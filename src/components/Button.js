@@ -1,0 +1,42 @@
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React from 'react'
+import colors from '../assets/colors'
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
+import Search from 'react-native-vector-icons/AntDesign';
+
+const Button = ({ onPress, buttonStyle, buttonText, textStyle, icon }) => {
+    return (
+        <TouchableOpacity style={[styles.button, buttonStyle]}
+            onPress={onPress}
+            activeOpacity={0.9}
+        >
+           <View style={{flexDirection: icon && 'row'}}> 
+            {icon &&  
+                <Search
+                    name={'search1'}
+                    color={colors.white}
+                    size={25}
+                    style={{marginRight: hp('1.5%')}}
+                />
+            }
+            <Text style={[styles.buttonText, textStyle]}>{buttonText}</Text>
+            </View>
+        </TouchableOpacity>
+    )
+}
+
+export default Button;
+
+const styles = StyleSheet.create({
+    button: {
+        backgroundColor: colors.primary,
+        padding: hp('2%'),
+        alignItems: 'center',
+        borderRadius: 5
+    },
+    buttonText: {
+        color: colors.white,
+        fontWeight: 'bold',
+        fontSize: hp('2.3%')
+    }
+})
