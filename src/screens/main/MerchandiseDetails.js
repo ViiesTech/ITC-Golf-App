@@ -11,7 +11,7 @@ import AddMinus from '../../components/AddMinus'
 import MerchandiseCard from '../../components/MerchandiseCard'
 import images from '../../assets/images'
 
-const StuffDetails = () => {
+const MerchandiseDetails = () => {
     return (
         <Container>
             <Header />
@@ -41,7 +41,7 @@ const StuffDetails = () => {
                     </View>
                 </View>
                 <View style={styles.border} />
-                <View style={{ paddingTop: hp('4%'), flexDirection: 'row' }}>
+                <View style={{ paddingTop: hp('4%'), flexDirection: 'row',justifyContent: 'space-between' }}>
                     <MerchandiseCard
                         image={images.stuff3}
                         text={'Golf Gloves'}
@@ -57,7 +57,7 @@ const StuffDetails = () => {
     )
 }
 
-export default StuffDetails
+export default MerchandiseDetails
 
 const styles = StyleSheet.create({
     screen: {

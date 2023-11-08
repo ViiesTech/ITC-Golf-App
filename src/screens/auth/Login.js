@@ -21,7 +21,7 @@ const Login = () => {
             <View style={styles.screen}>
                 <Text style={styles.heading}>Login Account</Text>
                 <Text style={styles.text}>Please enter the details below to continue.</Text>
-                <View style={{ paddingTop: hp('7%') }}>
+                <View style={{ paddingTop: hp('2%') }}>
                     <InputField
                         icon={'mail'}
                         placeholder={'@example.com'}
@@ -57,14 +57,13 @@ const styles = StyleSheet.create({
     screen: {
         flex: 1,
         justifyContent: 'flex-end',
+        paddingBottom: hp('2%'),
         alignItems: 'center',
-        paddingTop: hp('8%'),
-        paddingBottom: hp('6.5%')
     },
     image: {
         height: hp('16%'),
         width: '30%',
-        marginTop: hp('7%'),
+        marginTop: hp('5%'),
         alignSelf: 'center'
     },
     heading: {
@@ -75,14 +74,14 @@ const styles = StyleSheet.create({
     text: {
         color: colors.white,
         fontWeight: 'bold',
-        marginTop: hp('2%')
+        marginTop: hp('2%'),
     },
     input: {
-        marginBottom: hp('2%')
+        marginBottom: hp('1%')
     },
     message: {
         color: colors.white,
         alignSelf: 'center',
-        marginTop: hp('2.5%')
+        marginTop: hp('2%')
     }
 })

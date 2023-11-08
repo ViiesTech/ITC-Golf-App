@@ -47,16 +47,16 @@ export default DiscoverCard
 
 const styles = StyleSheet.create({
     wrapper: {
-        marginBottom: hp('6%'),
+        marginBottom: hp('3.5%'),
         borderWidth: 1,
         borderColor: colors.gray,
         height: hp('52%'),
-        width: '49%',
+        width: '47%',
         borderRadius: 10,
     },
     image: {
         height: hp('22%'),
-        width: hp('22%')
+        width: '101%'
     },
     numberView: {
         borderWidth: 1,
@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
     },
     name: {
         color: colors.white,
+        fontSize: hp('1.7%'),
         alignSelf: 'center'
     },
     textWrapper: {

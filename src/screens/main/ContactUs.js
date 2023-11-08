@@ -21,17 +21,19 @@ const ContactUs = () => {
                 <ContactInput
                     label={'Name:'}
                     placeholder={'Your Name'}
+                    inputStyle={{ marginLeft: hp('1%') }}
                     textColor={colors.white}
                 />
                 <ContactInput
                     label={'Email:'}
                     placeholder={'Your Email'}
                     textColor={colors.white}
+                    inputStyle={{ marginLeft: hp('1%') }}
                 />
                 <ContactInput
                     label={'Comment:'}
                     placeholder={'Enter Your Message'}
-                    inputStyle={{ height: hp('20%') }}
+                    inputStyle={{ height: hp('16%'), marginLeft: hp('1%') }}
                     textColor={colors.white}
                     textAlignVertical={'top'}
                 />

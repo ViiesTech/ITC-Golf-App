@@ -483,16 +483,16 @@ export const pickerss = [
     {
         id: 2,
         text: 'TYPE',
-        pickerText1: 'Match Play',
-        pickerText2: 'Four-Ball Match Play',
-        pickerText3: 'Foursomes'
+        pickerText1: 'Option1',
+        pickerText2: 'Option2',
+        pickerText3: 'Option3'
     },
     {
         id: 3,
         text: 'GAME',
-        pickerText1: 'Scramble',
-        pickerText2: 'Best Ball',
-        pickerText3: 'Skins Game'
+        pickerText1: 'Option1',
+        pickerText2: 'Option2',
+        pickerText3: 'Option3'
     },
 ]
 
@@ -571,6 +571,17 @@ export const groups = [
         id: 5,
         image: images.discover5
     },
+    {
+        id: 6,
+        image: images.discover2
+    },
+    {
+        id: 7,
+        image: images.discover3
+    }, {
+        id: 8,
+        image: images.discover8
+    },
 ]
 
 export const switchOptions = [
@@ -591,11 +602,11 @@ export const switchOptions = [
 export const Screens = [
     {
         id: 1,
-        text: 'All New Groups',
+        text: 'Add New Groups',
     },
     {
         id: 2,
-        text: 'All New Listings',
+        text: 'Add New Listings',
     },
     {
         id: 3,
@@ -605,8 +616,54 @@ export const Screens = [
         id: 4,
         text: 'My Profile',
     },
+]
+
+export const MainSettings = [
+    {
+        id: 1,
+        text: 'Add New Groups'
+    },
+    {
+        id: 2,
+        text: 'Add New Listings'
+    },
+    {
+        id: 3,
+        text: 'Player You Follow'
+    }
+]
+
+export const raffles = [
+    {
+        id: 1,
+        image: images.raffle1
+    },
+    {
+        id: 2,
+        image: images.raffle2
+    },
+    {
+        id: 3,
+        image: images.raffle1
+    },
+    {
+        id: 4,
+        image: images.raffle2
+    },
     {
         id: 5,
-        text: 'Subscription',
+        image: images.raffle1
+    },
+    {
+        id: 6,
+        image: images.raffle2
+    },
+    {
+        id: 7,
+        image: images.raffle1
+    },
+    {
+        id: 8,
+        image: images.raffle2
     }
 ]

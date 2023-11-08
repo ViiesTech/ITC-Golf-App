@@ -14,7 +14,7 @@ const DropDownPicker = ({ text, label1, label2, label3, textStyle, style, itemSt
                 <Picker
                     selectedValue={selectedOption}
                     style={[styles.textStyle, itemStyle]}
-                    dropdownIconColor={[colors.white, iconColor]}
+                    dropdownIconColor={colors.white}
                     onValueChange={(itemValue, itemIndex) =>
                         setSelectedOption(itemValue)
                     }

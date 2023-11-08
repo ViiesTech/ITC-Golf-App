@@ -1,14 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import SVGImage from './SVGImage'
 import Arrow from 'react-native-vector-icons/FontAwesome6';
 
-const ProfileOptions = ({ text, icon, image }) => {
+const ProfileOptions = ({ text, icon, image, onPress }) => {
     return (
-        <View style={styles.wrapper}> 
-            <View style={{ flexDirection: 'row'}}>
+        <TouchableOpacity style={styles.wrapper} onPress={onPress} activeOpacity={0.9}>
+            <View style={{ flexDirection: 'row' }}>
                 <View style={styles.iconView}>
                     <SVGImage
                         image={image}
@@ -22,14 +22,14 @@ const ProfileOptions = ({ text, icon, image }) => {
                 size={25}
                 style={{ alignSelf: 'center' }}
             />
-        </View>
+        </TouchableOpacity>
     )
 }
 
 export default ProfileOptions
 
 const styles = StyleSheet.create({
-    wrapper:{
+    wrapper: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: hp('5%'),

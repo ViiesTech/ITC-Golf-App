@@ -60,6 +60,9 @@ export default {
     discover5: require('../images/discover5.png'),
     discover6: require('../images/discover6.png'),
     discover7: require('../images/discover7.png'),
-    discover8: require('../images/discover8.png')
+    discover8: require('../images/discover8.png'),
+    editProfile: require('../images/profilePhoto.png'),
+    raffle1: require('../images/raffle1.png'),
+    raffle2: require('../images/raffle2.png')
 
 }

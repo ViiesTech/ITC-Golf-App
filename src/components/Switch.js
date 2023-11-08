@@ -4,17 +4,17 @@ import ToggleSwitch from 'toggle-switch-react-native'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
-const Switch = ({text,style}) => {
+const Switch = ({ text, style }) => {
     const [switchOn, setSwitchOn] = useState(false)
 
     return (
-        <View style={[{ flexDirection: 'row' },style]}>
+        <View style={[{ flexDirection: 'row' }, style]}>
             <ToggleSwitch
                 isOn={switchOn}
                 onColor={colors.primary}
                 circleColor={switchOn ? colors.secondary : colors.lightgray}
                 offColor={colors.white}
-                size="medium"
+                size='small'
                 onToggle={isOn => setSwitchOn(isOn)}
             />
             <Text style={styles.private}>{text}</Text>
@@ -26,7 +26,7 @@ export default Switch
 
 const styles = StyleSheet.create({
     private: {
-        marginLeft: hp('2%'),
+        marginLeft: hp('1%'),
         alignSelf: 'center',
         color: colors.lightgray
     }

@@ -7,11 +7,11 @@ import SVGImage from './SVGImage'
 import icons from '../assets/icons'
 import { useNavigation } from '@react-navigation/native'
 
-const Header = ({ iconStyle }) => {
+const Header = ({ iconStyle, headerStyle }) => {
     const navigation = useNavigation()
 
     return (
-        <View style={styles.headerView}>
+        <View style={[styles.headerView,headerStyle]}>
             <View style={{ flexDirection: 'row' }}>
                 <Image
                     source={images.header_image}

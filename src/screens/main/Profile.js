@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Linking } from 'react-native'
 import React from 'react'
 import Container from '../../components/Container'
 import Header from '../../components/Header'
@@ -7,15 +7,18 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import images from '../../assets/images'
 import colors from '../../assets/colors'
 import ProfileOptions from '../../components/ProfileOptions'
-import { Options, settings } from '../../DummyData'
+import { MainSettings, Options, settings } from '../../DummyData'
 import ProfileSettings from '../../components/ProfileSettings'
 import { useNavigation } from '@react-navigation/native'
+import Arrow from 'react-native-vector-icons/FontAwesome6';
 
 const Profile = () => {
 
+  const url = 'https://google.com'
+
   const navigation = useNavigation()
 
-  const onSettingsPress = (index) => {
+  const onSettingsPress = async (index) => {
     if (index == 0) {
       navigation.navigate('SecondaryStack', { screen: 'Payments' })
     } else if (index == 1) {
@@ -28,10 +31,27 @@ const Profile = () => {
       navigation.navigate('SecondaryStack', { screen: 'Language' })
     } else if (index == 5) {
       navigation.navigate('SecondaryStack', { screen: 'Rating' })
-    } else if (index == 7) {
+    } else if (index == 6) {
+      await Linking.openURL(url)
+    }
+    else {
       navigation.navigate('SecondaryStack', { screen: 'About' })
+    }
+  }
+
+  const onMainSettingsPress = (index) => {
+    if (index == 0) {
+      navigation.navigate('SecondaryStack', { screen: 'AllGroups', params: { options: 'Add New Groups' } })
+    } else if (index == 1) {
+      navigation.navigate('SecondaryStack', { screen: 'AllGroups', params: { options: 'Add New Listings' } })
     } else {
-      alert('working in progress')
+      navigation.navigate('SecondaryStack', { screen: 'AllGroups', params: { options: 'Players You Follow' } })
+    }
+  }
+
+  const onOptionsPress = (index) => {
+    if (index == 1) {
+      navigation.navigate('SecondaryStack', { screen: 'AllGroups', params: { options: 'My Profile' } })
     }
   }
 
@@ -59,6 +79,7 @@ const Profile = () => {
               <ProfileOptions
                 key={i}
                 text={item.text}
+                onPress={() => onOptionsPress(i)}
                 image={item.icon}
                 icon={i !== 0 && 'arrow-right'}
               />
@@ -66,7 +87,21 @@ const Profile = () => {
           </View>
         </View>
         <View style={{ paddingTop: hp('3%') }}>
-          <Text style={styles.heading}>General Settings</Text>
+          <Text style={styles.heading}>Main</Text>
+          {MainSettings.map((item, i) => (
+            <TouchableOpacity activeOpacity={0.9} onPress={() => onMainSettingsPress(i)} style={styles.mainWrapper}>
+              <Text key={i} style={styles.settingsText}>
+                {item.text}
+              </Text>
+              <Arrow
+                name={'arrow-right'}
+                color={colors.white}
+                size={22}
+                style={{ alignSelf: 'center' }}
+              />
+            </TouchableOpacity>
+          ))}
+          <Text style={[styles.heading, { marginTop: hp('4%') }]}>General Settings</Text>
           <View style={{ paddingTop: hp('5%') }}>
             {settings.map((item, i) => (
               <ProfileSettings
@@ -117,5 +152,15 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: hp('2.5%'),
     fontWeight: 'bold'
+  },
+  settingsText: {
+    color: colors.white,
+    fontWeight: 'bold',
+    fontSize: hp('2%')
+  },
+  mainWrapper: {
+    flexDirection: 'row',
+    paddingTop: hp('4%'),
+    justifyContent: 'space-between',
   }
 })

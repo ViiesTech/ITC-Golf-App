@@ -1,235 +1,138 @@
-import { StyleSheet, Text, View, ScrollView, FlatList } from 'react-native'
+import { StyleSheet, View, ScrollView, Text, Image } from 'react-native'
 import React, { useState } from 'react'
 import Container from '../../components/Container'
 import Header from '../../components/Header'
 import SecondaryHeader from '../../components/SecondaryHeader'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import AllOptionsCard from '../../components/AllOptionsCard'
-import { discovers, groups, switchOptions } from '../../DummyData'
-import DiscoverCard from '../../components/DiscoverCard'
 import SVGImage from '../../components/SVGImage'
 import icons from '../../assets/icons'
-import MyGroupsCard from '../../components/MyGroupsCard'
-import SearchFilter from '../../a../../components/SearchFilter'
+import SearchFilter from '../../components/SearchFilter'
 import colors from '../../assets/colors'
+import { AddNewGroups } from '../../components/AddNewGroups'
+import images from '../../assets/images'
+import Edit from 'react-native-vector-icons/Feather'
 import ContactInput from '../../components/ContactInput'
 import DropDownPicker from '../../components/DropDownPicker'
-import DateInput from '../../components/DateInput'
-import UploadPicture from '../../components/UploadPicture'
 import Button from '../../components/Button'
-import Tabs from '../../components/Tabs'
-import Switch from '../../components/Switch'
-import Add from 'react-native-vector-icons/MaterialIcons'
+import { AddNewListings } from '../../components/AddNewListings'
 
-const AllGroups = () => {
-    const [chooseOption, setChooseOption] = useState('Discover')
+const AllGroups = ({ route }) => {
+    const { options } = route.params
 
-    const onTabChange = (text) => {
-        setChooseOption(text)
-    }
+    const [changeTab, setChangeTab] = useState(options)
+
+    console.log(changeTab)
+
 
     return (
         <Container>
             <Header />
-            <SecondaryHeader
-                text={'All Groups'}
-            />
-            <ScrollView contentContainerStyle={styles.screen} showsVerticalScrollIndicator={false}>
-                <AllOptionsCard />
-                <View style={{ paddingTop: hp('3%') }}>
-                    <SearchFilter />
-                    <ScrollView contentContainerStyle={{ paddingTop: hp('3%') }}
-                        showsHorizontalScrollIndicator={false}
-                        horizontal={true}
-                    >
-                        <Tabs
-                            onChangeTab={(text) => onTabChange(text)}
-                            active={chooseOption}
-                        />
-                    </ScrollView>
-                    <View style={{ paddingTop: hp('5%') }}>
-                        {chooseOption === 'Discover' ?
-                            <FlatList
-                                data={discovers}
-                                numColumns={2}
-                                columnWrapperStyle={{ justifyContent: 'space-between' }}
-                                renderItem={({ item }) => (
-                                    <DiscoverCard
-                                        image={item.image}
-                                    />
-                                )}
-                            />
-                            : chooseOption === 'My Groups' ?
-                                <>
-                                    {
-                                        groups.map((item) => (
-                                            <MyGroupsCard
-                                                image={item.image}
-                                            />
-                                        ))
-                                    }
-                                </>
-                                : chooseOption === 'Add New Groups' ?
-                                    <View style={styles.addnewWrapper}>
-                                        <ContactInput
-                                            label={'Group Name'}
-                                            placeholder={'Add Title'}
-                                            textColor={colors.lightgray}
-                                            style={styles.input}
-                                        />
-                                        <ContactInput
-                                            label={'Description'}
-                                            textAlignVertical={'top'}
-                                            style={[styles.input, { height: hp('15%') }]}
-                                        />
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <DropDownPicker
-                                                text={'What Kind Of Listing Is This?'}
-                                                iconColor={colors.lightgray}
-                                                itemStyle={{ color: colors.lightgray }}
-                                                label1={'Select a Value'}
-                                                style={styles.picker}
-                                            />
-                                            <DateInput
-                                                icon={'date-range'}
-                                            />
-                                        </View>
-                                        <DropDownPicker
-                                            text={'Area Code'}
-                                            iconColor={colors.lightgray}
-                                            itemStyle={{ color: colors.lightgray }}
-                                            label1={'Select'}
-                                            style={[styles.picker, { width: hp('30%') }]}
-                                        />
-                                        <DropDownPicker
-                                            text={'The Itc Handshake'}
-                                            iconColor={colors.lightgray}
-                                            itemStyle={{ color: colors.lightgray }}
-                                            label1={'Select'}
-                                            style={[styles.picker, { width: hp('45%') }]}
-                                        />
-                                        <DropDownPicker
-                                            text={'Desired Tee Box'}
-                                            iconColor={colors.lightgray}
-                                            itemStyle={{ color: colors.lightgray }}
-                                            label1={'Front Tees'}
-                                            style={[styles.picker, { width: hp('45%') }]}
-                                        />
-                                        <Switch
-                                            text={'Is This A Private Group ?'}
-                                        />
-                                        <View style={{ paddingTop: hp('4%') }}>
-                                            <UploadPicture
-                                                text={'Picture'}
-                                            />
-                                            <Button
-                                                buttonText={'Create Groups'}
-                                                textStyle={{ color: colors.secondary }}
-                                                buttonStyle={{ width: '50%', borderRadius: 100, marginTop: hp('2%') }}
-                                                onPress={() => alert('working in progress')}
-                                            />
-                                        </View>
-                                    </View>
-                                    :
-                                    <View>
-                                        <ContactInput
-                                            label={'Location/Golf Course/Clubs For Sale.'}
-                                            style={styles.input}
-                                        />
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <DateInput
-                                                heading={'Suggested Day'}
-                                                text={'mm/dd/yy'}
-                                                icon={'date-range'}
-                                                mode={'date'}
-                                            />
-                                            <DateInput
-                                                heading={'Suggested Time'}
-                                                icon={'access-time'}
-                                                mode={'time'}
-                                                text={'Select'}
-                                                display={'clock'}
-                                            />
-                                        </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <DropDownPicker
-                                                text={'Area Code'}
-                                                iconColor={colors.lightgray}
-                                                itemStyle={{ color: colors.lightgray }}
-                                                label1={'Select'}
-                                                style={[styles.picker, { width: hp('20%') }]}
-                                            />
-                                            <DropDownPicker
-                                                text={'How Many Players?'}
-                                                iconColor={colors.lightgray}
-                                                itemStyle={{ color: colors.lightgray }}
-                                                label1={'Select'}
-                                                style={[styles.picker, { width: hp('20%') }]}
-                                            />
-                                        </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <DropDownPicker
-                                                text={'The Itc Handshake'}
-                                                iconColor={colors.lightgray}
-                                                itemStyle={{ color: colors.lightgray }}
-                                                label1={'Select'}
-                                                style={[styles.picker, { width: hp('20%') }]}
-                                            />
-                                            <DropDownPicker
-                                                text={'Desired Tee Box'}
-                                                iconColor={colors.lightgray}
-                                                itemStyle={{ color: colors.lightgray }}
-                                                label1={'Select'}
-                                                style={[styles.picker, { width: hp('20%') }]}
-                                            />
-                                        </View>
-                                        <ContactInput
-                                            label={'Description'}
-                                            textAlignVertical={'top'}
-                                            style={[styles.input, { height: hp('15%') }]}
-                                        />
-                                        <UploadPicture
-                                            text={'Image'}
-                                        />
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <UploadPicture
-                                                text={'Listing Gallery'}
-                                                buttonStyle={{ width: hp('16%') }}
-                                                style={{ width: hp('37%') }}
-                                            />
-                                            <View style={styles.addView}>
-                                                <Add
-                                                    name={'add'}
-                                                    color={colors.secondary}
-                                                    size={25}
-                                                />
-                                            </View>
-                                        </View>
-                                        <View style={{ paddingTop: hp('2%') }}>
-                                            <Text style={styles.heading}>Additional Details</Text>
-                                            <View style={{ flexDirection: 'row', paddingTop: hp('3%'), flexWrap: 'wrap', justifyContent: 'space-between' }}>
-                                                {switchOptions.map((item) => (
-                                                    <Switch
-                                                        text={item.text}
-                                                        style={item.id == 3 && { marginTop: hp('2.4%') }}
-                                                    />
-                                                ))}
-                                            </View>
-                                            <Button
-                                                buttonStyle={{ width: '50%', borderRadius: 100, marginTop: hp('5%') }}
-                                                onPress={() => alert('working in progress')}
-                                                buttonText={'Add New Listings'}
-                                                textStyle={{ color: colors.secondary }}
-                                            />
-                                        </View>
-                                    </View>
-                        }
-                    </View>
-                </View>
-                <SVGImage
-                    image={icons.pageEnd}
-                    style={{ alignSelf: 'center',marginTop: hp('5%') }}
+            <ScrollView contentContainerStyle={[styles.wrapper, { paddingBottom: changeTab === 'Add New Groups' || changeTab === 'Add New Listings' ? hp('215%') : 0 }]} showsVerticalScrollIndicator={false}>
+                <SecondaryHeader
+                    text={'All Groups'}
                 />
+                <View style={styles.screen}>
+                    <AllOptionsCard
+                        active={changeTab}
+                        onChangeTab={(text) => setChangeTab(text)}
+                    />
+                    {changeTab === 'Add New Groups' ?
+                        <>
+                            <SearchFilter />
+                            <View style={{ height: '200%' }}>
+                                <AddNewGroups />
+                            </View>
+                        </>
+                        : changeTab === 'Add New Listings' ?
+                            <View style={{ height: '400%' }}>
+                                <AddNewListings />
+                            </View>
+                            :
+                            changeTab === 'Players You Follow' ?
+                                <View style={styles.followCard}>
+                                    <Text style={styles.userName}>USER NAME:</Text>
+                                    <Text style={styles.name}>Becker alisson</Text>
+                                    <Text style={styles.userName}>EMAIL:</Text>
+                                    <Text style={styles.name}>backeraliison23@gmail.com</Text>
+                                </View>
+                                :
+                                <View style={{ paddingTop: hp('4%') }}>
+                                    <Text style={styles.heading}>EDIT YOUR PROFILE</Text>
+                                    <View style={{ position: 'relative', height: hp('14%'), width: '40%',marginTop: hp('2%') }}>
+                                        <Image
+                                            source={images.editProfile}
+                                            style={styles.imageStyle}
+                                            borderRadius={10}
+                                        />
+                                        <View style={styles.editView}>
+                                            <Edit
+                                                name={'edit'}
+                                                color={colors.primary}
+                                                size={16}
+                                            />
+                                        </View>
+                                    </View>
+                                    <View style={{ paddingTop: hp('4%'), flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <ContactInput
+                                            label={'First Name'}
+                                            placeholder={'First Name'}
+                                            style={styles.input}
+                                            textColor={colors.lightgray}
+                                        />
+                                        <ContactInput
+                                            label={'Last Name'}
+                                            placeholder={'Last Name'}
+                                            style={styles.input}
+                                            textColor={colors.lightgray}
+                                        />
+                                    </View>
+                                    <DropDownPicker
+                                        style={styles.pickerStyle}
+                                        text={'Area Code'}
+                                        label1={'Select'}
+                                    />
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <DropDownPicker
+                                            style={[styles.pickerStyle, { width: hp('20%') }]}
+                                            text={'Experience Level'}
+                                            label1={'Select'}
+                                        />
+                                        <DropDownPicker
+                                            style={styles.pickerStyle}
+                                            text={'Search By Desired Tee Box'}
+                                            label1={'Select'}
+                                        />
+                                    </View>
+                                    <DropDownPicker
+                                        style={[styles.pickerStyle, { marginBottom: hp('1%') }]}
+                                        text={'The Itc Handshake'}
+                                        label1={'Select'}
+                                    />
+                                    <Text style={{ color: colors.primary, fontSize: hp('1.5%'), marginBottom: hp('4%') }}>ITC GIVEAWAY AND RAFFLE ADDRESS</Text>
+                                    <ContactInput
+                                        style={[styles.input, { height: hp('16%'), width: '100%' }]}
+                                        placeholder={'37 Cardinal Lane Petersburg,'}
+                                        textColor={colors.lightgray}
+                                        textAlignVertical={'top'}
+                                        label={'Short Description:'}
+                                    />
+                                    <View style={styles.emailCard}>
+                                        <Text style={{ color: colors.lightgray, fontSize: hp('1.7%') }}>Backeraliison23@Gmail.Com</Text>
+                                    </View>
+                                    <Button
+                                        buttonText={'UPDATE MY PROFILE'}
+                                        buttonStyle={{ width: '60%', borderRadius: 100, marginTop: hp('5%') }}
+                                        textStyle={{ color: colors.secondary, fontSize: hp('1.8%') }}
+                                    />
+                                </View>
+
+                    }
+                    <SVGImage
+                        image={icons.pageEnd}
+                        style={{ alignSelf: 'center', marginTop: hp('5%') }}
+                    />
+                </View>
             </ScrollView>
         </Container >
     )
@@ -240,7 +143,6 @@ export default AllGroups
 const styles = StyleSheet.create({
     screen: {
         padding: hp('2%'),
-        paddingBottom: hp('20%')
     },
     tabView: {
         backgroundColor: colors.white,
@@ -261,6 +163,7 @@ const styles = StyleSheet.create({
     input: {
         backgroundColor: 'transparent',
         borderWidth: 1.5,
+        width: hp('22%'),
         borderColor: colors.gray
     },
     picker: {
@@ -284,5 +187,53 @@ const styles = StyleSheet.create({
         color: colors.white,
         fontSize: hp('2%'),
         fontWeight: 'bold'
+    },
+    followCard: {
+        backgroundColor: colors.gray,
+        marginTop: hp('5%'),
+        borderRadius: 10,
+        borderWidth: 0.7,
+        borderColor: colors.white,
+        padding: hp('4%')
+    },
+    userName: {
+        color: colors.white,
+        fontWeight: 'bold',
+        fontSize: hp('1.8%')
+    },
+    name: {
+        color: colors.white,
+        marginBottom: hp('4%'),
+        marginTop: hp('1%')
+    },
+    imageStyle: {
+        height: hp('14%'),
+        width: '100%'
+    },
+    editView: {
+        backgroundColor: colors.secondary,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: colors.primary,
+        position: 'absolute',
+        padding: hp('0.6%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        right: 5,
+        bottom: 5,
+    },
+    pickerStyle: {
+        borderWidth: 0.2,
+        marginBottom: hp('6%'),
+        borderRadius: 5
+    },
+    emailCard: {
+        marginTop: hp('2%'),
+        borderRadius: 10,
+        backgroundColor: colors.gray,
+        padding: hp('2%')
+    },
+    wrapper: {
+        paddingTop: hp('3%'),
     }
 })

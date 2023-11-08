@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         color: colors.white,
         alignSelf: 'flex-end',
         fontWeight: 'bold',
-        fontSize: hp('1.6%')
+        fontSize: hp('1.4%')
     },
     location: {
         color: colors.white,

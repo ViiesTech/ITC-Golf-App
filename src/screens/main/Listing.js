@@ -8,9 +8,12 @@ import ListingDetailCard from '../../components/ListingDetailCard'
 import { listingDetails } from '../../DummyData'
 import SVGImage from '../../components/SVGImage'
 import icons from '../../assets/icons'
-import colors from '../../assets/colors'
+import { useNavigation } from '@react-navigation/native'
 
 const Listing = () => {
+
+  const navigation = useNavigation()
+
   return (
     <Container>
       <Header />
@@ -25,6 +28,7 @@ const Listing = () => {
           renderItem={({ item, index }) => (
             <ListingDetailCard
               image={item.image}
+              onPress={() => navigation.navigate('SecondaryStack',{screen: 'PersonalInfo'})}
             />
           )}
         />

@@ -30,7 +30,7 @@ const FreeStuff = () => {
                         <MerchandiseCard
                             image={item.image}
                             text={item.text}
-                            onPress={() => navigation.navigate('SecondaryStack', { screen: 'StuffDetails' })}
+                            onPress={() => navigation.navigate('MerchandiseStack', { screen: 'MerchandiseDetails' })}
                         />
                     )}
                 />

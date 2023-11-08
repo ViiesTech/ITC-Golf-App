@@ -5,7 +5,7 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 const DateTime = ({number,text,style}) => {
     return (
-        <View style={{marginRight: hp('2.5%'),width: '18%'}}>
+        <View style={{marginRight: hp('2.2%'),width: '19%'}}>
             <View style={[styles.textView,style]}>
                 <Text style={styles.numberText}>{number}</Text>
             </View>

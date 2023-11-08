@@ -26,7 +26,7 @@ const Routes = () => {
                         animation: 'fade_from_bottom'
                     }}
                 >
-                    {/* <Stack.Screen name='AuthStack' component={AuthStack} /> */}
+                    <Stack.Screen name='AuthStack' component={AuthStack} />
                     <Stack.Screen name='MainStack' component={MainStack} />
                 </Stack.Navigator>
             </NavigationContainer>

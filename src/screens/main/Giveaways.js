@@ -11,8 +11,18 @@ import colors from '../../assets/colors'
 import DateTime from '../../components/DateTime'
 import SVGImage from '../../components/SVGImage'
 import icons from '../../assets/icons'
+import { useNavigation } from '@react-navigation/native'
 
 const Giveaways = () => {
+
+  const navigation = useNavigation()
+
+  const onGiveawayPress = (index) => {
+    if (index == 2 || 3) {
+      navigation.navigate('GiveawayStack', { screen: 'RaffleGiveaways' })
+    }
+  }
+
   return (
     <Container>
       <Header />
@@ -43,6 +53,7 @@ const Giveaways = () => {
             return (
               <GiveawayCard
                 buttonText={item.id == 2 ? 'Get Started' : 'Sign Up'}
+                onPress={() => onGiveawayPress(item.id)}
                 style={{ flexDirection: item.id == 1 ? 'row' : item.id == 2 ? 'row-reverse' : 'row' }}
                 textStyle={{ marginLeft: item.id == 2 && hp('15%') }}
                 imageStyle={{ marginLeft: item.id == 2 && hp('3.5%') }}

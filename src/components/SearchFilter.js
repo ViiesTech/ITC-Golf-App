@@ -1,33 +1,42 @@
-import { StyleSheet, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, View, Text } from 'react-native'
+import React, { useState } from 'react'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import DropDownPicker from './DropDownPicker'
 import { pickerss } from '../DummyData'
 import Button from './Button'
+import { Picker } from '@react-native-picker/picker'
 
 const SearchFilter = () => {
+    const [selectedOption, setSelectedOption] = useState('')
+
     return (
         <View style={styles.card}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingTop: hp('1%') }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: hp('1%') }}>
                 {pickerss.map((item) => (
-                    <DropDownPicker
-                        text={item.text}
-                        textStyle={{ color: colors.secondary, fontSize: hp('1.5%') }}
-                        style={styles.picker}
-                        itemStyle={{ color: colors.secondary }}
-                        labelStyle={{ fontSize: hp('1.1%') }}
-                        label1={'Select'}
-                        label2={'Select'}
-                        label3={'Select'}
-                        iconColor={colors.secondary}
-                    />
+                    <View>
+                        <Text style={styles.text}>{item.text}</Text>
+                        <View style={styles.pickerStyle}>
+                            <Picker
+                                selectedValue={selectedOption}
+                                style={styles.textStyle}
+                                dropdownIconColor={colors.secondary}
+                                onValueChange={(itemValue, itemIndex) =>
+                                    setSelectedOption(itemValue)
+                                }
+                            >
+                                <Picker.Item label={'Select'} value={'Select'} style={styles.labelStyle} />
+                                <Picker.Item label={'Select'} value={'Select'} style={styles.labelStyle} />
+                                <Picker.Item label={'Select'} value={'Select'} style={styles.labelStyle} />
+                            </Picker>
+                        </View>
+                    </View>
                 ))}
             </View>
             <Button
                 buttonText={'Sign up / Sign in'}
                 textStyle={{ color: colors.secondary, fontSize: hp('1.8%') }}
-                buttonStyle={{ borderRadius: 100, width: '50%', alignSelf: 'center' }}
+                buttonStyle={{ borderRadius: 100, width: '50%', alignSelf: 'center', marginTop: hp('3%') }}
             />
         </View>
     )
@@ -38,11 +47,27 @@ export default SearchFilter
 const styles = StyleSheet.create({
     card: {
         backgroundColor: colors.white,
+        marginTop: hp('2%'),
         borderRadius: 15,
         padding: hp('1.7%'),
     },
-    picker: {
-        width: hp('13%'),
-        borderWidth: 1
+    pickerStyle: {
+        width: hp('14%'),
+        marginTop: hp('1%'),
+        borderRadius: 5,
+        borderWidth: 0.4
+    },
+    text: {
+        color: colors.secondary,
+        fontSize: hp('1.8%'),
+        fontWeight: 'bold',
+    },
+    textStyle: {
+        color: colors.secondary,
+        fontSize: hp('2%')
+    },
+    labelStyle: {
+        color: colors.secondary,
+        fontSize: hp('1%')
     }
 })

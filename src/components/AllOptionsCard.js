@@ -1,30 +1,25 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import { Screens } from '../DummyData'
 
-const AllOptionsCard = () => {
+const AllOptionsCard = ({ active, onChangeTab }) => {
+
+    const onTextPress = (text) => {
+        onChangeTab(text)
+    }
+
     return (
         <View style={styles.card}>
             {Screens.map((item) => (
                 <>
                     <View style={item.id !== 1 && item.id !== 4 && styles.line} />
-                    <Text style={styles.text}>{item.text}</Text>
+                    <TouchableOpacity activeOpacity={0.9} onPress={() => onTextPress(item.text)}>
+                        <Text style={[styles.text, { color: active === item.text ? colors.secondary : colors.white }]}>{item.text}</Text>
+                    </TouchableOpacity>
                 </>
             ))}
-            {/* <View>
-            </View>
-            <View style={{ width: '32%' }}>
-                <Text style={[styles.text, { color: colors.white, marginLeft: hp('2%') }]}>Add New Listings</Text>
-                <View style={{ flexDirection: 'row' }}>
-                    <Text style={[styles.text, { alignSelf: 'center', marginTop: hp('1.6%'), color: colors.white }]}>My Profile</Text>
-                    <View style={[styles.line, { marginTop: hp('2%') }]} />
-                    <Text style={[styles.text, { alignSelf: 'center', marginTop: hp('1.6%'), color: colors.white, marginLeft: hp('2%') }]}>Subscription</Text>
-                </View>
-            </View>
-            <View style={styles.line} />
-            <Text style={[styles.text, { color: colors.white, marginLeft: hp('2%') }]}>Players You Follow</Text> */}
         </View>
     )
 }
@@ -41,7 +36,6 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap'
     },
     text: {
-        color: colors.white,
         alignSelf: 'center',
         fontSize: hp('1.4%'),
         fontWeight: 'bold'

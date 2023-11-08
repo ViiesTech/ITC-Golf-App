@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     textWrapper: {
-        marginLeft: hp('1.6%'),
+        marginLeft: hp('1%'),
         marginTop: hp('1%')
     },
     text: {
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     border: {
         borderBottomColor: colors.lightgray,
         borderBottomWidth: 0.5,
-        width: '74%',
+        width: '70%',
         marginTop: hp('1.7%')
     }
 

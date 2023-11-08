@@ -1,29 +1,29 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import images from '../assets/images'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import colors from '../assets/colors'
 import Button from './Button'
 
-const GiveawayCard = ({buttonText,style,textStyle,imageStyle}) => {
+const GiveawayCard = ({ buttonText, style, textStyle, imageStyle, onPress }) => {
     return (
-        <View style={[styles.wrapper,style]}>
+        <TouchableOpacity style={[styles.wrapper, style]} activeOpacity={0.9} onPress={onPress}>
             <View style={textStyle}>
                 <Text style={styles.heading}>GIVEAWAY</Text>
                 <Text style={styles.text}>Enter To Win A Free Giveaway </Text>
                 <Text style={styles.textStyle}>Lorem ipsum dolor sit amet, m erat.</Text>
-                <Button 
+                <Button
                     buttonStyle={styles.button}
                     buttonText={buttonText}
                     textStyle={styles.buttonText}
                 />
             </View>
-            <Image 
+            <Image
                 source={images.giveaway1}
-                style={[styles.image,imageStyle]}
+                style={[styles.image, imageStyle]}
                 borderRadius={5}
             />
-        </View>
+        </TouchableOpacity>
     )
 }
 
@@ -46,21 +46,21 @@ const styles = StyleSheet.create({
         marginTop: hp('2%'),
         width: '50%'
     },
-    textStyle:{
+    textStyle: {
         color: colors.white,
         fontSize: hp('1.4%'),
         marginTop: hp('2%')
     },
-    buttonText:{
+    buttonText: {
         color: colors.secondary
     },
-    button:{
+    button: {
         borderRadius: 100,
         padding: hp('1.5%'),
         marginTop: hp('3%'),
         width: '65%'
     },
-    image:{
+    image: {
         height: hp('20%'),
         width: '45%',
         alignSelf: 'center'

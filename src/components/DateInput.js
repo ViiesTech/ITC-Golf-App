@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     view: {
         borderWidth: 1.5,
         width: hp('20%'),
-        marginTop: hp('1.8%'),
+        marginTop: hp('1.4%'),
         borderRadius: 10,
         padding: hp('2.4%'),
         flexDirection: 'row',

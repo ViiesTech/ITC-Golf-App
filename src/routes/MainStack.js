@@ -17,9 +17,10 @@ import Language from '../screens/main/Language'
 import Rating from '../screens/main/Rating'
 import About from '../screens/main/About'
 import FreeStuff from '../screens/main/FreeStuff'
-import StuffDetails from '../screens/main/StuffDetails'
 import PersonalInfo from '../screens/main/PersonalInfo'
 import AllGroups from '../screens/main/AllGroups'
+import MerchandiseDetails from '../screens/main/MerchandiseDetails'
+import RaffleGiveaways from '../screens/main/RaffleGiveaways'
 
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
@@ -33,7 +34,7 @@ const BottomStack = () => {
         tabBarShowLabel: false,
         tabBarStyle: {
           borderTopWidth: 0,
-          height: 95,
+          height: 90,
           backgroundColor: 'rgb(65,65,65)',
         },
       }}
@@ -71,8 +72,24 @@ const BottomStack = () => {
         }}
       />
       <Tab.Screen
-        name='Giveaways'
-        component={Giveaways}
+        name='MerchandiseStack'
+        component={MerchandiseStack}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            focused ?
+              <View style={styles.iconView}>
+                <SVGImage
+                  image={icons.merchandise_active}
+                />
+              </View>
+              :
+              <SVGImage image={icons.merchandise_inactive} />
+          )
+        }}
+      />
+      <Tab.Screen
+        name='GiveawayStack'
+        component={GiveawayStack}
         options={{
           tabBarIcon: ({ focused }) => (
             focused ?
@@ -106,6 +123,32 @@ const BottomStack = () => {
   )
 }
 
+const MerchandiseStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false
+      }}
+    >
+      <Tab.Screen name='FreeStuff' component={FreeStuff} />
+      <Tab.Screen name='MerchandiseDetails' component={MerchandiseDetails} />
+    </Stack.Navigator>
+  )
+}
+
+const GiveawayStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false
+      }}
+    >
+      <Tab.Screen name='Giveaways' component={Giveaways} />
+      <Tab.Screen name='RaffleGiveaways' component={RaffleGiveaways} />
+    </Stack.Navigator>
+  )
+}
+
 const SecondaryStack = () => {
   return (
     <Stack.Navigator
@@ -113,16 +156,15 @@ const SecondaryStack = () => {
         headerShown: false
       }}
     >
-      {/* <Tab.Screen name='Payments' component={Payments} />
+      <Tab.Screen name='Payments' component={Payments} />
       <Tab.Screen name='Notifications' component={Notifications} />
       <Tab.Screen name='Wishlist' component={Wishlist} />
       <Tab.Screen name='ContactUs' component={ContactUs} />
       <Tab.Screen name='Language' component={Language} />
       <Tab.Screen name='Rating' component={Rating} />
-      <Tab.Screen name='About' component={About} /> */}
-      {/* <Tab.Screen name='FreeStuff' component={FreeStuff} /> */}
-      {/* <Tab.Screen name='StuffDetails' component={StuffDetails} /> */}
-      {/* <Tab.Screen name='PersonalInfo' component={PersonalInfo} /> */}
+      <Tab.Screen name='About' component={About} />
+      <Tab.Screen name='FreeStuff' component={FreeStuff} />
+      <Tab.Screen name='PersonalInfo' component={PersonalInfo} />
       <Tab.Screen name='AllGroups' component={AllGroups} />
     </Stack.Navigator>
   )
@@ -135,10 +177,10 @@ const MainStack = () => {
         headerShown: false
       }}
     >
-      {/* <Stack.Screen
+      <Stack.Screen
         name='BottomStack'
         component={BottomStack}
-      /> */}
+      />
       <Stack.Screen
         name='SecondaryStack'
         component={SecondaryStack}

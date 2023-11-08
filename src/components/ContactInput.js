@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         marginTop: hp('2%'),
     },
     input: {
-        marginLeft: hp('2%'),
+        marginLeft: hp('1%'),
         color: colors.white
     },
     labelText: {

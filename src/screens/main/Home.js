@@ -18,7 +18,7 @@ const Home = () => {
     <Container>
       <ScrollView>
         <View style={styles.headerWrapper}>
-          <Header iconStyle={{ left: hp('15%') }} />
+          <Header />
         </View>
         <Image
           source={images.home1}
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
   },
   headerWrapper: {
     position: 'absolute',
+    width: '100%',
     zIndex: 1
   },
   heading: {
