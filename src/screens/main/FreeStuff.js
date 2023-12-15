@@ -26,6 +26,7 @@ const FreeStuff = () => {
                     numColumns={2}
                     contentContainerStyle={{ paddingBottom: hp('34%') }}
                     columnWrapperStyle={{ justifyContent: 'space-between' }}
+                    showsVerticalScrollIndicator={false}
                     renderItem={({ item, index }) => (
                         <MerchandiseCard
                             image={item.image}

@@ -3,23 +3,30 @@ import React from 'react'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import Search from 'react-native-vector-icons/AntDesign';
+import Loader from './Loader';
 
-const Button = ({ onPress, buttonStyle, buttonText, textStyle, icon }) => {
+const Button = ({ onPress, buttonStyle, buttonText, textStyle, icon, indicator }) => {
     return (
         <TouchableOpacity style={[styles.button, buttonStyle]}
             onPress={onPress}
             activeOpacity={0.9}
         >
-           <View style={{flexDirection: icon && 'row'}}> 
-            {icon &&  
-                <Search
-                    name={'search1'}
-                    color={colors.white}
-                    size={25}
-                    style={{marginRight: hp('1.5%')}}
-                />
-            }
-            <Text style={[styles.buttonText, textStyle]}>{buttonText}</Text>
+            <View style={{ flexDirection: icon && 'row' }}>
+                {icon &&
+                    <Search
+                        name={'search1'}
+                        color={colors.white}
+                        size={25}
+                        style={{ marginRight: hp('1.5%') }}
+                    />
+                }
+                {indicator ?
+                    <Loader
+                        size={'small'}
+                    />
+                    :
+                    <Text style={[styles.buttonText, textStyle]}>{buttonText}</Text>
+                }
             </View>
         </TouchableOpacity>
     )

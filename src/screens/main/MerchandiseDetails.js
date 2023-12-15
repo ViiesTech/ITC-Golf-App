@@ -48,7 +48,7 @@ const MerchandiseDetails = () => {
                     />
                     <MerchandiseCard
                         image={images.stuff4}
-                        style={{ marginLeft: hp('3.5%') }}
+                        style={{ marginLeft: hp('2.6%') }}
                         text={'Golf Tees'}
                     />
                 </View>

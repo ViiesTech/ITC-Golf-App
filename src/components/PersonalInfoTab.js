@@ -3,10 +3,10 @@ import React from 'react'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
-const PersonalInfoTab = ({ text, style, onPress }) => {
+const PersonalInfoTab = ({ text, style, onPress, textStyle }) => {
     return (
         <TouchableOpacity style={[styles.button, style]} activeOpacity={0.9} onPress={onPress}>
-            <Text style={styles.buttonText}>{text}</Text>
+            <Text style={[styles.buttonText, textStyle]}>{text}</Text>
         </TouchableOpacity>
     )
 }
@@ -18,9 +18,9 @@ const styles = StyleSheet.create({
         borderColor: colors.secondary,
         borderWidth: 2,
         alignItems: 'center',
-        padding: hp('1.3%'),
+        marginRight: hp('0.5%'),
+        padding: hp('1%'),
         borderRadius: 100,
-        width: '45%',
     },
     buttonText: {
         color: colors.secondary,

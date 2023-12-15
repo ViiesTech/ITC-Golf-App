@@ -1,5 +1,5 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { ScrollView, StyleSheet, Text, View, FlatList } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import Container from '../../components/Container'
 import Header from '../../components/Header'
 import SecondaryHeader from '../../components/SecondaryHeader'
@@ -7,9 +7,46 @@ import ContactInput from '../../components/ContactInput'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import colors from '../../assets/colors'
 import LanguagesName from '../../components/LanguagesName'
-import { AllLanguages, RecentLanguages } from '../../DummyData'
+import { AllLanguages } from '../../DummyData'
+import { useDispatch, useSelector } from 'react-redux'
+import constant from '../../redux/constant'
 
 const Language = () => {
+    const [language, setLanguage] = useState([])
+
+    const { checkMark, showRecent } = useSelector(state => state.LanguageReducer)
+    const dispatch = useDispatch()
+    // console.log('hello world' ,checkMark)
+    // console.log('huhuhu')
+
+    useEffect(() => {
+
+        setLanguage(showRecent)
+
+    }, [])
+
+    const onSelectLanguage = (item, i) => {
+        dispatch({
+            type: constant.SELECTED,
+            payload: item.text
+        })
+
+        const index = showRecent?.findIndex(item => item == AllLanguages[i])
+
+        if (showRecent[index] == AllLanguages[i]) {
+            dispatch({
+                type: constant.SELECTED,
+                payload: item.text
+            })
+        } else {
+            const set = [...showRecent, AllLanguages[i]]
+            dispatch({
+                type: constant.ADD_RECENT,
+                payload: set
+            })
+        }
+    }
+
     return (
         <Container>
             <Header />
@@ -22,27 +59,39 @@ const Language = () => {
                     textColor={colors.lightgray}
                     icon={true}
                 />
-                <Text style={styles.heading}>Recent Languages</Text>
+                {language.length > 0 &&
+                    <>
+                        <Text style={styles.heading}>Recent Languages</Text>
+                        <View style={{ paddingTop: hp('3%') }}>
+                            {/* {RecentLanguages.map((item, i) => ( */}
+                            <FlatList
+                                data={language}
+                                renderItem={({ item, index }) => (
+                                    <LanguagesName
+                                        key={index}
+                                        flag={item.flag}
+                                        selectedLanguage={item.text == checkMark}
+                                        text={item.text}
+                                    />
+                                )}
+                            />
+                            {/* ))} */}
+                        </View>
+                    </>
+                }
+                <Text style={[styles.heading, { marginTop: hp('2%') }]}>All Languages</Text>
                 <View style={{ paddingTop: hp('3%') }}>
-                    {RecentLanguages.map((item, i) => (
+                    {AllLanguages.map((item, i) => (
                         <LanguagesName
                             key={i}
-                            icon={i == 1 && 'check'}
+                            onPress={() => onSelectLanguage(item, i)}
                             flag={item.flag}
+                            disabled={showRecent < 1 && item.text === 'English'}
+                            selectedLanguage={item.text == checkMark}
                             text={item.text}
                         />
                     ))}
-                   </View> 
-                    <Text style={[styles.heading, { marginTop: hp('2%') }]}>All Languages</Text>
-                    <View style={{ paddingTop: hp('3%') }}>
-                        {AllLanguages.map((item, i) => (
-                            <LanguagesName
-                                key={i}
-                                flag={item.flag}
-                                text={item.text}
-                            />
-                        ))}
-                    </View>
+                </View>
             </ScrollView>
         </Container>
     )

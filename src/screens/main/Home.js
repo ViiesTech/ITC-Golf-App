@@ -1,5 +1,5 @@
-import { Image, ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native'
+import React, { useState } from 'react'
 import Container from '../../components/Container'
 import Header from '../../components/Header'
 import images from '../../assets/images'
@@ -12,83 +12,115 @@ import Button from '../../components/Button'
 import ArrowDown from 'react-native-vector-icons/SimpleLineIcons';
 import SVGImage from '../../components/SVGImage'
 import icons from '../../assets/icons'
+import Video from 'react-native-video'
+import { useNavigation } from '@react-navigation/native'
+import AppStatusBar from '../../components/AppStatusBar'
+import { Picker } from '@react-native-picker/picker'
 
 const Home = () => {
+  const [selectedOption, setSelectedOption] = useState("")
+
+  const width = Dimensions.get('screen').width;
+
+  const navigation = useNavigation()
+
   return (
-    <Container>
-      <ScrollView>
-        <View style={styles.headerWrapper}>
-          <Header />
-        </View>
-        <Image
-          source={images.home1}
-          style={styles.image}
-        />
-        <View style={styles.textWrapper}>
-          <Text style={styles.heading}>A PLACE FOR GOLFERS</Text>
-          <Text style={styles.message}>Of All Skills Level To Find Each Other</Text>
-        </View>
-        <View style={{ padding: hp('2%') }}>
-          <View style={styles.border}>
-            {picker.map((item, i) => (
-              <DropDownPicker
-                key={i}
-                text={item.text}
-                label1={item.pickerText1}
-                label2={item.pickerText2}
-                label3={item.pickerText3} />
-            ))}
-            <Button
-              buttonText={'Search'}
-              icon={true}
-              onPress={() => alert('working in progress')}
-            />
+    <>
+      <AppStatusBar />
+      <Container>
+        <ScrollView>
+          <View style={styles.headerWrapper}>
+            <Header />
           </View>
-          <Text style={styles.text}>Listing</Text>
-          <View style={styles.cardWrapper}>
-            {cardImages.map((item) => (
-              <View style={item.id !== 5 && {
-                borderBottomWidth: 1,
-                borderBottomColor: colors.lightgray,
-                marginBottom: hp('2.5%')
-              }}>
-                <ListingCard
-                  key={item.id}
-                  image={item.image}
-                />
-              </View>
-            ))}
-          </View>
-          <TouchableOpacity style={styles.button} activeOpacity={0.9}>
-            <ArrowDown
-              name={'arrow-down'}
-              color={colors.white}
-              size={24}
-            />
-          </TouchableOpacity>
-          <View style={{ paddingTop: hp('5%') }}>
+          <Video
+            source={require('../../assets/video/homeVideo.mp4')}
+            style={[styles.backgroundVideo, { width: width }]}
+            resizeMode={"cover"}
+            repeat
+            paused={false}
+          />
+          <View style={styles.videoBackground} />
+          <View style={styles.logoWrapper}>
             <Image
-              source={images.home2}
-              style={styles.golfImage}
+              source={images.logo}
+              style={styles.logoStyle}
             />
-            <Text style={styles.heading}>Listing</Text>
-            <View style={{ paddingTop: hp('5%') }}>
-              {listingImages.map((item) => (
-                <Image
-                  source={item.image}
-                  style={styles.listingImage}
-                  borderRadius={10}
-                />
-              ))}
-              <SVGImage
-                image={icons.pageEnd}
-                style={styles.endIcon}
+          </View>
+          <View style={styles.textWrapper}>
+            <Text style={styles.heading}>A PLACE FOR GOLFERS</Text>
+            <Text style={styles.message}>Of All Skills Level To Find Each Other</Text>
+          </View>
+          <View style={{ padding: hp('2%') }}>
+            <View style={styles.border}>
+              <Text style={styles.textStyle}>Area Code</Text>
+              <View style={styles.pickerStyle}>
+                <Picker
+                  selectedValue={selectedOption}
+                  dropdownIconColor={colors.white}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setSelectedOption(itemValue)
+                  }
+                >
+                  {picker.map((item) => (
+                    <Picker.Item
+                      label={item.pickerText} value={item} style={{ color: colors.white }}
+                    />
+                  ))}
+                </Picker>
+              </View>
+              <Button
+                buttonText={'Search'}
+                icon={true}
+                onPress={() => alert('working in progress')}
               />
             </View>
+            <Text style={styles.text}>Listing</Text>
+            <View style={styles.cardWrapper}>
+              {cardImages.map((item) => (
+                <View style={item.id !== 5 && {
+                  borderBottomWidth: 1,
+                  borderBottomColor: colors.lightgray,
+                  marginBottom: hp('2.5%')
+                }}>
+                  <ListingCard
+                    key={item.id}
+                    image={item.image}
+                    onPress={() => navigation.navigate('SecondaryStack', { screen: 'ListingDetails' })}
+                  />
+                </View>
+              ))}
+            </View>
+            <TouchableOpacity style={styles.button} activeOpacity={0.9} onPress={() => navigation.navigate('Listing')}>
+              <ArrowDown
+                name={'arrow-down'}
+                color={colors.white}
+                size={24}
+              />
+            </TouchableOpacity>
+            <View style={{ paddingTop: hp('5%') }}>
+              <Image
+                source={images.home2}
+                style={styles.golfImage}
+              />
+              <Text style={styles.heading}>Listing</Text>
+              <View style={{ paddingTop: hp('5%') }}>
+                {listingImages.map((item) => (
+                  <Image
+                    source={item.image}
+                    style={styles.listingImage}
+                    borderRadius={10}
+                  />
+                ))}
+                <SVGImage
+                  image={icons.pageEnd}
+                  style={styles.endIcon}
+                />
+              </View>
+            </View>
           </View>
-        </View>
-      </ScrollView>
-    </Container>
+        </ScrollView>
+      </Container>
+    </>
   )
 }
 
@@ -119,7 +151,7 @@ const styles = StyleSheet.create({
   textWrapper: {
     left: hp('4%'),
     position: 'absolute',
-    top: hp('45%'),
+    top: hp('64%'),
   },
   border: {
     borderColor: colors.lightgray,
@@ -160,5 +192,40 @@ const styles = StyleSheet.create({
   endIcon: {
     alignSelf: 'center',
     paddingTop: hp('5%')
+  },
+  logoStyle: {
+    height: hp('22%'),
+    width: hp('22%')
+  },
+  logoWrapper: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    top: hp('27%'),
+    right: 0,
+    left: 0
+  },
+  backgroundVideo: {
+    height: hp('100%'),
+  },
+  videoBackground: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0
+  },
+  pickerStyle: {
+    borderWidth: 0.7,
+    borderRadius: 10,
+    marginTop: hp('1.5%'),
+    marginBottom: hp('4%'),
+    borderColor: colors.lightgray,
+  },
+  textStyle: {
+    color: colors.white,
+    fontSize: hp('1.8%'),
+    fontWeight: 'bold',
   }
 })

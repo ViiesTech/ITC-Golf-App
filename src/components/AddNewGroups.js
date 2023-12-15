@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, FlatList } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import colors from '../assets/colors';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { discovers, groups, picker } from '../DummyData';
+import { areaCode, discovers, groups, groupsItem, listingPicker, picker } from '../DummyData';
 import DiscoverCard from './DiscoverCard';
 import MyGroupsCard from './MyGroupsCard';
 import DropDownPicker from './DropDownPicker';
@@ -12,6 +12,7 @@ import ContactInput from './ContactInput';
 import Button from './Button';
 import UploadPicture from './UploadPicture';
 import Switch from './Switch';
+import { Picker } from '@react-native-picker/picker';
 
 const Discover = () => {
     return (
@@ -43,8 +44,11 @@ const MyGroups = () => (
     </View>
 );
 
-const AddNew = () => (
-        <View style={styles.addnewWrapper}>
+const AddNew = () => {
+    const [selectedOption, setSelectedOption] = React.useState("")
+
+    return (
+        <View style={styles.addnewWrapper} >
             <ContactInput
                 label={'Group Name'}
                 placeholder={'Add Title'}
@@ -58,30 +62,42 @@ const AddNew = () => (
                 style={[styles.input, { height: hp('15%') }]}
             />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <DropDownPicker
-                    text={'What Kind Of Listing Is This?'}
-                    iconColor={colors.lightgray}
-                    itemStyle={{ color: colors.lightgray }}
-                    label1={'Select'}
-                    style={styles.picker}
-                />
+                {listingPicker.map((item) => (
+                    <DropDownPicker
+                        text={item.text}
+                        iconColor={colors.lightgray}
+                        value1={item.pickerText1}
+                        value2={item.pickerText2}
+                        value3={item.pickerText3}
+                        itemStyle={{ color: colors.lightgray }}
+                        label1={item.pickerText1}
+                        label2={item.pickerText2}
+                        label3={item.pickerText3}
+                        style={[styles.picker, { width: '91%' }]}
+                    />
+                ))}
                 <DateInput
                     heading={'Suggested Day'}
                     icon={'date-range'}
                     text={'mm/dd/yy'}
                 />
             </View>
-            {picker.map((item) => (
-                <DropDownPicker
-                    text={item.text}
-                    iconColor={colors.lightgray}
-                    itemStyle={{ color: colors.lightgray }}
-                    label1={item.pickerText1}
-                    label2={item.pickerText2}
-                    label3={item.pickerText3}
-                    style={[styles.picker, { width: hp('44%') }]}
-                />
-            ))}
+            {
+                groupsItem.map((item) => (
+                    <DropDownPicker
+                        text={item.text}
+                        iconColor={colors.lightgray}
+                        value1={item.pickerText1}
+                        value2={item.pickerText2}
+                        value3={item.pickerText3}
+                        itemStyle={{ color: colors.lightgray }}
+                        label1={item.pickerText1}
+                        label2={item.pickerText2}
+                        label3={item.pickerText3}
+                        style={[styles.picker, { width: hp('43%') }]}
+                    />
+                ))
+            }
             <Switch
                 text={'Is This A Private Group ?'}
             />
@@ -97,7 +113,8 @@ const AddNew = () => (
                 />
             </View>
         </View>
-)
+    )
+}
 
 const renderScene = SceneMap({
     first: () => <Discover />,
@@ -124,13 +141,14 @@ export const AddNewGroups = () => {
                 <TabBar
                     indicatorStyle={styles.indicatorStyle}
                     {...styling}
-                    style={{ backgroundColor: colors.white, borderRadius: 10, height: hp('6.2%') }}
+                    style={{ backgroundColor: colors.white, borderRadius: 10, height: hp('6.7%') }}
                     renderLabel={({ route }) => (
                         <Text
                             style={{
                                 color: colors.secondary,
                                 fontWeight: 'bold',
                                 marginRight: 2,
+                                marginTop: hp('0.4%'),
                                 fontSize: hp('1.4%'),
                             }}>
                             {route.title}
@@ -146,18 +164,18 @@ const styles = StyleSheet.create({
     indicatorStyle: {
         backgroundColor: colors.primary,
         width: '30%',
-        bottom: hp('1%'),
+        bottom: hp('1.3%'),
         marginLeft: hp('0.5%'),
         alignItems: 'center',
-        borderRadius: 10,
+        borderRadius: 50,
         padding: hp('2%'),
     },
     input: {
         backgroundColor: 'transparent',
-        borderWidth: 1.5,
-        borderColor: colors.gray
+        borderWidth: 0.3,
+        borderColor: colors.white
     },
-    addnewWrapper:{
+    addnewWrapper: {
         paddingTop: hp('4%'),
-    }
+    },
 })

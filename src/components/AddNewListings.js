@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, FlatList, TouchableOpacity } from 'react-native
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import colors from '../assets/colors';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { discovers, groups, switchOptions } from '../DummyData';
+import { AllListingsPicker, discovers, groups, switchOptions } from '../DummyData';
 import DiscoverCard from './DiscoverCard';
 import MyGroupsCard from './MyGroupsCard';
 import DropDownPicker from './DropDownPicker';
@@ -65,37 +65,21 @@ const AddNew = () => (
                 display={'clock'}
             />
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <DropDownPicker
-                text={'Area Code'}
-                iconColor={colors.lightgray}
-                itemStyle={{ color: colors.lightgray }}
-                label1={'Select'}
-                style={[styles.picker, { width: hp('20%') }]}
-            />
-            <DropDownPicker
-                text={'How Many Players?'}
-                iconColor={colors.lightgray}
-                itemStyle={{ color: colors.lightgray }}
-                label1={'Select'}
-                style={[styles.picker, { width: hp('20%') }]}
-            />
-        </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <DropDownPicker
-                text={'The Itc Handshake'}
-                iconColor={colors.lightgray}
-                itemStyle={{ color: colors.lightgray }}
-                label1={'Select'}
-                style={[styles.picker, { width: hp('20%') }]}
-            />
-            <DropDownPicker
-                text={'Desired Tee Box'}
-                iconColor={colors.lightgray}
-                itemStyle={{ color: colors.lightgray }}
-                label1={'Select'}
-                style={[styles.picker, { width: hp('20%') }]}
-            />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+            {AllListingsPicker.map((item) => (
+                <DropDownPicker
+                    text={item.text}
+                    iconColor={colors.lightgray}
+                    itemStyle={{ color: colors.lightgray }}
+                    value1={item.pickerText1}
+                    value2={item.pickerText2}
+                    value3={item.pickerText3}
+                    label1={item.pickerText1}
+                    label2={item.pickerText2}
+                    label3={item.pickerText3}
+                    style={[styles.picker, { width: hp('20%') }]}
+                />
+            ))}
         </View>
         <ContactInput
             label={'Description'}
@@ -123,11 +107,11 @@ const AddNew = () => (
         </View>
         <View style={{ paddingTop: hp('2%') }}>
             <Text style={styles.heading}>Additional Details</Text>
-            <View style={{ flexDirection: 'row', paddingTop: hp('3%'), flexWrap: 'wrap',justifyContent: 'space-between'}}>
+            <View style={{ flexDirection: 'row', paddingTop: hp('3%'), flexWrap: 'wrap', justifyContent: 'space-between' }}>
                 {switchOptions.map((item) => (
                     <Switch
                         text={item.text}
-                        style={{marginBottom: hp('3%')}}
+                        style={{ marginBottom: hp('3%') }}
                     />
                 ))}
             </View>
@@ -167,11 +151,12 @@ export const AddNewListings = () => {
                 <TabBar
                     indicatorStyle={styles.indicatorStyle}
                     {...styling}
-                    style={{ backgroundColor: colors.white, borderRadius: 10, height: hp('6.2%') }}
+                    style={{ backgroundColor: colors.white, borderRadius: 10, height: hp('6.8%') }}
                     renderLabel={({ route }) => (
                         <Text
                             style={{
                                 color: colors.secondary,
+                                marginTop: hp('0.5%'),
                                 fontWeight: 'bold',
                                 fontSize: hp('1.4%'),
                             }}>
@@ -188,11 +173,11 @@ const styles = StyleSheet.create({
     indicatorStyle: {
         backgroundColor: colors.primary,
         width: '30%',
-        bottom: hp('1%'),
+        bottom: hp('1.2%'),
         marginLeft: hp('0.5%'),
         alignItems: 'center',
-        borderRadius: 10,
-        padding: hp('2%'),
+        borderRadius: 50,
+        padding: hp('2.3%'),
     },
     input: {
         backgroundColor: 'transparent',

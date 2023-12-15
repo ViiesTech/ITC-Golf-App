@@ -27,7 +27,7 @@ const MyGroupsCard = ({image}) => {
                                 <Text style={styles.text3}>Kansas City</Text>
                             </View>
                             <View style={styles.verticleLine} />
-                            <View>
+                            <View style={{marginRight: hp('1%')}}>
                                 <Text style={styles.text2}>RECORD:</Text>
                                 <Text style={[styles.text3, { marginLeft: hp('2%') }]}>11-8</Text>
                             </View>
@@ -104,10 +104,11 @@ const styles = StyleSheet.create({
     },
     text2: {
         color: colors.primary,
-        fontSize: hp('1.5%')
+        fontSize: hp('1.2%')
     },
     text3: {
         color: colors.white,
+        fontSize: hp('1.2%'),
         marginTop: hp('0.4%')
     },
     verticleLine: {

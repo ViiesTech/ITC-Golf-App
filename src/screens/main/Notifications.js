@@ -1,5 +1,5 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { ScrollView, StyleSheet, Text, View, Image } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import Container from '../../components/Container'
 import Header from '../../components/Header'
 import SecondaryHeader from '../../components/SecondaryHeader'
@@ -9,8 +9,17 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import colors from '../../assets/colors'
 import NotificationsCard from '../../components/NotificationsCard'
 import { TodayNotifications, YesterdayNotifications } from '../../DummyData'
+import images from '../../assets/images'
 
 const Notifications = () => {
+    const [notifications, setNotifications] = useState('')
+
+    useEffect(() => {
+
+        setNotifications(TodayNotifications)
+
+    }, [])
+
     return (
         <Container>
             <Header />
@@ -18,31 +27,41 @@ const Notifications = () => {
                 text={'Notifications'}
                 icon={true}
             />
-            <ScrollView contentContainerStyle={styles.screen} showsVerticalScrollIndicator={false}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={styles.heading}>Today</Text>
-                    <Text style={styles.read}>Mark As All Read</Text>
+            {notifications.length < 1 ?
+                <View style={{ flex: 0.7, alignItems: 'center', justifyContent: 'center' }}>
+                    <Image
+                        source={images.notification}
+                        style={styles.image}
+                    />
+                    <Text style={styles.text}>No Notifications</Text>
                 </View>
-                <View style={styles.notificationWrapper}>
-                    {TodayNotifications.map((item) => (
-                        <NotificationsCard
-                            image={item.image}
-                        />
-                    ))}
-                </View>
-                <Text style={styles.heading}>Yesterday</Text>
-                <View style={styles.notificationWrapper}>
-                    {YesterdayNotifications.map((item) => (
-                        <NotificationsCard
-                            image={item.image}
-                        />
-                    ))}
-                </View>
-                <SVGImage
-                    image={icons.pageEnd}
-                    style={{ alignSelf: 'center' }}
-                />
-            </ScrollView>
+                :
+                <ScrollView contentContainerStyle={styles.screen} showsVerticalScrollIndicator={false}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Text style={styles.heading}>Today</Text>
+                        <Text style={styles.read}>Mark As All Read</Text>
+                    </View>
+                    <View style={styles.notificationWrapper}>
+                        {notifications?.map((item) => (
+                            <NotificationsCard
+                                image={item.image}
+                            />
+                        ))}
+                    </View>
+                    <Text style={styles.heading}>Yesterday</Text>
+                    <View style={styles.notificationWrapper}>
+                        {YesterdayNotifications?.map((item) => (
+                            <NotificationsCard
+                                image={item.image}
+                            />
+                        ))}
+                    </View>
+                    <SVGImage
+                        image={icons.pageEnd}
+                        style={{ alignSelf: 'center' }}
+                    />
+                </ScrollView>
+            }
         </Container>
     )
 }
@@ -67,5 +86,13 @@ const styles = StyleSheet.create({
     },
     notificationWrapper: {
         paddingTop: hp('5%')
+    },
+    image: {
+        height: hp('34%'),
+        width: hp('34%')
+    },
+    text: {
+        color: colors.white,
+        fontSize: hp('3%')
     }
 })

@@ -32,10 +32,12 @@ const styles = StyleSheet.create({
     wrapper: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: hp('5%'),
+        marginTop: hp('3%'),
+        marginBottom: hp('3%'),
     },
     iconView: {
         backgroundColor: colors.white,
+
         borderRadius: 5,
         padding: hp('1.5%'),
         alignItems: 'center',

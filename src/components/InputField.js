@@ -38,13 +38,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 5,
     justifyContent: 'space-between',
-    padding: hp('1.5%'),
+    padding: hp('0.7%'),
     width: hp('40%')
   },
   input: {
     color: colors.white,
     marginLeft: hp('0.5%'),
-    fontSize: hp('1.9%')
+    fontSize: hp('1.9%'),
+    width: '90%',
   },
   icon: {
     alignSelf: 'center',

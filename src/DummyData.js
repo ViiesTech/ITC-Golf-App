@@ -4,32 +4,16 @@ import images from "./assets/images";
 export const picker = [
     {
         id: 1,
-        text: 'Area Code',
-        pickerText1: '+212',
-        pickerText2: '+310',
-        pickerText3: '+415'
+        pickerText: '+212',
     },
     {
         id: 2,
-        text: 'Experience Level',
-        pickerText1: 'Beginner',
-        pickerText2: 'Intermediate',
-        pickerText3: 'Expert'
+        pickerText: '+310',
     },
     {
         id: 3,
-        text: 'Desired Tee Box',
-        pickerText1: 'Championship (Back Tees)',
-        pickerText2: 'Mens (Middle Tees)',
-        pickerText3: 'Womens (Forward Tees)'
+        pickerText: '+415'
     },
-    {
-        id: 4,
-        text: 'The ITC Handshake',
-        pickerText1: 'Firm Handshake',
-        pickerText2: 'Gentle Handshake',
-        pickerText3: 'High-Five'
-    }
 ]
 
 export const cardImages = [
@@ -279,13 +263,13 @@ export const ContactOptions = [
 ]
 
 export const RecentLanguages = [
+    // {
+    //     id: 1,
+    //     text: 'Russian',
+    //     flag: icons.russia
+    // },
     {
         id: 1,
-        text: 'Russian',
-        flag: icons.russia
-    },
-    {
-        id: 2,
         text: 'English',
         flag: icons.english
     }
@@ -294,8 +278,8 @@ export const RecentLanguages = [
 export const AllLanguages = [
     {
         id: 1,
-        text: 'Georgian',
-        flag: icons.georgian
+        text: 'English',
+        flag: icons.english
     },
     {
         id: 2,
@@ -342,11 +326,6 @@ export const AllLanguages = [
         text: 'Georgian',
         flag: icons.georgian
     },
-    {
-        id: 11,
-        text: 'Turkish',
-        flag: icons.turkish
-    }
 ]
 
 export const stuff = [
@@ -472,7 +451,7 @@ export const ReviewImages = [
     }
 ]
 
-export const pickerss = [
+export const filterItems = [
     {
         id: 1,
         text: 'AREA CODE',
@@ -483,16 +462,16 @@ export const pickerss = [
     {
         id: 2,
         text: 'TYPE',
-        pickerText1: 'Option1',
-        pickerText2: 'Option2',
-        pickerText3: 'Option3'
+        pickerText1: 'Stroke Play',
+        pickerText2: 'Match Play',
+        pickerText3: 'Best Ball'
     },
     {
         id: 3,
         text: 'GAME',
-        pickerText1: 'Option1',
-        pickerText2: 'Option2',
-        pickerText3: 'Option3'
+        pickerText1: 'Greens Glory',
+        pickerText2: 'Divot Dynasty',
+        pickerText3: 'Golf Quest'
     },
 ]
 
@@ -665,5 +644,149 @@ export const raffles = [
     {
         id: 8,
         image: images.raffle2
+    }
+]
+
+export const Group = [
+    {
+        id: 1,
+        image: images.group1
+    },
+    {
+        id: 2,
+        image: images.group2
+    },
+    {
+        id: 3,
+        image: images.group3
+    },
+    {
+        id: 4,
+        image: images.group4
+    },
+    {
+        id: 5,
+        image: images.group1
+    },
+    {
+        id: 6,
+        image: images.group2
+    },
+    {
+        id: 7,
+        image: images.group3
+    },
+    {
+        id: 8,
+        image: images.group4
+    },
+
+
+
+
+]
+
+export const groupsItem = [
+    {
+        id: 1,
+        text: 'Area Code',
+        pickerText1: '+212',
+        pickerText2: '+310',
+        pickerText3: '+410',
+    },
+    {
+        id: 2,
+        text: 'THE ITC HANDSHAKE',
+        pickerText1: 'High-Five',
+        pickerText2: 'Wave or Nod',
+        pickerText3: 'Fist Bump',
+
+    },
+    {
+        id: 3,
+        text: 'Desired Tee Box',
+        pickerText1: 'Front Tees',
+        pickerText2: 'Back Tees',
+        pickerText3: 'Championship Tees',
+    }
+]
+
+export const listingPicker = [
+    {
+        id: 1,
+        text: 'What Kind Of Listing Is This ?',
+        pickerText1: 'Select',
+        pickerText2: 'Value',
+        pickerText3: 'Listing',
+    },
+]
+
+export const AllListingsPicker = [
+    {
+        id: 1,
+        text: 'Area Code',
+        pickerText1: '+212',
+        pickerText2: '+310',
+        pickerText3: '+415'
+    },
+    {
+        id: 2,
+        text: 'How Many Players?',
+        pickerText1: '2',
+        pickerText2: '4',
+        pickerText3: '6'
+    },
+    {
+        id: 3,
+        text: 'The Itc Handshake',
+        pickerText1: 'High-Five',
+        pickerText2: 'Wave or Nod',
+        pickerText3: 'Fist Bump'
+    },
+    {
+        id: 4,
+        text: 'Desired Tee Box',
+        pickerText1: 'Front Tees',
+        pickerText2: 'Back Tees',
+        pickerText3: 'Championship Tees'
+    }
+]
+
+export const areaCode = [
+    {
+        id: 1,
+        text: 'Area Code',
+        pickerText1: '+212',
+        pickerText2: '+310',
+        pickerText3: '+415'
+    },
+]
+
+export const profilePicker = [
+
+    {
+        id: 1,
+        text: 'Experience Level',
+        pickerText1: 'Master',
+        pickerText2: 'Intermediate',
+        pickerText3: 'Pro'
+    },
+    {
+        id: 2,
+        text: 'Search By Desired Tee Box',
+        pickerText1: 'Front Tees',
+        pickerText2: 'Back Tees',
+        pickerText3: 'Championship Tees'
+    },
+
+]
+
+export const handshake = [
+    {
+        id: 1,
+        text: 'The Itc Handshake',
+        pickerText1: 'Fist Bump',
+        pickerText2: 'High-Five',
+        pickerText3: 'Wave or Nod'
     }
 ]

@@ -1,12 +1,11 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
 import React from 'react'
-import images from '../assets/images'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import colors from '../assets/colors'
 import Alarm from 'react-native-vector-icons/MaterialCommunityIcons';
 import More from 'react-native-vector-icons/MaterialIcons'
 
-const NotificationsCard = ({image}) => {
+const NotificationsCard = ({ image }) => {
   return (
     <View style={styles.wrapper}>
       <View style={{ flexDirection: 'row' }}>
@@ -56,7 +55,7 @@ const styles = StyleSheet.create({
   text: {
     color: colors.white,
     fontWeight: 'bold',
-    fontSize: hp('1.6%')
+    fontSize: hp('1.5%')
   },
   date: {
     color: colors.lightgray,

@@ -2,8 +2,7 @@ import { StyleSheet, View, Text } from 'react-native'
 import React, { useState } from 'react'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
-import DropDownPicker from './DropDownPicker'
-import { pickerss } from '../DummyData'
+import { filterItems } from '../DummyData'
 import Button from './Button'
 import { Picker } from '@react-native-picker/picker'
 
@@ -13,7 +12,7 @@ const SearchFilter = () => {
     return (
         <View style={styles.card}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: hp('1%') }}>
-                {pickerss.map((item) => (
+                {filterItems.map((item) => (
                     <View>
                         <Text style={styles.text}>{item.text}</Text>
                         <View style={styles.pickerStyle}>
@@ -25,9 +24,13 @@ const SearchFilter = () => {
                                     setSelectedOption(itemValue)
                                 }
                             >
-                                <Picker.Item label={'Select'} value={'Select'} style={styles.labelStyle} />
-                                <Picker.Item label={'Select'} value={'Select'} style={styles.labelStyle} />
-                                <Picker.Item label={'Select'} value={'Select'} style={styles.labelStyle} />
+                                {/* {filterItems.map((value) => ( */}
+                                {/* <> */}
+                                <Picker.Item label={item.pickerText1} value={item.pickerText1} style={styles.labelStyle} />
+                                <Picker.Item label={item.pickerText2} value={item.pickerText2} style={styles.labelStyle} />
+                                <Picker.Item label={item.pickerText3} value={item.pickerText3} style={styles.labelStyle} />
+                                {/* </> */}
+                                {/* ))} */}
                             </Picker>
                         </View>
                     </View>
@@ -52,7 +55,7 @@ const styles = StyleSheet.create({
         padding: hp('1.7%'),
     },
     pickerStyle: {
-        width: hp('14%'),
+        width: hp('13%'),
         marginTop: hp('1%'),
         borderRadius: 5,
         borderWidth: 0.4
@@ -68,6 +71,6 @@ const styles = StyleSheet.create({
     },
     labelStyle: {
         color: colors.secondary,
-        fontSize: hp('1%')
+        fontSize: hp('1.6%')
     }
 })

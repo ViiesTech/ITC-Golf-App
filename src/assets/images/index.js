@@ -20,6 +20,7 @@ export default {
     listing7: require('../images/listing7.png'),
     giveaway1: require('../images/giveaway1.png'),
     profile: require('../images/profileImage.png'),
+    notification: require('../images/notification.png'),
     notification1: require('../images/notifications1.png'),
     notification2: require('../images/notifications2.png'),
     notification3: require('../images/notifications3.png'),
@@ -63,6 +64,10 @@ export default {
     discover8: require('../images/discover8.png'),
     editProfile: require('../images/profilePhoto.png'),
     raffle1: require('../images/raffle1.png'),
-    raffle2: require('../images/raffle2.png')
+    raffle2: require('../images/raffle2.png'),
+    group1: require('../images/group1.png'),
+    group2: require('../images/group2.png'),
+    group3: require('../images/group3.png'),
+    group4: require('../images/group4.png')
 
 }

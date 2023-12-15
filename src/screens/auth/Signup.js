@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native'
 import AuthContainer from '../../components/AuthContainer';
 import images from '../../assets/images';
@@ -7,10 +7,57 @@ import colors from '../../assets/colors';
 import InputField from '../../components/InputField';
 import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { signup } from '../../redux/actions/authAction';
+import { ShowToast } from '../../Custom';
 
 const Signup = () => {
+  const [username, setUsername] = useState('')
+  const [firstname, setFirstName] = useState('')
+  const [lastname, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [cpassword, setCPassword] = useState('')
 
   const navigation = useNavigation()
+
+  const dispatch = useDispatch()
+
+  const { signup_loading } = useSelector(state => state.AuthReducer)
+
+  const initialState = () => {
+    setUsername('')
+    setFirstName('')
+    setLastName('')
+    setEmail('')
+    setPassword('')
+    setCPassword('')
+  }
+
+  const onSignupPress = async () => {
+    if (!username) {
+      return ShowToast('Please fill all fields')
+    } else if (password.length < 8) {
+      return ShowToast('Password is too short')
+    } else if (cpassword !== password) {
+      return ShowToast('Password does not match')
+    }
+    else {
+      const res = await dispatch(signup(
+        username,
+        firstname,
+        lastname,
+        email,
+        password,
+        cpassword
+      ))
+      if (res) {
+        navigation.goBack()
+        initialState()
+        return ShowToast('User created Successfully')
+      }
+    }
+  }
 
   return (
     <AuthContainer>
@@ -25,28 +72,43 @@ const Signup = () => {
           <View style={{ paddingTop: hp('3%') }}>
             <InputField
               style={styles.input}
-              placeholder={'Name'}
+              value={username}
+              onChangeText={(text) => setUsername(text)}
+              placeholder={'Username'}
               icon={'user'}
             />
             <InputField
               style={styles.input}
+              value={firstname}
+              onChangeText={(text) => setFirstName(text)}
+              placeholder={'First Name'}
+              icon={'user'}
+            />
+            <InputField
+              style={styles.input}
+              value={lastname}
+              onChangeText={(text) => setLastName(text)}
               placeholder={'Last Name'}
               icon={'user'}
             />
             <InputField
               style={styles.input}
               placeholder={'@example.com'}
+              value={email}
+              onChangeText={(text) => setEmail(text)}
               keyboardType={'email-address'}
               icon={'mail'}
             />
-            <InputField
+            {/* <InputField
               style={styles.input}
               icon={'smartphone'}
               keyboardType={'numeric'}
               placeholder={'Phone number'}
-            />
+            /> */}
             <InputField
               style={styles.input}
+              value={password}
+              onChangeText={(text) => setPassword(text)}
               placeholder={'Password'}
               secureTextEntry={true}
               icon={'lock'}
@@ -54,18 +116,21 @@ const Signup = () => {
             <InputField
               style={styles.input}
               icon={'lock'}
+              value={cpassword}
+              onChangeText={(text) => setCPassword(text)}
               placeholder={'Confirm Password'}
               secureTextEntry={true}
             />
             <Button
               buttonStyle={styles.button}
               buttonText={'SIGNUP'}
-              onPress={() => navigation.navigate('MainStack')}
+              indicator={signup_loading}
+              onPress={() => onSignupPress()}
             />
             <TouchableOpacity activeOpacity={0.9}
               onPress={() => navigation.goBack()}
             >
-              <Text style={styles.message}>Have have an account?  <Text style={{ color: colors.primary }}>Login</Text></Text>
+              <Text style={styles.message}>Have an account? <Text style={{ color: colors.primary }}>Login</Text></Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -79,12 +144,13 @@ export default Signup;
 const styles = StyleSheet.create({
   screen: {
     alignItems: 'center',
+    flexGrow: 1,
     paddingTop: hp('7%'),
-    paddingBottom: hp('7%')
+    paddingBottom: hp('39%')
   },
   image: {
     height: hp('16%'),
-    width: '30%',
+    width: '32%',
   },
   heading: {
     color: colors.white,
@@ -96,7 +162,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     alignSelf: 'center',
     fontWeight: 'bold',
-    marginTop: hp('2%')
+    marginTop: hp('3%')
   },
   input: {
     marginBottom: hp('2%')

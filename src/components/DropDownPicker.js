@@ -4,8 +4,10 @@ import { Picker } from '@react-native-picker/picker'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
-const DropDownPicker = ({ text, label1, label2, label3, textStyle, style, itemStyle, iconColor, labelStyle }) => {
+const DropDownPicker = ({ text, label1, label2, label3, textStyle, style, itemStyle, labelStyle, value1, value2, value3 }) => {
     const [selectedOption, setSelectedOption] = useState("")
+
+    console.log(selectedOption)
 
     return (
         <View>
@@ -19,9 +21,9 @@ const DropDownPicker = ({ text, label1, label2, label3, textStyle, style, itemSt
                         setSelectedOption(itemValue)
                     }
                 >
-                    <Picker.Item label={label1} value={'Select'} style={labelStyle} />
-                    <Picker.Item label={label2} value={'Select'} style={labelStyle} />
-                    <Picker.Item label={label3} value={'Select'} style={labelStyle} />
+                    <Picker.Item label={label1} value={value1} style={labelStyle} />
+                    <Picker.Item label={label2} value={value2} style={labelStyle} />
+                    <Picker.Item label={label3} value={value3} style={labelStyle} />
                 </Picker>
             </View>
         </View>
@@ -40,7 +42,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: colors.white,
-        fontSize: hp('1.8%'),
+        fontSize: hp('1.6%'),
         fontWeight: 'bold',
     },
     textStyle: {

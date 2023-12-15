@@ -91,12 +91,12 @@ const styles = StyleSheet.create({
     },
     image2: {
         height: hp('21%'),
-        width: '56%'
+        width: '54%'
     },
     image3: {
         height: hp('10%'),
         marginLeft: hp('2%'),
-        width: hp('19%')
+        width: hp('17%')
     },
     heading: {
         color: colors.white,

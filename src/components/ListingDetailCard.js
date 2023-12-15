@@ -3,7 +3,7 @@ import React from 'react'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import colors from '../assets/colors'
 
-const ListingDetailCard = ({ image, onPress }) => {
+const ListingDetailCard = ({ image, onPress, hideTag }) => {
     return (
         <TouchableOpacity style={{ marginBottom: hp('10%') }} activeOpacity={0.9} onPress={onPress}>
             <Image
@@ -11,14 +11,23 @@ const ListingDetailCard = ({ image, onPress }) => {
                 style={styles.image}
                 borderRadius={10}
             />
-            <View style={styles.textView}>
-                <Text style={styles.numberText}>01</Text>
-            </View>
+            {!hideTag &&
+                <View style={styles.textView}>
+                    <Text style={styles.numberText}>01</Text>
+                </View>
+            }
             <View style={styles.wrapper}>
-                <Text style={styles.text}>MOKAN Elite (MO)</Text>
+                <Text style={[styles.text, { fontSize: hideTag && hp('1.7%') }]}>MOKAN Elite (MO)</Text>
+                {hideTag &&
+                    <View style={[styles.textView, { left: hp('17%'), padding: hp('0.7%'), top: hp('1.7%') }]}>
+                        <Text style={[styles.numberText, { fontSize: hp('1.5%') }]}>01</Text>
+                    </View>
+                }
                 <Text style={styles.winText}>Wins:<Text style={{ color: colors.lightgray }}> Indy Heat, Mac Irvin Fire, NJ Scholars</Text></Text>
-                <Text style={styles.loseText}>Losses: New Heights Lightning</Text>
-                <View style={styles.line} />
+                {!hideTag &&
+                    <Text style={styles.loseText}>Losses: New Heights Lightning</Text>
+                }
+                <View style={[styles.line, { marginTop: hideTag ? hp('8%') : hp('4%') }]} />
                 <View style={styles.textWrapper}>
                     <View style={{ paddingTop: hp('3%') }}>
                         <Text style={styles.textStyle}>LAST EVENT:</Text>
@@ -30,7 +39,7 @@ const ListingDetailCard = ({ image, onPress }) => {
                     </View>
                 </View>
             </View>
-        </TouchableOpacity>
+        </TouchableOpacity >
     )
 }
 
@@ -43,6 +52,7 @@ const styles = StyleSheet.create({
     },
     textView: {
         backgroundColor: colors.primary,
+        borderRadius: 5,
         padding: hp('1%'),
         position: 'absolute',
         left: hp('1.5%'),
@@ -75,7 +85,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.5,
         width: '100%',
         borderBottomColor: colors.lightgray,
-        marginTop: hp('4%')
     },
     textWrapper: {
         flexDirection: 'row',

@@ -11,20 +11,10 @@ import { ReviewImages, Tabs } from '../../DummyData'
 import ReviewCard from '../../components/ReviewCard'
 import SVGImage from '../../components/SVGImage'
 import icons from '../../assets/icons'
+import Button from '../../components/Button'
 
-const PersonalInfo = () => {
-    const [chooseButton, setChooseButton] = useState(1)
-    const [changeTab, setChangeTab] = useState(false)
-
-    const onChangeTab = (index) => {
-        setChooseButton(index)
-        if (index == 2) {
-            setChangeTab(true)
-        } else {
-            setChangeTab(false)
-        }
-
-    }
+const ListingDetails = () => {
+    const [changeTab, setChangeTab] = useState(1)
 
     return (
         <Container>
@@ -37,33 +27,14 @@ const PersonalInfo = () => {
                     {Tabs.map((item) => (
                         <PersonalInfoTab
                             text={item.text}
-                            style={chooseButton == item.id ? { backgroundColor: colors.primary, borderWidth: 0 } : { backgroundColor: 'transparent', borderWidth: 2 }}
-                            onPress={() => onChangeTab(item.id)}
+                            style={changeTab == item.id ? [styles.active, { width: item.id == 2 ? '36%' : '55%' }] : [styles.inactive, { width: item.id == 1 ? '55%' : '36%' }]}
+                            onPress={() => setChangeTab(item.id)}
+                            textStyle={changeTab == item.id && { marginTop: hp('0.3%') }}
                         />
                     ))}
                 </View>
-                {changeTab ?
+                {changeTab == 1 ?
                     <>
-                        <ScrollView contentContainerStyle={{ paddingTop: hp('5%'),paddingBottom: hp('10%') }}>
-                            <Text style={styles.review}>Reviews</Text>
-                            <View style={{ paddingTop: hp('3%') }}>
-                                <FlatList
-                                    data={ReviewImages}
-                                    numColumns={2}
-                                    columnWrapperStyle={{ justifyContent: 'space-between' }}
-                                    renderItem={({ item, index }) => (
-                                        <ReviewCard
-                                            image={item.image}
-                                        />
-                                    )}
-                                />
-                            </View>
-                            <SVGImage 
-                                image={icons.pageEnd} 
-                                style={{alignSelf: 'center'}}
-                            />
-                        </ScrollView>
-                    </> : <>
                         <View style={{ paddingTop: hp('10%') }}>
                             <View style={styles.headingView}>
                                 <Image
@@ -86,6 +57,12 @@ const PersonalInfo = () => {
                                     <Text style={styles.heading}>SUGGESTED TIME:</Text>
                                     <Text style={styles.heading}>HOW MANY PLAYERS:</Text>
                                     <Text style={styles.heading}>THE ITC HANDSHAKE:</Text>
+                                    <Button
+                                        buttonText={'Join Listing'}
+                                        buttonStyle={styles.button}
+                                        textStyle={{ color: colors.secondary }}
+                                        onPress={() => alert('working in progress')}
+                                    />
                                 </View>
                             </View>
                             <View>
@@ -105,6 +82,26 @@ const PersonalInfo = () => {
                                 <Text style={[styles.text, { width: '50%' }]}>CASUAL HANDSHAKE</Text>
                             </View>
                         </View>
+                    </> : <>
+                        <ScrollView contentContainerStyle={{ paddingTop: hp('5%'), paddingBottom: hp('10%') }}>
+                            <Text style={styles.review}>Reviews</Text>
+                            <View style={{ paddingTop: hp('3%') }}>
+                                <FlatList
+                                    data={ReviewImages}
+                                    numColumns={2}
+                                    columnWrapperStyle={{ justifyContent: 'space-between' }}
+                                    renderItem={({ item, index }) => (
+                                        <ReviewCard
+                                            image={item.image}
+                                        />
+                                    )}
+                                />
+                            </View>
+                            <SVGImage
+                                image={icons.pageEnd}
+                                style={{ alignSelf: 'center' }}
+                            />
+                        </ScrollView>
                     </>
                 }
 
@@ -113,7 +110,7 @@ const PersonalInfo = () => {
     )
 }
 
-export default PersonalInfo
+export default ListingDetails
 
 const styles = StyleSheet.create({
     screen: {
@@ -142,8 +139,8 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
         borderRadius: 10,
         padding: hp('2%'),
+        paddingLeft: hp('1%'),
         flexDirection: 'row',
-        justifyContent: 'space-between'
     },
     heading: {
         color: colors.white,
@@ -164,14 +161,26 @@ const styles = StyleSheet.create({
     },
     text: {
         color: colors.lightgray,
-        fontSize: hp('1.7%'),
+        fontSize: hp('1.6%'),
         marginBottom: hp('6%'),
-        marginLeft: hp('5%'),
+        marginLeft: hp('3.5%'),
         marginTop: hp('0.1%')
     },
     review: {
         color: colors.white,
         fontWeight: 'bold',
         fontSize: hp('2.4%')
+    },
+    inactive: {
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+    },
+    active: {
+        backgroundColor: colors.primary,
+        borderWidth: 0
+    },
+    button: {
+        marginTop: hp('4%'),
+        borderRadius: 50,
     }
 })

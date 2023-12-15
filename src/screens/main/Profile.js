@@ -11,12 +11,17 @@ import { MainSettings, Options, settings } from '../../DummyData'
 import ProfileSettings from '../../components/ProfileSettings'
 import { useNavigation } from '@react-navigation/native'
 import Arrow from 'react-native-vector-icons/FontAwesome6';
+import { useDispatch } from 'react-redux'
+import constant from '../../redux/constant'
+import { ShowToast } from '../../Custom'
 
 const Profile = () => {
 
   const url = 'https://google.com'
 
   const navigation = useNavigation()
+
+  const dispatch = useDispatch()
 
   const onSettingsPress = async (index) => {
     if (index == 0) {
@@ -52,6 +57,11 @@ const Profile = () => {
   const onOptionsPress = (index) => {
     if (index == 1) {
       navigation.navigate('SecondaryStack', { screen: 'AllGroups', params: { options: 'My Profile' } })
+    } else if (index == 2) {
+      dispatch({
+        type: constant.LOGOUT
+      })
+      return ShowToast('Logout Successfully')
     }
   }
 
@@ -146,7 +156,8 @@ const styles = StyleSheet.create({
   optionsCard: {
     backgroundColor: colors.primary,
     borderRadius: 8,
-    padding: hp('2.7%')
+    paddingHorizontal: hp('3%'),
+    padding: hp('0.1%')
   },
   heading: {
     color: colors.white,

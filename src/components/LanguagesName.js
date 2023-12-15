@@ -1,13 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import SVGImage from './SVGImage'
 import Check from 'react-native-vector-icons/AntDesign';
 
-const LanguagesName = ({ icon, text, flag }) => {
+const LanguagesName = ({ text, flag, onPress, selectedLanguage, disabled }) => {
     return (
-        <View style={styles.languageView}>
+        <TouchableOpacity style={styles.languageView} onPress={onPress} activeOpacity={0.9} disabled={disabled} >
             <View style={{ flexDirection: 'row' }}>
                 <SVGImage
                     image={flag}
@@ -15,13 +15,15 @@ const LanguagesName = ({ icon, text, flag }) => {
                 />
                 <Text style={styles.text}>{text}</Text>
             </View>
-            <Check
-                name={icon}
-                color={'#e61824'}
-                size={22}
-                style={{ alignSelf: 'center' }}
-            />
-        </View>
+            {selectedLanguage &&
+                <Check
+                    name={'check'}
+                    color={'#e61824'}
+                    size={22}
+                    style={{ alignSelf: 'center' }}
+                />
+            }
+        </TouchableOpacity>
     )
 }
 

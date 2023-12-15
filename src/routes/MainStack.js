@@ -3,7 +3,6 @@ import React from 'react'
 import Home from '../screens/main/Home'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Listing from '../screens/main/Listing'
-import Giveaways from '../screens/main/Giveaways'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import SVGImage from '../components/SVGImage'
 import icons from '../assets/icons'
@@ -17,10 +16,10 @@ import Language from '../screens/main/Language'
 import Rating from '../screens/main/Rating'
 import About from '../screens/main/About'
 import FreeStuff from '../screens/main/FreeStuff'
-import PersonalInfo from '../screens/main/PersonalInfo'
 import AllGroups from '../screens/main/AllGroups'
 import MerchandiseDetails from '../screens/main/MerchandiseDetails'
-import RaffleGiveaways from '../screens/main/RaffleGiveaways'
+import Groups from '../screens/main/Groups'
+import ListingDetails from '../screens/main/ListingDetails'
 
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
@@ -34,8 +33,8 @@ const BottomStack = () => {
         tabBarShowLabel: false,
         tabBarStyle: {
           borderTopWidth: 0,
-          height: 90,
-          backgroundColor: 'rgb(65,65,65)',
+          height: 80,
+          backgroundColor: 'rgb(65,65,60)',
         },
       }}
     >
@@ -88,18 +87,18 @@ const BottomStack = () => {
         }}
       />
       <Tab.Screen
-        name='GiveawayStack'
-        component={GiveawayStack}
+        name='Groups'
+        component={Groups}
         options={{
           tabBarIcon: ({ focused }) => (
             focused ?
               <View style={styles.iconView}>
                 <SVGImage
-                  image={icons.giveaways_active}
+                  image={icons.groups_active}
                 />
               </View>
               :
-              <SVGImage image={icons.giveaways_inactive} />
+              <SVGImage image={icons.groups_inactive} />
           )
         }}
       />
@@ -136,18 +135,18 @@ const MerchandiseStack = () => {
   )
 }
 
-const GiveawayStack = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false
-      }}
-    >
-      <Tab.Screen name='Giveaways' component={Giveaways} />
-      <Tab.Screen name='RaffleGiveaways' component={RaffleGiveaways} />
-    </Stack.Navigator>
-  )
-}
+// const GiveawayStack = () => {
+//   return (
+//     <Stack.Navigator
+//       screenOptions={{
+//         headerShown: false
+//       }}
+//     >
+//       <Tab.Screen name='Giveaways' component={Giveaways} />
+//       <Tab.Screen name='RaffleGiveaways' component={RaffleGiveaways} />
+//     </Stack.Navigator>
+//   )
+// }
 
 const SecondaryStack = () => {
   return (
@@ -164,7 +163,7 @@ const SecondaryStack = () => {
       <Tab.Screen name='Rating' component={Rating} />
       <Tab.Screen name='About' component={About} />
       <Tab.Screen name='FreeStuff' component={FreeStuff} />
-      <Tab.Screen name='PersonalInfo' component={PersonalInfo} />
+      <Tab.Screen name='ListingDetails' component={ListingDetails} />
       <Tab.Screen name='AllGroups' component={AllGroups} />
     </Stack.Navigator>
   )

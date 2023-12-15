@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import colors from '../assets/colors';
 
-const ListingCard = ({image}) => {
+const ListingCard = ({image, onPress}) => {
     return (
-        <View style={styles.wrapper}>
+        <TouchableOpacity style={styles.wrapper} activeOpacity={0.9} onPress={onPress}>
             <View style={{ flexDirection: 'row' }}>
                 <Image
                     source={image}
@@ -22,13 +22,13 @@ const ListingCard = ({image}) => {
                 </View>
                 <Text style={styles.text}>MOKAN Elite (MO)</Text>
             </View>
-            <View>
+            <View style={{marginRight: hp('1%')}}>
                 <Text style={styles.eventsText}>LAST EVENT:</Text>
                 <Text style={styles.location}>Nike EYBL IV: Kansas City</Text>
                 <Text style={styles.recordHeading}>RECORD:</Text>
                 <Text style={styles.recordsNumber}>11-8</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     text: {
         color: colors.white,
         marginTop: hp('1.7%'),
+        fontSize: hp('1.4%'),
         fontWeight: 'bold',
         marginLeft: hp('1%')
     },
@@ -78,16 +79,19 @@ const styles = StyleSheet.create({
     textStyle: {
         color: colors.white,
         marginTop: hp('2%'),
+        fontSize: hp('1.4%'),
         position: 'absolute',
     },
     recordHeading: {
         color: colors.white,
         alignSelf: 'flex-end',
+        fontSize: hp('1.4%'),
         marginTop: hp('2%')
     },
     recordsNumber: {
         color: colors.white,
         marginTop: hp('0.5%'),
+        fontSize: hp('1.4%'),
         alignSelf: 'flex-end'
     }
 

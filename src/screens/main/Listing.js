@@ -25,14 +25,14 @@ const Listing = () => {
           contentContainerStyle={{ paddingBottom: hp('35%') }}
           numColumns={2}
           columnWrapperStyle={{ justifyContent: 'space-between' }}
-          renderItem={({ item, index }) => (
+          renderItem={({ item }) => (
             <ListingDetailCard
               image={item.image}
-              onPress={() => navigation.navigate('SecondaryStack',{screen: 'PersonalInfo'})}
+              onPress={() => navigation.navigate('SecondaryStack', { screen: 'PersonalInfo' })}
             />
           )}
         />
-      <SVGImage image={icons.pageEnd} style={styles.endIcon} />
+        <SVGImage image={icons.pageEnd} style={styles.endIcon} />
       </View>
     </Container>
   )
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     paddingTop: hp('2%'),
     padding: hp('3%'),
   },
-  endIcon:{
+  endIcon: {
     alignSelf: 'center',
   }
 })

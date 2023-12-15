@@ -16,13 +16,14 @@ import ContactInput from '../../components/ContactInput'
 import DropDownPicker from '../../components/DropDownPicker'
 import Button from '../../components/Button'
 import { AddNewListings } from '../../components/AddNewListings'
+import { areaCode, handshake, profilePicker } from '../../DummyData'
 
 const AllGroups = ({ route }) => {
     const { options } = route.params
 
     const [changeTab, setChangeTab] = useState(options)
 
-    console.log(changeTab)
+    console.log(options)
 
 
     return (
@@ -30,7 +31,7 @@ const AllGroups = ({ route }) => {
             <Header />
             <ScrollView contentContainerStyle={[styles.wrapper, { paddingBottom: changeTab === 'Add New Groups' || changeTab === 'Add New Listings' ? hp('215%') : 0 }]} showsVerticalScrollIndicator={false}>
                 <SecondaryHeader
-                    text={'All Groups'}
+                    text={options === 'Add New Listings' || changeTab === 'Add New Listings' ? 'All Listings' : options === 'Players You Follow' || changeTab === 'Players You Follow' ? 'Players You Follow' : options === 'Add New Groups' || changeTab === 'Add New Groups' ? 'All Groups' : 'My Profile'}
                 />
                 <View style={styles.screen}>
                     <AllOptionsCard
@@ -59,7 +60,7 @@ const AllGroups = ({ route }) => {
                                 :
                                 <View style={{ paddingTop: hp('4%') }}>
                                     <Text style={styles.heading}>EDIT YOUR PROFILE</Text>
-                                    <View style={{ position: 'relative', height: hp('14%'), width: '40%',marginTop: hp('2%') }}>
+                                    <View style={{ position: 'relative', height: hp('14%'), width: '40%', marginTop: hp('2%') }}>
                                         <Image
                                             source={images.editProfile}
                                             style={styles.imageStyle}
@@ -87,28 +88,44 @@ const AllGroups = ({ route }) => {
                                             textColor={colors.lightgray}
                                         />
                                     </View>
-                                    <DropDownPicker
-                                        style={styles.pickerStyle}
-                                        text={'Area Code'}
-                                        label1={'Select'}
-                                    />
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <DropDownPicker
-                                            style={[styles.pickerStyle, { width: hp('20%') }]}
-                                            text={'Experience Level'}
-                                            label1={'Select'}
-                                        />
+                                    {areaCode.map((item) => (
                                         <DropDownPicker
                                             style={styles.pickerStyle}
-                                            text={'Search By Desired Tee Box'}
-                                            label1={'Select'}
+                                            text={item.text}
+                                            value1={item.pickerText1}
+                                            value2={item.pickerText2}
+                                            value3={item.pickerText3}
+                                            label1={item.pickerText1}
+                                            label2={item.pickerText2}
+                                            label3={item.pickerText3}
                                         />
+                                    ))}
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                                        {profilePicker.map((item) => (
+                                            <DropDownPicker
+                                                style={[styles.pickerStyle, { width: item.id == 1 ? '150%' : null }]}
+                                                text={item.text}
+                                                value1={item.pickerText1}
+                                                value2={item.pickerText2}
+                                                value3={item.pickerText3}
+                                                label1={item.pickerText1}
+                                                label2={item.pickerText2}
+                                                label3={item.pickerText3}
+                                            />
+                                        ))}
                                     </View>
-                                    <DropDownPicker
-                                        style={[styles.pickerStyle, { marginBottom: hp('1%') }]}
-                                        text={'The Itc Handshake'}
-                                        label1={'Select'}
-                                    />
+                                    {handshake.map((item) => (
+                                        <DropDownPicker
+                                            style={styles.pickerStyle}
+                                            text={item.text}
+                                            value1={item.pickerText1}
+                                            value2={item.pickerText2}
+                                            value3={item.pickerText3}
+                                            label1={item.pickerText1}
+                                            label2={item.pickerText2}
+                                            label3={item.pickerText3}
+                                        />
+                                    ))}
                                     <Text style={{ color: colors.primary, fontSize: hp('1.5%'), marginBottom: hp('4%') }}>ITC GIVEAWAY AND RAFFLE ADDRESS</Text>
                                     <ContactInput
                                         style={[styles.input, { height: hp('16%'), width: '100%' }]}
@@ -126,7 +143,6 @@ const AllGroups = ({ route }) => {
                                         textStyle={{ color: colors.secondary, fontSize: hp('1.8%') }}
                                     />
                                 </View>
-
                     }
                     <SVGImage
                         image={icons.pageEnd}
@@ -163,7 +179,7 @@ const styles = StyleSheet.create({
     input: {
         backgroundColor: 'transparent',
         borderWidth: 1.5,
-        width: hp('22%'),
+        width: hp('19%'),
         borderColor: colors.gray
     },
     picker: {
