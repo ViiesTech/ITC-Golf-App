@@ -2,12 +2,13 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import colors from '../assets/colors'
+import images from '../assets/images'
 
-const ListingDetailCard = ({ image, onPress, hideTag }) => {
+const ListingDetailCard = ({ image, onPress, hideTag, title, desc, exp, date, time}) => {
     return (
-        <TouchableOpacity style={{ marginBottom: hp('10%') }} activeOpacity={0.9} onPress={onPress}>
+        <TouchableOpacity style={{ marginBottom: hp('10%'), width: '45%' }} activeOpacity={0.9} onPress={onPress}>
             <Image
-                source={image}
+                source={images.listing2}
                 style={styles.image}
                 borderRadius={10}
             />
@@ -17,25 +18,25 @@ const ListingDetailCard = ({ image, onPress, hideTag }) => {
                 </View>
             }
             <View style={styles.wrapper}>
-                <Text style={[styles.text, { fontSize: hideTag && hp('1.7%') }]}>MOKAN Elite (MO)</Text>
+                <Text style={[styles.text, { fontSize: hideTag && hp('1.7%') }]}>{title}</Text>
                 {hideTag &&
                     <View style={[styles.textView, { left: hp('17%'), padding: hp('0.7%'), top: hp('1.7%') }]}>
                         <Text style={[styles.numberText, { fontSize: hp('1.5%') }]}>01</Text>
                     </View>
                 }
-                <Text style={styles.winText}>Wins:<Text style={{ color: colors.lightgray }}> Indy Heat, Mac Irvin Fire, NJ Scholars</Text></Text>
+                <Text style={styles.winText}>{desc}</Text>
                 {!hideTag &&
-                    <Text style={styles.loseText}>Losses: New Heights Lightning</Text>
+                    <Text style={styles.loseText}>{exp}</Text>
                 }
                 <View style={[styles.line, { marginTop: hideTag ? hp('8%') : hp('4%') }]} />
                 <View style={styles.textWrapper}>
                     <View style={{ paddingTop: hp('3%') }}>
-                        <Text style={styles.textStyle}>LAST EVENT:</Text>
-                        <Text style={styles.fontStyle}>Nike EYBL IV: Kansas City</Text>
+                        <Text style={styles.textStyle}>DATE:</Text>
+                        <Text style={styles.fontStyle}>{date}</Text>
                     </View>
                     <View style={{ paddingTop: hp('3%') }}>
-                        <Text style={styles.textStyle}>RECORD:</Text>
-                        <Text style={[styles.fontStyle, { alignSelf: 'flex-end' }]}>11-8</Text>
+                        <Text style={styles.textStyle}>TIME:</Text>
+                        <Text style={[styles.fontStyle, { alignSelf: 'flex-end' }]}>{time}</Text>
                     </View>
                 </View>
             </View>

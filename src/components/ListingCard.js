@@ -2,13 +2,14 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import colors from '../assets/colors';
+import images from '../assets/images';
 
-const ListingCard = ({image, onPress}) => {
+const ListingCard = ({image, onPress,title,desc,count, exp, date, descStyle}) => {
     return (
         <TouchableOpacity style={styles.wrapper} activeOpacity={0.9} onPress={onPress}>
             <View style={{ flexDirection: 'row' }}>
                 <Image
-                    source={image}
+                    source={images.listing2}
                     style={styles.image}
                     borderRadius={12}
                 />
@@ -17,16 +18,16 @@ const ListingCard = ({image, onPress}) => {
                         <Text style={styles.number}>01</Text>
                     </View>
                     <View style={{ position: 'absolute', top: hp('5%') }}>
-                        <Text style={styles.textStyle}>Wins: Indy Heat, Mac Irvin Fire</Text>
+                        <Text style={[styles.textStyle,descStyle]}>{desc}</Text>
                     </View>
                 </View>
-                <Text style={styles.text}>MOKAN Elite (MO)</Text>
+                <Text style={styles.text}>{title}</Text>
             </View>
             <View style={{marginRight: hp('1%')}}>
-                <Text style={styles.eventsText}>LAST EVENT:</Text>
-                <Text style={styles.location}>Nike EYBL IV: Kansas City</Text>
-                <Text style={styles.recordHeading}>RECORD:</Text>
-                <Text style={styles.recordsNumber}>11-8</Text>
+                <Text style={styles.eventsText}>NO OF PLAYERS:</Text>
+                <Text style={styles.location}>{count}</Text>
+                <Text style={styles.recordHeading}>{exp}</Text>
+                <Text style={styles.recordsNumber}>{date}</Text>
             </View>
         </TouchableOpacity>
     )
@@ -37,8 +38,8 @@ export default ListingCard;
 const styles = StyleSheet.create({
     wrapper: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: hp('4.5%'),
+        justifyContent: 'space-around',
+        marginBottom: hp('7%'),
         paddingTop: hp('2%')
     },
     image: {
@@ -47,20 +48,23 @@ const styles = StyleSheet.create({
     },
     textWrapper: {
         marginLeft: hp('1.5%'),
-        marginTop: hp('0.5%')
+        marginTop: hp('0.8%')
     },
     textView: {
         backgroundColor: colors.gray,
-        padding: hp('1%'),
+        borderRadius: 5,
+        padding: hp('0.6%'),
     },
     number: {
         color: colors.white,
+        fontSize: hp('1.3%'),
         fontWeight: 'bold'
     },
     text: {
         color: colors.white,
-        marginTop: hp('1.7%'),
+        marginTop: hp('1%'),
         fontSize: hp('1.4%'),
+        width: '40%',
         fontWeight: 'bold',
         marginLeft: hp('1%')
     },
@@ -72,15 +76,16 @@ const styles = StyleSheet.create({
     },
     location: {
         color: colors.white,
+        alignSelf: 'flex-end',
         marginBottom: hp('0.5%'),
-        fontSize: hp('1.2%'),
+        fontSize: hp('1.4%'),
         marginTop: hp('2%')
     },
     textStyle: {
         color: colors.white,
-        marginTop: hp('2%'),
+        marginTop: hp('0%'),
         fontSize: hp('1.4%'),
-        position: 'absolute',
+        // position: 'absolute',
     },
     recordHeading: {
         color: colors.white,

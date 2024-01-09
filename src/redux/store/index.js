@@ -9,7 +9,8 @@ const persistConfig = {
     storage: AsyncStorage,
     whitelist: [
         "LanguageReducer",
-        "AuthReducer"
+        "AuthReducer",
+        "HomeReducer",
     ],
     blacklist: []
 }

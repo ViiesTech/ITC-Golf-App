@@ -1,5 +1,5 @@
 import { Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Container from '../../components/Container'
 import Header from '../../components/Header'
 import images from '../../assets/images'
@@ -16,13 +16,27 @@ import Video from 'react-native-video'
 import { useNavigation } from '@react-navigation/native'
 import AppStatusBar from '../../components/AppStatusBar'
 import { Picker } from '@react-native-picker/picker'
+import { useDispatch, useSelector } from 'react-redux'
+import { getListings } from '../../redux/actions/homeAction'
+import Loader from '../../components/Loader'
 
 const Home = () => {
   const [selectedOption, setSelectedOption] = useState("")
 
   const width = Dimensions.get('screen').width;
 
+  const { listing } = useSelector(state => state.HomeReducer)
+  console.log('listinggg', listing)
+
+  const dispatch = useDispatch()
+
   const navigation = useNavigation()
+
+  useEffect(() => {
+
+    dispatch(getListings())
+
+  }, [])
 
   return (
     <>
@@ -76,16 +90,22 @@ const Home = () => {
             </View>
             <Text style={styles.text}>Listing</Text>
             <View style={styles.cardWrapper}>
-              {cardImages.map((item) => (
-                <View style={item.id !== 5 && {
+              {listing?.map((item, index) => (
+                <View style={index !== 7 && {
                   borderBottomWidth: 1,
                   borderBottomColor: colors.lightgray,
                   marginBottom: hp('2.5%')
                 }}>
                   <ListingCard
                     key={item.id}
-                    image={item.image}
-                    onPress={() => navigation.navigate('SecondaryStack', { screen: 'ListingDetails' })}
+                    title={Object.keys(item.listing_title).length == 13 ? item.listing_title : 'New Listing'}
+                    // descStyle={{ width: index == 0 ? '20%' : index == 1 ? '40%' : '100%' }}
+                    count={item.how_many_players == 'Select a Value' ? '3' : item.how_many_players}
+                    exp={item.experience_level == "" ? '5 to 10 par progress-level' : item.experience_level}
+                    date={item.course_date}
+                    desc={Object.keys(item.match_description).length == 4 ? item.match_description : 'test'}
+                    // image={item.image}
+                    onPress={() => navigation.navigate('SecondaryStack', { screen: 'ListingDetails', params: { item } })}
                   />
                 </View>
               ))}

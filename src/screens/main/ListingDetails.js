@@ -13,14 +13,17 @@ import SVGImage from '../../components/SVGImage'
 import icons from '../../assets/icons'
 import Button from '../../components/Button'
 
-const ListingDetails = () => {
+const ListingDetails = ({ route }) => {
     const [changeTab, setChangeTab] = useState(1)
+
+    const { item } = route.params
+    console.log('paramsssss ================>', Object.keys(item.match_description).length)
 
     return (
         <Container>
             <Header />
             <SecondaryHeader
-                text={'MOKAN Elite (MO)'}
+                text={Object.keys(item.listing_title).length == 13 ? item.listing_title : 'New Listing'}
             />
             <ScrollView contentContainerStyle={styles.screen}>
                 <View style={styles.tabView}>
@@ -41,16 +44,16 @@ const ListingDetails = () => {
                                     source={images.personal1}
                                     style={styles.image}
                                 />
-                                <Text style={styles.name}>MOKAN Elite (MO)</Text>
+                                <Text style={styles.name}>{Object.keys(item.listing_title).length == 13 ? item.listing_title : 'New Listing'}</Text>
                             </View>
                         </View>
                         <View style={styles.formWrapper}>
                             <View>
                                 <Text style={styles.heading}>MATCH DESCRIPTION:</Text>
-                                <Text style={styles.heading}>LISTER'S NAME:</Text>
-                                <Text style={styles.heading}>MATCH NAME:</Text>
+                                <Text style={styles.heading}>SMOKING FRIENDLY:</Text>
+                                <Text style={styles.heading}>DRINKING FRIENDLY:</Text>
                                 <Text style={styles.heading}>AREA CODE:</Text>
-                                <Text style={styles.heading}>MATCH TYPE:</Text>
+                                <Text style={styles.heading}>PRIVATE GROUP:</Text>
                                 <Text style={styles.heading}>EXPERIENCE LEVEL:</Text>
                                 <View style={{ paddingTop: hp('3%') }}>
                                     <Text style={styles.heading}>SUGGESTED DAY:</Text>
@@ -70,16 +73,16 @@ const ListingDetails = () => {
                                 <View style={[styles.line, { marginTop: hp('5.5%'), height: hp('32%') }]} />
                             </View>
                             <View>
-                                <Text style={styles.text}>Test</Text>
-                                <Text style={styles.text}>Kelvin James</Text>
-                                <Text style={styles.text}>MOKAN Elite</Text>
-                                <Text style={styles.text}>216</Text>
-                                <Text style={styles.text}>Singles Match Play</Text>
-                                <Text style={[styles.text, { width: '50%' }]}>Around Par To 5 High Level</Text>
-                                <Text style={[styles.text, { marginTop: hp('1%') }]}>2023-08-23</Text>
-                                <Text style={styles.text}>23:28</Text>
-                                <Text style={styles.text}>2</Text>
-                                <Text style={[styles.text, { width: '50%' }]}>CASUAL HANDSHAKE</Text>
+                                <Text style={styles.text}>{Object.keys(item.match_description).length == 4 ? item.match_description : 'test'}</Text>
+                                <Text style={styles.text}>{item.smoking_friendly == '' ? 'on' : item.smoking_friendly}</Text>
+                                <Text style={styles.text}>{item.drinking_friendly == '' ? 'on' : item.drinking_friendly}</Text>
+                                <Text style={styles.text}>{item.area_code_match == '' ? '214' : item.area_code_match}</Text>
+                                <Text style={styles.text}>{item.private_group == '' ? 'on' : item.private_group}</Text>
+                                <Text style={[styles.text, { width: '50%' }]}>{item.experience_level == '' ? '5 to 10 par progress level' : item.experience_level}</Text>
+                                <Text style={[styles.text, { marginTop: hp('2.5%') }]}>{item.course_date}</Text>
+                                <Text style={styles.text}>{item.course_time}</Text>
+                                <Text style={styles.text}>{item.how_many_players == 'Select a Value' ? '3' : item.how_many_players}</Text>
+                                <Text style={[styles.text, { width: '50%' }]}>{item.the_itc_handshake == '' ? 'CASUAL HANDSHAKE' : item.the_itc_handshake}</Text>
                             </View>
                         </View>
                     </> : <>
@@ -131,7 +134,7 @@ const styles = StyleSheet.create({
     name: {
         color: colors.white,
         alignSelf: 'flex-end',
-        marginRight: hp('3%'),
+        marginRight: hp('6%'),
         fontWeight: 'bold',
         fontSize: hp('2%')
     },

@@ -69,7 +69,7 @@ export const signin = (username, password) => {
         }).then(async (res) => {
             const response = await res.json()
             console.log('login response', response)
-            if (response) {
+            if (response.token) {
                 ShowToast('login successfully')
                 dispatch({
                     type: constant.LOGIN_DONE,
