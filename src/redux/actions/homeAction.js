@@ -30,3 +30,31 @@ export const getListings = () => {
         })
     }
 }
+
+export const getGroups = () => {
+    return async dispatch => {
+
+        dispatch({
+            type: constant.GET_GROUPS
+        })
+
+        await fetch(`${url}/groups`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+            }
+        }).then(async (res) => {
+            const group = await res.json()
+            console.log('group responsee ============>', group)
+            dispatch({
+                type: constant.GET_GROUPS_DONE,
+                payload: group
+            })
+        }).catch((error) => {
+            console.log('group errorrrr ==============>', error)
+            dispatch({
+                type: constant.GET_GROUPS_DONE
+            })
+        })
+    }
+}

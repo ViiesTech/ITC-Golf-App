@@ -23,13 +23,6 @@ const Listing = () => {
       <Header />
       <SecondaryHeader text={'Listing'} />
       <View style={styles.screen}>
-        {loader ?
-          <Loader
-            size={'large'}
-            color={colors.white}
-            style={{ alignSelf: 'center' }}
-          />
-          :
           <FlatList
             data={listing}
             showsVerticalScrollIndicator={false}
@@ -48,7 +41,6 @@ const Listing = () => {
               />
             )}
           />
-        }
         <SVGImage image={icons.pageEnd} style={styles.endIcon} />
       </View>
     </Container>

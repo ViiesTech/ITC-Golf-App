@@ -4,7 +4,7 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import colors from '../assets/colors'
 import images from '../assets/images'
 
-const ListingDetailCard = ({ image, onPress, hideTag, title, desc, exp, date, time}) => {
+const ListingDetailCard = ({ image, onPress, hideTag, title, desc, exp, date, time, area }) => {
     return (
         <TouchableOpacity style={{ marginBottom: hp('10%'), width: '45%' }} activeOpacity={0.9} onPress={onPress}>
             <Image
@@ -35,8 +35,8 @@ const ListingDetailCard = ({ image, onPress, hideTag, title, desc, exp, date, ti
                         <Text style={styles.fontStyle}>{date}</Text>
                     </View>
                     <View style={{ paddingTop: hp('3%') }}>
-                        <Text style={styles.textStyle}>TIME:</Text>
-                        <Text style={[styles.fontStyle, { alignSelf: 'flex-end' }]}>{time}</Text>
+                        <Text style={styles.textStyle}>{time ? 'TIME:' : 'AREA-CODE'}</Text>
+                        <Text style={[styles.fontStyle, { alignSelf: 'flex-end' }]}>{time ? time : area}</Text>
                     </View>
                 </View>
             </View>
@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
     winText: {
         color: colors.white,
         position: 'absolute',
-        top: hp('6%'),
-        // fontSize: hp('1.8%'),
+        top: hp('7%'),
+        fontSize: hp('1.6%'),
         fontWeight: 'bold'
     },
     loseText: {
