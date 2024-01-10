@@ -47,7 +47,7 @@ const Groups = () => {
                             <ListingDetailCard
                                 hideTag
                                 title={item.listing_title}
-                                desc={item.itc_group_handshake == '' ? 'FUN/CASUAL' : item.itc_group_handshake}
+                                desc={item.group_desired_teebox == '' ? 'All Other' : item.group_desired_teebox}
                                 date={item.suggested_day}
                                 area={item.area_code}
                             />
