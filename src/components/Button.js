@@ -23,6 +23,7 @@ const Button = ({ onPress, buttonStyle, buttonText, textStyle, icon, indicator }
                 {indicator ?
                     <Loader
                         size={'small'}
+                        color={colors.secondary}
                     />
                     :
                     <Text style={[styles.buttonText, textStyle]}>{buttonText}</Text>

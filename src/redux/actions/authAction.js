@@ -1,9 +1,9 @@
-import constant from '../constant'
+import constant, { URL } from '../constant'
 import FormData from 'form-data'
 import { ErrorToast } from 'react-native-toast-message';
 import { ShowToast } from '../../Custom';
+import axios from 'axios';
 
-const url = 'https://inthecup.golf/wp-json/app/v1'
 
 export const signup = (username, firstname, lastname, email, password, cpassword) => {
     return async dispatch => {
@@ -21,7 +21,7 @@ export const signup = (username, firstname, lastname, email, password, cpassword
         data.append('custom_user_first', firstname)
         data.append('custom_user_last', lastname)
 
-        return await fetch(`${url}/signup`, {
+        return await fetch(`${URL}/signup`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -59,7 +59,7 @@ export const signin = (username, password) => {
         data.append('username', username)
         data.append('password', password)
 
-        return await fetch(`${url}/login`, {
+        return await fetch(`${URL}/login`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -87,6 +87,44 @@ export const signin = (username, password) => {
             dispatch({
                 type: constant.LOGIN_DONE
             })
+        })
+    }
+}
+
+export const contactUs = (name, email, comment) => {
+    return async dispatch => {
+
+        dispatch({
+            type: constant.CONTACT_US
+        })
+
+        var data = new FormData()
+
+        data.append('name', name)
+        data.append('email', email)
+        data.append('comment', comment)
+
+        return await axios.post(`${URL}/contact-form`, data, {
+            headers: {
+                'Accept': 'application/json',
+                "Content-Type": 'multipart/form-data'
+            }
+        }).then((res) => {
+            console.log('contact uss response ===================>',res.data)
+            if (res.data.success) {
+                dispatch({
+                    type: constant.CONTACT_US_DONE
+                })
+                return res.data
+            } else {
+                return res.data.success;
+            }
+        }).catch(error => {
+            dispatch({
+                type: constant.CONTACT_US_DONE,
+            })
+            ShowToast('Check your network, Try Again!' || error.code)
+            return false
         })
     }
 }

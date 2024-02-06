@@ -6,10 +6,3 @@ export const ShowToast = (message) => {
         text1: message
     })
 }
-
-export const ErrorToast = (message) => {
-    return Toast.show({
-        type: 'success',
-        text1: message || "Some Problem Occured"
-    })
-}

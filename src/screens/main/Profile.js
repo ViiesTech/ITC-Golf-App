@@ -11,7 +11,7 @@ import { MainSettings, Options, settings } from '../../DummyData'
 import ProfileSettings from '../../components/ProfileSettings'
 import { useNavigation } from '@react-navigation/native'
 import Arrow from 'react-native-vector-icons/FontAwesome6';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import constant from '../../redux/constant'
 import { ShowToast } from '../../Custom'
 
@@ -22,6 +22,8 @@ const Profile = () => {
   const navigation = useNavigation()
 
   const dispatch = useDispatch()
+
+  const { user } = useSelector(state => state.AuthReducer)
 
   const onSettingsPress = async (index) => {
     if (index == 0) {
@@ -79,8 +81,8 @@ const Profile = () => {
             borderRadius={10}
           />
           <View style={styles.wrapper}>
-            <Text style={styles.name}>Wilbert Bright</Text>
-            <Text style={styles.email}>@Wilbertb</Text>
+            <Text style={styles.name}>{user?.first_name + ' ' + user?.last_name}</Text>
+            <Text style={styles.email}>@{user?.username}</Text>
           </View>
         </View>
         <View style={{ paddingTop: hp('5%') }}>
@@ -88,7 +90,7 @@ const Profile = () => {
             {Options.map((item, i) => (
               <ProfileOptions
                 key={i}
-                text={item.text}
+                text={item.id == 1 ? user?.user_email : item.text}
                 onPress={() => onOptionsPress(i)}
                 image={item.icon}
                 icon={i !== 0 && 'arrow-right'}

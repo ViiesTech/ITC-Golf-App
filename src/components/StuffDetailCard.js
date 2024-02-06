@@ -8,15 +8,14 @@ import StarRating from 'react-native-star-rating-widget'
 import ColorOptions from './ColorOptions'
 import { Colors } from '../DummyData'
 
-const StuffDetailCard = () => {
-    const [rating, setRating] = useState(4)
+const StuffDetailCard = ({ rating, image, title, desc }) => {
     const [chooseOptions, setChooseOptions] = useState(0)
 
     return (
         <View style={styles.wrapper}>
             <View style={styles.cardStyle}>
                 <Image
-                    source={images.stuff1}
+                    source={image}
                     style={styles.image}
                 />
                 <View style={styles.heartView}>
@@ -28,19 +27,19 @@ const StuffDetailCard = () => {
                 </View>
             </View>
             <View style={styles.textWrapper}>
-                <Text style={styles.text}>Golf Ball Markers</Text>
+                <Text style={[styles.text, { width: title?.length > 45 ? '60%' : title?.length == 28 && '70%' }]}>{title}</Text>
                 <StarRating
                     starSize={15}
                     style={{ marginTop: hp('1.7%') }}
                     rating={rating}
-                    onChange={setRating}
+                    onChange={() => null}
                 />
-                <Text style={styles.desc}>Lorem Ipsum Dolor Sit Amet, Consetetur </Text>
-                <View style={styles.border} />
+                <Text style={styles.desc}>{desc !== '' ? desc : 'Lorem Ipsum Dolor Sit Amet, Consetetur'}</Text>
+                <View style={[styles.border, { width: title?.length > 45 ? '63%' : '70%' }]} />
                 <View style={{ paddingTop: hp('2%'), flexDirection: 'row' }}>
                     {Colors.map((item, i) => (
                         <ColorOptions
-                            style={chooseOptions == i ? { backgroundColor: colors.gray, borderWidth: 0 } : { backgroundColor: 'transparent' }}
+                            style={chooseOptions == i ? { backgroundColor: colors.gray, borderWidth: 0 } : { backgroundColor: 'transparent', width: title?.length > 45 ? '12.5%' : ' 14%' }}
                             onPress={() => setChooseOptions(i)}
                             image={item.image}
                         />
@@ -64,10 +63,11 @@ const styles = StyleSheet.create({
         padding: hp('1%')
     },
     image: {
-        height: hp('24%'),
-        position: 'absolute',
-        bottom: hp('3%'),
-        width: '80%'
+        height: hp('24.5%'),
+        // position: 'absolute',
+        borderRadius: 10,
+        // bottom: hp('3%'),
+        width: '100%'
     },
     heartView: {
         backgroundColor: colors.primary,
@@ -97,7 +97,6 @@ const styles = StyleSheet.create({
     border: {
         borderBottomColor: colors.lightgray,
         borderBottomWidth: 0.5,
-        width: '70%',
         marginTop: hp('1.7%')
     }
 

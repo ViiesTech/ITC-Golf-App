@@ -7,35 +7,34 @@ import Heart from 'react-native-vector-icons/AntDesign'
 import SVGImage from './SVGImage'
 import icons from '../assets/icons'
 
-const MerchandiseCard = ({ text, image, onPress,style }) => {
-    const [rating, setRating] = useState(4)
+const MerchandiseCard = ({ text, image, onPress, style, desc, rating, imageStyle, favourite, heartPress }) => {
 
     return (
-        <TouchableOpacity style={[styles.component,style]} onPress={onPress} activeOpacity={0.9}>
-            <View style={styles.cardStyle}>
+        <View style={[styles.component, style]}>
+            <TouchableOpacity style={styles.cardStyle} onPress={onPress} activeOpacity={0.9}>
                 <Image
                     source={image}
-                    resizeMode='contain'
-                    style={styles.image}
+                    resizeMode='cover'
+                    style={[styles.image, imageStyle]}
                 />
-            </View>
+            </TouchableOpacity>
             <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
                 <Text style={styles.productName}>{text}</Text>
-                <View style={styles.heartView}>
+                <TouchableOpacity style={styles.heartView} activeOpacity={0.9} onPress={heartPress}>
                     <Heart
-                        name={'heart'}
-                        size={12}
+                        name={favourite ? 'heart' : 'hearto'}
+                        size={15}
                         color={colors.secondary}
                     />
-                </View>
+                </TouchableOpacity>
             </View>
-            <Text style={styles.desc}>Lorem Ipsum Dolor Sit Amet, Consetetur </Text>
+            <Text style={[styles.desc, { paddingTop: text.length > 45 && hp('3%') }]}>{desc == '' ? 'Lorem Ipsum Dolor Sit Amet, Consetetur' : desc}</Text>
             <View style={styles.wrapper}>
                 <StarRating
                     starSize={12}
                     style={{ alignSelf: 'center' }}
                     rating={rating}
-                    onChange={setRating}
+                    onChange={() => null}
                 />
                 <View style={styles.verticleLine} />
                 <SVGImage
@@ -44,7 +43,7 @@ const MerchandiseCard = ({ text, image, onPress,style }) => {
                 />
             </View>
             <View style={styles.border} />
-        </TouchableOpacity>
+        </View>
     )
 }
 
@@ -62,13 +61,14 @@ const styles = StyleSheet.create({
         borderColor: colors.gray
     },
     image: {
-        height: hp('17%'),
-        marginTop: hp('1.5%'),
-        width: '80%',
+        height: hp('18%'),
+        borderRadius: 10,
+        width: '100%',
         alignSelf: 'center'
     },
     productName: {
         color: colors.white,
+        width: hp('18%'),
         fontSize: hp('2%'),
         marginTop: hp('3%'),
         fontWeight: 'bold'
@@ -76,11 +76,11 @@ const styles = StyleSheet.create({
     desc: {
         color: colors.lightgray,
         position: 'absolute',
-        top: hp('28%'),
+        top: hp('30%'),
         marginTop: hp('1%'),
     },
     wrapper: {
-        paddingTop: hp('6%'),
+        paddingTop: hp('7%'),
         justifyContent: 'space-between',
         flexDirection: 'row',
     },

@@ -1,7 +1,5 @@
-import constant from "../constant"
-
-
-const url = 'https://inthecup.golf/wp-json/app/v1'
+import { ShowToast } from "../../Custom"
+import constant, { URL } from "../constant"
 
 export const getListings = () => {
     return async dispatch => {
@@ -10,7 +8,7 @@ export const getListings = () => {
             type: constant.GET_LISTING
         })
 
-        await fetch(`${url}/matches`, {
+        await fetch(`${URL}/matches`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -27,6 +25,7 @@ export const getListings = () => {
             dispatch({
                 type: constant.GET_LISTING_DONE
             })
+            return ShowToast('Check your network, Try Again!' || error.code)
         })
     }
 }
@@ -38,7 +37,7 @@ export const getGroups = () => {
             type: constant.GET_GROUPS
         })
 
-        await fetch(`${url}/groups`, {
+        await fetch(`${URL}/groups`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -55,6 +54,7 @@ export const getGroups = () => {
             dispatch({
                 type: constant.GET_GROUPS_DONE
             })
+            return ShowToast('Check your network, Try Again!' || error.code)
         })
     }
 }

@@ -1,5 +1,5 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect } from 'react'
 import Container from '../../components/Container'
 import Header from '../../components/Header'
 import SecondaryHeader from '../../components/SecondaryHeader'
@@ -10,8 +10,38 @@ import colors from '../../assets/colors'
 import AddMinus from '../../components/AddMinus'
 import MerchandiseCard from '../../components/MerchandiseCard'
 import images from '../../assets/images'
+import { useDispatch, useSelector } from 'react-redux'
+import { getProductDetails } from '../../redux/actions/productAction'
 
-const MerchandiseDetails = () => {
+const MerchandiseDetails = ({ route }) => {
+
+    const id = route.params
+    console.log('product idd params ==========>', id)
+
+    const dispatch = useDispatch()
+
+    const { product_detail, product_detail_loading } = useSelector(state => state.ProductReducer)
+    // console.log('product details from screen =========> ==========>', product_detail[id])
+
+    useEffect(() => {
+
+        if (!product_detail[id]) {
+            dispatch(getProductDetails(id))
+        }
+
+    }, [])
+
+    if (product_detail_loading) {
+        return (
+            <View style={{ flex: 1, backgroundColor: colors.secondary, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator
+                    size={'large'}
+                    color={colors.primary}
+                />
+            </View>
+        )
+    }
+
     return (
         <Container>
             <Header />
@@ -19,7 +49,11 @@ const MerchandiseDetails = () => {
                 text={'Free Stuff Merchandise'}
             />
             <ScrollView contentContainerStyle={styles.screen} showsVerticalScrollIndicator={false}>
-                <StuffDetailCard />
+                <StuffDetailCard
+                    title={product_detail[id]?.title}
+                    image={{ uri: product_detail[id]?.image }}
+                    desc={product_detail[id]?.description}
+                />
                 <View style={styles.wrapper}>
                     <View style={{ flexDirection: 'row' }}>
                         <Button
@@ -41,13 +75,14 @@ const MerchandiseDetails = () => {
                     </View>
                 </View>
                 <View style={styles.border} />
-                <View style={{ paddingTop: hp('4%'), flexDirection: 'row',justifyContent: 'space-between' }}>
+                <View style={{ paddingTop: hp('4%'), flexDirection: 'row', justifyContent: 'space-between' }}>
                     <MerchandiseCard
                         image={images.stuff3}
                         text={'Golf Gloves'}
                     />
                     <MerchandiseCard
                         image={images.stuff4}
+                        imageStyle={{ height: hp('18%'), width: '54%' }}
                         style={{ marginLeft: hp('2.6%') }}
                         text={'Golf Tees'}
                     />

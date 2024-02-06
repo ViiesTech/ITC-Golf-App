@@ -8,10 +8,11 @@ const ToastMessage = ({ position }) => {
         success: (props) => (
             <BaseToast
                 {...props}
-                style={{ borderLeftColor: colors.secondary, borderLeftWidth: 7 }}
-                contentContainerStyle={{ paddingHorizontal: 15 }}
+                style={{ borderLeftColor: colors.primary, borderLeftWidth: 7 }}
+                contentContainerStyle={{ paddingHorizontal: 15, backgroundColor: colors.secondary }}
                 text1Style={{
                     fontSize: 15,
+                    color: colors.primary,
                     fontWeight: '400'
                 }}
             />

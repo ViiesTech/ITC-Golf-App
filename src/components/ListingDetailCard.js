@@ -4,11 +4,11 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import colors from '../assets/colors'
 import images from '../assets/images'
 
-const ListingDetailCard = ({ image, onPress, hideTag, title, desc, exp, date, time, area }) => {
+const ListingDetailCard = ({ image, onPress, hideTag, title, desc, exp, date, time, area, route }) => {
     return (
         <TouchableOpacity style={{ marginBottom: hp('10%'), width: '45%' }} activeOpacity={0.9} onPress={onPress}>
             <Image
-                source={images.listing2}
+                source={route === 'Listing' ? images.listing2 : images.listing3}
                 style={styles.image}
                 borderRadius={10}
             />

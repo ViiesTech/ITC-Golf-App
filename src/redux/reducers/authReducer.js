@@ -5,7 +5,8 @@ const initialState = {
     signup_loading: false,
     signin_loading: false,
     edit_loading: false,
-    reset_loading: false
+    reset_loading: false,
+    contact_loading: false,
 }
 
 export default (state = initialState, action) => {
@@ -33,6 +34,12 @@ export default (state = initialState, action) => {
 
         case constant.RESET_PASSWORD_DONE:
             return { ...state, reset_loading: false }
+
+        case constant.CONTACT_US:
+            return { ...state, contact_loading: true }
+
+        case constant.CONTACT_US_DONE:
+            return { ...state, contact_loading: false }
 
         case constant.LOGOUT:
             return initialState;
