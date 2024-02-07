@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     },
     input: {
         marginLeft: hp('1%'),
+        width: '100%',
         color: colors.white
     },
     labelText: {

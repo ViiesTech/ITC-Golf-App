@@ -13,6 +13,11 @@ import Button from './Button';
 import UploadPicture from './UploadPicture';
 import Switch from './Switch';
 import { Picker } from '@react-native-picker/picker';
+import { useDispatch, useSelector } from 'react-redux';
+import { ShowToast } from '../Custom';
+import { createGroup } from '../redux/actions/groupAction';
+import moment from 'moment';
+import { launchImageLibrary } from 'react-native-image-picker'
 
 const Discover = () => {
     return (
@@ -45,19 +50,101 @@ const MyGroups = () => (
 );
 
 const AddNew = () => {
-    const [selectedOption, setSelectedOption] = React.useState("")
+    const [state, setState] = React.useState({
+        group_title: '',
+        description: '',
+        pickers: {
+            kind_listing: 'Sample',
+            area_code: '212',
+            desired_tee: 'Front Tees',
+            itc_handshake: 'High-Five',
+        },
+        suggested_day: '',
+        private_group: false,
+        group_photo_details: {
+            name: 'No File Choosen',
+            path: ''
+        }
+    })
+
+    const dispatch = useDispatch()
+    const { create_group_loading } = useSelector(state => state.GroupReducer)
+
+    // console.log('oh hello', typeof state.suggested_day)
+
+    const handlePickerChange = (pickerName, text) => {
+        setState(prevState => ({
+            ...prevState,
+            pickers: {
+                ...prevState.pickers,
+                [pickerName]: text
+            }
+        }));
+    }
+
+    const onCreateGroup = async () => {
+        if (!state.group_title) {
+            return ShowToast('Please add group title')
+        } else {
+            await dispatch(createGroup(state.group_title,
+                state.private_group,
+                state.pickers.area_code,
+                state.pickers.itc_handshake,
+                state.pickers.desired_tee,
+                state.suggested_day,
+                state.pickers.kind_listing
+            ))
+        }
+    }
+
+    const onChoosePhoto = async () => {
+        const options = {
+            title: 'Select Image',
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+                quality: 0.5,
+            }
+        }
+
+        await launchImageLibrary(options, async response => {
+            if (response.didCancel) {
+                console.log('cancelled', response.didCancel)
+            } else {
+                setState(prevState => ({
+                    ...prevState,
+                    group_photo_details: {
+                        name: response.assets[0].fileName,
+                        path: response.assets[0].uri
+                    }
+                }))
+            }
+
+        })
+    }
+
 
     return (
-        <View style={styles.addnewWrapper} >
+        <View style={styles.addnewWrapper}>
             <ContactInput
                 label={'Group Name'}
+                value={state.group_title}
+                onChangeText={(text) => setState({
+                    ...state,
+                    group_title: text
+                })}
                 placeholder={'Add Title'}
                 textColor={colors.lightgray}
                 style={styles.input}
             />
             <ContactInput
                 label={'Description'}
+                value={state.description}
                 placeholder={'Description...'}
+                onChangeText={(text) => setState({
+                    ...state,
+                    description: text
+                })}
                 textAlignVertical={'top'}
                 style={[styles.input, { height: hp('15%') }]}
             />
@@ -69,6 +156,10 @@ const AddNew = () => {
                         value1={item.pickerText1}
                         value2={item.pickerText2}
                         value3={item.pickerText3}
+                        onValueChange={(itemValue) =>
+                            handlePickerChange('kind_listing', itemValue)
+                        }
+                        selectedValue={state.pickers.kind_listing}
                         itemStyle={{ color: colors.lightgray }}
                         label1={item.pickerText1}
                         label2={item.pickerText2}
@@ -78,8 +169,12 @@ const AddNew = () => {
                 ))}
                 <DateInput
                     heading={'Suggested Day'}
+                    onConfirm={(date) => setState({
+                        ...state,
+                        suggested_day: moment(date).format('MM/DD/YY')
+                    })}
                     icon={'date-range'}
-                    text={'mm/dd/yy'}
+                    text={state.suggested_day !== '' ? state.suggested_day : 'mm/dd/yy'}
                 />
             </View>
             {
@@ -90,6 +185,10 @@ const AddNew = () => {
                         value1={item.pickerText1}
                         value2={item.pickerText2}
                         value3={item.pickerText3}
+                        onValueChange={(itemValue) =>
+                            handlePickerChange(item.property, itemValue)
+                        }
+                        selectedValue={state.pickers[item.property]}
                         itemStyle={{ color: colors.lightgray }}
                         label1={item.pickerText1}
                         label2={item.pickerText2}
@@ -100,16 +199,25 @@ const AddNew = () => {
             }
             <Switch
                 text={'Is This A Private Group ?'}
+                onToggle={(isOn) => setState({
+                    ...state,
+                    private_group: isOn
+                })}
+                isOn={state.private_group}
+                color={state.private_group ? colors.secondary : colors.lightgray}
             />
             <View style={{ paddingTop: hp('4%') }}>
                 <UploadPicture
                     text={'Picture'}
+                    fileName={state.group_photo_details.name}
+                    chooseFile={() => onChoosePhoto()}
                 />
                 <Button
                     buttonText={'Create Groups'}
                     textStyle={{ color: colors.secondary }}
+                    indicator={create_group_loading}
                     buttonStyle={{ width: '50%', borderRadius: 100, marginTop: hp('2%') }}
-                    onPress={() => alert('working in progress')}
+                    onPress={() => onCreateGroup()}
                 />
             </View>
         </View>

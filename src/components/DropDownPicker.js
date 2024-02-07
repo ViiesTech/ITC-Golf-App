@@ -4,22 +4,21 @@ import { Picker } from '@react-native-picker/picker'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
-const DropDownPicker = ({ text, label1, label2, label3, textStyle, style, itemStyle, labelStyle, value1, value2, value3 }) => {
-    const [selectedOption, setSelectedOption] = useState("")
+const DropDownPicker = ({ text, label1, label2, label3, textStyle, style, itemStyle, labelStyle, value1, value2, value3, onValueChange, selectedValue }) => {
 
-    console.log(selectedOption)
 
     return (
         <View>
             <Text style={[styles.text, textStyle]}>{text}</Text>
             <View style={[styles.pickerStyle, style]}>
                 <Picker
-                    selectedValue={selectedOption}
+                    selectedValue={selectedValue}
                     style={[styles.textStyle, itemStyle]}
                     dropdownIconColor={colors.white}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setSelectedOption(itemValue)
-                    }
+                    // onValueChange={(itemValue, itemIndex) =>
+                    //     setSelectedOption(itemValue)
+                    // }
+                    onValueChange={onValueChange}
                 >
                     <Picker.Item label={label1} value={value1} style={labelStyle} />
                     <Picker.Item label={label2} value={value2} style={labelStyle} />

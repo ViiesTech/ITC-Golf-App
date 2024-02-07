@@ -5,12 +5,12 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-const DateInput = ({heading,mode, display,icon,text}) => {
+const DateInput = ({ heading, mode, display, icon, text, onConfirm }) => {
     const [isDatePickerVisible, setIsDatePickerVisible] = useState(false)
 
-    const handleConfirm = (date) => {
-        console.log('date has been picked', date)
-    }
+    // const handleConfirm = (date) => {
+    //     console.log('date has been picked', date)
+    // }
 
     return (
         <TouchableOpacity style={{ marginBottom: hp('3%') }}
@@ -33,7 +33,7 @@ const DateInput = ({heading,mode, display,icon,text}) => {
                 mode={mode}
                 display={display}
                 onCancel={() => setIsDatePickerVisible(false)}
-                onConfirm={(date) => handleConfirm(date)}
+                onConfirm={onConfirm}
             />
         </TouchableOpacity>
     )

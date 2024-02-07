@@ -8,7 +8,7 @@ import StarRating from 'react-native-star-rating-widget'
 import ColorOptions from './ColorOptions'
 import { Colors } from '../DummyData'
 
-const StuffDetailCard = ({ rating, image, title, desc }) => {
+const StuffDetailCard = ({ rating, image, title, desc, favourite }) => {
     const [chooseOptions, setChooseOptions] = useState(0)
 
     return (
@@ -20,8 +20,8 @@ const StuffDetailCard = ({ rating, image, title, desc }) => {
                 />
                 <View style={styles.heartView}>
                     <Heart
-                        name={'heart'}
-                        size={12}
+                        name={favourite ? 'heart' : 'hearto'}
+                        size={17}
                         color={colors.secondary}
                     />
                 </View>

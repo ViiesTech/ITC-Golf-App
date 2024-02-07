@@ -11,7 +11,9 @@ const persistConfig = {
         "LanguageReducer",
         "AuthReducer",
         "HomeReducer",
-        "ProductReducer"
+        "ProductReducer",
+        "GroupReducer",
+        "ListingReducer"
     ],
     blacklist: []
 }

@@ -15,8 +15,9 @@ import { getProductDetails } from '../../redux/actions/productAction'
 
 const MerchandiseDetails = ({ route }) => {
 
-    const id = route.params
-    console.log('product idd params ==========>', id)
+    const { id, wishlist } = route.params
+    const fav = route.params.wishlist
+    console.log('product idd params ==========>', wishlist)
 
     const dispatch = useDispatch()
 
@@ -52,6 +53,7 @@ const MerchandiseDetails = ({ route }) => {
                 <StuffDetailCard
                     title={product_detail[id]?.title}
                     image={{ uri: product_detail[id]?.image }}
+                    favourite={wishlist}
                     desc={product_detail[id]?.description}
                 />
                 <View style={styles.wrapper}>

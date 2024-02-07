@@ -22,7 +22,7 @@ const FreeStuff = () => {
     const dispatch = useDispatch()
 
     const { products, products_loading, isFavourite } = useSelector(state => state.ProductReducer)
-    console.log('from screen ======================>', isFavourite)
+    // console.log('from screen ======================>', isFavourite)
 
     useEffect(() => {
         if (products.length < 1) {
@@ -75,7 +75,7 @@ const FreeStuff = () => {
                             favourite={item.isFav}
                             desc={item.description}
                             rating={item.ratings}
-                            onPress={() => navigation.navigate('MerchandiseStack', { screen: 'MerchandiseDetails', params: item.product_id })}
+                            onPress={() => navigation.navigate('MerchandiseStack', { screen: 'MerchandiseDetails', params: { id: item.product_id, wishlist: item.isFav } })}
                         />
                     )}
                 />

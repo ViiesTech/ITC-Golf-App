@@ -4,18 +4,18 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import colors from '../assets/colors'
 import Button from './Button'
 
-const UploadPicture = ({text,style,buttonStyle}) => {
+const UploadPicture = ({ text, style, buttonStyle, chooseFile, fileName }) => {
     return (
         <View style={{ marginBottom: hp('3%') }}>
             <Text style={styles.heading}>{text}</Text>
-            <View style={[styles.uploadView,style]}>
+            <View style={[styles.uploadView, style]}>
                 <Button
                     buttonText={'Choose File'}
                     textStyle={{ color: colors.primary }}
-                    buttonStyle={[styles.button,buttonStyle]}
-                    onPress={() => alert('working in progress')}
+                    buttonStyle={[styles.button, buttonStyle]}
+                    onPress={chooseFile}
                 />
-                <Text style={styles.text}>No File Chosen</Text>
+                <Text style={styles.text}>{fileName}</Text>
             </View>
         </View>
     )
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         fontSize: hp('2%'),
         marginLeft: hp('2%')
     },
-    heading:{
+    heading: {
         color: colors.white,
         fontWeight: 'bold',
         fontSize: hp('2%')

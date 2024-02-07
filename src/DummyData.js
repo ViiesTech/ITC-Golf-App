@@ -566,15 +566,18 @@ export const groups = [
 export const switchOptions = [
     {
         id: 1,
-        text: 'Smoking-Friendly?'
+        text: 'Smoking-Friendly?',
+        props: 'smoking_friendly'
     },
     {
         id: 2,
-        text: 'Drinking-Friendly'
+        text: 'Drinking-Friendly',
+        props: 'drinking_friendly'
     },
     {
         id: 3,
-        text: 'Is This A Private Listing'
+        text: 'Is This A Private Listing',
+        props: 'private_listing'
     }
 ]
 
@@ -690,13 +693,15 @@ export const groupsItem = [
     {
         id: 1,
         text: 'Area Code',
-        pickerText1: '+212',
-        pickerText2: '+310',
-        pickerText3: '+410',
+        property: 'area_code',
+        pickerText1: '212',
+        pickerText2: '310',
+        pickerText3: '410',
     },
     {
         id: 2,
         text: 'THE ITC HANDSHAKE',
+        property: 'itc_handshake',
         pickerText1: 'High-Five',
         pickerText2: 'Wave or Nod',
         pickerText3: 'Fist Bump',
@@ -705,6 +710,7 @@ export const groupsItem = [
     {
         id: 3,
         text: 'Desired Tee Box',
+        property: 'desired_tee',
         pickerText1: 'Front Tees',
         pickerText2: 'Back Tees',
         pickerText3: 'Championship Tees',
@@ -715,7 +721,7 @@ export const listingPicker = [
     {
         id: 1,
         text: 'What Kind Of Listing Is This ?',
-        pickerText1: 'Select',
+        pickerText1: 'Sample',
         pickerText2: 'Value',
         pickerText3: 'Listing',
     },
@@ -725,13 +731,15 @@ export const AllListingsPicker = [
     {
         id: 1,
         text: 'Area Code',
-        pickerText1: '+212',
-        pickerText2: '+310',
-        pickerText3: '+415'
+        props: 'area_code',
+        pickerText1: '212',
+        pickerText2: '310',
+        pickerText3: '415'
     },
     {
         id: 2,
         text: 'How Many Players?',
+        props: 'how_many_players',
         pickerText1: '2',
         pickerText2: '4',
         pickerText3: '6'
@@ -739,6 +747,7 @@ export const AllListingsPicker = [
     {
         id: 3,
         text: 'The Itc Handshake',
+        props: 'itc_handshake',
         pickerText1: 'High-Five',
         pickerText2: 'Wave or Nod',
         pickerText3: 'Fist Bump'
@@ -746,6 +755,7 @@ export const AllListingsPicker = [
     {
         id: 4,
         text: 'Desired Tee Box',
+        props: 'desired_tee',
         pickerText1: 'Front Tees',
         pickerText2: 'Back Tees',
         pickerText3: 'Championship Tees'
