@@ -1,5 +1,5 @@
-import { Image, StyleSheet, Text, View, ScrollView, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import { Image, StyleSheet, Text, View, ScrollView, FlatList, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Container from '../../components/Container'
 import Header from '../../components/Header'
 import SecondaryHeader from '../../components/SecondaryHeader'
@@ -12,9 +12,24 @@ import ReviewCard from '../../components/ReviewCard'
 import SVGImage from '../../components/SVGImage'
 import icons from '../../assets/icons'
 import Button from '../../components/Button'
+import { useDispatch, useSelector } from 'react-redux'
+import { getReviews } from '../../redux/actions/homeAction'
 
 const ListingDetails = ({ route }) => {
     const [changeTab, setChangeTab] = useState(1)
+
+    const dispatch = useDispatch()
+
+    const { reviews, reviews_loading } = useSelector(state => state.HomeReducer)
+    console.log('reviews response from screen ===============>', reviews)
+
+    useEffect(() => {
+
+        if (changeTab == 2 && reviews.length < 1) {
+            dispatch(getReviews())
+        }
+
+    }, [changeTab])
 
     const { item } = route.params
     console.log('paramsssss ================>', Object.keys(item.match_description).length)
@@ -88,18 +103,29 @@ const ListingDetails = ({ route }) => {
                     </> : <>
                         <ScrollView contentContainerStyle={{ paddingTop: hp('5%'), paddingBottom: hp('10%') }}>
                             <Text style={styles.review}>Reviews</Text>
-                            <View style={{ paddingTop: hp('3%') }}>
-                                <FlatList
-                                    data={ReviewImages}
-                                    numColumns={2}
-                                    columnWrapperStyle={{ justifyContent: 'space-between' }}
-                                    renderItem={({ item, index }) => (
-                                        <ReviewCard
-                                            image={item.image}
-                                        />
-                                    )}
-                                />
-                            </View>
+                            {changeTab == 2 && reviews_loading ?
+                                <View style={{ alignItems: 'center', marginVertical: hp('6%') }}>
+                                    <ActivityIndicator
+                                        size={'large'}
+                                        color={colors.primary}
+                                    />
+                                </View>
+                                :
+                                <View style={{ paddingTop: hp('3%') }}>
+                                    <FlatList
+                                        data={reviews}
+                                        numColumns={2}
+                                        columnWrapperStyle={{ justifyContent: 'space-between' }}
+                                        renderItem={({ item, index }) => (
+                                            <ReviewCard
+                                                image={images.review1}
+                                                name={item.reviews_title}
+                                                ratings={item}
+                                            />
+                                        )}
+                                    />
+                                </View>
+                            }
                             <SVGImage
                                 image={icons.pageEnd}
                                 style={{ alignSelf: 'center' }}
@@ -107,7 +133,6 @@ const ListingDetails = ({ route }) => {
                         </ScrollView>
                     </>
                 }
-
             </ScrollView>
         </Container >
     )

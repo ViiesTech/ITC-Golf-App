@@ -16,7 +16,6 @@ import { getProductDetails } from '../../redux/actions/productAction'
 const MerchandiseDetails = ({ route }) => {
 
     const { id, wishlist } = route.params
-    const fav = route.params.wishlist
     console.log('product idd params ==========>', wishlist)
 
     const dispatch = useDispatch()
@@ -77,6 +76,7 @@ const MerchandiseDetails = ({ route }) => {
                     </View>
                 </View>
                 <View style={styles.border} />
+                <Text style={styles.heading}>Related Products</Text>
                 <View style={{ paddingTop: hp('4%'), flexDirection: 'row', justifyContent: 'space-between' }}>
                     <MerchandiseCard
                         image={images.stuff3}
@@ -134,5 +134,11 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         marginTop: hp('5%'),
         borderBottomColor: colors.gray
+    },
+    heading: {
+        color: colors.white,
+        fontWeight: 'bold',
+        paddingTop: hp('4%'),
+        fontSize: hp('2.5%')
     }
 })

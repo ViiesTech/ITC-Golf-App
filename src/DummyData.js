@@ -404,15 +404,43 @@ export const Tabs = [
 export const reviews = [
     {
         id: 1,
-        text: 'Rank Members Pace Of Play'
+        text: 'Rank Members Experince'
     },
     {
         id: 2,
-        text: 'Rank Members On Cource Sportsmanship'
+        text: 'Rank Members Pace'
     },
     {
         id: 3,
+        text: 'Members Attitudesportsmanship'
+    },
+    {
+        id: 4,
         text: 'Showed Up To Tee Time As Agreed'
+    },
+    {
+        id: 5,
+        text: 'Punctuality To Tee Time'
+    },
+    {
+        id: 6,
+        text: 'Play With Member Again'
+    },
+    {
+        id: 7,
+        text: 'Make Good On Ther Itc Handshake'
+    },
+    {
+        id: 8,
+        text: 'Member Used Itc Siteapp'
+    },
+    {
+        id: 9,
+        text: 'Would You Recommend'
+    },
+    {
+        id: 10,
+        text: 'Overall Experince With Member'
     }
 ]
 

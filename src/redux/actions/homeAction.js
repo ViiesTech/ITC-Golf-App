@@ -1,3 +1,4 @@
+import axios from "axios"
 import { ShowToast } from "../../Custom"
 import constant, { URL } from "../constant"
 
@@ -53,6 +54,32 @@ export const getGroups = () => {
             console.log('group errorrrr ==============>', error)
             dispatch({
                 type: constant.GET_GROUPS_DONE
+            })
+            return ShowToast('Check your network, Try Again!' || error.code)
+        })
+    }
+}
+
+export const getReviews = () => {
+    return async dispatch => {
+
+        dispatch({
+            type: constant.GET_REVIEWS
+        })
+
+        await axios.get(`${URL}/reviews`, {
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(res => {
+            // console.log('reviews response ================>', res.data)
+            dispatch({
+                type: constant.GET_REVIEWS_DONE,
+                payload: res.data
+            })
+        }).catch(error => {
+            dispatch({
+                type: constant.GET_REVIEWS_DONE
             })
             return ShowToast('Check your network, Try Again!' || error.code)
         })

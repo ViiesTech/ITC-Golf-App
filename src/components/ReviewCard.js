@@ -5,26 +5,31 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import ReviewGiven from './ReviewGiven'
 import { reviews } from '../DummyData'
 
-const ReviewCard = ({ image }) => {
+const ReviewCard = ({ image, name, ratings }) => {
+
     return (
         <View style={styles.cardStyle}>
-            <View style={{ width: '60%' }}>
+            <View style={{ width: '53%' }}>
                 <Image
                     source={image}
                     style={styles.image}
                     borderRadius={10}
                 />
                 <View style={{ paddingTop: hp('2%') }}>
-                    {reviews.map((item) => (
+                    {reviews.map((item) => {
+                        // console.log(ratings[item.text.toLowerCase().replace(/\s+/g, '_')])
+                       return ( 
                         <ReviewGiven
                             text={item.text}
+                            rating={ratings[item.text.toLowerCase().replace(/\s+/g, '_')]}
                         />
-                    ))}
+                        )
+                    })}
                 </View>
             </View>
             <View style={styles.wrapper}>
                 <Text style={styles.posted}>Posted By:</Text>
-                <Text style={styles.name}>Kevin</Text>
+                <Text style={styles.name}>{name}</Text>
                 <View style={styles.border} />
             </View>
         </View>
@@ -64,7 +69,7 @@ const styles = StyleSheet.create({
     border: {
         borderBottomColor: colors.lightgray,
         borderBottomWidth: 0.4,
-        width: '100%',
+        // width: '100%',
         marginTop: hp('1.5%')
     }
 })
