@@ -6,7 +6,7 @@ import images from '../assets/images'
 
 const ListingDetailCard = ({ image, onPress, hideTag, title, desc, exp, date, time, area, route }) => {
     return (
-        <TouchableOpacity style={{ marginBottom: hp('10%'), width: '45%' }} activeOpacity={0.9} onPress={onPress}>
+        <TouchableOpacity style={{ marginBottom: hp('10%'), width: '45%', }} activeOpacity={0.9} onPress={onPress}>
             <Image
                 source={route === 'Listing' ? images.listing2 : images.listing3}
                 style={styles.image}
@@ -29,6 +29,7 @@ const ListingDetailCard = ({ image, onPress, hideTag, title, desc, exp, date, ti
                     <Text style={styles.loseText}>{exp}</Text>
                 }
                 <View style={[styles.line, { marginTop: hideTag ? hp('8%') : hp('4%') }]} />
+
                 <View style={styles.textWrapper}>
                     <View style={{ paddingTop: hp('3%') }}>
                         <Text style={styles.textStyle}>DATE:</Text>
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
         color: colors.secondary
     },
     wrapper: {
-        paddingTop: hp('2%')
+        paddingTop: hp('2%'),
     },
     text: {
         color: colors.white,

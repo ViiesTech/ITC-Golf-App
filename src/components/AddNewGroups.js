@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Text, FlatList } from 'react-native';
+import { View, StyleSheet, Text, FlatList, ActivityIndicator } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import colors from '../assets/colors';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -18,20 +18,49 @@ import { ShowToast } from '../Custom';
 import { createGroup } from '../redux/actions/groupAction';
 import moment from 'moment';
 import { launchImageLibrary } from 'react-native-image-picker'
+import { getGroups } from '../redux/actions/homeAction';
+import images from '../assets/images';
 
 const Discover = () => {
+    const dispatch = useDispatch()
+
+    const { groups, group_loader } = useSelector(state => state.HomeReducer)
+    console.log('groups api data =============>', groups)
+
+    React.useEffect(() => {
+
+        if (groups.length < 1) {
+            dispatch(getGroups())
+        }
+
+    }, [])
+
     return (
         <View style={{ paddingTop: hp('4%') }}>
-            <FlatList
-                data={discovers}
-                numColumns={2}
-                columnWrapperStyle={{ justifyContent: 'space-between' }}
-                renderItem={({ item }) => (
-                    <DiscoverCard
-                        image={item.image}
+            {group_loader ?
+                <View style={{ alignItems: 'center', marginVertical: hp('5%') }}>
+                    <ActivityIndicator
+                        size={'large'}
+                        color={colors.primary}
                     />
-                )}
-            />
+                </View>
+                :
+                <FlatList
+                    data={groups}
+                    numColumns={2}
+                    columnWrapperStyle={{ justifyContent: 'space-between' }}
+                    renderItem={({ item }) => (
+                        <DiscoverCard
+                            image={images.discover2}
+                            title={item.listing_title}
+                            date={item.suggested_day == '02/18/24' ? item.suggested_day : '02/18/24'}
+                            area_code={item.area_code}
+                            desc={item.group_desired_teebox}
+                            itc={item.itc_group_handshake}
+                        />
+                    )}
+                />
+            }
         </View>
     )
 }

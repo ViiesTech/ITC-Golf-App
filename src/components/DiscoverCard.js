@@ -5,7 +5,7 @@ import colors from '../assets/colors'
 import SVGImage from './SVGImage'
 import icons from '../assets/icons'
 
-const DiscoverCard = ({ image }) => {
+const DiscoverCard = ({ image, title, desc, date, area_code, itc, titleStyle, time }) => {
     return (
         <View style={styles.wrapper}>
             <Image
@@ -17,25 +17,25 @@ const DiscoverCard = ({ image }) => {
                 <View style={styles.numberView}>
                     <Text style={{ color: colors.primary }}>01</Text>
                 </View>
-                <Text style={styles.name}>Shawn Letit (Sl)</Text>
+                <Text style={[styles.name, titleStyle]}>{title}</Text>
                 <SVGImage
                     image={icons.tee}
                     style={{ alignSelf: 'center' }}
                 />
             </View>
             <View style={styles.secondaryWrapper}>
-                <Text style={styles.textStyle}>Wins: <Text style={{ color: colors.white }}> Indy Heat, Mac Irvin Fire, NJ Scholars</Text></Text>
-                <Text style={styles.loseText}>Losses: <Text style={{ color: colors.white }}> New Heights Lightning</Text></Text>
+                <Text style={styles.textStyle}>{desc}</Text>
+                <Text style={styles.loseText}>{itc}</Text>
                 <View style={styles.border} />
                 <View style={{ paddingTop: hp('2%'), justifyContent: 'space-between', flexDirection: 'row' }}>
                     <View>
-                        <Text style={styles.heading}>LAST EVENT:</Text>
-                        <Text style={styles.text2}>Kansas City</Text>
+                        <Text style={styles.heading}>DATE:</Text>
+                        <Text style={styles.text2}>{date}</Text>
                     </View>
                     <View style={styles.verticleLine} />
                     <View>
-                        <Text style={styles.heading}>RECORD:</Text>
-                        <Text style={[styles.text2,{marginLeft: hp('2%')}]}>11-8</Text>
+                        <Text style={styles.heading}>{time ? 'TIME:' : 'AREA CODE:'}</Text>
+                        <Text style={[styles.text2, { marginLeft: time ? 0 : hp('2%') }]}>{time ? time : area_code}</Text>
                     </View>
                 </View>
             </View>

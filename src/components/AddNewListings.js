@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import colors from '../assets/colors';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -18,20 +18,48 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import moment from 'moment';
 import { ShowToast } from '../Custom';
 import { createListing } from '../redux/actions/listingAction';
+import { getListings } from '../redux/actions/homeAction';
+import images from '../assets/images';
 
 const Discover = () => {
+    const dispatch = useDispatch()
+
+    const { listing, loader } = useSelector(state => state.HomeReducer)
+
+    React.useEffect(() => {
+
+        if (listing.length < 1) {
+            dispatch(getListings())
+        }
+
+    }, [])
+
     return (
         <View style={{ paddingTop: hp('4%') }}>
-            <FlatList
-                data={discovers}
-                numColumns={2}
-                columnWrapperStyle={{ justifyContent: 'space-between' }}
-                renderItem={({ item }) => (
-                    <DiscoverCard
-                        image={item.image}
+            {loader ?
+                <View style={{ alignItems: 'center', marginVertical: hp('5%') }}>
+                    <ActivityIndicator
+                        size={'large'}
+                        color={colors.primary}
                     />
-                )}
-            />
+                </View>
+                :
+                <FlatList
+                    data={listing}
+                    numColumns={2}
+                    columnWrapperStyle={{ justifyContent: 'space-between' }}
+                    renderItem={({ item }) => (
+                        <DiscoverCard
+                            image={images.discover1}
+                            title={Object.keys(item.listing_title).length == 13 ? item.listing_title : 'New Listing'}
+                            itc={item.experience_level == '' ? '5 to 10 par progress level' : item.experience_level}
+                            desc={Object.keys(item.match_description).length == 4 ? item.match_description : 'test'}
+                            date={item.course_date}
+                            time={item.course_time == '' ? '23:28' : item.course_time}
+                        />
+                    )}
+                />
+            }
         </View>
     )
 }

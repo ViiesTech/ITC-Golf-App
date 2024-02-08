@@ -45,6 +45,7 @@ const Groups = () => {
                 text={'Groups'}
             />
             <View style={styles.screen}>
+                <Text>hello world</Text>
                 <FlatList
                     data={groups}
                     showsVerticalScrollIndicator={false}
@@ -57,7 +58,7 @@ const Groups = () => {
                             route={routeName}
                             title={item.listing_title}
                             desc={item.group_desired_teebox == '' ? 'All Other' : item.group_desired_teebox}
-                            date={item.suggested_day}
+                            date={item.suggested_day == '02/18/24' ? item.suggested_day : '02/18/24'}
                             area={item.area_code}
                         />
                     )}
