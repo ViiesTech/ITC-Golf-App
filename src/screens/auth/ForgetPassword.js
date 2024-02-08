@@ -6,13 +6,36 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import colors from '../../assets/colors'
 import InputField from '../../components/InputField'
 import Button from '../../components/Button'
+import { ShowToast } from '../../Custom'
+import { useDispatch, useSelector } from 'react-redux'
+import { resetPasswordLink } from '../../redux/actions/authAction'
+import { useNavigation } from '@react-navigation/native'
 
 const ForgetPassword = () => {
     const [username, setUsername] = useState('')
-    const [newPassword, setNewPassword] = useState('')
+    const [email, setEmail] = useState('')
 
-    const onResetPassword = () => {
+    const dispatch = useDispatch()
 
+    const { password_link_loading } = useSelector(state => state.AuthReducer)
+
+    const navigation = useNavigation()
+
+    const onSendResetLink = async () => {
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+
+        if (!username) {
+            return ShowToast('Please type your username')
+        } else if (!email) {
+            return ShowToast('Please type your email')
+        } else if (reg.test(email) === false) {
+            return ShowToast('Please enter a valid email')
+        } else {
+            const res = await dispatch(resetPasswordLink(username, email))
+            if (res) {
+                navigation.navigate('VerifyToken', { name: username })
+            }
+        }
     }
 
     return (
@@ -33,15 +56,17 @@ const ForgetPassword = () => {
                         style={styles.input}
                     />
                     <InputField
-                        icon={'lock'}
-                        value={newPassword}
-                        onChangeText={(text) => setNewPassword(text)}
-                        placeholder={'New Password'}
+                        icon={'mail'}
+                        value={email}
+                        onChangeText={(text) => setEmail(text)}
+                        placeholder={'Email'}
+                        keyboardType={'email-address'}
                         style={styles.input}
                     />
                     <Button
                         buttonText={'Reset Password'}
-                        onPress={() => onResetPassword()}
+                        indicator={password_link_loading}
+                        onPress={() => onSendResetLink()}
                         buttonStyle={{ marginTop: hp('3%') }}
                     />
                 </View>

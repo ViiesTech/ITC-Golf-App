@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Image, ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import AuthContainer from '../../components/AuthContainer';
 import colors from '../../assets/colors';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -26,7 +26,9 @@ const Login = () => {
 
         if (!username || !password) {
             return ShowToast('Please type your information')
-        } else {
+
+        }
+        else {
             await dispatch(signin(username, password))
             setUsername('')
             setPassword('')

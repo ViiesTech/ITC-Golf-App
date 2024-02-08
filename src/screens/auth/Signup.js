@@ -35,14 +35,17 @@ const Signup = () => {
   }
 
   const onSignupPress = async () => {
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+
     if (!username) {
       return ShowToast('Please fill all fields')
     } else if (password.length < 8) {
       return ShowToast('Password is too short')
     } else if (cpassword !== password) {
       return ShowToast('Password does not match')
-    }
-    else {
+    } else if (reg.test(email) === false) {
+      return ShowToast('Please enter a valid email')
+    } else {
       const res = await dispatch(signup(
         username,
         firstname,

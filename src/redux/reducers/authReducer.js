@@ -7,6 +7,8 @@ const initialState = {
     edit_loading: false,
     reset_loading: false,
     contact_loading: false,
+    password_link_loading: false,
+    verify_loading: false,
 }
 
 export default (state = initialState, action) => {
@@ -28,6 +30,18 @@ export default (state = initialState, action) => {
 
         case constant.EDIT_PROFILE_DONE:
             return { ...state, edit_loading: false, user: action.payload }
+
+        case constant.SEND_PASSWORD_LINK:
+            return { ...state, password_link_loading: true }
+
+        case constant.SEND_PASSWORD_LINK_DONE:
+            return { ...state, password_link_loading: false }
+
+        case constant.VERIFY_TOKEN:
+            return { ...state, verify_loading: true }
+
+        case constant.VERIFY_TOKEN_DONE:
+            return { ...state, verify_loading: false }
 
         case constant.RESET_PASSWORD:
             return { ...state, reset_loading: true }

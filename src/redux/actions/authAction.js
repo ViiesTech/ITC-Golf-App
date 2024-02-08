@@ -110,7 +110,7 @@ export const contactUs = (name, email, comment) => {
                 "Content-Type": 'multipart/form-data'
             }
         }).then((res) => {
-            console.log('contact uss response ===================>',res.data)
+            console.log('contact uss response ===================>', res.data)
             if (res.data.success) {
                 dispatch({
                     type: constant.CONTACT_US_DONE
@@ -129,8 +129,130 @@ export const contactUs = (name, email, comment) => {
     }
 }
 
-export const resetPassword = () => {
+export const resetPasswordLink = (username, email) => {
     return async dispatch => {
+
+        dispatch({
+            type: constant.SEND_PASSWORD_LINK
+        })
+
+        var data = new FormData()
+
+        data.append('username', username)
+        data.append('email', email)
+
+        // return console.log(data)
+
+        return await axios.post(`${URL}/reset-password`, data, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then((res) => {
+            console.log('password link response ====================>', res.data)
+            if (res.data.success) {
+                dispatch({
+                    type: constant.SEND_PASSWORD_LINK_DONE,
+                })
+                ShowToast(res.data.message)
+                return res.data.success
+            } else {
+                dispatch({
+                    type: constant.SEND_PASSWORD_LINK_DONE
+                })
+                ShowToast(res.data.message)
+                return false
+            }
+        }).catch(error => {
+            dispatch({
+                type: constant.SEND_PASSWORD_LINK_DONE
+            })
+            console.log(error)
+            return ShowToast('Check your network, Try Again!' || error.message)
+        })
+    }
+}
+
+export const verifyResetToken = (username, token) => {
+    return async dispatch => {
+
+        dispatch({
+            type: constant.VERIFY_TOKEN
+        })
+
+        let data = {
+            username: username,
+            token: token
+        }
+
+        return await axios.post(`${URL}/verify-reset-token`, data, {
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(res => {
+            console.log('verify response ===============>', res.data)
+            if (res.data.success) {
+                dispatch({
+                    type: constant.VERIFY_TOKEN_DONE
+                })
+                ShowToast(res.data.message)
+                return res.data.success
+            } else {
+                dispatch({
+                    type: constant.VERIFY_TOKEN_DONE
+                })
+                ShowToast(res.data.message)
+                return false
+            }
+        }).catch(error => {
+            console.log(error)
+            dispatch({
+                type: constant.VERIFY_TOKEN_DONE
+            })
+            ShowToast('Check your network, Try Again!' || error)
+            return false
+        })
+    }
+}
+
+export const resetPassword = (username, token, newPassword) => {
+    return async dispatch => {
+        dispatch({
+            type: constant.RESET_PASSWORD
+        })
+
+        let data = {
+            username: username,
+            token: token,
+            new_password: newPassword
+        }
+
+        return await axios.post(`${URL}/update-password`, data, {
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(res => {
+            console.log('password change response ================>', res.data)
+            if (res.data.success) {
+                dispatch({
+                    type: constant.RESET_PASSWORD_DONE
+                })
+                ShowToast(res.data.message)
+                return res.data.success
+            } else {
+                dispatch({
+                    type: constant.RESET_PASSWORD_DONE
+                })
+                ShowToast(res.data.message)
+                return res.data.success
+            }
+        }).catch(error => {
+            console.log(error)
+            dispatch({
+                type: constant.RESET_PASSWORD_DONE
+            })
+            ShowToast('Check your network, Try Again!' || error)
+            return false
+        })
     }
 }
 

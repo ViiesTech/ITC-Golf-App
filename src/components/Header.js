@@ -6,9 +6,12 @@ import colors from '../assets/colors'
 import SVGImage from './SVGImage'
 import icons from '../assets/icons'
 import { useNavigation } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
 
 const Header = ({ iconStyle, headerStyle }) => {
     const navigation = useNavigation()
+
+    const { user } = useSelector(state => state.AuthReducer)
 
     return (
         <View style={[styles.headerView,headerStyle]}>
@@ -17,7 +20,7 @@ const Header = ({ iconStyle, headerStyle }) => {
                     source={images.header_image}
                     style={styles.image}
                 />
-                <Text style={styles.headerText}>Hello Richard!</Text>
+                <Text style={styles.headerText}>Hello {user.username}!</Text>
             </View>
             <TouchableOpacity activeOpacity={0.9}
                 onPress={() => navigation.navigate('SecondaryStack', { screen: 'Notifications' })}
