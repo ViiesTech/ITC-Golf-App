@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, Linking } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import Container from '../../components/Container'
 import Header from '../../components/Header'
 import SecondaryHeader from '../../components/SecondaryHeader'
@@ -14,8 +14,10 @@ import Arrow from 'react-native-vector-icons/FontAwesome6';
 import { useDispatch, useSelector } from 'react-redux'
 import constant from '../../redux/constant'
 import { ShowToast } from '../../Custom'
+import ConfirmationModal from '../../components/ConfirmationModal'
 
 const Profile = () => {
+  const [modalVisible, setModalVisible] = useState(false)
 
   const url = 'https://google.com'
 
@@ -60,11 +62,15 @@ const Profile = () => {
     if (index == 1) {
       navigation.navigate('SecondaryStack', { screen: 'AllGroups', params: { options: 'My Profile' } })
     } else if (index == 2) {
-      dispatch({
-        type: constant.LOGOUT
-      })
-      return ShowToast('Logout Successfully')
+      setModalVisible(true)
     }
+  }
+
+  const onConfirmLogout = () => {
+    dispatch({
+      type: constant.LOGOUT
+    })
+    return ShowToast('Logout Successfully')
   }
 
   return (
@@ -126,6 +132,15 @@ const Profile = () => {
           </View>
         </View>
       </ScrollView>
+      <ConfirmationModal
+        visible={modalVisible}
+        onPressOut={() => setModalVisible(false)}
+        onCancel={() => setModalVisible(false)}
+        onConfirm={() => onConfirmLogout()}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible)
+        }}
+      />
     </Container>
   )
 }

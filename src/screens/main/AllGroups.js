@@ -1,4 +1,4 @@
-import { StyleSheet, View, ScrollView, Text, Image } from 'react-native'
+import { StyleSheet, View, ScrollView, Text, Image, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import Container from '../../components/Container'
 import Header from '../../components/Header'
@@ -17,14 +17,69 @@ import DropDownPicker from '../../components/DropDownPicker'
 import Button from '../../components/Button'
 import { AddNewListings } from '../../components/AddNewListings'
 import { areaCode, handshake, profilePicker } from '../../DummyData'
+import { useSelector } from 'react-redux'
+import { launchImageLibrary } from 'react-native-image-picker'
 
 const AllGroups = ({ route }) => {
+    const { user } = useSelector(state => state.AuthReducer)
+
+    const [state, setState] = useState({
+        first_name: user.first_name,
+        last_name: user.last_name,
+        pickers: {
+            area_code: '',
+            exp_level: '',
+            desired_tee: '',
+            itc_handshake: ''
+        },
+        description: '',
+        photoURL: ''
+    })
+
     const { options } = route.params
 
     const [changeTab, setChangeTab] = useState(options)
 
     console.log(options)
 
+    const onInputChange = (value, text) => {
+        setState(prevState => ({
+            ...prevState,
+            [value]: text
+        }))
+    }
+
+    const onPickerValueChange = (value, text) => {
+        setState(prevState => ({
+            ...prevState,
+            pickers: {
+                ...prevState.pickers,
+                [value]: text
+            }
+        }))
+    }
+
+    const onChangePhoto = async () => {
+        const options = {
+            title: 'Select Image',
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+                quality: 0.5,
+            }
+        }
+
+        await launchImageLibrary(options, async response => {
+            if (response.didCancel) {
+                console.log('cancelled', response.didCancel)
+            } else {
+                setState(prevState => ({
+                    ...prevState,
+                    photoURL: response.assets[0].uri
+                }))
+            }
+        })
+    }
 
     return (
         <Container>
@@ -62,28 +117,33 @@ const AllGroups = ({ route }) => {
                                     <Text style={styles.heading}>EDIT YOUR PROFILE</Text>
                                     <View style={{ position: 'relative', height: hp('14%'), width: '40%', marginTop: hp('2%') }}>
                                         <Image
-                                            source={images.editProfile}
+                                            source={state.photoURL ? { uri: state.photoURL } : images.editProfile}
+                                            resizeMode='cover'
                                             style={styles.imageStyle}
                                             borderRadius={10}
                                         />
-                                        <View style={styles.editView}>
+                                        <TouchableOpacity style={styles.editView} activeOpacity={0.9} onPress={() => onChangePhoto()}>
                                             <Edit
                                                 name={'edit'}
                                                 color={colors.primary}
                                                 size={16}
                                             />
-                                        </View>
+                                        </TouchableOpacity>
                                     </View>
                                     <View style={{ paddingTop: hp('4%'), flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <ContactInput
                                             label={'First Name'}
                                             placeholder={'First Name'}
+                                            value={state.first_name}
+                                            onChangeText={(text) => onInputChange('first_name', text)}
                                             style={styles.input}
                                             textColor={colors.lightgray}
                                         />
                                         <ContactInput
                                             label={'Last Name'}
                                             placeholder={'Last Name'}
+                                            value={state.last_name}
+                                            onChangeText={(text) => onInputChange('last_name', text)}
                                             style={styles.input}
                                             textColor={colors.lightgray}
                                         />
@@ -92,6 +152,10 @@ const AllGroups = ({ route }) => {
                                         <DropDownPicker
                                             style={styles.pickerStyle}
                                             text={item.text}
+                                            selectedValue={state.pickers[item.props]}
+                                            onValueChange={(itemValue) => {
+                                                onPickerValueChange('area_code', itemValue)
+                                            }}
                                             value1={item.pickerText1}
                                             value2={item.pickerText2}
                                             value3={item.pickerText3}
@@ -100,10 +164,14 @@ const AllGroups = ({ route }) => {
                                             label3={item.pickerText3}
                                         />
                                     ))}
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         {profilePicker.map((item) => (
                                             <DropDownPicker
                                                 style={[styles.pickerStyle, { width: item.id == 1 ? '150%' : null }]}
+                                                selectedValue={state.pickers[item.props]}
+                                                onValueChange={(itemValue) => {
+                                                    onPickerValueChange(item.props, itemValue)
+                                                }}
                                                 text={item.text}
                                                 value1={item.pickerText1}
                                                 value2={item.pickerText2}
@@ -118,6 +186,10 @@ const AllGroups = ({ route }) => {
                                         <DropDownPicker
                                             style={styles.pickerStyle}
                                             text={item.text}
+                                            selectedValue={state.pickers[item.props]}
+                                            onValueChange={(itemValue) => {
+                                                onPickerValueChange('itc_handshake', itemValue)
+                                            }}
                                             value1={item.pickerText1}
                                             value2={item.pickerText2}
                                             value3={item.pickerText3}
@@ -154,7 +226,7 @@ const AllGroups = ({ route }) => {
     )
 }
 
-export default AllGroups
+export default AllGroups;
 
 const styles = StyleSheet.create({
     screen: {

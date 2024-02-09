@@ -794,6 +794,7 @@ export const areaCode = [
     {
         id: 1,
         text: 'Area Code',
+        props: 'area_code',
         pickerText1: '+212',
         pickerText2: '+310',
         pickerText3: '+415'
@@ -805,6 +806,7 @@ export const profilePicker = [
     {
         id: 1,
         text: 'Experience Level',
+        props: 'exp_level',
         pickerText1: 'Master',
         pickerText2: 'Intermediate',
         pickerText3: 'Pro'
@@ -812,6 +814,7 @@ export const profilePicker = [
     {
         id: 2,
         text: 'Search By Desired Tee Box',
+        props: 'desired_tee',
         pickerText1: 'Front Tees',
         pickerText2: 'Back Tees',
         pickerText3: 'Championship Tees'
@@ -823,6 +826,7 @@ export const handshake = [
     {
         id: 1,
         text: 'The Itc Handshake',
+        props: 'itc_handshake',
         pickerText1: 'Fist Bump',
         pickerText2: 'High-Five',
         pickerText3: 'Wave or Nod'
