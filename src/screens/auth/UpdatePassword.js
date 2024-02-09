@@ -19,6 +19,7 @@ const UpdatePassword = ({ route }) => {
     const [token, setToken] = useState(resetToken)
     const [username, setUsername] = useState(userName)
     const [newPassword, setNewPassword] = useState('')
+    const [cPassword, setCPassword] = useState('')
 
     const dispatch = useDispatch()
 
@@ -31,6 +32,10 @@ const UpdatePassword = ({ route }) => {
             return ShowToast('Please enter your username')
         } else if (!token) {
             return ShowToast('Please enter your verification token')
+        } else if (newPassword.length < 8) {
+            return ShowToast('Password is too short')
+        } else if (cPassword !== newPassword) {
+            return ShowToast('Password does not match')
         } else {
             const res = await dispatch(resetPassword(username, token, newPassword))
             if (res) {
@@ -69,6 +74,14 @@ const UpdatePassword = ({ route }) => {
                         onChangeText={(text) => setNewPassword(text)}
                         secureTextEntry={true}
                         placeholder={'New Password'}
+                        style={styles.input}
+                    />
+                    <InputField
+                        value={cPassword}
+                        icon={'lock'}
+                        onChangeText={(text) => setCPassword(text)}
+                        secureTextEntry={true}
+                        placeholder={'Confirm Password'}
                         style={styles.input}
                     />
                     <Button

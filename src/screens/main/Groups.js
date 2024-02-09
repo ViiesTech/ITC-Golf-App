@@ -45,7 +45,6 @@ const Groups = () => {
                 text={'Groups'}
             />
             <View style={styles.screen}>
-                <Text>hello world</Text>
                 <FlatList
                     data={groups}
                     showsVerticalScrollIndicator={false}

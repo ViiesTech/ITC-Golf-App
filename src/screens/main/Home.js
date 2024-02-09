@@ -83,13 +83,14 @@ const Home = () => {
                 <Picker
                   selectedValue={selectedOption}
                   dropdownIconColor={colors.white}
+                  style={{ color: colors.white }}
                   onValueChange={(itemValue, itemIndex) =>
                     setSelectedOption(itemValue)
                   }
                 >
                   {picker.map((item) => (
                     <Picker.Item
-                      label={item.pickerText} value={item} style={{ color: colors.white }}
+                      label={item.pickerText} value={item.pickerText} style={{ color: colors.secondary }}
                     />
                   ))}
                 </Picker>

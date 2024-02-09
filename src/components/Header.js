@@ -35,7 +35,7 @@ const Header = ({ iconStyle, headerStyle }) => {
     )
 }
 
-export default Header
+export default Header;
 
 const styles = StyleSheet.create({
     headerView: {
