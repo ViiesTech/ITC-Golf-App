@@ -5,7 +5,6 @@ const initialState = {
     products_loading: false,
     product_detail: {},
     product_detail_loading: false,
-    isFavourite: false
 }
 
 export default (state = initialState, action) => {
@@ -25,11 +24,6 @@ export default (state = initialState, action) => {
                     ...state.product_detail,
                     [action.payload.product_id]: action.payload
                 }
-            }
-
-        case constant.ADD_TO_WISHLIST:
-            return {
-                ...state, isFavourite: action.payload
             }
 
         default:

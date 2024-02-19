@@ -6,6 +6,8 @@ import SVGImage from './SVGImage'
 import icons from '../assets/icons'
 
 const DiscoverCard = ({ image, title, desc, date, area_code, itc, titleStyle, time }) => {
+    console.log(desc.length)
+
     return (
         <View style={styles.wrapper}>
             <Image
@@ -17,7 +19,7 @@ const DiscoverCard = ({ image, title, desc, date, area_code, itc, titleStyle, ti
                 <View style={styles.numberView}>
                     <Text style={{ color: colors.primary }}>01</Text>
                 </View>
-                <Text style={[styles.name, titleStyle]}>{title}</Text>
+                <Text style={[styles.name, titleStyle]}>{!time && title.length > 21 ? 'New Group' : title}</Text>
                 <SVGImage
                     image={icons.tee}
                     style={{ alignSelf: 'center' }}
@@ -27,7 +29,7 @@ const DiscoverCard = ({ image, title, desc, date, area_code, itc, titleStyle, ti
                 <Text style={styles.textStyle}>{desc}</Text>
                 <Text style={styles.loseText}>{itc}</Text>
                 <View style={styles.border} />
-                <View style={{ paddingTop: hp('2%'), justifyContent: 'space-between', flexDirection: 'row' }}>
+                <View style={{ paddingTop: hp('2%'), justifyContent: 'space-between', flexDirection: 'row', width: '95%' }}>
                     <View>
                         <Text style={styles.heading}>DATE:</Text>
                         <Text style={styles.text2}>{date}</Text>
@@ -86,14 +88,16 @@ const styles = StyleSheet.create({
     },
     border: {
         borderBottomWidth: 1,
+        width: '95%',
         borderBottomColor: colors.gray,
         marginTop: hp('2%'),
     },
     secondaryWrapper: {
         marginLeft: hp('1%'),
-        position: 'absolute',
-        top: hp('29%'),
-        width: '90%'
+        paddingTop: hp('1.6%')
+        // position: 'absolute',
+        // top: hp('29%'),
+        // width: '90%'
     },
     heading: {
         color: colors.primary,

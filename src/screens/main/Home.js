@@ -18,6 +18,7 @@ import AppStatusBar from '../../components/AppStatusBar'
 import { Picker } from '@react-native-picker/picker'
 import { useDispatch, useSelector } from 'react-redux'
 import { getListings } from '../../redux/actions/homeAction'
+import Sponsors from '../../components/Sponsors'
 
 const Home = () => {
   const [selectedOption, setSelectedOption] = useState("")
@@ -67,10 +68,10 @@ const Home = () => {
           />
           <View style={styles.videoBackground} />
           <View style={styles.logoWrapper}>
-            <Image
+            {/* <Image
               source={images.logo}
               style={styles.logoStyle}
-            />
+            /> */}
           </View>
           <View style={styles.textWrapper}>
             <Text style={styles.heading}>A PLACE FOR GOLFERS</Text>
@@ -136,19 +137,7 @@ const Home = () => {
                 style={styles.golfImage}
               />
               <Text style={styles.heading}>Listing</Text>
-              <View style={{ paddingTop: hp('5%') }}>
-                {listingImages.map((item) => (
-                  <Image
-                    source={item.image}
-                    style={styles.listingImage}
-                    borderRadius={10}
-                  />
-                ))}
-                <SVGImage
-                  image={icons.pageEnd}
-                  style={styles.endIcon}
-                />
-              </View>
+              <Sponsors />
             </View>
           </View>
         </ScrollView>
@@ -214,36 +203,15 @@ const styles = StyleSheet.create({
   },
   golfImage: {
     height: hp('35%'),
-    width: '85%',
+    width: hp('38%'),
     alignSelf: 'center'
-  },
-  listingImage: {
-    height: hp('20%'),
-    marginBottom: hp('4%'),
-    width: '100%'
-  },
-  endIcon: {
-    alignSelf: 'center',
-    paddingTop: hp('5%')
-  },
-  logoStyle: {
-    height: hp('22%'),
-    width: hp('22%')
-  },
-  logoWrapper: {
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
-    top: hp('27%'),
-    right: 0,
-    left: 0
   },
   backgroundVideo: {
     height: hp('100%'),
   },
   videoBackground: {
     position: 'absolute',
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(0,0,0,0.1)',
     top: 0,
     left: 0,
     right: 0,

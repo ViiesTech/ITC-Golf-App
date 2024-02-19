@@ -1,19 +1,17 @@
-import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { ActivityIndicator, FlatList, ScrollView, StyleSheet, View } from 'react-native'
+import React, { useEffect } from 'react'
 import Container from '../../components/Container'
 import Header from '../../components/Header'
 import SecondaryHeader from '../../components/SecondaryHeader'
 import MerchandiseCard from '../../components/MerchandiseCard'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
-import { stuff } from '../../DummyData'
-import SVGImage from '../../components/SVGImage'
-import icons from '../../assets/icons'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToWishlist, getProducts } from '../../redux/actions/productAction'
 import colors from '../../assets/colors'
 import { ShowToast } from '../../Custom'
 import constant from '../../redux/constant'
+import Sponsors from '../../components/Sponsors'
 
 const FreeStuff = () => {
 
@@ -21,7 +19,7 @@ const FreeStuff = () => {
 
     const dispatch = useDispatch()
 
-    const { products, products_loading, isFavourite } = useSelector(state => state.ProductReducer)
+    const { products, products_loading } = useSelector(state => state.ProductReducer)
     // console.log('from screen ======================>', isFavourite)
 
     useEffect(() => {
@@ -45,7 +43,7 @@ const FreeStuff = () => {
         const res = await dispatch(addToWishlist(item.product_id))
         if (res.success) {
             // console.log('hello world')
-            products[index] = { ...item, isFav: isFavourite }
+            products[index] = { ...item, isFav: true }
             dispatch({
                 type: constant.RENDER_PRODUCT_DONE,
                 payload: products
@@ -60,11 +58,10 @@ const FreeStuff = () => {
             <SecondaryHeader
                 text={'Free Stuff Merchandise'}
             />
-            <View style={styles.screen}>
+            <ScrollView contentContainerStyle={styles.screen}>
                 <FlatList
                     data={products}
                     numColumns={2}
-                    contentContainerStyle={{ paddingBottom: hp('34%') }}
                     columnWrapperStyle={{ justifyContent: 'space-between' }}
                     showsVerticalScrollIndicator={false}
                     renderItem={({ item, index }) => (
@@ -79,8 +76,8 @@ const FreeStuff = () => {
                         />
                     )}
                 />
-            </View>
-            <SVGImage image={icons.pageEnd} style={{ alignSelf: 'center' }} />
+                <Sponsors />
+            </ScrollView>
         </Container>
 
     )
@@ -90,7 +87,7 @@ export default FreeStuff
 
 const styles = StyleSheet.create({
     screen: {
-        padding: hp('2%')
+        padding: hp('2.5%')
     },
     errorMessage: {
         color: colors.primary,

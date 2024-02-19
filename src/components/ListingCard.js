@@ -4,7 +4,7 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import colors from '../assets/colors';
 import images from '../assets/images';
 
-const ListingCard = ({image, onPress,title,desc,count, exp, date, descStyle}) => {
+const ListingCard = ({ image, onPress, title, desc, count, exp, date, descStyle }) => {
     return (
         <TouchableOpacity style={styles.wrapper} activeOpacity={0.9} onPress={onPress}>
             <View style={{ flexDirection: 'row' }}>
@@ -18,12 +18,12 @@ const ListingCard = ({image, onPress,title,desc,count, exp, date, descStyle}) =>
                         <Text style={styles.number}>01</Text>
                     </View>
                     <View style={{ position: 'absolute', top: hp('5%') }}>
-                        <Text style={[styles.textStyle,descStyle]}>{desc}</Text>
+                        <Text style={[styles.textStyle, descStyle]}>{desc}</Text>
                     </View>
                 </View>
                 <Text style={styles.text}>{title}</Text>
             </View>
-            <View style={{marginRight: hp('1%')}}>
+            <View style={{ marginRight: hp('1%') }}>
                 <Text style={styles.eventsText}>NO OF PLAYERS:</Text>
                 <Text style={styles.location}>{count}</Text>
                 <Text style={styles.recordHeading}>{exp}</Text>
@@ -38,7 +38,7 @@ export default ListingCard;
 const styles = StyleSheet.create({
     wrapper: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
         marginBottom: hp('7%'),
         paddingTop: hp('2%')
     },
@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
         width: hp('10%')
     },
     textWrapper: {
-        marginLeft: hp('1.5%'),
-        marginTop: hp('0.8%')
+        marginTop: hp('0.8%'),
+        marginHorizontal: hp('1.4%')
     },
     textView: {
         backgroundColor: colors.gray,
@@ -64,9 +64,8 @@ const styles = StyleSheet.create({
         color: colors.white,
         marginTop: hp('1%'),
         fontSize: hp('1.4%'),
-        width: '40%',
+        // width: '40%',
         fontWeight: 'bold',
-        marginLeft: hp('1%')
     },
     eventsText: {
         color: colors.white,
@@ -85,7 +84,7 @@ const styles = StyleSheet.create({
         color: colors.white,
         marginTop: hp('0%'),
         fontSize: hp('1.4%'),
-        // position: 'absolute',
+        position: 'absolute',
     },
     recordHeading: {
         color: colors.white,

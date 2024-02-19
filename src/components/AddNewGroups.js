@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { View, StyleSheet, Text, FlatList, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Text, FlatList, ActivityIndicator, ScrollView } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import colors from '../assets/colors';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { areaCode, discovers, groups, groupsItem, listingPicker, picker } from '../DummyData';
+import { DesiredItem, areaCode, discovers, groups, groupsItem, handshake, listingPicker, picker } from '../DummyData';
 import DiscoverCard from './DiscoverCard';
 import MyGroupsCard from './MyGroupsCard';
 import DropDownPicker from './DropDownPicker';
@@ -53,10 +53,11 @@ const Discover = () => {
                         <DiscoverCard
                             image={images.discover2}
                             title={item.listing_title}
+                            titleStyle={{ fontSize: hp('1.6%') }}
                             date={item.suggested_day == '02/18/24' ? item.suggested_day : '02/18/24'}
-                            area_code={item.area_code}
-                            desc={item.group_desired_teebox}
-                            itc={item.itc_group_handshake}
+                            area_code={item.area_code === 'Select a Area Code' ? '240' : item.area_code}
+                            desc={item.group_desired_teebox.length == 0 ? 'All Other' : item.group_desired_teebox}
+                            itc={item.itc_group_handshake.length == 0 ? 'CASUAL HANDSHAKE' : item.itc_group_handshake}
                         />
                     )}
                 />
@@ -82,6 +83,7 @@ const AddNew = () => {
     const [state, setState] = React.useState({
         group_title: '',
         description: '',
+        hyperlink: '',
         pickers: {
             kind_listing: 'Sample',
             area_code: '212',
@@ -178,24 +180,25 @@ const AddNew = () => {
                 style={[styles.input, { height: hp('15%') }]}
             />
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                {listingPicker.map((item) => (
-                    <DropDownPicker
-                        text={item.text}
-                        iconColor={colors.lightgray}
-                        value1={item.pickerText1}
-                        value2={item.pickerText2}
-                        value3={item.pickerText3}
-                        onValueChange={(itemValue) =>
-                            handlePickerChange('kind_listing', itemValue)
-                        }
-                        selectedValue={state.pickers.kind_listing}
-                        itemStyle={{ color: colors.lightgray }}
-                        label1={item.pickerText1}
-                        label2={item.pickerText2}
-                        label3={item.pickerText3}
-                        style={[styles.picker, { width: '91%' }]}
-                    />
-                ))}
+                <View>
+                    <Text style={styles.textStyle}>What Kind Of Listing Is This?</Text>
+                    <View style={styles.pickerStyle}>
+                        <Picker
+                            selectedValue={state.pickers.kind_listing}
+                            dropdownIconColor={colors.white}
+                            style={{ color: colors.white }}
+                            onValueChange={(itemValue, itemIndex) =>
+                                handlePickerChange('kind_listing', itemValue)
+                            }
+                        >
+                            {listingPicker.map((item) => (
+                                <Picker.Item
+                                    label={item.pickerText} value={item.pickerText} style={{ color: colors.secondary }}
+                                />
+                            ))}
+                        </Picker>
+                    </View>
+                </View>
                 <DateInput
                     heading={'Suggested Day'}
                     onConfirm={(date) => setState({
@@ -206,26 +209,67 @@ const AddNew = () => {
                     text={state.suggested_day !== '' ? state.suggested_day : 'mm/dd/yy'}
                 />
             </View>
+            <Text style={styles.textStyle}>IN THE CUP HANDSHAKE</Text>
+            <View style={styles.pickerStyle}>
+                <Picker
+                    selectedValue={state.pickers.itc_handshake}
+                    dropdownIconColor={colors.white}
+                    style={{ color: colors.white }}
+                    onValueChange={(itemValue, itemIndex) =>
+                        handlePickerChange('itc_handshake', itemValue)
+                    }
+                >
+                    {handshake.map((item) => (
+                        <Picker.Item
+                            label={item.pickerText} value={item.pickerText} style={{ color: colors.secondary }}
+                        />
+                    ))}
+                </Picker>
+            </View>
+            <Text style={styles.textStyle}>AREA CODE</Text>
+            <View style={styles.pickerStyle}>
+                <Picker
+                    selectedValue={state.pickers.area_code}
+                    dropdownIconColor={colors.white}
+                    style={{ color: colors.white }}
+                    onValueChange={(itemValue, itemIndex) =>
+                        handlePickerChange('area_code', itemValue)
+                    }
+                >
+                    {picker.map((item) => (
+                        <Picker.Item
+                            label={item.pickerText} value={item.pickerText} style={{ color: colors.secondary }}
+                        />
+                    ))}
+                </Picker>
+            </View>
             {
-                groupsItem.map((item) => (
+                DesiredItem.map((item) => (
                     <DropDownPicker
                         text={item.text}
                         iconColor={colors.lightgray}
                         value1={item.pickerText1}
                         value2={item.pickerText2}
                         value3={item.pickerText3}
+                        value4={item.pickerText4}
+                        value5={item.pickerText5}
+                        value6={item.pickerText6}
                         onValueChange={(itemValue) =>
-                            handlePickerChange(item.property, itemValue)
+                            handlePickerChange('desired_tee', itemValue)
                         }
-                        selectedValue={state.pickers[item.property]}
+                        selectedValue={state.pickers.desired_tee}
                         itemStyle={{ color: colors.lightgray }}
                         label1={item.pickerText1}
                         label2={item.pickerText2}
                         label3={item.pickerText3}
-                        style={[styles.picker, { width: hp('43%') }]}
+                        label4={item.pickerText4}
+                        label5={item.pickerText5}
+                        label6={item.pickerText6}
+                        style={[styles.picker, { width: '100%' }]}
                     />
                 ))
             }
+            <Text style={styles.text}>Additional Details</Text>
             <Switch
                 text={'Is This A Private Group ?'}
                 onToggle={(isOn) => setState({
@@ -241,8 +285,18 @@ const AddNew = () => {
                     fileName={state.group_photo_details.name}
                     chooseFile={() => onChoosePhoto()}
                 />
+                <ContactInput
+                    label={'Hyper Link'}
+                    value={state.group_title}
+                    onChangeText={(text) => setState({
+                        ...state,
+                        hyperlink: text
+                    })}
+                    textColor={colors.lightgray}
+                    style={styles.input}
+                />
                 <Button
-                    buttonText={'Create Groups'}
+                    buttonText={'Create Group'}
                     textStyle={{ color: colors.secondary }}
                     indicator={create_group_loading}
                     buttonStyle={{ width: '50%', borderRadius: 100, marginTop: hp('2%') }}
@@ -278,15 +332,15 @@ export const AddNewGroups = () => {
                 <TabBar
                     indicatorStyle={styles.indicatorStyle}
                     {...styling}
-                    style={{ backgroundColor: colors.white, borderRadius: 10, height: hp('6.7%') }}
+                    style={{ backgroundColor: colors.white, borderRadius: 10 }}
                     renderLabel={({ route }) => (
                         <Text
                             style={{
                                 color: colors.secondary,
                                 fontWeight: 'bold',
-                                marginRight: 2,
-                                marginTop: hp('0.4%'),
-                                fontSize: hp('1.4%'),
+                                // marginRight: 2,
+                                // marginTop: hp('0.4%'),
+                                fontSize: hp('1.5%'),
                             }}>
                             {route.title}
                         </Text>
@@ -301,11 +355,12 @@ const styles = StyleSheet.create({
     indicatorStyle: {
         backgroundColor: colors.primary,
         width: '30%',
-        bottom: hp('1.3%'),
-        marginLeft: hp('0.5%'),
+        bottom: 5,
+        left: 5,
         alignItems: 'center',
+        position: 'absolute',
         borderRadius: 50,
-        padding: hp('2%'),
+        paddingVertical: hp('2.5%'),
     },
     input: {
         backgroundColor: 'transparent',
@@ -315,4 +370,23 @@ const styles = StyleSheet.create({
     addnewWrapper: {
         paddingTop: hp('4%'),
     },
+    text: {
+        color: colors.white,
+        marginBottom: hp('2%'),
+        fontWeight: 'bold',
+        fontSize: hp('2.3%')
+    },
+    pickerStyle: {
+        borderWidth: 0.7,
+        width: '100%',
+        borderRadius: 10,
+        marginTop: hp('1.5%'),
+        marginBottom: hp('4%'),
+        borderColor: colors.lightgray,
+    },
+    textStyle: {
+        color: colors.white,
+        fontSize: hp('1.8%'),
+        fontWeight: 'bold',
+    }
 })

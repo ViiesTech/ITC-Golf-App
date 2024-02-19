@@ -14,7 +14,7 @@ const Header = ({ iconStyle, headerStyle }) => {
     const { user } = useSelector(state => state.AuthReducer)
 
     return (
-        <View style={[styles.headerView,headerStyle]}>
+        <View style={[styles.headerView, headerStyle]}>
             <View style={{ flexDirection: 'row' }}>
                 <Image
                     source={images.header_image}
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: hp('3%'),
-        paddingTop: hp('7%')
+        paddingTop: hp('6%')
     },
     image: {
         height: hp('6.5%'),

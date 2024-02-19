@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, FlatList, TouchableOpacity, ActivityIndicator }
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import colors from '../assets/colors';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { AllListingsPicker, discovers, groups, switchOptions } from '../DummyData';
+import { AllListingsPicker, DesiredItem, ExperienceLevel, discovers, groups, handshake, how_many_players, picker, switchOptions } from '../DummyData';
 import DiscoverCard from './DiscoverCard';
 import MyGroupsCard from './MyGroupsCard';
 import DropDownPicker from './DropDownPicker';
@@ -20,6 +20,7 @@ import { ShowToast } from '../Custom';
 import { createListing } from '../redux/actions/listingAction';
 import { getListings } from '../redux/actions/homeAction';
 import images from '../assets/images';
+import { Picker } from '@react-native-picker/picker';
 
 const Discover = () => {
     const dispatch = useDispatch()
@@ -82,18 +83,25 @@ const AddNew = () => {
         location: '',
         suggested_day: '',
         suggested_time: '',
+        hyperlink: '',
         pickers: {
-            area_code: '212',
-            how_many_players: '2',
-            itc_handshake: 'High-Five',
-            desired_tee: 'Front Tees',
+            area_code: '',
+            how_many_players: '',
+            itc_handshake: '',
+            desired_tee: '',
+            exp_level: ''
         },
         description: '',
         image_details: {
             name: 'No File Chosen',
             path: ''
         },
-        listing_gallery: '',
+        listing_gallery: [
+            {
+                name: 'No File Chosen',
+                path: '',
+            },
+        ],
         smoking_friendly: false,
         drinking_friendly: false,
         private_listing: false,
@@ -104,8 +112,10 @@ const AddNew = () => {
     const { create_listing_loading } = useSelector(state => state.ListingReducer)
 
     // console.log(typeof state.smoking_friendly)
+    // console.log(state.listing_gallery)
 
-    const onChoosePhoto = async (type) => {
+
+    const onChoosePhoto = async (type, index) => {
         const options = {
             title: 'Select Image',
             storageOptions: {
@@ -128,10 +138,11 @@ const AddNew = () => {
                         }
                     }))
                 } else {
-                    setState({
-                        ...state,
-                        listing_gallery: response.assets[0].uri
-                    })
+                    const obj = { name: response.assets[0].fileName, path: response.assets[0].uri };
+                    setState(prevState => ({
+                        ...prevState,
+                        listing_gallery: prevState.listing_gallery.map((item, i) => i === index ? obj : item)
+                    }));
                 }
             }
 
@@ -175,6 +186,15 @@ const AddNew = () => {
         }
     }
 
+    const onAddMore = () => {
+        const obj = { name: 'No File Chosen', path: '' }
+        const modifiedArr = [...state.listing_gallery, obj]
+        setState({
+            ...state,
+            listing_gallery: modifiedArr
+        })
+    }
+
 
     return (
         <View style={styles.addnewWrapper}>
@@ -212,22 +232,104 @@ const AddNew = () => {
                     display={'clock'}
                 />
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-                {AllListingsPicker.map((item) => (
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap', paddingTop: hp('1.3%') }}>
+                <View>
+                    <Text style={styles.textStyle}>Area Code</Text>
+                    <View style={styles.pickerStyle}>
+                        <Picker
+                            selectedValue={state.pickers.area_code}
+                            dropdownIconColor={colors.white}
+                            style={{ color: colors.white }}
+                            onValueChange={(itemValue, itemIndex) =>
+                                handlePickerChange('area_code', itemValue)
+                            }
+                        >
+                            {picker.map((item) => (
+                                <Picker.Item
+                                    label={item.pickerText} value={item.pickerText} style={{ color: colors.secondary }}
+                                />
+                            ))}
+                        </Picker>
+                    </View>
+                </View>
+                <View>
+                    <Text style={styles.textStyle}>How Many Players</Text>
+                    <View style={styles.pickerStyle}>
+                        <Picker
+                            selectedValue={state.pickers.how_many_players}
+                            dropdownIconColor={colors.white}
+                            style={{ color: colors.white }}
+                            onValueChange={(itemValue, itemIndex) =>
+                                handlePickerChange('how_many_players', itemValue)
+                            }
+                        >
+                            {how_many_players.map((item) => (
+                                <Picker.Item
+                                    label={item.pickerText} value={item.pickerText} style={{ color: colors.secondary }}
+                                />
+                            ))}
+                        </Picker>
+                    </View>
+                </View>
+                <View>
+                    <Text style={styles.textStyle}>IN THE CUP HANDSHAKE</Text>
+                    <View style={[styles.pickerStyle, { width: hp('30%') }]}>
+                        <Picker
+                            selectedValue={state.pickers.kind_listing}
+                            dropdownIconColor={colors.white}
+                            style={{ color: colors.white }}
+                            onValueChange={(itemValue, itemIndex) =>
+                                handlePickerChange('itc_handshake', itemValue)
+                            }
+                        >
+                            {handshake.map((item) => (
+                                <Picker.Item
+                                    label={item.pickerText} value={item.pickerText} style={{ color: colors.secondary }}
+                                />
+                            ))}
+                        </Picker>
+                    </View>
+                </View>
+                <View>
+                    <Text style={styles.textStyle}>Experience Level</Text>
+                    <View style={styles.pickerStyle}>
+                        <Picker
+                            selectedValue={state.pickers.exp_level}
+                            dropdownIconColor={colors.white}
+                            style={{ color: colors.white }}
+                            onValueChange={(itemValue, itemIndex) =>
+                                handlePickerChange('exp_level', itemValue)
+                            }
+                        >
+                            {ExperienceLevel.map((item) => (
+                                <Picker.Item
+                                    label={item.pickerText} value={item.pickerText} style={{ color: colors.secondary }}
+                                />
+                            ))}
+                        </Picker>
+                    </View>
+                </View>
+                {DesiredItem.map((item) => (
                     <DropDownPicker
                         text={item.text}
                         iconColor={colors.lightgray}
                         itemStyle={{ color: colors.lightgray }}
                         selectedValue={state.pickers[item.props]}
                         onValueChange={(itemValue) => {
-                            handlePickerChange(item.props, itemValue)
+                            handlePickerChange('desired_tee', itemValue)
                         }}
                         value1={item.pickerText1}
                         value2={item.pickerText2}
                         value3={item.pickerText3}
+                        value4={item.pickerText4}
+                        value5={item.pickerText5}
+                        value6={item.pickerText6}
                         label1={item.pickerText1}
                         label2={item.pickerText2}
                         label3={item.pickerText3}
+                        label4={item.pickerText4}
+                        label5={item.pickerText5}
+                        label6={item.pickerText6}
                         style={[styles.picker, { width: hp('20%') }]}
                     />
                 ))}
@@ -247,15 +349,30 @@ const AddNew = () => {
                 chooseFile={() => onChoosePhoto('image')}
                 fileName={state.image_details.name}
             />
-            <View style={{ flexDirection: 'row' }}>
-                <UploadPicture
-                    text={'Listing Gallery'}
-                    buttonStyle={{ width: hp('16%') }}
-                    chooseFile={() => onChoosePhoto('gallery')}
-                    style={{ width: hp('37%') }}
-                />
+            <ContactInput
+                label={'Hyper Link'}
+                value={state.hyperlink}
+                onChangeText={(text) => setState({
+                    ...state,
+                    hyperlink: text
+                })}
+                style={styles.input} />
+            <View style={{ flexDirection: 'row', gap: 15, alignItems: 'flex-start', position: 'relative' }}>
+                <View style={{ flex: 1 }}>
+                    {state.listing_gallery.map((item, i) => {
+                        return (
+                            <UploadPicture
+                                text={i == 0 && 'Listing Gallery'}
+                                buttonStyle={{ width: hp('16%') }}
+                                chooseFile={() => onChoosePhoto('gallery', i)}
+                                style={{ width: hp('37%') }}
+                                fileName={item.name}
+                            />
+                        )
+                    })}
+                </View>
                 <TouchableOpacity style={styles.addView} activeOpacity={0.9}
-                    onPress={() => alert('working in progress')}
+                    onPress={() => onAddMore()}
                 >
                     <Add
                         name={'add'}
@@ -265,7 +382,7 @@ const AddNew = () => {
                 </TouchableOpacity>
             </View>
             <View style={{ paddingTop: hp('2%') }}>
-                <Text style={styles.heading}>Additional Details</Text>
+                <Text style={styles.text}>Additional Details</Text>
                 <View style={{ flexDirection: 'row', paddingTop: hp('3%'), flexWrap: 'wrap', justifyContent: 'space-between' }}>
                     {switchOptions.map((item) => (
                         <Switch
@@ -349,5 +466,37 @@ const styles = StyleSheet.create({
     },
     addnewWrapper: {
         paddingTop: hp('4%'),
-    }
+    },
+    pickerStyle: {
+        borderWidth: 0.7,
+        width: hp('20%'),
+        borderRadius: 10,
+        marginTop: hp('1.5%'),
+        marginBottom: hp('4%'),
+        borderColor: colors.lightgray,
+    },
+    textStyle: {
+        color: colors.white,
+        fontSize: hp('1.8%'),
+        fontWeight: 'bold',
+    },
+    addView: {
+        backgroundColor: colors.primary,
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        position: 'absolute',
+        right: 10,
+        top: 48,
+        // marginTop: hp('1%'),
+        height: hp('5%'),
+        width: hp('5%'),
+        borderRadius: 100
+    },
+    text: {
+        color: colors.white,
+        marginBottom: hp('2%'),
+        fontWeight: 'bold',
+        fontSize: hp('2.3%')
+    },
 })

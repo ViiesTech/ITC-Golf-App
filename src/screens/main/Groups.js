@@ -1,4 +1,4 @@
-import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native'
+import { StyleSheet, View, FlatList, ActivityIndicator, ScrollView } from 'react-native'
 import React, { useEffect } from 'react'
 import Container from '../../components/Container'
 import Header from '../../components/Header'
@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getGroups } from '../../redux/actions/homeAction'
 import colors from '../../assets/colors'
 import { useNavigation } from '@react-navigation/native'
+import SearchFilter from '../../components/SearchFilter'
+import Sponsors from '../../components/Sponsors'
 
 const Groups = () => {
 
@@ -41,14 +43,16 @@ const Groups = () => {
     return (
         <Container>
             <Header />
-            <SecondaryHeader
-                text={'Groups'}
-            />
-            <View style={styles.screen}>
+            <ScrollView contentContainerStyle={styles.screen}>
+                <SearchFilter />
+                <SecondaryHeader
+                    text={'Groups'}
+                    style={{ paddingTop: hp('5%') }}
+                />
                 <FlatList
                     data={groups}
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingBottom: hp('35%') }}
+                    contentContainerStyle={{ padding: hp('2.5%') }}
                     numColumns={2}
                     columnWrapperStyle={{ justifyContent: 'space-between' }}
                     renderItem={({ item }) => (
@@ -62,7 +66,8 @@ const Groups = () => {
                         />
                     )}
                 />
-            </View>
+                <Sponsors />
+            </ScrollView>
         </Container>
     )
 }
@@ -71,7 +76,6 @@ export default Groups
 
 const styles = StyleSheet.create({
     screen: {
-        padding: hp('3%'),
         paddingTop: hp('2%')
     }
 })

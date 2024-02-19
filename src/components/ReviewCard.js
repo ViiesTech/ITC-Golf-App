@@ -42,16 +42,17 @@ const styles = StyleSheet.create({
     cardStyle: {
         backgroundColor: '#1C1C1C',
         flexDirection: 'row',
+        justifyContent: 'space-between',
         borderRadius: 10,
         width: '48%',
-        padding: hp('1%'),
+        padding: hp('1.5%'),
         borderWidth: 1,
         marginBottom: hp('5%'),
         borderColor: colors.lightgray
     },
     image: {
-        height: hp('9%'),
-        width: hp('9%')
+        height: hp('10%'),
+        width: hp('10%')
     },
     wrapper: {
         marginTop: hp('1%'),

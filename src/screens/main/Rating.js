@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     },
     image: {
         height: hp('50%'),
-        width: '90%'
+        width: hp('50%')
     },
     text: {
         color: colors.white,

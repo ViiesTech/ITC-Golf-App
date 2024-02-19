@@ -6,7 +6,7 @@ import images from '../assets/images'
 
 const ListingDetailCard = ({ image, onPress, hideTag, title, desc, exp, date, time, area, route }) => {
     return (
-        <TouchableOpacity style={{ marginBottom: hp('10%'), width: '45%', }} activeOpacity={0.9} onPress={onPress}>
+        <TouchableOpacity style={{ marginBottom: hp('10%'), width: '45%' }} activeOpacity={0.9} onPress={onPress}>
             <Image
                 source={route === 'Listing' ? images.listing2 : images.listing3}
                 style={styles.image}
@@ -18,12 +18,14 @@ const ListingDetailCard = ({ image, onPress, hideTag, title, desc, exp, date, ti
                 </View>
             }
             <View style={styles.wrapper}>
-                <Text style={[styles.text, { fontSize: hideTag && hp('1.7%') }]}>{title}</Text>
-                {hideTag &&
-                    <View style={[styles.textView, { left: hp('17%'), padding: hp('0.7%'), top: hp('1.7%') }]}>
-                        <Text style={[styles.numberText, { fontSize: hp('1.5%') }]}>01</Text>
-                    </View>
-                }
+                <View style={hideTag && { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Text style={[styles.text, { fontSize: hideTag && hp('1.7%'), width: '79%' }]}>{title}</Text>
+                    {hideTag &&
+                        <View style={styles.groupNumberView}>
+                            <Text style={[styles.numberText, { fontSize: hp('1.5%') }]}>01</Text>
+                        </View>
+                    }
+                </View>
                 <Text style={styles.winText}>{desc}</Text>
                 {!hideTag &&
                     <Text style={styles.loseText}>{exp}</Text>
@@ -41,7 +43,7 @@ const ListingDetailCard = ({ image, onPress, hideTag, title, desc, exp, date, ti
                     </View>
                 </View>
             </View>
-        </TouchableOpacity >
+        </TouchableOpacity>
     )
 }
 
@@ -59,6 +61,11 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: hp('1.5%'),
         top: hp('1.3%')
+    },
+    groupNumberView: {
+        backgroundColor: colors.primary,
+        borderRadius: 5,
+        padding: hp('0.7%'),
     },
     numberText: {
         color: colors.secondary

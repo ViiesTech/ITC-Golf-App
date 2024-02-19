@@ -258,7 +258,39 @@ export const resetPassword = (username, token, newPassword) => {
 
 export const editProfile = (profile_photo, firstname, lastname, area_code, exp_level, desired_tee_box, address, short_desc) => {
     return async dispatch => {
+        dispatch({
+            type: constant.EDIT_PROFILE
+        })
 
+        var data = new FormData()
+        if (profile_photo) {
+            data.append('profile_picture', {
+                name: "image.jpg",
+                type: "image/jpeg",
+                uri: Platform.OS === "android" ? profile_photo : profile_photo.replace("file://", "")
+            })
+        }
+        data.append('fname', firstname)
+        data.append('last_name', lastname)
+        data.append('area_code', area_code)
+        data.append('experience_level', exp_level)
+        data.append('desired_tee_box', desired_tee_box)
+        data.append('address', address)
+        data.append('short_description', short_desc)
+
+        return await axios.post(`${URL}/edit-profile`, data, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then((res) => {
+            console.log('edit profile response ==================>', res.data)
+            dispatch({
+                type: constant.EDIT_PROFILE_DONE
+            })
+        }).catch((error) => {
+            console.log('edit profile response error =================>', error)
+        })
     }
 }
 

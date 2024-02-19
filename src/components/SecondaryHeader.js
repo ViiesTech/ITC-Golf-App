@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     headerView: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingTop: hp('2%'),
+        paddingTop: hp('1.5%'),
         padding: hp('3%')
     },
     headerText: {

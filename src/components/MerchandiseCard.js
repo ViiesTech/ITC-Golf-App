@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React  from 'react'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import StarRating from 'react-native-star-rating-widget'
@@ -51,25 +51,25 @@ export default MerchandiseCard
 
 const styles = StyleSheet.create({
     component: {
-        marginBottom: hp('7%')
+        marginBottom: hp('7%'),
     },
     cardStyle: {
         borderWidth: 2,
         padding: hp('1.5%'),
         borderRadius: 10,
-        width: hp('21%'),
+        width: '100%',
         borderColor: colors.gray
     },
     image: {
         height: hp('18%'),
         borderRadius: 10,
-        width: '100%',
+        width: hp('18%'),
         alignSelf: 'center'
     },
     productName: {
         color: colors.white,
         width: hp('18%'),
-        fontSize: hp('2%'),
+        fontSize: hp('1.8%'),
         marginTop: hp('3%'),
         fontWeight: 'bold'
     },
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
         marginTop: hp('1%'),
     },
     wrapper: {
-        paddingTop: hp('7%'),
+        paddingTop: hp('9%'),
         justifyContent: 'space-between',
         flexDirection: 'row',
     },
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     border: {
         borderBottomColor: colors.gray,
         marginTop: hp('2%'),
+        width: '100%',
         borderBottomWidth: 0.8
     }
 })

@@ -101,7 +101,7 @@ export default UpdatePassword
 const styles = StyleSheet.create({
     image: {
         height: hp('16%'),
-        width: '32%',
+        width: hp('16%'),
         marginTop: hp('5%'),
         alignSelf: 'center'
     },

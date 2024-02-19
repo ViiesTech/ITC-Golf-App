@@ -84,7 +84,7 @@ const AllGroups = ({ route }) => {
     return (
         <Container>
             <Header />
-            <ScrollView contentContainerStyle={[styles.wrapper, { paddingBottom: changeTab === 'Add New Groups' || changeTab === 'Add New Listings' ? hp('215%') : 0 }]} showsVerticalScrollIndicator={false}>
+            <ScrollView contentContainerStyle={[styles.wrapper, { paddingBottom: changeTab === 'Add New Groups' ? hp('495%') : changeTab === 'Add New Listings' && hp('325%') }]} showsVerticalScrollIndicator={false}>
                 <SecondaryHeader
                     text={options === 'Add New Listings' || changeTab === 'Add New Listings' ? 'All Listings' : options === 'Players You Follow' || changeTab === 'Players You Follow' ? 'Players You Follow' : options === 'Add New Groups' || changeTab === 'Add New Groups' ? 'All Groups' : 'My Profile'}
                 />
@@ -95,15 +95,18 @@ const AllGroups = ({ route }) => {
                     />
                     {changeTab === 'Add New Groups' ?
                         <>
-                            <SearchFilter />
-                            <View style={{ height: '200%' }}>
+                            <SearchFilter  style={{width: '100%'}}/>
+                            <View style={{ height: '400%' }}>
                                 <AddNewGroups />
                             </View>
                         </>
                         : changeTab === 'Add New Listings' ?
-                            <View style={{ height: '400%' }}>
-                                <AddNewListings />
-                            </View>
+                            <>
+                                <SearchFilter  style={{width: '100%'}} />
+                                <View style={{ height: '400%' }}>
+                                    <AddNewListings />
+                                </View>
+                            </>
                             :
                             changeTab === 'Players You Follow' ?
                                 <View style={styles.followCard}>
@@ -323,5 +326,6 @@ const styles = StyleSheet.create({
     },
     wrapper: {
         paddingTop: hp('3%'),
+        paddingBottom: hp('20%')
     }
 })

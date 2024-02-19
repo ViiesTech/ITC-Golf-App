@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     justifyContent: 'space-between',
     padding: hp('0.7%'),
+    alignSelf: 'center',
     width: hp('40%')
   },
   input: {

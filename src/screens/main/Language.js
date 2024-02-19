@@ -57,7 +57,6 @@ const Language = () => {
                 <ContactInput
                     placeholder={'Search Language'}
                     textColor={colors.lightgray}
-                    icon={true}
                 />
                 {language.length > 0 &&
                     <>

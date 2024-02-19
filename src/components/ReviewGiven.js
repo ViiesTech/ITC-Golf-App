@@ -12,7 +12,7 @@ const ReviewGiven = ({ text, textStyle, ratingStyle, rating }) => {
             <StarRating
                 rating={rating}
                 starSize={9}
-                style={[{ marginTop: hp('5%') }, ratingStyle]}
+                style={[{ marginTop: hp('2%') }, ratingStyle]}
                 onChange={() => null}
             />
         </View>
@@ -29,6 +29,5 @@ const styles = StyleSheet.create({
         color: colors.white,
         width: '160%',
         fontSize: hp('1.4%'),
-        position: 'absolute',
     }
 })

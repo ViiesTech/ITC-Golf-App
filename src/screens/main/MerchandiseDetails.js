@@ -80,12 +80,14 @@ const MerchandiseDetails = ({ route }) => {
                 <View style={{ paddingTop: hp('4%'), flexDirection: 'row', justifyContent: 'space-between' }}>
                     <MerchandiseCard
                         image={images.stuff3}
+                        desc={'Lorem Ipsum Dolor Sit Amet, Consetetur'}
                         text={'Golf Gloves'}
                     />
                     <MerchandiseCard
                         image={images.stuff4}
                         imageStyle={{ height: hp('18%'), width: '54%' }}
                         style={{ marginLeft: hp('2.6%') }}
+                        desc={'Lorem Ipsum Dolor Sit Amet, Consetetur'}
                         text={'Golf Tees'}
                     />
                 </View>

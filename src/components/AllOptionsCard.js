@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     line: {
         height: hp('2.5%'),
         marginHorizontal: hp('1.5%'),
-        width: 2,
+        width: 1,
         backgroundColor: colors.white
     }
 })

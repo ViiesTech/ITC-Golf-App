@@ -1,4 +1,4 @@
-import { StyleSheet, View, FlatList } from 'react-native'
+import { StyleSheet, View, FlatList, ScrollView } from 'react-native'
 import React from 'react'
 import Container from '../../components/Container'
 import Header from '../../components/Header'
@@ -10,6 +10,8 @@ import icons from '../../assets/icons'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import Loader from '../../components/Loader'
+import Sponsors from '../../components/Sponsors'
+import SearchFilter from '../../components/SearchFilter'
 
 const Listing = () => {
 
@@ -22,13 +24,15 @@ const Listing = () => {
   return (
     <Container>
       <Header />
-      <SecondaryHeader text={'Listing'} />
-      <View style={styles.screen}>
+      <ScrollView contentContainerStyle={styles.screen}>
+        <SearchFilter
+        />
+        <SecondaryHeader text={'Listing'} style={{ paddingTop: hp('5%') }} />
         <FlatList
           data={listing}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: hp('35%') }}
           numColumns={2}
+          contentContainerStyle={{ padding: hp('2.5%') }}
           columnWrapperStyle={{ justifyContent: 'space-between' }}
           renderItem={({ item }) => (
             <ListingDetailCard
@@ -43,8 +47,8 @@ const Listing = () => {
             />
           )}
         />
-        <SVGImage image={icons.pageEnd} style={styles.endIcon} />
-      </View>
+        <Sponsors />
+      </ScrollView>
     </Container>
   )
 }
@@ -54,9 +58,5 @@ export default Listing;
 const styles = StyleSheet.create({
   screen: {
     paddingTop: hp('2%'),
-    padding: hp('3%'),
   },
-  endIcon: {
-    alignSelf: 'center',
-  }
 })

@@ -6,7 +6,7 @@ import Button from './Button'
 
 const UploadPicture = ({ text, style, buttonStyle, chooseFile, fileName }) => {
     return (
-        <View style={{ marginBottom: hp('3%') }}>
+        <View style={{ marginBottom: hp('2%') }}>
             <Text style={styles.heading}>{text}</Text>
             <View style={[styles.uploadView, style]}>
                 <Button

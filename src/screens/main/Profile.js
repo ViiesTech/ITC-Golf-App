@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
   profileImage: {
     height: hp('18%'),
-    width: '42%'
+    width: hp('18%')
   },
   wrapper: {
     marginLeft: hp('3%'),

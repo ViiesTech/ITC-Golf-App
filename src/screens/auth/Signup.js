@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   },
   image: {
     height: hp('16%'),
-    width: '32%',
+    width: hp('16%'),
   },
   heading: {
     color: colors.white,
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     marginTop: hp('3%')
   },
   input: {
-    marginBottom: hp('2%')
+    marginBottom: hp('2%'),
   },
   button: {
     marginTop: hp('0.5%')
