@@ -1,54 +1,65 @@
-import { Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import Container from '../../components/Container'
-import Header from '../../components/Header'
-import images from '../../assets/images'
-import colors from '../../assets/colors'
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
-import DropDownPicker from '../../components/DropDownPicker'
-import { cardImages, listingImages, picker } from '../../DummyData'
-import ListingCard from '../../components/ListingCard'
-import Button from '../../components/Button'
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Dimensions,
+  ActivityIndicator,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import Container from '../../components/Container';
+import Header from '../../components/Header';
+import images from '../../assets/images';
+import colors from '../../assets/colors';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import DropDownPicker from '../../components/DropDownPicker';
+import {cardImages, listingImages, picker} from '../../DummyData';
+import ListingCard from '../../components/ListingCard';
+import Button from '../../components/Button';
 import ArrowDown from 'react-native-vector-icons/SimpleLineIcons';
-import SVGImage from '../../components/SVGImage'
-import icons from '../../assets/icons'
-import Video from 'react-native-video'
-import { useNavigation } from '@react-navigation/native'
-import AppStatusBar from '../../components/AppStatusBar'
-import { Picker } from '@react-native-picker/picker'
-import { useDispatch, useSelector } from 'react-redux'
-import { getListings } from '../../redux/actions/homeAction'
-import Sponsors from '../../components/Sponsors'
+import SVGImage from '../../components/SVGImage';
+import icons from '../../assets/icons';
+import Video from 'react-native-video';
+import {useNavigation} from '@react-navigation/native';
+import AppStatusBar from '../../components/AppStatusBar';
+import {Picker} from '@react-native-picker/picker';
+import {useDispatch, useSelector} from 'react-redux';
+import {getAllAreaCodes, getListings} from '../../redux/actions/homeAction';
+import Sponsors from '../../components/Sponsors';
 
 const Home = () => {
-  const [selectedOption, setSelectedOption] = useState("")
+  const [selectedOption, setSelectedOption] = useState('');
 
   const width = Dimensions.get('screen').width;
 
-  const { listing, loader } = useSelector(state => state.HomeReducer)
-  console.log('listinggg', listing)
+  const {listing, loader, area_codes} = useSelector(state => state.HomeReducer);
+  // console.log('listinggg', selectedOption);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   useEffect(() => {
-
-    if (listing.length < 1) {
-      dispatch(getListings())
+    if (listing.length < 1 && area_codes.length < 1) {
+      dispatch(getListings());
+      dispatch(getAllAreaCodes());
     }
-
-  }, [])
+  }, []);
 
   if (loader) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.secondary, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator
-          size={'large'}
-          color={colors.primary}
-        />
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.secondary,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ActivityIndicator size={'large'} color={colors.primary} />
       </View>
-    )
+    );
   }
 
   return (
@@ -61,8 +72,8 @@ const Home = () => {
           </View>
           <Video
             source={require('../../assets/video/homeVideo.mp4')}
-            style={[styles.backgroundVideo, { width: width }]}
-            resizeMode={"cover"}
+            style={[styles.backgroundVideo, {width: width}]}
+            resizeMode={'cover'}
             repeat
             paused={false}
           />
@@ -75,23 +86,31 @@ const Home = () => {
           </View>
           <View style={styles.textWrapper}>
             <Text style={styles.heading}>A PLACE FOR GOLFERS</Text>
-            <Text style={styles.message}>Of All Skills Level To Find Each Other</Text>
+            <Text style={styles.message}>
+              Of All Skills Level To Find Each Other
+            </Text>
           </View>
-          <View style={{ padding: hp('2%') }}>
+          <View style={{padding: hp('2%')}}>
             <View style={styles.border}>
               <Text style={styles.textStyle}>Area Code</Text>
               <View style={styles.pickerStyle}>
                 <Picker
                   selectedValue={selectedOption}
                   dropdownIconColor={colors.white}
-                  style={{ color: colors.white }}
+                  style={{color: colors.white}}
                   onValueChange={(itemValue, itemIndex) =>
                     setSelectedOption(itemValue)
-                  }
-                >
-                  {picker.map((item) => (
+                  }>
+                  <Picker.Item
+                    label="Select"
+                    value={null}
+                    style={{color: colors.secondary}}
+                  />
+                  {area_codes?.map(item => (
                     <Picker.Item
-                      label={item.pickerText} value={item.pickerText} style={{ color: colors.secondary }}
+                      label={item}
+                      value={item}
+                      style={{color: colors.secondary}}
                     />
                   ))}
                 </Picker>
@@ -105,37 +124,57 @@ const Home = () => {
             <Text style={styles.text}>Listing</Text>
             <View style={styles.cardWrapper}>
               {listing?.map((item, index) => (
-                <View style={index !== 7 && {
-                  borderBottomWidth: 1,
-                  borderBottomColor: colors.lightgray,
-                  marginBottom: hp('2.5%')
-                }}>
+                <View
+                  style={
+                    index !== 7 && {
+                      borderBottomWidth: 1,
+                      borderBottomColor: colors.lightgray,
+                      marginBottom: hp('2.5%'),
+                    }
+                  }>
                   <ListingCard
                     key={item.id}
-                    title={Object.keys(item.listing_title).length == 13 ? item.listing_title : 'New Listing'}
+                    title={
+                      Object.keys(item.listing_title).length == 13
+                        ? item.listing_title
+                        : 'New Listing'
+                    }
                     // descStyle={{ width: index == 0 ? '20%' : index == 1 ? '40%' : '100%' }}
-                    count={item.how_many_players == 'Select a Value' ? '3' : item.how_many_players}
-                    exp={item.experience_level == "" ? '5 to 10 par progress-level' : item.experience_level}
+                    count={
+                      item.how_many_players == 'Select a Value'
+                        ? '3'
+                        : item.how_many_players
+                    }
+                    exp={
+                      item.experience_level == ''
+                        ? '5 to 10 par progress-level'
+                        : item.experience_level
+                    }
                     date={item.course_date}
-                    desc={Object.keys(item.match_description).length == 4 ? item.match_description : 'test'}
+                    desc={
+                      Object.keys(item.match_description).length == 4
+                        ? item.match_description
+                        : 'test'
+                    }
                     // image={item.image}
-                    onPress={() => navigation.navigate('SecondaryStack', { screen: 'ListingDetails', params: { item } })}
+                    onPress={() =>
+                      navigation.navigate('SecondaryStack', {
+                        screen: 'ListingDetails',
+                        params: {item},
+                      })
+                    }
                   />
                 </View>
               ))}
             </View>
-            <TouchableOpacity style={styles.button} activeOpacity={0.9} onPress={() => navigation.navigate('Listing')}>
-              <ArrowDown
-                name={'arrow-down'}
-                color={colors.white}
-                size={24}
-              />
+            <TouchableOpacity
+              style={styles.button}
+              activeOpacity={0.9}
+              onPress={() => navigation.navigate('Listing')}>
+              <ArrowDown name={'arrow-down'} color={colors.white} size={24} />
             </TouchableOpacity>
-            <View style={{ paddingTop: hp('5%') }}>
-              <Image
-                source={images.home2}
-                style={styles.golfImage}
-              />
+            <View style={{paddingTop: hp('5%')}}>
+              <Image source={images.home2} style={styles.golfImage} />
               <Text style={styles.heading}>Listing</Text>
               <Sponsors />
             </View>
@@ -143,8 +182,8 @@ const Home = () => {
         </ScrollView>
       </Container>
     </>
-  )
-}
+  );
+};
 
 export default Home;
 
@@ -156,19 +195,19 @@ const styles = StyleSheet.create({
   headerWrapper: {
     position: 'absolute',
     width: '100%',
-    zIndex: 1
+    zIndex: 1,
   },
   heading: {
     color: colors.white,
     fontWeight: 'bold',
     width: '70%',
-    fontSize: hp('4%')
+    fontSize: hp('4%'),
   },
   message: {
     color: colors.white,
     marginTop: hp('2%'),
     fontWeight: 'bold',
-    fontSize: hp('2%')
+    fontSize: hp('2%'),
   },
   textWrapper: {
     left: hp('4%'),
@@ -185,11 +224,11 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontWeight: 'bold',
     fontSize: hp('3.8%'),
-    marginTop: hp('7%')
+    marginTop: hp('7%'),
   },
   wrapper: {
     paddingTop: hp('3%'),
-    marginLeft: hp('1%')
+    marginLeft: hp('1%'),
   },
   cardWrapper: {
     paddingTop: hp('5%'),
@@ -199,12 +238,12 @@ const styles = StyleSheet.create({
     padding: hp('2%'),
     borderRadius: 5,
     marginTop: hp('2%'),
-    alignItems: 'center'
+    alignItems: 'center',
   },
   golfImage: {
     height: hp('35%'),
     width: hp('38%'),
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   backgroundVideo: {
     height: hp('100%'),
@@ -215,7 +254,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0
+    bottom: 0,
   },
   pickerStyle: {
     borderWidth: 0.7,
@@ -228,5 +267,5 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: hp('1.8%'),
     fontWeight: 'bold',
-  }
-})
+  },
+});

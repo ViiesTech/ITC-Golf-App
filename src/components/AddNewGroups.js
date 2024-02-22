@@ -182,7 +182,7 @@ const AddNew = () => {
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <View>
                     <Text style={styles.textStyle}>What Kind Of Listing Is This?</Text>
-                    <View style={styles.pickerStyle}>
+                    <View style={[styles.pickerStyle, {width: '85%'}]}>
                         <Picker
                             selectedValue={state.pickers.kind_listing}
                             dropdownIconColor={colors.white}
@@ -206,6 +206,7 @@ const AddNew = () => {
                         suggested_day: moment(date).format('MM/DD/YY')
                     })}
                     icon={'date-range'}
+                    style={{padding: hp('2.3%')}}
                     text={state.suggested_day !== '' ? state.suggested_day : 'mm/dd/yy'}
                 />
             </View>
@@ -332,7 +333,7 @@ export const AddNewGroups = () => {
                 <TabBar
                     indicatorStyle={styles.indicatorStyle}
                     {...styling}
-                    style={{ backgroundColor: colors.white, borderRadius: 10 }}
+                    style={{ backgroundColor: colors.white, borderRadius: 10, justifyContent: 'center', height: hp('6.8%') }}
                     renderLabel={({ route }) => (
                         <Text
                             style={{
@@ -355,7 +356,7 @@ const styles = StyleSheet.create({
     indicatorStyle: {
         backgroundColor: colors.primary,
         width: '30%',
-        bottom: 5,
+        bottom: hp('1%'),
         left: 5,
         alignItems: 'center',
         position: 'absolute',
@@ -380,7 +381,7 @@ const styles = StyleSheet.create({
         borderWidth: 0.7,
         width: '100%',
         borderRadius: 10,
-        marginTop: hp('1.5%'),
+        marginTop: hp('1.3%'),
         marginBottom: hp('4%'),
         borderColor: colors.lightgray,
     },

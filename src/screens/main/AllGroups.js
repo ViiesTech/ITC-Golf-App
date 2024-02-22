@@ -1,331 +1,396 @@
-import { StyleSheet, View, ScrollView, Text, Image, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
-import Container from '../../components/Container'
-import Header from '../../components/Header'
-import SecondaryHeader from '../../components/SecondaryHeader'
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
-import AllOptionsCard from '../../components/AllOptionsCard'
-import SVGImage from '../../components/SVGImage'
-import icons from '../../assets/icons'
-import SearchFilter from '../../components/SearchFilter'
-import colors from '../../assets/colors'
-import { AddNewGroups } from '../../components/AddNewGroups'
-import images from '../../assets/images'
-import Edit from 'react-native-vector-icons/Feather'
-import ContactInput from '../../components/ContactInput'
-import DropDownPicker from '../../components/DropDownPicker'
-import Button from '../../components/Button'
-import { AddNewListings } from '../../components/AddNewListings'
-import { areaCode, handshake, profilePicker } from '../../DummyData'
-import { useSelector } from 'react-redux'
-import { launchImageLibrary } from 'react-native-image-picker'
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  Text,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import Container from '../../components/Container';
+import Header from '../../components/Header';
+import SecondaryHeader from '../../components/SecondaryHeader';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import AllOptionsCard from '../../components/AllOptionsCard';
+import SVGImage from '../../components/SVGImage';
+import icons from '../../assets/icons';
+import SearchFilter from '../../components/SearchFilter';
+import colors from '../../assets/colors';
+import {AddNewGroups} from '../../components/AddNewGroups';
+import images from '../../assets/images';
+import Edit from 'react-native-vector-icons/Feather';
+import ContactInput from '../../components/ContactInput';
+import DropDownPicker from '../../components/DropDownPicker';
+import Button from '../../components/Button';
+import {AddNewListings} from '../../components/AddNewListings';
+import {areaCode, handshake, profilePicker} from '../../DummyData';
+import {useDispatch, useSelector} from 'react-redux';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {PlayersFollow} from '../../redux/actions/authAction';
 
-const AllGroups = ({ route }) => {
-    const { user } = useSelector(state => state.AuthReducer)
+const AllGroups = ({route}) => {
+  const {user, follow_loader, players_follow} = useSelector(
+    state => state.AuthReducer,
+  );
+  const dispatch = useDispatch();
 
-    const [state, setState] = useState({
-        first_name: user.first_name,
-        last_name: user.last_name,
-        pickers: {
-            area_code: '',
-            exp_level: '',
-            desired_tee: '',
-            itc_handshake: ''
-        },
-        description: '',
-        photoURL: ''
-    })
+  console.log(user.user_id)
 
-    const { options } = route.params
+  const [state, setState] = useState({
+    first_name: user.first_name,
+    last_name: user.last_name,
+    pickers: {
+      area_code: '',
+      exp_level: '',
+      desired_tee: '',
+      itc_handshake: '',
+    },
+    description: '',
+    photoURL: '',
+  });
 
-    const [changeTab, setChangeTab] = useState(options)
+  const {options} = route.params;
 
-    console.log(options)
+  const [changeTab, setChangeTab] = useState(options);
 
-    const onInputChange = (value, text) => {
+  // console.log('wah',changeTab)
+
+  useEffect(() => {
+    if (changeTab === 'Players You Follow') {
+      dispatch(PlayersFollow());
+    }
+  }, []);
+
+  const onInputChange = (value, text) => {
+    setState(prevState => ({
+      ...prevState,
+      [value]: text,
+    }));
+  };
+
+  const onPickerValueChange = (value, text) => {
+    setState(prevState => ({
+      ...prevState,
+      pickers: {
+        ...prevState.pickers,
+        [value]: text,
+      },
+    }));
+  };
+
+  const onChangePhoto = async () => {
+    const options = {
+      title: 'Select Image',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+        quality: 0.5,
+      },
+    };
+
+    await launchImageLibrary(options, async response => {
+      if (response.didCancel) {
+        console.log('cancelled', response.didCancel);
+      } else {
         setState(prevState => ({
-            ...prevState,
-            [value]: text
-        }))
-    }
+          ...prevState,
+          photoURL: response.assets[0].uri,
+        }));
+      }
+    });
+  };
 
-    const onPickerValueChange = (value, text) => {
-        setState(prevState => ({
-            ...prevState,
-            pickers: {
-                ...prevState.pickers,
-                [value]: text
-            }
-        }))
-    }
-
-    const onChangePhoto = async () => {
-        const options = {
-            title: 'Select Image',
-            storageOptions: {
-                skipBackup: true,
-                path: 'images',
-                quality: 0.5,
-            }
-        }
-
-        await launchImageLibrary(options, async response => {
-            if (response.didCancel) {
-                console.log('cancelled', response.didCancel)
-            } else {
-                setState(prevState => ({
-                    ...prevState,
-                    photoURL: response.assets[0].uri
-                }))
-            }
-        })
-    }
-
-    return (
-        <Container>
-            <Header />
-            <ScrollView contentContainerStyle={[styles.wrapper, { paddingBottom: changeTab === 'Add New Groups' ? hp('495%') : changeTab === 'Add New Listings' && hp('325%') }]} showsVerticalScrollIndicator={false}>
-                <SecondaryHeader
-                    text={options === 'Add New Listings' || changeTab === 'Add New Listings' ? 'All Listings' : options === 'Players You Follow' || changeTab === 'Players You Follow' ? 'Players You Follow' : options === 'Add New Groups' || changeTab === 'Add New Groups' ? 'All Groups' : 'My Profile'}
+  return (
+    <Container>
+      <Header />
+      <ScrollView
+        contentContainerStyle={[
+          styles.wrapper,
+          {
+            paddingBottom:
+              changeTab === 'Add New Groups'
+                ? hp('495%')
+                : changeTab === 'Add New Listings' && hp('325%'),
+          },
+        ]}
+        showsVerticalScrollIndicator={false}>
+        <SecondaryHeader
+          text={
+            options === 'Add New Listings' || changeTab === 'Add New Listings'
+              ? 'All Listings'
+              : options === 'Players You Follow' ||
+                changeTab === 'Players You Follow'
+              ? 'Players You Follow'
+              : options === 'Add New Groups' || changeTab === 'Add New Groups'
+              ? 'All Groups'
+              : 'My Profile'
+          }
+        />
+        <View style={styles.screen}>
+          <AllOptionsCard
+            active={changeTab}
+            onChangeTab={text => setChangeTab(text)}
+          />
+          {changeTab === 'Add New Groups' ? (
+            <>
+              <SearchFilter style={{width: '100%'}} />
+              <View style={{height: '400%'}}>
+                <AddNewGroups />
+              </View>
+            </>
+          ) : changeTab === 'Add New Listings' ? (
+            <>
+              <SearchFilter style={{width: '100%'}} />
+              <View style={{height: '400%'}}>
+                <AddNewListings />
+              </View>
+            </>
+          ) : changeTab === 'Players You Follow' ? (
+            <View style={styles.followCard}>
+              <Text style={styles.userName}>USER NAME:</Text>
+              <Text style={styles.name}>Becker alisson</Text>
+              <Text style={styles.userName}>EMAIL:</Text>
+              <Text style={styles.name}>backeraliison23@gmail.com</Text>
+            </View>
+          ) : (
+            <View style={{paddingTop: hp('4%')}}>
+              <Text style={styles.heading}>EDIT YOUR PROFILE</Text>
+              <View
+                style={{
+                  position: 'relative',
+                  height: hp('14%'),
+                  width: '40%',
+                  marginTop: hp('2%'),
+                }}>
+                <Image
+                  source={
+                    state.photoURL ? {uri: state.photoURL} : images.editProfile
+                  }
+                  resizeMode="cover"
+                  style={styles.imageStyle}
+                  borderRadius={10}
                 />
-                <View style={styles.screen}>
-                    <AllOptionsCard
-                        active={changeTab}
-                        onChangeTab={(text) => setChangeTab(text)}
-                    />
-                    {changeTab === 'Add New Groups' ?
-                        <>
-                            <SearchFilter  style={{width: '100%'}}/>
-                            <View style={{ height: '400%' }}>
-                                <AddNewGroups />
-                            </View>
-                        </>
-                        : changeTab === 'Add New Listings' ?
-                            <>
-                                <SearchFilter  style={{width: '100%'}} />
-                                <View style={{ height: '400%' }}>
-                                    <AddNewListings />
-                                </View>
-                            </>
-                            :
-                            changeTab === 'Players You Follow' ?
-                                <View style={styles.followCard}>
-                                    <Text style={styles.userName}>USER NAME:</Text>
-                                    <Text style={styles.name}>Becker alisson</Text>
-                                    <Text style={styles.userName}>EMAIL:</Text>
-                                    <Text style={styles.name}>backeraliison23@gmail.com</Text>
-                                </View>
-                                :
-                                <View style={{ paddingTop: hp('4%') }}>
-                                    <Text style={styles.heading}>EDIT YOUR PROFILE</Text>
-                                    <View style={{ position: 'relative', height: hp('14%'), width: '40%', marginTop: hp('2%') }}>
-                                        <Image
-                                            source={state.photoURL ? { uri: state.photoURL } : images.editProfile}
-                                            resizeMode='cover'
-                                            style={styles.imageStyle}
-                                            borderRadius={10}
-                                        />
-                                        <TouchableOpacity style={styles.editView} activeOpacity={0.9} onPress={() => onChangePhoto()}>
-                                            <Edit
-                                                name={'edit'}
-                                                color={colors.primary}
-                                                size={16}
-                                            />
-                                        </TouchableOpacity>
-                                    </View>
-                                    <View style={{ paddingTop: hp('4%'), flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <ContactInput
-                                            label={'First Name'}
-                                            placeholder={'First Name'}
-                                            value={state.first_name}
-                                            onChangeText={(text) => onInputChange('first_name', text)}
-                                            style={styles.input}
-                                            textColor={colors.lightgray}
-                                        />
-                                        <ContactInput
-                                            label={'Last Name'}
-                                            placeholder={'Last Name'}
-                                            value={state.last_name}
-                                            onChangeText={(text) => onInputChange('last_name', text)}
-                                            style={styles.input}
-                                            textColor={colors.lightgray}
-                                        />
-                                    </View>
-                                    {areaCode.map((item) => (
-                                        <DropDownPicker
-                                            style={styles.pickerStyle}
-                                            text={item.text}
-                                            selectedValue={state.pickers[item.props]}
-                                            onValueChange={(itemValue) => {
-                                                onPickerValueChange('area_code', itemValue)
-                                            }}
-                                            value1={item.pickerText1}
-                                            value2={item.pickerText2}
-                                            value3={item.pickerText3}
-                                            label1={item.pickerText1}
-                                            label2={item.pickerText2}
-                                            label3={item.pickerText3}
-                                        />
-                                    ))}
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        {profilePicker.map((item) => (
-                                            <DropDownPicker
-                                                style={[styles.pickerStyle, { width: item.id == 1 ? '150%' : null }]}
-                                                selectedValue={state.pickers[item.props]}
-                                                onValueChange={(itemValue) => {
-                                                    onPickerValueChange(item.props, itemValue)
-                                                }}
-                                                text={item.text}
-                                                value1={item.pickerText1}
-                                                value2={item.pickerText2}
-                                                value3={item.pickerText3}
-                                                label1={item.pickerText1}
-                                                label2={item.pickerText2}
-                                                label3={item.pickerText3}
-                                            />
-                                        ))}
-                                    </View>
-                                    {handshake.map((item) => (
-                                        <DropDownPicker
-                                            style={styles.pickerStyle}
-                                            text={item.text}
-                                            selectedValue={state.pickers[item.props]}
-                                            onValueChange={(itemValue) => {
-                                                onPickerValueChange('itc_handshake', itemValue)
-                                            }}
-                                            value1={item.pickerText1}
-                                            value2={item.pickerText2}
-                                            value3={item.pickerText3}
-                                            label1={item.pickerText1}
-                                            label2={item.pickerText2}
-                                            label3={item.pickerText3}
-                                        />
-                                    ))}
-                                    <Text style={{ color: colors.primary, fontSize: hp('1.5%'), marginBottom: hp('4%') }}>ITC GIVEAWAY AND RAFFLE ADDRESS</Text>
-                                    <ContactInput
-                                        style={[styles.input, { height: hp('16%'), width: '100%' }]}
-                                        placeholder={'37 Cardinal Lane Petersburg,'}
-                                        textColor={colors.lightgray}
-                                        textAlignVertical={'top'}
-                                        label={'Short Description:'}
-                                    />
-                                    <View style={styles.emailCard}>
-                                        <Text style={{ color: colors.lightgray, fontSize: hp('1.7%') }}>Backeraliison23@Gmail.Com</Text>
-                                    </View>
-                                    <Button
-                                        buttonText={'UPDATE MY PROFILE'}
-                                        buttonStyle={{ width: '60%', borderRadius: 100, marginTop: hp('5%') }}
-                                        textStyle={{ color: colors.secondary, fontSize: hp('1.8%') }}
-                                    />
-                                </View>
-                    }
-                    <SVGImage
-                        image={icons.pageEnd}
-                        style={{ alignSelf: 'center', marginTop: hp('5%') }}
-                    />
-                </View>
-            </ScrollView>
-        </Container >
-    )
-}
+                <TouchableOpacity
+                  style={styles.editView}
+                  activeOpacity={0.9}
+                  onPress={() => onChangePhoto()}>
+                  <Edit name={'edit'} color={colors.primary} size={16} />
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  paddingTop: hp('4%'),
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <ContactInput
+                  label={'First Name'}
+                  placeholder={'First Name'}
+                  value={state.first_name}
+                  onChangeText={text => onInputChange('first_name', text)}
+                  style={styles.input}
+                  textColor={colors.lightgray}
+                />
+                <ContactInput
+                  label={'Last Name'}
+                  placeholder={'Last Name'}
+                  value={state.last_name}
+                  onChangeText={text => onInputChange('last_name', text)}
+                  style={styles.input}
+                  textColor={colors.lightgray}
+                />
+              </View>
+              {areaCode.map(item => (
+                <DropDownPicker
+                  style={styles.pickerStyle}
+                  text={item.text}
+                  selectedValue={state.pickers[item.props]}
+                  onValueChange={itemValue => {
+                    onPickerValueChange('area_code', itemValue);
+                  }}
+                  value1={item.pickerText1}
+                  value2={item.pickerText2}
+                  value3={item.pickerText3}
+                  label1={item.pickerText1}
+                  label2={item.pickerText2}
+                  label3={item.pickerText3}
+                />
+              ))}
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                {profilePicker.map(item => (
+                  <DropDownPicker
+                    style={[
+                      styles.pickerStyle,
+                      {width: item.id == 1 ? '150%' : null},
+                    ]}
+                    selectedValue={state.pickers[item.props]}
+                    onValueChange={itemValue => {
+                      onPickerValueChange(item.props, itemValue);
+                    }}
+                    text={item.text}
+                    value1={item.pickerText1}
+                    value2={item.pickerText2}
+                    value3={item.pickerText3}
+                    label1={item.pickerText1}
+                    label2={item.pickerText2}
+                    label3={item.pickerText3}
+                  />
+                ))}
+              </View>
+              {handshake.map(item => (
+                <DropDownPicker
+                  style={styles.pickerStyle}
+                  text={item.text}
+                  selectedValue={state.pickers[item.props]}
+                  onValueChange={itemValue => {
+                    onPickerValueChange('itc_handshake', itemValue);
+                  }}
+                  value1={item.pickerText1}
+                  value2={item.pickerText2}
+                  value3={item.pickerText3}
+                  label1={item.pickerText1}
+                  label2={item.pickerText2}
+                  label3={item.pickerText3}
+                />
+              ))}
+              <Text
+                style={{
+                  color: colors.primary,
+                  fontSize: hp('1.5%'),
+                  marginBottom: hp('4%'),
+                }}>
+                ITC GIVEAWAY AND RAFFLE ADDRESS
+              </Text>
+              <ContactInput
+                style={[styles.input, {height: hp('16%'), width: '100%'}]}
+                placeholder={'37 Cardinal Lane Petersburg,'}
+                textColor={colors.lightgray}
+                textAlignVertical={'top'}
+                label={'Short Description:'}
+              />
+              <View style={styles.emailCard}>
+                <Text style={{color: colors.lightgray, fontSize: hp('1.7%')}}>
+                  Backeraliison23@Gmail.Com
+                </Text>
+              </View>
+              <Button
+                buttonText={'UPDATE MY PROFILE'}
+                buttonStyle={{
+                  width: '60%',
+                  borderRadius: 100,
+                  marginTop: hp('5%'),
+                }}
+                textStyle={{color: colors.secondary, fontSize: hp('1.8%')}}
+              />
+            </View>
+          )}
+          <SVGImage
+            image={icons.pageEnd}
+            style={{alignSelf: 'center', marginTop: hp('5%')}}
+          />
+        </View>
+      </ScrollView>
+    </Container>
+  );
+};
 
 export default AllGroups;
 
 const styles = StyleSheet.create({
-    screen: {
-        padding: hp('2%'),
-    },
-    tabView: {
-        backgroundColor: colors.white,
-        padding: hp('1.2%'),
-        alignItems: 'center',
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        borderRadius: 10
-    },
-    textBackground: {
-        backgroundColor: colors.primary,
-        alignItems: 'center',
-        borderRadius: 100,
-        padding: hp('1.8%')
-    },
-    addnewWrapper: {
-    },
-    input: {
-        backgroundColor: 'transparent',
-        borderWidth: 1.5,
-        width: hp('19%'),
-        borderColor: colors.gray
-    },
-    picker: {
-        borderWidth: 1.5,
-        width: hp('23%'),
-        padding: hp('0.6%'),
-        borderColor: colors.gray
-    },
-    addView: {
-        backgroundColor: colors.primary,
-        height: hp('4%'),
-        width: hp('4%'),
-        borderRadius: 100,
-        marginLeft: hp('2%'),
-        alignSelf: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: hp('1%')
-    },
-    heading: {
-        color: colors.white,
-        fontSize: hp('2%'),
-        fontWeight: 'bold'
-    },
-    followCard: {
-        backgroundColor: colors.gray,
-        marginTop: hp('5%'),
-        borderRadius: 10,
-        borderWidth: 0.7,
-        borderColor: colors.white,
-        padding: hp('4%')
-    },
-    userName: {
-        color: colors.white,
-        fontWeight: 'bold',
-        fontSize: hp('1.8%')
-    },
-    name: {
-        color: colors.white,
-        marginBottom: hp('4%'),
-        marginTop: hp('1%')
-    },
-    imageStyle: {
-        height: hp('14%'),
-        width: '100%'
-    },
-    editView: {
-        backgroundColor: colors.secondary,
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: colors.primary,
-        position: 'absolute',
-        padding: hp('0.6%'),
-        alignItems: 'center',
-        justifyContent: 'center',
-        right: 5,
-        bottom: 5,
-    },
-    pickerStyle: {
-        borderWidth: 0.2,
-        marginBottom: hp('6%'),
-        borderRadius: 5
-    },
-    emailCard: {
-        marginTop: hp('2%'),
-        borderRadius: 10,
-        backgroundColor: colors.gray,
-        padding: hp('2%')
-    },
-    wrapper: {
-        paddingTop: hp('3%'),
-        paddingBottom: hp('20%')
-    }
-})
+  screen: {
+    padding: hp('2%'),
+  },
+  tabView: {
+    backgroundColor: colors.white,
+    padding: hp('1.2%'),
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    borderRadius: 10,
+  },
+  textBackground: {
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    borderRadius: 100,
+    padding: hp('1.8%'),
+  },
+  addnewWrapper: {},
+  input: {
+    backgroundColor: 'transparent',
+    borderWidth: 1.5,
+    width: hp('19%'),
+    borderColor: colors.gray,
+  },
+  picker: {
+    borderWidth: 1.5,
+    width: hp('23%'),
+    padding: hp('0.6%'),
+    borderColor: colors.gray,
+  },
+  addView: {
+    backgroundColor: colors.primary,
+    height: hp('4%'),
+    width: hp('4%'),
+    borderRadius: 100,
+    marginLeft: hp('2%'),
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: hp('1%'),
+  },
+  heading: {
+    color: colors.white,
+    fontSize: hp('2%'),
+    fontWeight: 'bold',
+  },
+  followCard: {
+    backgroundColor: colors.gray,
+    marginTop: hp('5%'),
+    borderRadius: 10,
+    borderWidth: 0.7,
+    borderColor: colors.white,
+    padding: hp('4%'),
+  },
+  userName: {
+    color: colors.white,
+    fontWeight: 'bold',
+    fontSize: hp('1.8%'),
+  },
+  name: {
+    color: colors.white,
+    marginBottom: hp('4%'),
+    marginTop: hp('1%'),
+  },
+  imageStyle: {
+    height: hp('14%'),
+    width: '100%',
+  },
+  editView: {
+    backgroundColor: colors.secondary,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    position: 'absolute',
+    padding: hp('0.6%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 5,
+    bottom: 5,
+  },
+  pickerStyle: {
+    borderWidth: 0.2,
+    marginBottom: hp('6%'),
+    borderRadius: 5,
+  },
+  emailCard: {
+    marginTop: hp('2%'),
+    borderRadius: 10,
+    backgroundColor: colors.gray,
+    padding: hp('2%'),
+  },
+  wrapper: {
+    paddingTop: hp('3%'),
+    paddingBottom: hp('20%'),
+  },
+});

@@ -5,7 +5,7 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-const DateInput = ({ heading, mode, display, icon, text, onConfirm }) => {
+const DateInput = ({ heading, mode, display, icon, text, onConfirm, style }) => {
     const [isDatePickerVisible, setIsDatePickerVisible] = useState(false)
 
     // const handleConfirm = (date) => {
@@ -18,7 +18,7 @@ const DateInput = ({ heading, mode, display, icon, text, onConfirm }) => {
             activeOpacity={0.9}
         >
             <Text style={styles.heading}>{heading}</Text>
-            <View style={styles.view}>
+            <View style={[styles.view,style]}>
                 <Text style={styles.text}>{text}</Text>
                 <Icon
                     name={icon}

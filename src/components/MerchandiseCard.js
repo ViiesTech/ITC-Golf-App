@@ -28,7 +28,7 @@ const MerchandiseCard = ({ text, image, onPress, style, desc, rating, imageStyle
                     />
                 </TouchableOpacity>
             </View>
-            <Text style={[styles.desc, { paddingTop: text.length > 45 && hp('3%') }]}>{desc == '' ? 'Lorem Ipsum Dolor Sit Amet, Consetetur' : desc}</Text>
+            <Text style={[styles.desc, { paddingTop: text.length > 45 && hp('1.6%') }]}>{desc == '' ? 'Lorem Ipsum Dolor Sit Amet, Consetetur' : desc}</Text>
             <View style={styles.wrapper}>
                 <StarRating
                     starSize={12}
@@ -76,11 +76,11 @@ const styles = StyleSheet.create({
     desc: {
         color: colors.lightgray,
         position: 'absolute',
-        top: hp('30%'),
+        top: hp('29.5%'),
         marginTop: hp('1%'),
     },
     wrapper: {
-        paddingTop: hp('9%'),
+        paddingTop: 50,
         justifyContent: 'space-between',
         flexDirection: 'row',
     },

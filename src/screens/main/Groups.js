@@ -17,7 +17,7 @@ const Groups = () => {
     const navigation = useNavigation()
 
     const { group_loader, groups } = useSelector(state => state.HomeReducer)
-    console.log('from group screen =============>', groups)
+    console.log('from group screen =============>', groups.length)
 
     const routeName = navigation.getState().routes[3].name
 
@@ -55,10 +55,11 @@ const Groups = () => {
                     contentContainerStyle={{ padding: hp('2.5%') }}
                     numColumns={2}
                     columnWrapperStyle={{ justifyContent: 'space-between' }}
-                    renderItem={({ item }) => (
+                    renderItem={({ item, index }) => (
                         <ListingDetailCard
                             hideTag
                             route={routeName}
+                            count={index + 1}
                             title={item.listing_title}
                             desc={item.group_desired_teebox == '' ? 'All Other' : item.group_desired_teebox}
                             date={item.suggested_day == '02/18/24' ? item.suggested_day : '02/18/24'}

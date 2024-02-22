@@ -42,7 +42,7 @@ const FreeStuff = () => {
     const onToggleWishlist = async (item, index) => {
         const res = await dispatch(addToWishlist(item.product_id))
         if (res.success) {
-            // console.log('hello world')
+            // return console.log('kia hogya hai jani',res)
             products[index] = { ...item, isFav: true }
             dispatch({
                 type: constant.RENDER_PRODUCT_DONE,
@@ -72,6 +72,7 @@ const FreeStuff = () => {
                             favourite={item.isFav}
                             desc={item.description}
                             rating={item.ratings}
+                            // style={{marginLeft: hp('2.6%')}}
                             onPress={() => navigation.navigate('MerchandiseStack', { screen: 'MerchandiseDetails', params: { id: item.product_id, wishlist: item.isFav } })}
                         />
                     )}
@@ -87,7 +88,7 @@ export default FreeStuff
 
 const styles = StyleSheet.create({
     screen: {
-        padding: hp('2.5%')
+        padding: hp('2%')
     },
     errorMessage: {
         color: colors.primary,

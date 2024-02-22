@@ -142,7 +142,7 @@ export default ListingDetails
 
 const styles = StyleSheet.create({
     screen: {
-        padding: hp('3%')
+        padding: hp('2%')
     },
     headingView: {
         backgroundColor: colors.gray,

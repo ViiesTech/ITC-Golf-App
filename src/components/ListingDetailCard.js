@@ -4,7 +4,7 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import colors from '../assets/colors'
 import images from '../assets/images'
 
-const ListingDetailCard = ({ image, onPress, hideTag, title, desc, exp, date, time, area, route }) => {
+const ListingDetailCard = ({ image, onPress, hideTag, title, desc, exp, date, time, area, route, count, total }) => {
     return (
         <TouchableOpacity style={{ marginBottom: hp('10%'), width: '45%' }} activeOpacity={0.9} onPress={onPress}>
             <Image
@@ -14,7 +14,7 @@ const ListingDetailCard = ({ image, onPress, hideTag, title, desc, exp, date, ti
             />
             {!hideTag &&
                 <View style={styles.textView}>
-                    <Text style={styles.numberText}>01</Text>
+                    <Text style={styles.numberText}>{total}</Text>
                 </View>
             }
             <View style={styles.wrapper}>
@@ -22,7 +22,7 @@ const ListingDetailCard = ({ image, onPress, hideTag, title, desc, exp, date, ti
                     <Text style={[styles.text, { fontSize: hideTag && hp('1.7%'), width: '79%' }]}>{title}</Text>
                     {hideTag &&
                         <View style={styles.groupNumberView}>
-                            <Text style={[styles.numberText, { fontSize: hp('1.5%') }]}>01</Text>
+                            <Text style={[styles.numberText, { fontSize: hp('1.5%') }]}>{count}</Text>
                         </View>
                     }
                 </View>

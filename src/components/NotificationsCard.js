@@ -5,7 +5,7 @@ import colors from '../assets/colors'
 import Alarm from 'react-native-vector-icons/MaterialCommunityIcons';
 import More from 'react-native-vector-icons/MaterialIcons'
 
-const NotificationsCard = ({ image }) => {
+const NotificationsCard = ({ image, text, date, desc }) => {
   return (
     <View style={styles.wrapper}>
       <View style={{ flexDirection: 'row' }}>
@@ -15,7 +15,8 @@ const NotificationsCard = ({ image }) => {
           borderRadius={5}
         />
         <View style={styles.Textwrapper}>
-          <Text style={styles.text}>Happy To Share This Notification Element</Text>
+          <Text style={styles.text}>{text}</Text>
+          <Text style={[styles.text,{fontSize: hp('1.5%'), color: colors.lightgray, marginBottom: 2}]}>{desc}</Text>
           <View style={{ flexDirection: 'row', marginTop: hp('1%') }}>
             <Alarm
               name={'alarm'}
@@ -23,7 +24,7 @@ const NotificationsCard = ({ image }) => {
               size={17}
               style={{ alignSelf: 'center' }}
             />
-            <Text style={styles.date}>24 april 2021</Text>
+            <Text style={styles.date}>{date}</Text>
           </View>
         </View>
       </View>
@@ -50,15 +51,17 @@ const styles = StyleSheet.create({
   },
   Textwrapper: {
     marginLeft: hp('1.5%'),
-    marginTop: hp('3%')
+    marginTop: hp('1.5%')
   },
   text: {
     color: colors.white,
+    marginBottom: hp('1%'),
     fontWeight: 'bold',
-    fontSize: hp('1.5%')
+    fontSize: hp('1.8%')
   },
   date: {
     color: colors.lightgray,
+    fontSize: hp('1.5%'),
     marginLeft: hp('1.2%')
   }
 })

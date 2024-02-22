@@ -23,7 +23,7 @@ const ListingCard = ({ image, onPress, title, desc, count, exp, date, descStyle 
                 </View>
                 <Text style={styles.text}>{title}</Text>
             </View>
-            <View style={{ marginRight: hp('1%') }}>
+            <View style={{ marginRight: hp('1%'), paddingTop: hp('1%') }}>
                 <Text style={styles.eventsText}>NO OF PLAYERS:</Text>
                 <Text style={styles.location}>{count}</Text>
                 <Text style={styles.recordHeading}>{exp}</Text>
