@@ -129,6 +129,7 @@ const AddNew = () => {
   const dispatch = useDispatch();
 
   const {create_listing_loading} = useSelector(state => state.ListingReducer);
+  const {area_codes} = useSelector(state => state.HomeReducer);
 
   // console.log(typeof state.smoking_friendly)
   // console.log(state.listing_gallery)
@@ -211,8 +212,7 @@ const AddNew = () => {
   };
 
   const onAddMore = () => {
-    const obj = {name: 'No File Chosen', path: ''};
-    const modifiedArr = [...state.listing_gallery, obj];
+    const modifiedArr = [...state.listing_gallery, state.image_details];
     setState({
       ...state,
       listing_gallery: modifiedArr,
@@ -276,10 +276,15 @@ const AddNew = () => {
               onValueChange={(itemValue, itemIndex) =>
                 handlePickerChange('area_code', itemValue)
               }>
-              {picker.map(item => (
+              <Picker.Item
+                label={'Select'}
+                value={null}
+                style={{color: colors.secondary}}
+              />
+              {area_codes?.map(item => (
                 <Picker.Item
-                  label={item.pickerText}
-                  value={item.pickerText}
+                  label={item}
+                  value={item}
                   style={{color: colors.secondary}}
                 />
               ))}
@@ -296,6 +301,11 @@ const AddNew = () => {
               onValueChange={(itemValue, itemIndex) =>
                 handlePickerChange('how_many_players', itemValue)
               }>
+              <Picker.Item
+                label={'Select a Value'}
+                value={null}
+                style={{color: colors.secondary}}
+              />
               {how_many_players.map(item => (
                 <Picker.Item
                   label={item.pickerText}
@@ -316,6 +326,11 @@ const AddNew = () => {
               onValueChange={(itemValue, itemIndex) =>
                 handlePickerChange('itc_handshake', itemValue)
               }>
+                <Picker.Item
+                label={'Select'}
+                value={null}
+                style={{color: colors.secondary}}
+              />
               {handshake.map(item => (
                 <Picker.Item
                   label={item.pickerText}
@@ -336,6 +351,11 @@ const AddNew = () => {
               onValueChange={(itemValue, itemIndex) =>
                 handlePickerChange('exp_level', itemValue)
               }>
+                <Picker.Item
+                label={'Select'}
+                value={null}
+                style={{color: colors.secondary}}
+              />
               {ExperienceLevel.map(item => (
                 <Picker.Item
                   label={item.pickerText}
@@ -355,7 +375,7 @@ const AddNew = () => {
             onValueChange={itemValue => {
               handlePickerChange('desired_tee', itemValue);
             }}
-            value1={item.pickerText1}
+            value1={null}
             value2={item.pickerText2}
             value3={item.pickerText3}
             value4={item.pickerText4}

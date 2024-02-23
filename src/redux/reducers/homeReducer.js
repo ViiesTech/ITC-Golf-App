@@ -9,11 +9,17 @@ const initialState = {
   loader: false,
   notification_loader: false,
   notifications: [],
-  area_codes: []
+  area_codes: [],
+  groups_filter: [],
+  filter_loading: false,
+  group_filter_message: '',
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case constant.GET_AREA_CODES:
+      return {...state, area_codes: action.payload};
+
     case constant.GET_LISTING:
       return {...state, loader: true};
 
@@ -41,9 +47,18 @@ export default (state = initialState, action) => {
         notifications: action.payload,
         notification_loader: false,
       };
+      
 
-    case constant.GET_AREA_CODES:
-      return {...state, area_codes: action.payload}  
+    case constant.GROUPS_BY_AREACODE:
+      return {...state, filter_loading: true};
+
+    case constant.GROUPS_BY_AREACODE_DONE:
+      return {
+        ...state,
+        filter_loading: false,
+        groups_filter: action.payload,
+        groups_filter_message: state.groups_filter != []  && action.message,
+      };
 
     default:
       return state;

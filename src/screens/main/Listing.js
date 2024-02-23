@@ -1,5 +1,5 @@
 import {StyleSheet, View, FlatList, ScrollView} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';

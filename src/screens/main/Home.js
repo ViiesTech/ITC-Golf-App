@@ -35,7 +35,7 @@ const Home = () => {
   const width = Dimensions.get('screen').width;
 
   const {listing, loader, area_codes} = useSelector(state => state.HomeReducer);
-  // console.log('listinggg', selectedOption);
+  // console.log('listinggg', area_codes);
 
   const dispatch = useDispatch();
 

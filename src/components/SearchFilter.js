@@ -1,5 +1,5 @@
 import {StyleSheet, View, Text} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import colors from '../assets/colors';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {filterItems, picker} from '../DummyData';
@@ -7,10 +7,12 @@ import Button from './Button';
 import {Picker} from '@react-native-picker/picker';
 import {useSelector} from 'react-redux';
 
-const SearchFilter = ({searchStyle, style}) => {
-  const [selectedOption, setSelectedOption] = useState('');
+const SearchFilter = ({searchStyle, style, onValueChange, selectedValue}) => {
+  // const [selectedOption, setSelectedOption] = useState('');
 
   const {area_codes} = useSelector(state => state.HomeReducer);
+
+  // console.log('area codessss =======>', selectedValue)
 
   return (
     <View style={[styles.card, style]}>
@@ -18,12 +20,10 @@ const SearchFilter = ({searchStyle, style}) => {
         <Text style={styles.text}>AREA CODE</Text>
         <View style={styles.pickerStyle}>
           <Picker
-            selectedValue={selectedOption}
+            selectedValue={selectedValue}
             style={styles.textStyle}
             dropdownIconColor={colors.secondary}
-            onValueChange={(itemValue, itemIndex) =>
-              setSelectedOption(itemValue)
-            }>
+            onValueChange={onValueChange}>
             <Picker.Item
               label="Select"
               value={null}

@@ -23,22 +23,31 @@ import ContactInput from '../../components/ContactInput';
 import DropDownPicker from '../../components/DropDownPicker';
 import Button from '../../components/Button';
 import {AddNewListings} from '../../components/AddNewListings';
-import {areaCode, handshake, profilePicker} from '../../DummyData';
+import {
+  DesiredItem,
+  ExperienceLevel,
+  areaCode,
+  handshake,
+  profilePicker,
+} from '../../DummyData';
 import {useDispatch, useSelector} from 'react-redux';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {PlayersFollow} from '../../redux/actions/authAction';
+import {Picker} from '@react-native-picker/picker';
 
 const AllGroups = ({route}) => {
   const {user, follow_loader, players_follow} = useSelector(
     state => state.AuthReducer,
   );
+  const {area_codes} = useSelector(state => state.HomeReducer);
   const dispatch = useDispatch();
 
-  console.log(user.user_id)
+  console.log(user.user_id);
 
   const [state, setState] = useState({
     first_name: user.first_name,
     last_name: user.last_name,
+    address: '',
     pickers: {
       area_code: '',
       exp_level: '',
@@ -185,7 +194,7 @@ const AllGroups = ({route}) => {
                 }}>
                 <ContactInput
                   label={'First Name'}
-                  placeholder={'First Name'}
+                  placeholder={'Name/Nickname'}
                   value={state.first_name}
                   onChangeText={text => onInputChange('first_name', text)}
                   style={styles.input}
@@ -200,60 +209,93 @@ const AllGroups = ({route}) => {
                   textColor={colors.lightgray}
                 />
               </View>
-              {areaCode.map(item => (
-                <DropDownPicker
-                  style={styles.pickerStyle}
-                  text={item.text}
-                  selectedValue={state.pickers[item.props]}
-                  onValueChange={itemValue => {
-                    onPickerValueChange('area_code', itemValue);
-                  }}
-                  value1={item.pickerText1}
-                  value2={item.pickerText2}
-                  value3={item.pickerText3}
-                  label1={item.pickerText1}
-                  label2={item.pickerText2}
-                  label3={item.pickerText3}
-                />
-              ))}
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                {profilePicker.map(item => (
-                  <DropDownPicker
-                    style={[
-                      styles.pickerStyle,
-                      {width: item.id == 1 ? '150%' : null},
-                    ]}
-                    selectedValue={state.pickers[item.props]}
-                    onValueChange={itemValue => {
-                      onPickerValueChange(item.props, itemValue);
-                    }}
-                    text={item.text}
-                    value1={item.pickerText1}
-                    value2={item.pickerText2}
-                    value3={item.pickerText3}
-                    label1={item.pickerText1}
-                    label2={item.pickerText2}
-                    label3={item.pickerText3}
+              <Text style={styles.textStyle}>AREA CODE</Text>
+              <View style={styles.pickerStyle}>
+                <Picker
+                  selectedValue={state.pickers.area_code}
+                  dropdownIconColor={colors.white}
+                  style={{color: colors.white}}
+                  onValueChange={(itemValue, itemIndex) =>
+                    onPickerValueChange('area_code', itemValue)
+                  }>
+                  <Picker.Item
+                    label={'Select'}
+                    value={null}
+                    style={{color: colors.secondary}}
                   />
-                ))}
+                  {area_codes?.map(item => (
+                    <Picker.Item
+                      label={item}
+                      value={item}
+                      style={{color: colors.secondary}}
+                    />
+                  ))}
+                </Picker>
               </View>
-              {handshake.map(item => (
-                <DropDownPicker
-                  style={styles.pickerStyle}
-                  text={item.text}
-                  selectedValue={state.pickers[item.props]}
-                  onValueChange={itemValue => {
-                    onPickerValueChange('itc_handshake', itemValue);
-                  }}
-                  value1={item.pickerText1}
-                  value2={item.pickerText2}
-                  value3={item.pickerText3}
-                  label1={item.pickerText1}
-                  label2={item.pickerText2}
-                  label3={item.pickerText3}
-                />
-              ))}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <View style={{width: hp('18%')}}>
+                  <Text style={styles.textStyle}>Experience Level</Text>
+                  <View style={styles.pickerStyle}>
+                    <Picker
+                      selectedValue={state.pickers.exp_level}
+                      dropdownIconColor={colors.white}
+                      style={{color: colors.white}}
+                      onValueChange={(itemValue, itemIndex) =>
+                        onPickerValueChange('exp_level', itemValue)
+                      }>
+                      <Picker.Item
+                        label={'Select'}
+                        value={null}
+                        style={{color: colors.secondary}}
+                      />
+                      {ExperienceLevel?.map(item => (
+                        <Picker.Item
+                          label={item.pickerText}
+                          value={item.pickerText}
+                          style={{color: colors.secondary}}
+                        />
+                      ))}
+                    </Picker>
+                  </View>
+                </View>
+                <View style={{width: hp('18%')}}>
+                  <Text style={styles.textStyle}>Desired Tee Box</Text>
+                  <View style={styles.pickerStyle}>
+                    <Picker
+                      selectedValue={state.pickers.desired_tee}
+                      dropdownIconColor={colors.white}
+                      style={{color: colors.white}}
+                      onValueChange={(itemValue, itemIndex) =>
+                        onPickerValueChange('desired_tee', itemValue)
+                      }>
+                      <Picker.Item
+                        label={'Select'}
+                        value={null}
+                        style={{color: colors.secondary}}
+                      />
+                      {DesiredItem.map(item => (
+                        <Picker.Item
+                          label={item.pickerText}
+                          value={item.pickerText}
+                          style={{color: colors.secondary}}
+                        />
+                      ))}
+                    </Picker>
+                  </View>
+                </View>
+              </View>
+              <ContactInput
+                label={'Address'}
+                placeholder={'37 Cardinal Lane Petersburg,'}
+                value={state.address}
+                onChangeText={text => onInputChange('address', text)}
+                style={[styles.input, {width: hp('45%')}]}
+                textColor={colors.lightgray}
+              />
               <Text
                 style={{
                   color: colors.primary,
@@ -264,7 +306,7 @@ const AllGroups = ({route}) => {
               </Text>
               <ContactInput
                 style={[styles.input, {height: hp('16%'), width: '100%'}]}
-                placeholder={'37 Cardinal Lane Petersburg,'}
+                // placeholder={'37 Cardinal Lane Petersburg,'}
                 textColor={colors.lightgray}
                 textAlignVertical={'top'}
                 label={'Short Description:'}
@@ -315,7 +357,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     padding: hp('1.8%'),
   },
-  addnewWrapper: {},
+  // addnewWrapper: {},
   input: {
     backgroundColor: 'transparent',
     borderWidth: 1.5,
@@ -378,10 +420,20 @@ const styles = StyleSheet.create({
     right: 5,
     bottom: 5,
   },
+  // pickerStyle2: {
+  //   borderWidth: 0.2,
+  //   width: '50%',
+  //   marginBottom: hp('6%'),
+  //   backgroundColor: 'red',
+  //   borderRadius: 5,
+  // },
   pickerStyle: {
-    borderWidth: 0.2,
+    borderWidth: 1.5,
+    width: '100%',
+    borderRadius: 10,
+    marginTop: hp('1.3%'),
     marginBottom: hp('6%'),
-    borderRadius: 5,
+    borderColor: colors.gray,
   },
   emailCard: {
     marginTop: hp('2%'),
@@ -392,5 +444,10 @@ const styles = StyleSheet.create({
   wrapper: {
     paddingTop: hp('3%'),
     paddingBottom: hp('20%'),
+  },
+  textStyle: {
+    color: colors.white,
+    fontSize: hp('1.8%'),
+    fontWeight: 'bold',
   },
 });

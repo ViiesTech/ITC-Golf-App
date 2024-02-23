@@ -2,6 +2,28 @@ import axios from 'axios';
 import {ShowToast} from '../../Custom';
 import constant, {URL} from '../constant';
 
+export const getAllAreaCodes = () => {
+  return async dispatch => {
+    await axios
+      .get(`${URL}/area-codes`, {
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+      .then(res => {
+        console.log('all area codes response ===========>', res.data);
+        dispatch({
+          type: constant.GET_AREA_CODES,
+          payload: res.data,
+        });
+      })
+      .catch(error => {
+        console.log('area codes error ========>', error);
+        return ShowToast('Some problem occured');
+      });
+  };
+};
+
 export const getListings = () => {
   return async dispatch => {
     dispatch({
@@ -118,22 +140,31 @@ export const getNotifications = () => {
   };
 };
 
-export const getAllAreaCodes = () => {
+export const GroupsByAreaCodes = area_code => {
   return async dispatch => {
+    dispatch({
+      type: constant.GROUPS_BY_AREACODE,
+    });
+
     await axios
-      .get(`${URL}/area-codes`, {
+      .get(`${URL}/group-search?area_code=${area_code}`, {
         headers: {
           Accept: 'application/json',
         },
       })
       .then(res => {
+        console.log('groups filter response =========>', res.data);
         dispatch({
-          type: constant.GET_AREA_CODES,
+          type: constant.GROUPS_BY_AREACODE_DONE,
           payload: res.data,
+          message: 'No Groups Found',
         });
       })
       .catch(error => {
-        console.log('area codes error ========>', error);
+        console.log('groups filter error ========>', error);
+        dispatch({
+          type: constant.GROUPS_BY_AREACODE_DONE,
+        });
         return ShowToast('Some problem occured');
       });
   };
