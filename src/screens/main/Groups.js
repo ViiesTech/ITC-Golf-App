@@ -18,6 +18,7 @@ import colors from '../../assets/colors';
 import {useNavigation} from '@react-navigation/native';
 import SearchFilter from '../../components/SearchFilter';
 import Sponsors from '../../components/Sponsors';
+import images from '../../assets/images';
 
 const Groups = () => {
   const navigation = useNavigation();
@@ -31,7 +32,7 @@ const Groups = () => {
     groups_filter_message,
     area_codes,
   } = useSelector(state => state.HomeReducer);
-  // console.log('from group screen =============>', groups_filter.length);
+  // console.log('from group screen =============>', selectedCode);
 
   const routeName = navigation.getState().routes[3].name;
 
@@ -43,12 +44,12 @@ const Groups = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (selectedCode != null) {
-      // alert('wah');
-      dispatch(GroupsByAreaCodes(selectedCode));
-    }
-  }, [selectedCode]);
+  // useEffect(() => {
+  //   if (selectedCode != null) {
+  //     // alert('wah');
+  //     dispatch(GroupsByAreaCodes(selectedCode));
+  //   }
+  // }, [selectedCode]);
 
   if (group_loader) {
     return (
@@ -113,12 +114,13 @@ const Groups = () => {
             numColumns={2}
             columnWrapperStyle={{justifyContent: 'space-between'}}
             renderItem={({item, index}) => {
-              console.log('filterrrrr', groups_filter);
+              // console.log('filterrrrr', groups_filter);
               return (
                 <ListingDetailCard
                   hideTag
                   route={routeName}
                   count={index + 1}
+                  image={{uri: item.featured_image_url}}
                   title={item.listing_title}
                   desc={
                     item.group_desired_teebox == ''
@@ -153,6 +155,7 @@ const Groups = () => {
             hideTag
             route={routeName}
             count={index + 1}
+            image={images.listing3}
             title={item.listing_title}
             desc={
               item.group_desired_teebox == ''
@@ -169,6 +172,13 @@ const Groups = () => {
     );
   };
 
+  const onAreaCodeSearch = () => {
+    if (selectedCode != null) {
+      // alert('wah');
+      dispatch(GroupsByAreaCodes(selectedCode));
+    }
+  };
+
   return (
     <Container>
       <Header />
@@ -176,6 +186,7 @@ const Groups = () => {
         <SearchFilter
           selectedValue={selectedCode}
           onValueChange={itemValue => setSelectedCode(itemValue)}
+          onSearchPress={() => onAreaCodeSearch()}
         />
         <SecondaryHeader text={'Groups'} style={{paddingTop: hp('5%')}} />
         {selectedCode ? renderFilterGroups() : renderAllGroups()}

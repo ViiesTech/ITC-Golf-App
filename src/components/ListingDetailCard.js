@@ -8,9 +8,10 @@ const ListingDetailCard = ({ image, onPress, hideTag, title, desc, exp, date, ti
     return (
         <TouchableOpacity style={{ marginBottom: hp('10%'), width: '45%' }} activeOpacity={0.9} onPress={onPress}>
             <Image
-                source={route === 'Listing' ? images.listing2 : images.listing3}
+                source={route === 'Listing' ? images.listing2 : image}
                 style={styles.image}
                 borderRadius={10}
+                resizeMode='cover'
             />
             {!hideTag &&
                 <View style={styles.textView}>

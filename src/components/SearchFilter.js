@@ -7,7 +7,13 @@ import Button from './Button';
 import {Picker} from '@react-native-picker/picker';
 import {useSelector} from 'react-redux';
 
-const SearchFilter = ({searchStyle, style, onValueChange, selectedValue}) => {
+const SearchFilter = ({
+  searchStyle,
+  style,
+  onValueChange,
+  selectedValue,
+  onSearchPress,
+}) => {
   // const [selectedOption, setSelectedOption] = useState('');
 
   const {area_codes} = useSelector(state => state.HomeReducer);
@@ -41,6 +47,7 @@ const SearchFilter = ({searchStyle, style, onValueChange, selectedValue}) => {
       </View>
       <Button
         buttonText={'Search'}
+        onPress={onSearchPress}
         textStyle={{color: colors.secondary, fontSize: hp('2%')}}
         buttonStyle={[
           {

@@ -60,6 +60,9 @@ export default {
 
   GROUPS_BY_AREACODE: 'GROUPS_BY_AREACODE',
   GROUPS_BY_AREACODE_DONE: 'GROUPS_BY_AREACODE_DONE',
+
+  GET_MY_GROUPS: 'GET_MY_GROUPS',
+  GET_MY_GROUPS_DONE: 'GET_MY_GROUPS_DONE',
 };
 
 export const URL = 'https://inthecup.golf/wp-json/app/v1';

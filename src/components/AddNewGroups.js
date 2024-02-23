@@ -5,21 +5,11 @@ import {
   Text,
   FlatList,
   ActivityIndicator,
-  ScrollView,
 } from 'react-native';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import colors from '../assets/colors';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import {
-  DesiredItem,
-  areaCode,
-  discovers,
-  groups,
-  groupsItem,
-  handshake,
-  listingPicker,
-  picker,
-} from '../DummyData';
+import {DesiredItem, handshake, listingPicker} from '../DummyData';
 import DiscoverCard from './DiscoverCard';
 import MyGroupsCard from './MyGroupsCard';
 import DropDownPicker from './DropDownPicker';
@@ -31,7 +21,7 @@ import Switch from './Switch';
 import {Picker} from '@react-native-picker/picker';
 import {useDispatch, useSelector} from 'react-redux';
 import {ShowToast} from '../Custom';
-import {createGroup} from '../redux/actions/groupAction';
+import {createGroup, getGroupsById} from '../redux/actions/groupAction';
 import moment from 'moment';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {getGroups} from '../redux/actions/homeAction';
@@ -91,13 +81,56 @@ const Discover = () => {
   );
 };
 
-const MyGroups = () => (
-  <View style={{paddingTop: hp('4%')}}>
-    {groups.map(item => (
-      <MyGroupsCard image={item.image} />
-    ))}
-  </View>
-);
+const MyGroups = () => {
+  const {my_groups, my_groups_loader, my_groups_message} = useSelector(
+    state => state.GroupReducer,
+  );
+
+  console.log('my groups from screen =============>', my_groups_message);
+  const {user} = useSelector(state => state.AuthReducer);
+
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(getGroupsById(user.user_id));
+  }, []);
+
+  const renderLoader = () => {
+    return (
+      <View style={{alignItems: 'center'}}>
+        <ActivityIndicator size={'large'} color={colors.primary} />
+      </View>
+    );
+  };
+
+  const renderMessage = () => {
+    return (
+      <View
+        style={{
+          alignItems: 'center',
+        }}>
+        <Text
+          style={{
+            color: colors.white,
+            fontSize: hp('2%'),
+            fontWeight: 'bold',
+          }}>
+          {my_groups_message}
+        </Text>
+      </View>
+    );
+  };
+
+  return (
+    <View style={{paddingTop: hp('4%')}}>
+      {my_groups_loader
+        ? renderLoader()
+        : my_groups.length < 1
+        ? renderMessage()
+        : my_groups.map(item => <MyGroupsCard image={images.about1} />)}
+    </View>
+  );
+};
 
 const AddNew = () => {
   const [state, setState] = React.useState({
