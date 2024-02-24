@@ -9,7 +9,7 @@ import {
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import colors from '../assets/colors';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import {DesiredItem, handshake, listingPicker} from '../DummyData';
+import {DesiredItem, TeeBox, handshake, listingPicker} from '../DummyData';
 import DiscoverCard from './DiscoverCard';
 import MyGroupsCard from './MyGroupsCard';
 import DropDownPicker from './DropDownPicker';
@@ -92,7 +92,9 @@ const MyGroups = () => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(getGroupsById(user.user_id));
+    if (my_groups.length < 1) {
+      dispatch(getGroupsById(user.user_id));
+    }
   }, []);
 
   const renderLoader = () => {
@@ -323,7 +325,7 @@ const AddNew = () => {
           ))}
         </Picker>
       </View>
-      {DesiredItem.map(item => (
+      {TeeBox.map(item => (
         <DropDownPicker
           text={item.text}
           iconColor={colors.lightgray}

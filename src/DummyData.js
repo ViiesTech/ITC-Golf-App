@@ -1663,6 +1663,19 @@ export const DesiredItem = [
   },
 ];
 
+export const TeeBox = [
+  {
+    id: 1,
+    text: 'Desired Tee Box',
+    pickerText1: 'Select',
+    pickerText2: 'Junior Tees (17 and under)',
+    pickerText3: 'Front Tees',
+    pickerText4: 'Senior Tees',
+    pickerText5: 'Forward Tees',
+    pickerText6: 'All Other'
+  }
+]
+
 export const listingPicker = [
   {
     id: 1,
