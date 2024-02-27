@@ -134,6 +134,7 @@ const Home = () => {
                   }>
                   <ListingCard
                     key={item.id}
+                    number={index + 1}
                     title={
                       Object.keys(item.listing_title).length == 13
                         ? item.listing_title

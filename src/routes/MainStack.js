@@ -20,6 +20,7 @@ import AllGroups from '../screens/main/AllGroups'
 import MerchandiseDetails from '../screens/main/MerchandiseDetails'
 import Groups from '../screens/main/Groups'
 import ListingDetails from '../screens/main/ListingDetails'
+import GroupDetail from '../screens/main/GroupDetail'
 
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
@@ -165,6 +166,7 @@ const SecondaryStack = () => {
       <Tab.Screen name='FreeStuff' component={FreeStuff} />
       <Tab.Screen name='ListingDetails' component={ListingDetails} />
       <Tab.Screen name='AllGroups' component={AllGroups} />
+      <Tab.Screen name='GroupDetail' component={GroupDetail} />
     </Stack.Navigator>
   )
 }

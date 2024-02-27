@@ -63,6 +63,9 @@ export default {
 
   GET_MY_GROUPS: 'GET_MY_GROUPS',
   GET_MY_GROUPS_DONE: 'GET_MY_GROUPS_DONE',
+
+  GET_MY_LISTINGS: 'GET_MY_LISTINGS',
+  GET_MY_LISTINGS_DONE: 'GET_MY_LISTINGS_DONE',
 };
 
 export const URL = 'https://inthecup.golf/wp-json/app/v1';

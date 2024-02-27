@@ -157,7 +157,6 @@ export const GroupsByAreaCodes = area_code => {
         dispatch({
           type: constant.GROUPS_BY_AREACODE_DONE,
           payload: res.data,
-          message: 'No Groups Found',
         });
       })
       .catch(error => {
@@ -166,6 +165,20 @@ export const GroupsByAreaCodes = area_code => {
           type: constant.GROUPS_BY_AREACODE_DONE,
         });
         return ShowToast('Some problem occured');
+      });
+  };
+};
+
+export const ListingsByAreaCodes = area_code => {
+  return async dispatch => {
+    await axios
+      .get(`${URL}/listing-search?area_code=${area_code}`, {
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+      .then(res => {
+        console.log('listing filter response =======>', res.data);
       });
   };
 };

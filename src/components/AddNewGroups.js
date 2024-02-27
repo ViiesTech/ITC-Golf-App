@@ -26,9 +26,11 @@ import moment from 'moment';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {getGroups} from '../redux/actions/homeAction';
 import images from '../assets/images';
+import {useNavigation} from '@react-navigation/native';
 
 const Discover = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const {groups, group_loader} = useSelector(state => state.HomeReducer);
   console.log('groups api data =============>', groups);
@@ -50,11 +52,20 @@ const Discover = () => {
           data={groups}
           numColumns={2}
           columnWrapperStyle={{justifyContent: 'space-between'}}
-          renderItem={({item}) => (
+          renderItem={({item, index}) => (
             <DiscoverCard
               image={images.discover2}
+              onPress={() =>
+                navigation.navigate('SecondaryStack', {
+                  screen: 'GroupDetail',
+                  params: {item},
+                })
+              }
               title={item.listing_title}
               titleStyle={{fontSize: hp('1.6%')}}
+              count={index + 1}
+              group={true}
+              players={item.group_desired_teebox}
               date={
                 item.suggested_day == '02/18/24'
                   ? item.suggested_day
@@ -86,7 +97,7 @@ const MyGroups = () => {
     state => state.GroupReducer,
   );
 
-  console.log('my groups from screen =============>', my_groups_message);
+  console.log('my groups from screen =============>', my_groups_loader);
   const {user} = useSelector(state => state.AuthReducer);
 
   const dispatch = useDispatch();

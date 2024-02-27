@@ -34,13 +34,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import {launchImageLibrary} from 'react-native-image-picker';
 import moment from 'moment';
 import {ShowToast} from '../Custom';
-import {createListing} from '../redux/actions/listingAction';
+import {ListingsByUserID, createListing} from '../redux/actions/listingAction';
 import {getListings} from '../redux/actions/homeAction';
 import images from '../assets/images';
 import {Picker} from '@react-native-picker/picker';
+import {useNavigation} from '@react-navigation/native';
 
 const Discover = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const {listing, loader} = useSelector(state => state.HomeReducer);
 
@@ -61,24 +63,33 @@ const Discover = () => {
           data={listing}
           numColumns={2}
           columnWrapperStyle={{justifyContent: 'space-between'}}
-          renderItem={({item}) => (
+          renderItem={({item, index}) => (
             <DiscoverCard
               image={images.discover1}
+              onPress={() =>
+                navigation.navigate('SecondaryStack', {
+                  screen: 'ListingDetails',
+                  params: {item},
+                })
+              }
+              count={index + 1}
               title={
                 Object.keys(item.listing_title).length == 13
                   ? item.listing_title
                   : 'New Listing'
               }
-              itc={
-                item.experience_level == ''
-                  ? '5 to 10 par progress level'
-                  : item.experience_level
-              }
-              desc={
-                Object.keys(item.match_description).length == 4
-                  ? item.match_description
-                  : 'test'
-              }
+              // itc={
+              //   item.experience_level == ''
+              //     ? '5 to 10 par progress level'
+              //     : item.experience_level
+              // }
+              itc={item.the_itc_handshake}
+              // desc={
+              //   Object.keys(item.match_description).length == 4
+              //     ? item.match_description
+              //     : 'test'
+              // }
+              players={item.how_many_players}
               date={item.course_date}
               time={item.course_time == '' ? '23:28' : item.course_time}
             />
@@ -89,13 +100,74 @@ const Discover = () => {
   );
 };
 
-const MyListings = () => (
-  <View style={{paddingTop: hp('4%')}}>
-    {groups.map(item => (
-      <MyGroupsCard image={item.image} />
-    ))}
-  </View>
-);
+const MyListings = () => {
+  const {my_listings, my_listings_loader} = useSelector(
+    state => state.ListingReducer,
+  );
+  const {user} = useSelector(state => state.AuthReducer);
+
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  React.useEffect(() => {
+    if (my_listings?.length < 1) {
+      dispatch(ListingsByUserID(user.user_id));
+    }
+  }, []);
+
+  const renderLoader = () => {
+    return (
+      <View style={{alignItems: 'center', paddingTop: hp('5%')}}>
+        <ActivityIndicator size={'large'} color={colors.primary} />
+      </View>
+    );
+  };
+
+  const renderMessage = () => {
+    return (
+      <View style={{alignItems: 'center', paddingTop: hp('5%')}}>
+        <Text
+          style={{color: colors.white, fontSize: hp('2%'), fontWeight: 'bold'}}>
+          You have no upcoming matches
+        </Text>
+      </View>
+    );
+  };
+
+  return (
+    <View style={{paddingTop: hp('4%')}}>
+      {my_listings_loader
+        ? renderLoader()
+        : my_listings?.length < 1
+        ? renderMessage()
+        : my_listings?.map((item, i) => (
+            <MyGroupsCard
+              image={images.discover1}
+              onPress={() =>
+                navigation.navigate('SecondaryStack', {
+                  screen: 'ListingDetails',
+                  params: {item},
+                })
+              }
+              count={i + 1}
+              title={
+                item.listing_title.length > 15
+                  ? 'New Listing'
+                  : item.listing_title
+              }
+              players={item.how_many_players}
+              area_code={item.area_code_match}
+              date={item.course_date}
+              handshake={
+                item.the_itc_handshake == ''
+                  ? 'CASUAL HANDSHAKE'
+                  : item.the_itc_handshake
+              }
+            />
+          ))}
+    </View>
+  );
+};
 
 const AddNew = () => {
   const [state, setState] = React.useState({
@@ -326,7 +398,7 @@ const AddNew = () => {
               onValueChange={(itemValue, itemIndex) =>
                 handlePickerChange('itc_handshake', itemValue)
               }>
-                <Picker.Item
+              <Picker.Item
                 label={'Select'}
                 value={null}
                 style={{color: colors.secondary}}
@@ -351,7 +423,7 @@ const AddNew = () => {
               onValueChange={(itemValue, itemIndex) =>
                 handlePickerChange('exp_level', itemValue)
               }>
-                <Picker.Item
+              <Picker.Item
                 label={'Select'}
                 value={null}
                 style={{color: colors.secondary}}

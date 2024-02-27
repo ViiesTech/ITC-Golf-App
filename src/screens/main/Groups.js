@@ -23,16 +23,11 @@ import images from '../../assets/images';
 const Groups = () => {
   const navigation = useNavigation();
   const [selectedCode, setSelectedCode] = useState(null);
+  const [searchPressed, setSearchPressed] = useState(false);
 
-  const {
-    group_loader,
-    groups,
-    groups_filter,
-    filter_loading,
-    groups_filter_message,
-    area_codes,
-  } = useSelector(state => state.HomeReducer);
-  // console.log('from group screen =============>', selectedCode);
+  const {group_loader, groups, groups_filter, filter_loading, area_codes} =
+    useSelector(state => state.HomeReducer);
+  console.log('from group screen =============>', groups_filter);
 
   const routeName = navigation.getState().routes[3].name;
 
@@ -43,13 +38,6 @@ const Groups = () => {
       dispatch(getGroups());
     }
   }, []);
-
-  // useEffect(() => {
-  //   if (selectedCode != null) {
-  //     // alert('wah');
-  //     dispatch(GroupsByAreaCodes(selectedCode));
-  //   }
-  // }, [selectedCode]);
 
   if (group_loader) {
     return (
@@ -93,7 +81,7 @@ const Groups = () => {
             marginBottom: hp('5%'),
             fontSize: hp('2%'),
           }}>
-          {groups_filter_message}
+          {groups_filter?.message}
         </Text>
       </View>
     );
@@ -104,7 +92,7 @@ const Groups = () => {
       <>
         {filter_loading ? (
           renderFilterLoader()
-        ) : groups_filter.length == 32 || groups_filter.length < 1 ? (
+        ) : groups_filter.message ? (
           renderMessage()
         ) : (
           <FlatList
@@ -137,6 +125,12 @@ const Groups = () => {
                       : '02/18/24'
                   }
                   area={item.area_code}
+                  onPress={() =>
+                    navigation.navigate('SecondaryStack', {
+                      screen: 'GroupDetail',
+                      params: {item},
+                    })
+                  }
                 />
               );
             }}
@@ -170,6 +164,12 @@ const Groups = () => {
               item.suggested_day == '02/18/24' ? item.suggested_day : '02/18/24'
             }
             area={item.area_code}
+            onPress={() =>
+              navigation.navigate('SecondaryStack', {
+                screen: 'GroupDetail',
+                params: {item},
+              })
+            }
           />
         )}
       />
@@ -180,6 +180,9 @@ const Groups = () => {
     if (selectedCode != null) {
       // alert('wah');
       dispatch(GroupsByAreaCodes(selectedCode));
+      setSearchPressed(true);
+    } else {
+      setSearchPressed(false);
     }
   };
 
@@ -193,7 +196,7 @@ const Groups = () => {
           onSearchPress={() => onAreaCodeSearch()}
         />
         <SecondaryHeader text={'Groups'} style={{paddingTop: hp('5%')}} />
-        {selectedCode ? renderFilterGroups() : renderAllGroups()}
+        {searchPressed ? renderFilterGroups() : renderAllGroups()}
         <Sponsors />
       </ScrollView>
     </Container>

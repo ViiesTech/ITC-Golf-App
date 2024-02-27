@@ -118,7 +118,7 @@ const AllGroups = ({route}) => {
           {
             paddingBottom:
               changeTab === 'Add New Groups'
-                ? hp('495%')
+                ? hp('660%')
                 : changeTab === 'Add New Listings' && hp('325%'),
           },
         ]}

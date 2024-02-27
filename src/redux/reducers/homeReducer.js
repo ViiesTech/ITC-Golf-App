@@ -12,7 +12,6 @@ const initialState = {
   area_codes: [],
   groups_filter: [],
   filter_loading: false,
-  group_filter_message: '',
 };
 
 export default (state = initialState, action) => {
@@ -57,7 +56,6 @@ export default (state = initialState, action) => {
         ...state,
         filter_loading: false,
         groups_filter: action.payload,
-        groups_filter_message: state.groups_filter != []  && action.message,
       };
 
     default:
