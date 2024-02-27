@@ -16,10 +16,11 @@ export default PersonalInfoTab
 const styles = StyleSheet.create({
     button: {
         borderColor: colors.secondary,
+        // width: '40%',
         borderWidth: 2,
         alignItems: 'center',
-        marginRight: hp('0.5%'),
-        padding: hp('1%'),
+        marginRight: hp('1%'),
+        padding: hp('0.9%'),
         borderRadius: 100,
     },
     buttonText: {

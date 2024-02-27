@@ -43,6 +43,7 @@ export const createListing = (
         if (res.data.listing_id) {
           dispatch({
             type: constant.CREATE_LISTING_DONE,
+            payload: res.data.listing_id,
           });
           ShowToast(res.data.message);
         } else {

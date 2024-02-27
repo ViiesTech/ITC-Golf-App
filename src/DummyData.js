@@ -1380,6 +1380,10 @@ export const Tabs = [
     id: 1,
     text: 'Personal Information',
   },
+  // {
+  //   id: 2,
+  //   text: 'Add Reviews',
+  // },
   {
     id: 2,
     text: 'Match Reviews',
@@ -1672,9 +1676,9 @@ export const TeeBox = [
     pickerText3: 'Front Tees',
     pickerText4: 'Senior Tees',
     pickerText5: 'Forward Tees',
-    pickerText6: 'All Other'
-  }
-]
+    pickerText6: 'All Other',
+  },
+];
 
 export const listingPicker = [
   {
@@ -1784,4 +1788,45 @@ export const ExperienceLevel = [
   },
 ];
 
-374;
+export const postReviewText = [
+  {
+    id: 1,
+    text: 'RANK MEMBERS EXPERINCE LEVEL THAT THEY POSTED AS FALSE OR TRUTHFULL ?',
+  },
+  {
+    id: 2,
+    text: 'RANK MEMBERS PACE OF PLAY?',
+  },
+  {
+    id: 3,
+    text: 'RANK MEMBERS ON COURSE ATTITUDE/SPORTSMANSHIP?',
+  },
+  {
+    id: 4,
+    text: 'SHOWED UP TO TEE TIME AS AGREED?',
+  },
+  {
+    id: 5,
+    text: 'RANK MEMBERS PUNCTUALITY TO TEE TIME?',
+  },
+  {
+    id: 6,
+    text: 'WOULD YOU PLAY WITH MEMBER AGAIN?',
+  },
+  {
+    id: 7,
+    text: 'DID MEMBER MAKE GOOD ON THER ITC HANDSHAKE?',
+  },
+  {
+    id: 8,
+    text: 'MEMBER USED ITC SITE/APP FOR GOLF ONLY NOT ANY SOLICAITATION PUPOSE?',
+  },
+  {
+    id: 9,
+    text: 'WOULD YOU RECOMMEND OTHER MEMBERS TO PLAY WITH THIS MEMBER AGAIN?',
+  },
+  {
+    id: 10,
+    text: 'RANK YOUR OVERALL EXPERINCE WITH THIS MEMBER?',
+  },
+];

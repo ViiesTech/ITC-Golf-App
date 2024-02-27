@@ -4,6 +4,7 @@ const initialState = {
   create_listing_loading: false,
   my_listings: [],
   my_listings_loader: false,
+  listing_id: 0,
 };
 
 export default (state = initialState, action) => {
@@ -12,7 +13,11 @@ export default (state = initialState, action) => {
       return {...state, create_listing_loading: true};
 
     case constant.CREATE_LISTING_DONE:
-      return {...state, create_listing_loading: false};
+      return {
+        ...state,
+        create_listing_loading: false,
+        listing_id: action.payload,
+      };
 
     case constant.GET_MY_LISTINGS:
       return {...state, my_listings_loader: true};

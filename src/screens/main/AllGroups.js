@@ -5,6 +5,7 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
@@ -42,7 +43,9 @@ const AllGroups = ({route}) => {
   const {area_codes} = useSelector(state => state.HomeReducer);
   const dispatch = useDispatch();
 
-  console.log(user.user_id);
+  const {listing_id} = useSelector(state => state.ListingReducer);
+
+  console.log('listing id ========>', listing_id);
 
   const [state, setState] = useState({
     first_name: user.first_name,
@@ -62,11 +65,11 @@ const AllGroups = ({route}) => {
 
   const [changeTab, setChangeTab] = useState(options);
 
-  // console.log('wah',changeTab)
+  // console.log('wah', changeTab);
 
   useEffect(() => {
-    if (changeTab === 'Players You Follow') {
-      dispatch(PlayersFollow());
+    if (changeTab === 'Players You Follow' && players_follow.length < 1) {
+      dispatch(PlayersFollow(user.user_id, listing_id));
     }
   }, []);
 
@@ -155,12 +158,33 @@ const AllGroups = ({route}) => {
               </View>
             </>
           ) : changeTab === 'Players You Follow' ? (
-            <View style={styles.followCard}>
-              <Text style={styles.userName}>USER NAME:</Text>
-              <Text style={styles.name}>Becker alisson</Text>
-              <Text style={styles.userName}>EMAIL:</Text>
-              <Text style={styles.name}>backeraliison23@gmail.com</Text>
-            </View>
+            follow_loader ? (
+              <View style={{alignItems: 'center', marginVertical: hp('4%')}}>
+                <ActivityIndicator size={'large'} color={colors.primary} />
+              </View>
+            ) : players_follow.length < 1 ? (
+              <View style={{alignItems: 'center', marginVertical: hp('4%')}}>
+                <Text
+                  style={{
+                    color: colors.white,
+                    fontSize: hp('2%'),
+                    fontWeight: 'bold',
+                  }}>
+                  No Players Found
+                </Text>
+              </View>
+            ) : (
+              players_follow.map(item => {
+                return (
+                  <View style={styles.followCard}>
+                    <Text style={styles.userName}>USER NAME:</Text>
+                    <Text style={styles.name}>{item.username}</Text>
+                    <Text style={styles.userName}>EMAIL:</Text>
+                    <Text style={styles.name}>{item.user_email}</Text>
+                  </View>
+                );
+              })
+            )
           ) : (
             <View style={{paddingTop: hp('4%')}}>
               <Text style={styles.heading}>EDIT YOUR PROFILE</Text>

@@ -15,13 +15,14 @@ import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import colors from '../../assets/colors';
 import images from '../../assets/images';
 import PersonalInfoTab from '../../components/PersonalInfoTab';
-import {ReviewImages, Tabs} from '../../DummyData';
+import {ReviewImages, Tabs, postReviewText} from '../../DummyData';
 import ReviewCard from '../../components/ReviewCard';
 import SVGImage from '../../components/SVGImage';
 import icons from '../../assets/icons';
 import Button from '../../components/Button';
 import {useDispatch, useSelector} from 'react-redux';
 import {getReviews} from '../../redux/actions/homeAction';
+import PostReview from '../../components/PostReview';
 
 const ListingDetails = ({route}) => {
   const [changeTab, setChangeTab] = useState(1);
@@ -32,7 +33,7 @@ const ListingDetails = ({route}) => {
   console.log('reviews response from screen ===============>', reviews);
 
   useEffect(() => {
-    if (changeTab == 2 && reviews.length < 1) {
+    if (changeTab == 3 && reviews.length < 1) {
       dispatch(getReviews());
     }
   }, [changeTab]);
@@ -61,8 +62,13 @@ const ListingDetails = ({route}) => {
               text={item.text}
               style={
                 changeTab == item.id
-                  ? [styles.active, {width: item.id == 2 ? '36%' : '55%'}]
-                  : [styles.inactive, {width: item.id == 1 ? '55%' : '36%'}]
+                  ? [
+                      styles.active,
+                      {
+                        width: item.id == 2 ? '40%' : '44%',
+                      },
+                    ]
+                  : [styles.inactive, {width: item.id == 1 ? '44%' : '40%'}]
               }
               onPress={() => setChangeTab(item.id)}
               textStyle={changeTab == item.id && {marginTop: hp('0.3%')}}
@@ -151,7 +157,25 @@ const ListingDetails = ({route}) => {
               </View>
             </View>
           </>
-        ) : (
+        ) 
+        // : changeTab == 2 ? (
+        //   <View style={styles.reviewStyle}>
+        //     <Text style={styles.reviewHeading}>POST A REVIEW</Text>
+        //     <View style={{paddingTop: hp('3%')}}>
+        //       {postReviewText.map(item => (
+        //         <PostReview text={item.text} />
+        //       ))}
+        //     </View>
+        //     <View style={{paddingTop: hp('1%')}}>
+        //       <Button
+        //         buttonText={'Post a review'}
+        //         onPress={() => alert('working in progress')}
+        //         buttonStyle={styles.buttonStyle}
+        //       />
+        //     </View>
+        //   </View>
+        // ) 
+        : (
           <>
             <ScrollView
               contentContainerStyle={{
@@ -159,7 +183,7 @@ const ListingDetails = ({route}) => {
                 paddingBottom: hp('10%'),
               }}>
               <Text style={styles.review}>Reviews</Text>
-              {changeTab == 2 && reviews_loading ? (
+              {changeTab == 3 && reviews_loading ? (
                 <View style={{alignItems: 'center', marginVertical: hp('6%')}}>
                   <ActivityIndicator size={'large'} color={colors.primary} />
                 </View>
@@ -217,6 +241,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 10,
     padding: hp('2%'),
+    // justifyContent: 'space-between',
     paddingLeft: hp('1%'),
     flexDirection: 'row',
   },
@@ -260,5 +285,23 @@ const styles = StyleSheet.create({
   button: {
     marginTop: hp('4%'),
     borderRadius: 50,
+  },
+  reviewStyle: {
+    backgroundColor: colors.gray,
+    marginTop: hp('4%'),
+    borderWidth: 0.6,
+    borderColor: colors.white,
+    borderRadius: 10,
+    padding: hp('2%'),
+  },
+  reviewHeading: {
+    color: colors.white,
+    fontWeight: 'bold',
+    fontSize: hp('2.2%'),
+  },
+  buttonStyle: {
+    borderRadius: 100,
+    marginBottom: hp('1%'),
+    width: hp('24%'),
   },
 });

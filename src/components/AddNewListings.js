@@ -14,6 +14,7 @@ import {
   AllListingsPicker,
   DesiredItem,
   ExperienceLevel,
+  TeeBox,
   discovers,
   groups,
   handshake,
@@ -438,7 +439,7 @@ const AddNew = () => {
             </Picker>
           </View>
         </View>
-        {DesiredItem.map(item => (
+        {TeeBox.map(item => (
           <DropDownPicker
             text={item.text}
             iconColor={colors.lightgray}
