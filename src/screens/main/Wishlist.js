@@ -25,7 +25,7 @@ const Wishlist = () => {
 
   const dispatch = useDispatch();
 
-  console.log(user.user_id);
+  console.log(wishlist_items);
 
   useEffect(() => {
     if (wishlist_items?.length < 1) {
@@ -48,7 +48,7 @@ const Wishlist = () => {
             }}>
             <ActivityIndicator size={'large'} color={colors.primary} />
           </View>
-        ) : wishlist_items?.length < 1 ? (
+        ) : wishlist_items.message ? (
           <>
             <Image source={images.wishlist1} style={styles.image} />
             <Text style={styles.text}>Your Wishlist is Empty</Text>

@@ -6,8 +6,8 @@ import colors from '../assets/colors';
 import SVGImage from './SVGImage';
 import icons from '../assets/icons';
 
-const MyGroupsCard = ({image, count, title, players, date, area_code, handshake, onPress}) => {
-  console.log(title.length);
+const MyGroupsCard = ({image, count, title, players, date, area_code, handshake, onPress, group}) => {
+  // console.log(title.length);
 
   return (
     <TouchableOpacity style={styles.wrapper} activeOpacity={0.9} onPress={onPress}>
@@ -27,11 +27,11 @@ const MyGroupsCard = ({image, count, title, players, date, area_code, handshake,
           </View>
           <View style={styles.textWrapper}>
             <Text style={styles.text}>
-              Total Players:
+              {group ? 'Private Group:' : 'Total Players:'}
               <Text style={{color: colors.white}}> {players}</Text>
             </Text>
             <Text style={[styles.text, {marginTop: hp('0.5%')}]}>
-              ITC HANDSHAKE:
+              {group ? 'ITC_GROUP_HANDSHAKE:' : 'ITC HANDSHAKE:'}
               <Text style={{color: colors.white}}> {handshake}</Text>
             </Text>
             <View style={styles.border} />

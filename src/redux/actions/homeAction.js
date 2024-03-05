@@ -60,7 +60,7 @@ export const getGroups = () => {
       type: constant.GET_GROUPS,
     });
 
-    await fetch(`${URL}/groups`, {
+    await fetch(`${URL}/all-groups`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -112,14 +112,14 @@ export const getReviews = () => {
   };
 };
 
-export const getNotifications = () => {
+export const getNotifications = (user_id) => {
   return async dispatch => {
     dispatch({
       type: constant.GET_NOTIFICATIONS,
     });
 
     await axios
-      .get(`${URL}/notifications/143`, {
+      .get(`${URL}/notifications/${user_id}`, {
         headers: {
           Accept: 'application/json',
         },
@@ -171,14 +171,29 @@ export const GroupsByAreaCodes = area_code => {
 
 export const ListingsByAreaCodes = area_code => {
   return async dispatch => {
+    dispatch({
+      type: constant.LISTINGS_BY_AREACODE,
+    });
+
     await axios
-      .get(`${URL}/listing-search?area_code=${area_code}`, {
+      .get(`${URL}/search?area_code=${area_code}`, {
         headers: {
           Accept: 'application/json',
         },
       })
       .then(res => {
         console.log('listing filter response =======>', res.data);
+        dispatch({
+          type: constant.LISTINGS_BY_AREACODE_DONE,
+          payload: res.data,
+        });
+      })
+      .catch(error => {
+        console.log('listings filter error =========>', error);
+        dispatch({
+          type: constant.LISTINGS_BY_AREACODE_DONE,
+        });
+        return ShowToast('Some problem occured');
       });
   };
 };

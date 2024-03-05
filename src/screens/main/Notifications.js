@@ -15,11 +15,15 @@ import icons from '../../assets/icons';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import colors from '../../assets/colors';
 import NotificationsCard from '../../components/NotificationsCard';
-import {TodayNotifications, YesterdayNotifications} from '../../DummyData';
 import images from '../../assets/images';
 import {useDispatch, useSelector} from 'react-redux';
 import {getNotifications} from '../../redux/actions/homeAction';
 import moment from 'moment';
+import {AcceptListing, RejectListing} from '../../redux/actions/listingAction';
+import {AcceptGroup, RejectGroup} from '../../redux/actions/groupAction';
+import {ShowToast} from '../../Custom';
+import {useNavigation} from '@react-navigation/native';
+import constant from '../../redux/constant';
 
 const Notifications = () => {
   // const [notifications, setNotifications] = useState('')
@@ -27,15 +31,23 @@ const Notifications = () => {
   const {notification_loader, notifications} = useSelector(
     state => state.HomeReducer,
   );
+
+  const {user} = useSelector(state => state.AuthReducer);
+  const {accept_loader, reject_loader} = useSelector(
+    state => state.GroupReducer,
+  );
+
+  const navigation = useNavigation();
+
   const dispatch = useDispatch();
 
-  console.log('notifications data =====>', notifications);
+  console.log('notifications data =====>', user.user_id);
 
   useEffect(() => {
     // setNotifications(TodayNotifications)
-    if (notifications.length < 1) {
-      dispatch(getNotifications());
-    }
+    // if (notifications.length < 1) {
+    dispatch(getNotifications(user.user_id));
+    // }
   }, []);
 
   const renderLoader = () => {
@@ -50,6 +62,94 @@ const Notifications = () => {
         <ActivityIndicator size={'large'} color={colors.primary} />
       </View>
     );
+  };
+
+  const onAcceptRequest = async item => {
+    if (item.listing_id) {
+      const listing = await dispatch(
+        AcceptListing(
+          user.user_id,
+          item.listing_post_author_id,
+          user.user_email,
+          'accepted your request',
+          item.listing_id,
+        ),
+      );
+      if (listing.message && item.status === 'pending') {
+        navigation.navigate('Home');
+        dispatch({
+          type: constant.ACCEPT_LISTING_DONE,
+          payload: {listingId: item.notification_id, status: listing.status},
+        });
+        return ShowToast(listing.message);
+      } else {
+        return ShowToast(listing.message);
+      }
+    } else {
+      const group = await dispatch(
+        AcceptGroup(
+          user.user_id,
+          item.listing_post_author_id,
+          user.user_email,
+          'accepted your request',
+          item.group_id,
+        ),
+      );
+      if (group.message && item.status === 'pending') {
+        navigation.navigate('Home');
+        dispatch({
+          type: constant.ACCEPT_GROUP_DONE,
+          payload: {listingId: item.notification_id, status: 'accepted'},
+        });
+        return ShowToast(group.message);
+      } else {
+        return ShowToast(group.message);
+      }
+    }
+  };
+
+  const onRejectRequest = async item => {
+    if (item.listing_id) {
+      const listing = await dispatch(
+        RejectListing(
+          user.user_id,
+          item.listing_post_author_id,
+          user.user_email,
+          'rejected your request',
+          item.listing_id,
+        ),
+      );
+      if (listing.message && item.status === 'pending') {
+        navigation.navigate('MainStack');
+        dispatch({
+          type: constant.REJECT_LISTING_DONE,
+          payload: {listingId: item.notification_id, status: 'rejected'},
+        });
+        return ShowToast(listing.message);
+      } else {
+        return ShowToast(listing.message);
+      }
+    } else {
+      const group = await dispatch(
+        RejectGroup(
+          user.user_id,
+          item.listing_post_author_id,
+          user.user_email,
+          'rejected your request',
+          item.listing_id,
+        ),
+      );
+      if (group.message && item.status === 'pending') {
+        navigation.navigate('MainStack');
+        dispatch({
+          type: constant.REJECT_GROUP_DONE,
+          payload: {listingId: item.notification_id, status: 'rejected'},
+        });
+        return ShowToast(group.message);
+      } else {
+        return ShowToast(group.message);
+      }
+    }
   };
 
   return (
@@ -79,18 +179,32 @@ const Notifications = () => {
             {/* <Text style={styles.read}>Mark As All Read</Text> */}
           </View>
           <View style={styles.notificationWrapper}>
-            {notifications?.map(item => (
-              <NotificationsCard
-                image={images.notification3}
-                text={item.notification_text}
-                desc={
-                  item.notification_desc === ''
-                    ? 'Notifications description'
-                    : item.notification_desc
-                }
-                date={moment(item.create_date).format('DD MMMM YYYY')}
-              />
-            ))}
+            {notifications?.map(item => {
+              console.log(item.status);
+              return (
+                <NotificationsCard
+                  image={images.notification3}
+                  onAcceptPress={() => onAcceptRequest(item)}
+                  accept_loader={accept_loader}
+                  reject_loader={reject_loader}
+                  hidebuttons={
+                    item.status === '' ||
+                    item.status === 'accepted' ||
+                    item.status === 'rejected'
+                      ? true
+                      : false
+                  }
+                  onRejectPress={() => onRejectRequest(item)}
+                  text={item.notification_text}
+                  desc={
+                    item.notification_desc === ''
+                      ? 'Notifications description'
+                      : item.notification_desc
+                  }
+                  date={moment(item.create_date).format('DD MMMM YYYY')}
+                />
+              );
+            })}
           </View>
           {/* <Text style={styles.heading}>Yesterday</Text> */}
           {/* <View style={styles.notificationWrapper}>

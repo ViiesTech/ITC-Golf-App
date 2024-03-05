@@ -2,6 +2,7 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  Linking,
   ScrollView,
   StyleSheet,
   Text,
@@ -21,15 +22,26 @@ import PostReview from '../../components/PostReview';
 import ReviewCard from '../../components/ReviewCard';
 import {useSelector, useDispatch} from 'react-redux';
 import {getReviews} from '../../redux/actions/homeAction';
+import {ShowToast} from '../../Custom';
+import {useNavigation} from '@react-navigation/native';
+import {JoinGroup} from '../../redux/actions/groupAction';
+import constant from '../../redux/constant';
 
 const GroupDetail = ({route}) => {
   const [changeTab, setChangeTab] = useState(1);
 
   const {reviews, reviews_loading} = useSelector(state => state.HomeReducer);
+  const {user} = useSelector(state => state.AuthReducer);
+  const {join_loading} = useSelector(state => state.GroupReducer);
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const {item} = route.params;
-  console.log('detail ======>', item);
+  console.log('detail ======>', item.group_id);
+
+  const itemStatus = useSelector(
+    state => state.GroupReducer[item.group_id] || 'Unknown',
+  );
 
   useEffect(() => {
     if (changeTab == 3 && reviews.length < 1) {
@@ -37,10 +49,48 @@ const GroupDetail = ({route}) => {
     }
   }, [changeTab]);
 
+  const onHyperLink = async link => {
+    if (link == '') {
+      return ShowToast('Hyperlink not found');
+    } else {
+      await Linking.openURL(link);
+    }
+  };
+
+  const onJoinGroup = async () => {
+    const res = await dispatch(
+      JoinGroup(
+        user.user_id,
+        item.group_id,
+        item.author_id,
+        item.private_group,
+        item.author_email,
+        'wants to join you',
+      ),
+    );
+    if (res.success) {
+      dispatch({
+        type: constant.JOIN_GROUP_DONE,
+        payload: {listingId: item.group_id, status: res.status},
+      });
+      return ShowToast(res.message);
+    } else {
+      return ShowToast(res.message);
+    }
+  };
+
   return (
     <Container>
       <Header />
-      <SecondaryHeader text={item.listing_title} link={true} />
+      <SecondaryHeader
+        text={item.listing_title}
+        link={true}
+        linkButton={{
+          width:
+            Object.keys(item.listing_title).length > 10 ? hp('10%') : hp('14%'),
+        }}
+        onLinkPress={() => onHyperLink(item.hyper_link)}
+      />
       <ScrollView contentContainerStyle={styles.screen}>
         <View style={styles.tabView}>
           {Tabs.map(item => (
@@ -66,7 +116,18 @@ const GroupDetail = ({route}) => {
             <View style={styles.detailView}>
               <View style={styles.headingView}>
                 <Image source={images.personal1} style={styles.image} />
-                <Text style={styles.name}>{item.listing_title}</Text>
+                <Text
+                  style={[
+                    styles.name,
+                    {
+                      marginRight:
+                        Object.keys(item.listing_title).length > 10
+                          ? hp('3%')
+                          : hp('8%'),
+                    },
+                  ]}>
+                  {item.listing_title}
+                </Text>
               </View>
             </View>
             <View style={styles.formWrapper}>
@@ -79,12 +140,30 @@ const GroupDetail = ({route}) => {
                 <Text style={styles.heading}>WHAT KIND OF MATCH IS THIS:</Text>
                 <Text style={styles.heading}>SUGGESTED DAY:</Text>
                 <Text style={styles.heading}>IS THIS A PRIVATE GROUP:</Text>
-                <Button
-                  buttonText={'Join Group'}
-                  buttonStyle={styles.button}
-                  textStyle={{color: colors.secondary}}
-                  onPress={() => alert('working in progress')}
-                />
+                {itemStatus === 'accepted' ? (
+                  <Button
+                    buttonText={'Go to chat'}
+                    buttonStyle={styles.button}
+                    textStyle={{color: colors.secondary}}
+                    onPress={() =>
+                      navigation.navigate('SecondaryStack', {
+                        screen: 'GroupChat',
+                        params: {title: item.listing_title},
+                      })
+                    }
+                  />
+                ) : (
+                  <Button
+                    buttonText={
+                      itemStatus === 'Unknown' ? 'Join Group' : itemStatus
+                    }
+                    buttonStyle={styles.button}
+                    disable={itemStatus === 'pending' ? true : false}
+                    textStyle={{color: colors.secondary}}
+                    indicator={join_loading}
+                    onPress={() => onJoinGroup()}
+                  />
+                )}
               </View>
               <View style={styles.line} />
               <View>
@@ -184,7 +263,6 @@ const styles = StyleSheet.create({
   name: {
     color: colors.white,
     alignSelf: 'flex-end',
-    marginRight: hp('8%'),
     fontWeight: 'bold',
     fontSize: hp('2%'),
   },

@@ -8,7 +8,7 @@ import SVGImage from './SVGImage';
 import icons from '../assets/icons';
 import Button from './Button';
 
-const SecondaryHeader = ({icon, text, style, link, onLinkPress}) => {
+const SecondaryHeader = ({icon, text, style, link, onLinkPress, linkButton}) => {
   const navigation = useNavigation();
 
   return (
@@ -23,7 +23,7 @@ const SecondaryHeader = ({icon, text, style, link, onLinkPress}) => {
         />
         <Text style={styles.headerText}>{text}</Text>
         {link && (
-          <TouchableOpacity style={styles.linkStyle} activeOpacity={0.9} onPress={onLinkPress}>
+          <TouchableOpacity style={[styles.linkStyle,linkButton]} activeOpacity={0.9} onPress={onLinkPress}>
             <Text style={styles.textStyle}>View Link</Text>
           </TouchableOpacity>
         )}

@@ -6,6 +6,7 @@ import {
   ScrollView,
   FlatList,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
@@ -23,14 +24,23 @@ import Button from '../../components/Button';
 import {useDispatch, useSelector} from 'react-redux';
 import {getReviews} from '../../redux/actions/homeAction';
 import PostReview from '../../components/PostReview';
+import {ShowToast} from '../../Custom';
+import {JoinListing} from '../../redux/actions/listingAction';
+import constant from '../../redux/constant';
+import {useNavigation} from '@react-navigation/native';
 
 const ListingDetails = ({route}) => {
   const [changeTab, setChangeTab] = useState(1);
 
   const dispatch = useDispatch();
+  const navigation = useNavigation();
+  // console.log('kiaaa',navigation.getState().index)
 
-  const {reviews, reviews_loading} = useSelector(state => state.HomeReducer);
-  console.log('reviews response from screen ===============>', reviews);
+  const {reviews, reviews_loading, listing} = useSelector(
+    state => state.HomeReducer,
+  );
+  const {user} = useSelector(state => state.AuthReducer);
+  const {join_loading} = useSelector(state => state.ListingReducer);
 
   useEffect(() => {
     if (changeTab == 3 && reviews.length < 1) {
@@ -39,21 +49,58 @@ const ListingDetails = ({route}) => {
   }, [changeTab]);
 
   const {item} = route.params;
+
+  const itemStatus = useSelector(state => state?.ListingReducer[item.listing_id] || 'Unknown');
+  console.log(itemStatus);
+
+  console.log('reviews response from screen ===============>', item);
+
   console.log(
     'paramsssss ================>',
     Object.keys(item.match_description).length,
   );
+
+  const onHyperLink = async link => {
+    if (link == '') {
+      return ShowToast('Hyperlink not found');
+    } else {
+      await Linking.openURL(link);
+    }
+  };
+
+  const onJoin = async () => {
+    const res = await dispatch(
+      JoinListing(
+        user.user_id,
+        item.author_id,
+        item.listing_id,
+        item.author_email,
+        'listing',
+      ),
+    );
+
+    if (res.success) {
+      dispatch({
+        type: constant.JOIN_LISTING_DONE,
+        payload: {listingId: item.listing_id, status: res.status},
+      });
+      return ShowToast(res.message);
+    } else {
+      return ShowToast(res.message);
+    }
+  };
 
   return (
     <Container>
       <Header />
       <SecondaryHeader
         text={
-          Object.keys(item.listing_title).length == 13
-            ? item.listing_title
-            : 'New Listing'
+          Object.keys(item.listing_title).length > 13
+            ? 'New Listing'
+            : item.listing_title
         }
         link={true}
+        onLinkPress={() => onHyperLink(item.hyper_link)}
       />
       <ScrollView contentContainerStyle={styles.screen}>
         <View style={styles.tabView}>
@@ -81,17 +128,15 @@ const ListingDetails = ({route}) => {
               <View style={styles.headingView}>
                 <Image source={images.personal1} style={styles.image} />
                 <Text style={styles.name}>
-                  {Object.keys(item.listing_title).length == 13
-                    ? item.listing_title
-                    : 'New Listing'}
+                  {Object.keys(item.listing_title).length > 13
+                    ? 'New Listing'
+                    : item.listing_title}
                 </Text>
               </View>
             </View>
             <View style={styles.formWrapper}>
               <View>
                 <Text style={styles.heading}>MATCH DESCRIPTION:</Text>
-                <Text style={styles.heading}>SMOKING FRIENDLY:</Text>
-                <Text style={styles.heading}>DRINKING FRIENDLY:</Text>
                 <Text style={styles.heading}>AREA CODE:</Text>
                 <Text style={styles.heading}>PRIVATE GROUP:</Text>
                 <Text style={styles.heading}>EXPERIENCE LEVEL:</Text>
@@ -100,12 +145,32 @@ const ListingDetails = ({route}) => {
                   <Text style={styles.heading}>SUGGESTED TIME:</Text>
                   <Text style={styles.heading}>HOW MANY PLAYERS:</Text>
                   <Text style={styles.heading}>THE ITC HANDSHAKE:</Text>
-                  <Button
-                    buttonText={'Join Listing'}
-                    buttonStyle={styles.button}
-                    textStyle={{color: colors.secondary}}
-                    onPress={() => alert('working in progress')}
-                  />
+                  <Text style={styles.heading}>SMOKING FRIENDLY:</Text>
+                  <Text style={styles.heading}>DRINKING FRIENDLY:</Text>
+                  {itemStatus === 'accepted' ? (
+                    <Button
+                      buttonText={'Go to chat'}
+                      buttonStyle={styles.button}
+                      textStyle={{color: colors.secondary}}
+                      onPress={() =>
+                        navigation.navigate('SecondaryStack', {
+                          screen: 'GroupChat',
+                          params: {title: item.listing_title},
+                        })
+                      }
+                    />
+                  ) : (
+                    <Button
+                      buttonText={
+                        itemStatus === 'Unknown' ? 'Join Listing' : itemStatus
+                      }
+                      buttonStyle={styles.button}
+                      disable={itemStatus === 'pending' ? true : false}
+                      textStyle={{color: colors.secondary}}
+                      indicator={join_loading}
+                      onPress={() => onJoin()}
+                    />
+                  )}
                 </View>
               </View>
               <View>
@@ -122,12 +187,6 @@ const ListingDetails = ({route}) => {
                   {Object.keys(item.match_description).length == 4
                     ? item.match_description
                     : 'test'}
-                </Text>
-                <Text style={styles.text}>
-                  {item.smoking_friendly == '' ? 'on' : item.smoking_friendly}
-                </Text>
-                <Text style={styles.text}>
-                  {item.drinking_friendly == '' ? 'on' : item.drinking_friendly}
                 </Text>
                 <Text style={styles.text}>
                   {item.area_code_match == '' ? '214' : item.area_code_match}
@@ -154,28 +213,33 @@ const ListingDetails = ({route}) => {
                     ? 'CASUAL HANDSHAKE'
                     : item.the_itc_handshake}
                 </Text>
+                <Text style={styles.text}>
+                  {item.smoking_friendly == '' ? 'on' : item.smoking_friendly}
+                </Text>
+                <Text style={styles.text}>
+                  {item.drinking_friendly == '' ? 'on' : item.drinking_friendly}
+                </Text>
               </View>
             </View>
           </>
-        ) 
-        // : changeTab == 2 ? (
-        //   <View style={styles.reviewStyle}>
-        //     <Text style={styles.reviewHeading}>POST A REVIEW</Text>
-        //     <View style={{paddingTop: hp('3%')}}>
-        //       {postReviewText.map(item => (
-        //         <PostReview text={item.text} />
-        //       ))}
-        //     </View>
-        //     <View style={{paddingTop: hp('1%')}}>
-        //       <Button
-        //         buttonText={'Post a review'}
-        //         onPress={() => alert('working in progress')}
-        //         buttonStyle={styles.buttonStyle}
-        //       />
-        //     </View>
-        //   </View>
-        // ) 
-        : (
+        ) : (
+          // : changeTab == 2 ? (
+          //   <View style={styles.reviewStyle}>
+          //     <Text style={styles.reviewHeading}>POST A REVIEW</Text>
+          //     <View style={{paddingTop: hp('3%')}}>
+          //       {postReviewText.map(item => (
+          //         <PostReview text={item.text} />
+          //       ))}
+          //     </View>
+          //     <View style={{paddingTop: hp('1%')}}>
+          //       <Button
+          //         buttonText={'Post a review'}
+          //         onPress={() => alert('working in progress')}
+          //         buttonStyle={styles.buttonStyle}
+          //       />
+          //     </View>
+          //   </View>
+          // )
           <>
             <ScrollView
               contentContainerStyle={{
@@ -267,7 +331,7 @@ const styles = StyleSheet.create({
     fontSize: hp('1.6%'),
     marginBottom: hp('6%'),
     marginLeft: hp('3.5%'),
-    marginTop: hp('0.1%'),
+    marginTop: hp('0.2%'),
   },
   review: {
     color: colors.white,

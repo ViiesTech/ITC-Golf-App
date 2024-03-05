@@ -45,58 +45,132 @@ const Discover = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const {listing, loader} = useSelector(state => state.HomeReducer);
+  const {listing, loader, listings_filter, listings_filter_loader} =
+    useSelector(state => state.HomeReducer);
 
   React.useEffect(() => {
-    if (listing.length < 1) {
-      dispatch(getListings());
-    }
+    // if (listing.length < 1) {
+    dispatch(getListings());
+    // }
   }, []);
+
+  const renderAllListings = () => {
+    return loader ? (
+      <View style={{alignItems: 'center', marginVertical: hp('5%')}}>
+        <ActivityIndicator size={'large'} color={colors.primary} />
+      </View>
+    ) : (
+      <FlatList
+        data={listing}
+        numColumns={2}
+        columnWrapperStyle={{justifyContent: 'space-between'}}
+        renderItem={({item, index}) => (
+          <DiscoverCard
+            image={images.discover1}
+            onPress={() =>
+              navigation.navigate('SecondaryStack', {
+                screen: 'ListingDetails',
+                params: {item},
+              })
+            }
+            count={index + 1}
+            title={
+              Object.keys(item.listing_title).length > 13
+                ? 'New Listing'
+                : item.listing_title
+            }
+            // itc={
+            //   item.experience_level == ''
+            //     ? '5 to 10 par progress level'
+            //     : item.experience_level
+            // }
+            itc={item.the_itc_handshake}
+            // desc={
+            //   Object.keys(item.match_description).length == 4
+            //     ? item.match_description
+            //     : 'test'
+            // }
+            players={item.how_many_players}
+            date={item.course_date}
+            time={item.course_time == '' ? '23:28' : item.course_time}
+          />
+        )}
+      />
+    );
+  };
+
+  const renderFilterListings = () => {
+    return listings_filter_loader ? (
+      renderLoader()
+    ) : listings_filter.message ? (
+      renderMessage()
+    ) : (
+      <FlatList
+        data={listings_filter}
+        numColumns={2}
+        columnWrapperStyle={{justifyContent: 'space-between'}}
+        renderItem={({item, index}) => (
+          <DiscoverCard
+            image={images.discover1}
+            onPress={() =>
+              navigation.navigate('SecondaryStack', {
+                screen: 'ListingDetails',
+                params: {item},
+              })
+            }
+            count={index + 1}
+            title={
+              Object.keys(item.listing_title).length == 13
+                ? item.listing_title
+                : 'New Listing'
+            }
+            // itc={
+            //   item.experience_level == ''
+            //     ? '5 to 10 par progress level'
+            //     : item.experience_level
+            // }
+            itc={item.the_itc_handshake}
+            // desc={
+            //   Object.keys(item.match_description).length == 4
+            //     ? item.match_description
+            //     : 'test'
+            // }
+            players={item.how_many_players}
+            date={item.course_date}
+            time={item.course_time == '' ? '23:28' : item.course_time}
+          />
+        )}
+      />
+    );
+  };
+
+  const renderMessage = () => {
+    return (
+      <View style={{alignItems: 'center', marginVertical: hp('4%')}}>
+        <Text
+          style={{
+            alignItems: 'center',
+            color: colors.white,
+            fontWeight: 'bold',
+            fontSize: hp('2%'),
+          }}>
+          {listings_filter.message}
+        </Text>
+      </View>
+    );
+  };
+
+  const renderLoader = () => {
+    return (
+      <View style={{alignItems: 'center', marginVertical: hp('4%')}}>
+        <ActivityIndicator color={colors.primary} size={'large'} />
+      </View>
+    );
+  };
 
   return (
     <View style={{paddingTop: hp('4%')}}>
-      {loader ? (
-        <View style={{alignItems: 'center', marginVertical: hp('5%')}}>
-          <ActivityIndicator size={'large'} color={colors.primary} />
-        </View>
-      ) : (
-        <FlatList
-          data={listing}
-          numColumns={2}
-          columnWrapperStyle={{justifyContent: 'space-between'}}
-          renderItem={({item, index}) => (
-            <DiscoverCard
-              image={images.discover1}
-              onPress={() =>
-                navigation.navigate('SecondaryStack', {
-                  screen: 'ListingDetails',
-                  params: {item},
-                })
-              }
-              count={index + 1}
-              title={
-                Object.keys(item.listing_title).length == 13
-                  ? item.listing_title
-                  : 'New Listing'
-              }
-              // itc={
-              //   item.experience_level == ''
-              //     ? '5 to 10 par progress level'
-              //     : item.experience_level
-              // }
-              itc={item.the_itc_handshake}
-              // desc={
-              //   Object.keys(item.match_description).length == 4
-              //     ? item.match_description
-              //     : 'test'
-              // }
-              players={item.how_many_players}
-              date={item.course_date}
-              time={item.course_time == '' ? '23:28' : item.course_time}
-            />
-          )}
-        />
-      )}
+      {!listings_filter_loader ? renderFilterListings() : renderAllListings()}
     </View>
   );
 };
@@ -106,14 +180,15 @@ const MyListings = () => {
     state => state.ListingReducer,
   );
   const {user} = useSelector(state => state.AuthReducer);
+  console.log(my_listings);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
   React.useEffect(() => {
-    if (my_listings?.length < 1) {
-      dispatch(ListingsByUserID(user.user_id));
-    }
+    // if (my_listings?.length < 1) {
+    dispatch(ListingsByUserID(user.user_id));
+    // }
   }, []);
 
   const renderLoader = () => {
@@ -129,7 +204,7 @@ const MyListings = () => {
       <View style={{alignItems: 'center', paddingTop: hp('5%')}}>
         <Text
           style={{color: colors.white, fontSize: hp('2%'), fontWeight: 'bold'}}>
-          You have no upcoming matches
+          {my_listings?.message}
         </Text>
       </View>
     );
@@ -139,7 +214,7 @@ const MyListings = () => {
     <View style={{paddingTop: hp('4%')}}>
       {my_listings_loader
         ? renderLoader()
-        : my_listings?.length < 1
+        : my_listings?.message
         ? renderMessage()
         : my_listings?.map((item, i) => (
             <MyGroupsCard
@@ -203,6 +278,7 @@ const AddNew = () => {
 
   const {create_listing_loading} = useSelector(state => state.ListingReducer);
   const {area_codes} = useSelector(state => state.HomeReducer);
+  const {user} = useSelector(state => state.AuthReducer);
 
   // console.log(typeof state.smoking_friendly)
   // console.log(state.listing_gallery)
@@ -279,6 +355,8 @@ const AddNew = () => {
           state.pickers.desired_tee,
           state.drinking_friendly,
           state.private_listing,
+          state.hyperlink,
+          user.user_id,
         ),
       );
     }

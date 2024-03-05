@@ -1,146 +1,161 @@
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect } from 'react'
-import Container from '../../components/Container'
-import Header from '../../components/Header'
-import SecondaryHeader from '../../components/SecondaryHeader'
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
-import StuffDetailCard from '../../components/StuffDetailCard'
-import Button from '../../components/Button'
-import colors from '../../assets/colors'
-import AddMinus from '../../components/AddMinus'
-import MerchandiseCard from '../../components/MerchandiseCard'
-import images from '../../assets/images'
-import { useDispatch, useSelector } from 'react-redux'
-import { getProductDetails } from '../../redux/actions/productAction'
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, {useEffect} from 'react';
+import Container from '../../components/Container';
+import Header from '../../components/Header';
+import SecondaryHeader from '../../components/SecondaryHeader';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import StuffDetailCard from '../../components/StuffDetailCard';
+import Button from '../../components/Button';
+import colors from '../../assets/colors';
+import AddMinus from '../../components/AddMinus';
+import MerchandiseCard from '../../components/MerchandiseCard';
+import images from '../../assets/images';
+import {useDispatch, useSelector} from 'react-redux';
+import {getProductDetails} from '../../redux/actions/productAction';
 
-const MerchandiseDetails = ({ route }) => {
+const MerchandiseDetails = ({route}) => {
+  const {id, wishlist} = route.params;
+  console.log('product idd params ==========>', wishlist);
 
-    const { id, wishlist } = route.params
-    console.log('product idd params ==========>', wishlist)
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch()
+  const {product_detail, product_detail_loading} = useSelector(
+    state => state.ProductReducer,
+  );
+  // console.log('product details from screen =========> ==========>', product_detail[id])
 
-    const { product_detail, product_detail_loading } = useSelector(state => state.ProductReducer)
-    // console.log('product details from screen =========> ==========>', product_detail[id])
-
-    useEffect(() => {
-
-        if (!product_detail[id]) {
-            dispatch(getProductDetails(id))
-        }
-
-    }, [])
-
-    if (product_detail_loading) {
-        return (
-            <View style={{ flex: 1, backgroundColor: colors.secondary, justifyContent: 'center', alignItems: 'center' }}>
-                <ActivityIndicator
-                    size={'large'}
-                    color={colors.primary}
-                />
-            </View>
-        )
+  useEffect(() => {
+    if (!product_detail[id]) {
+      dispatch(getProductDetails(id));
     }
+  }, []);
 
+  if (product_detail_loading) {
     return (
-        <Container>
-            <Header />
-            <SecondaryHeader
-                text={'Free Stuff Merchandise'}
-            />
-            <ScrollView contentContainerStyle={styles.screen} showsVerticalScrollIndicator={false}>
-                <StuffDetailCard
-                    title={product_detail[id]?.title}
-                    image={{ uri: product_detail[id]?.image }}
-                    favourite={wishlist}
-                    desc={product_detail[id]?.description}
-                />
-                <View style={styles.wrapper}>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Button
-                            buttonText={'Add To Cart'}
-                            textStyle={styles.buttonText}
-                            buttonStyle={styles.button}
-                        />
-                        <Button
-                            buttonText={'Book Now'}
-                            textStyle={styles.button2Text}
-                            buttonStyle={styles.button2}
-                        />
-                    </View>
-                    <View style={{ marginLeft: hp('2%'), }}>
-                        <Text style={styles.price}>$99.00</Text>
-                        <View style={{ paddingTop: hp('1%') }}>
-                            <AddMinus />
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.border} />
-                <Text style={styles.heading}>Related Products</Text>
-                <View style={{ paddingTop: hp('4%'), flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <MerchandiseCard
-                        image={images.stuff3}
-                        desc={'Lorem Ipsum Dolor Sit Amet, Consetetur'}
-                        text={'Golf Gloves'}
-                    />
-                    <MerchandiseCard
-                        image={images.stuff4}
-                        imageStyle={{ height: hp('18%'), width: '54%' }}
-                        style={{ marginLeft: hp('2.6%') }}
-                        desc={'Lorem Ipsum Dolor Sit Amet, Consetetur'}
-                        text={'Golf Tees'}
-                    />
-                </View>
-            </ScrollView>
-        </Container>
-    )
-}
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.secondary,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ActivityIndicator size={'large'} color={colors.primary} />
+      </View>
+    );
+  }
 
-export default MerchandiseDetails
+  return (
+    <Container>
+      <Header />
+      <SecondaryHeader text={'Free Stuff Merchandise'} />
+      <ScrollView
+        contentContainerStyle={styles.screen}
+        showsVerticalScrollIndicator={false}>
+        <StuffDetailCard
+          title={product_detail[id]?.title}
+          image={{uri: product_detail[id]?.image}}
+          favourite={wishlist}
+          desc={product_detail[id]?.description}
+        />
+        <View style={styles.wrapper}>
+          <View style={{flexDirection: 'row'}}>
+            <Button
+              buttonText={'Add To Cart'}
+              textStyle={styles.buttonText}
+              buttonStyle={styles.button}
+            />
+            <Button
+              buttonText={'Book Now'}
+              textStyle={styles.button2Text}
+              buttonStyle={styles.button2}
+            />
+          </View>
+          <View style={{marginLeft: hp('2%')}}>
+            <Text style={styles.price}>$99.00</Text>
+            <View style={{paddingTop: hp('1%')}}>
+              <AddMinus />
+            </View>
+          </View>
+        </View>
+        <View style={styles.border} />
+        <Text style={styles.heading}>Related Products</Text>
+        <View
+          style={{
+            paddingTop: hp('4%'),
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <MerchandiseCard
+            image={images.stuff3}
+            desc={'Lorem Ipsum Dolor Sit Amet, Consetetur'}
+            text={'Golf Gloves'}
+            descStyle={{top: hp('27.5%')}}
+          />
+          <MerchandiseCard
+            image={images.stuff4}
+            imageStyle={{height: hp('18%'), width: '54%'}}
+            style={{marginLeft: hp('2.6%')}}
+            desc={'Lorem Ipsum Dolor Sit Amet, Consetetur'}
+            descStyle={{top: hp('27.5%')}}
+            text={'Golf Tees'}
+          />
+        </View>
+      </ScrollView>
+    </Container>
+  );
+};
+
+export default MerchandiseDetails;
 
 const styles = StyleSheet.create({
-    screen: {
-        padding: hp('1.6%'),
-        paddingTop: hp('5%')
-    },
-    wrapper: {
-        paddingTop: hp('4%'),
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    button: {
-        borderRadius: 100,
-        width: hp('15%'),
-    },
-    button2: {
-        borderWidth: 2,
-        backgroundColor: 'transparent',
-        borderColor: colors.white,
-        borderRadius: 100,
-        width: hp('15%'),
-        marginLeft: hp('1%')
-    },
-    buttonText: {
-        fontSize: hp('2%'),
-        color: colors.secondary
-    },
-    button2Text: {
-        fontSize: hp('2%'),
-    },
-    price: {
-        color: colors.white,
-        marginLeft: hp('4%'),
-        fontWeight: 'bold'
-    },
-    border: {
-        borderBottomWidth: 1,
-        marginTop: hp('5%'),
-        borderBottomColor: colors.gray
-    },
-    heading: {
-        color: colors.white,
-        fontWeight: 'bold',
-        paddingTop: hp('4%'),
-        fontSize: hp('2.5%')
-    }
-})
+  screen: {
+    padding: hp('1.6%'),
+    paddingTop: hp('5%'),
+  },
+  wrapper: {
+    paddingTop: hp('4%'),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  button: {
+    borderRadius: 100,
+    width: hp('15%'),
+  },
+  button2: {
+    borderWidth: 2,
+    backgroundColor: 'transparent',
+    borderColor: colors.white,
+    borderRadius: 100,
+    width: hp('15%'),
+    marginLeft: hp('1%'),
+  },
+  buttonText: {
+    fontSize: hp('2%'),
+    color: colors.secondary,
+  },
+  button2Text: {
+    fontSize: hp('2%'),
+  },
+  price: {
+    color: colors.white,
+    marginLeft: hp('4%'),
+    fontWeight: 'bold',
+  },
+  border: {
+    borderBottomWidth: 1,
+    marginTop: hp('5%'),
+    borderBottomColor: colors.gray,
+  },
+  heading: {
+    color: colors.white,
+    fontWeight: 'bold',
+    paddingTop: hp('4%'),
+    fontSize: hp('2.5%'),
+  },
+});

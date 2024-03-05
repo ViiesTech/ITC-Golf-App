@@ -12,6 +12,8 @@ const initialState = {
   area_codes: [],
   groups_filter: [],
   filter_loading: false,
+  listings_filter: [],
+  listings_filter_loader: false,
 };
 
 export default (state = initialState, action) => {
@@ -46,7 +48,6 @@ export default (state = initialState, action) => {
         notifications: action.payload,
         notification_loader: false,
       };
-      
 
     case constant.GROUPS_BY_AREACODE:
       return {...state, filter_loading: true};
@@ -56,6 +57,16 @@ export default (state = initialState, action) => {
         ...state,
         filter_loading: false,
         groups_filter: action.payload,
+      };
+
+    case constant.LISTINGS_BY_AREACODE:
+      return {...state, listings_filter_loader: true};
+
+    case constant.LISTINGS_BY_AREACODE_DONE:
+      return {
+        ...state,
+        listings_filter: action.payload,
+        listings_filter_loader: false,
       };
 
     default:

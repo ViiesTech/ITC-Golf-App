@@ -32,62 +32,136 @@ const Discover = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const {groups, group_loader} = useSelector(state => state.HomeReducer);
+  const {groups, group_loader, groups_filter, filter_loading} = useSelector(
+    state => state.HomeReducer,
+  );
   console.log('groups api data =============>', groups);
 
   React.useEffect(() => {
-    if (groups.length < 1) {
-      dispatch(getGroups());
-    }
+    // if (groups.length < 1) {
+    dispatch(getGroups());
+    // }
   }, []);
+
+  const renderAllGroups = () => {
+    return group_loader ? (
+      <View style={{alignItems: 'center', marginVertical: hp('5%')}}>
+        <ActivityIndicator size={'large'} color={colors.primary} />
+      </View>
+    ) : (
+      <FlatList
+        data={groups}
+        numColumns={2}
+        columnWrapperStyle={{justifyContent: 'space-between'}}
+        renderItem={({item, index}) => (
+          <DiscoverCard
+            image={images.discover2}
+            onPress={() =>
+              navigation.navigate('SecondaryStack', {
+                screen: 'GroupDetail',
+                params: {item},
+              })
+            }
+            title={item.listing_title}
+            titleStyle={{fontSize: hp('1.6%')}}
+            count={index + 1}
+            group={true}
+            players={item.group_desired_teebox}
+            date={
+              item.suggested_day == '02/18/24' ? item.suggested_day : '02/18/24'
+            }
+            area_code={
+              item.area_code === 'Select a Area Code' ? '240' : item.area_code
+            }
+            desc={
+              item.group_desired_teebox.length == 0
+                ? 'All Other'
+                : item.group_desired_teebox
+            }
+            itc={
+              item.itc_group_handshake.length == 0
+                ? 'CASUAL HANDSHAKE'
+                : item.itc_group_handshake
+            }
+          />
+        )}
+      />
+    );
+  };
+
+  const renderMessage = () => {
+    return (
+      <View style={{alignItems: 'center', marginVertical: hp('4%')}}>
+        <Text
+          style={{
+            alignItems: 'center',
+            color: colors.white,
+            fontWeight: 'bold',
+            fontSize: hp('2%'),
+          }}>
+          {groups_filter.message}
+        </Text>
+      </View>
+    );
+  };
+
+  const renderLoader = () => {
+    return (
+      <View style={{alignItems: 'center', marginVertical: hp('4%')}}>
+        <ActivityIndicator color={colors.primary} size={'large'} />
+      </View>
+    );
+  };
+
+  const renderFilterGroups = () => {
+    return filter_loading ? (
+      renderLoader()
+    ) : groups_filter.message ? (
+      renderMessage()
+    ) : (
+      <FlatList
+        data={groups_filter}
+        numColumns={2}
+        columnWrapperStyle={{justifyContent: 'space-between'}}
+        renderItem={({item, index}) => (
+          <DiscoverCard
+            image={images.discover2}
+            onPress={() =>
+              navigation.navigate('SecondaryStack', {
+                screen: 'GroupDetail',
+                params: {item},
+              })
+            }
+            title={item.listing_title}
+            titleStyle={{fontSize: hp('1.6%')}}
+            count={index + 1}
+            group={true}
+            players={item.group_desired_teebox}
+            date={
+              item.suggested_day == '02/18/24' ? item.suggested_day : '02/18/24'
+            }
+            area_code={
+              item.area_code === 'Select a Area Code' ? '240' : item.area_code
+            }
+            desc={
+              item.group_desired_teebox.length == 0
+                ? 'All Other'
+                : item.group_desired_teebox
+            }
+            itc={
+              item.itc_group_handshake.length == 0
+                ? 'CASUAL HANDSHAKE'
+                : item.itc_group_handshake
+            }
+          />
+        )}
+      />
+    );
+  };
 
   return (
     <View style={{paddingTop: hp('4%')}}>
-      {group_loader ? (
-        <View style={{alignItems: 'center', marginVertical: hp('5%')}}>
-          <ActivityIndicator size={'large'} color={colors.primary} />
-        </View>
-      ) : (
-        <FlatList
-          data={groups}
-          numColumns={2}
-          columnWrapperStyle={{justifyContent: 'space-between'}}
-          renderItem={({item, index}) => (
-            <DiscoverCard
-              image={images.discover2}
-              onPress={() =>
-                navigation.navigate('SecondaryStack', {
-                  screen: 'GroupDetail',
-                  params: {item},
-                })
-              }
-              title={item.listing_title}
-              titleStyle={{fontSize: hp('1.6%')}}
-              count={index + 1}
-              group={true}
-              players={item.group_desired_teebox}
-              date={
-                item.suggested_day == '02/18/24'
-                  ? item.suggested_day
-                  : '02/18/24'
-              }
-              area_code={
-                item.area_code === 'Select a Area Code' ? '240' : item.area_code
-              }
-              desc={
-                item.group_desired_teebox.length == 0
-                  ? 'All Other'
-                  : item.group_desired_teebox
-              }
-              itc={
-                item.itc_group_handshake.length == 0
-                  ? 'CASUAL HANDSHAKE'
-                  : item.itc_group_handshake
-              }
-            />
-          )}
-        />
-      )}
+      {!filter_loading  ? renderFilterGroups() : renderAllGroups()}
     </View>
   );
 };
@@ -97,15 +171,17 @@ const MyGroups = () => {
     state => state.GroupReducer,
   );
 
-  console.log('my groups from screen =============>', my_groups_loader);
+  console.log('my groups from screen =============>', my_groups);
   const {user} = useSelector(state => state.AuthReducer);
+
+  const navigation = useNavigation();
 
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    if (my_groups.length < 1) {
-      dispatch(getGroupsById(user.user_id));
-    }
+    // if (my_groups?.length < 1) {
+    dispatch(getGroupsById(user.user_id));
+    // }
   }, []);
 
   const renderLoader = () => {
@@ -138,9 +214,26 @@ const MyGroups = () => {
     <View style={{paddingTop: hp('4%')}}>
       {my_groups_loader
         ? renderLoader()
-        : my_groups.length < 1
+        : my_groups?.length < 1
         ? renderMessage()
-        : my_groups.map(item => <MyGroupsCard image={images.about1} />)}
+        : my_groups?.map((item, i) => (
+            <MyGroupsCard
+              image={images.about1}
+              title={item.listing_title}
+              count={i + 1}
+              area_code={item.area_code}
+              date={item.suggested_day}
+              group={true}
+              handshake={item.itc_group_handshake}
+              players={item.private_group == '1' ? 'Yes' : 'No'}
+              onPress={() =>
+                navigation.navigate('SecondaryStack', {
+                  screen: 'GroupDetail',
+                  params: {item},
+                })
+              }
+            />
+          ))}
     </View>
   );
 };
@@ -167,6 +260,7 @@ const AddNew = () => {
   const dispatch = useDispatch();
   const {create_group_loading} = useSelector(state => state.GroupReducer);
   const {area_codes} = useSelector(state => state.HomeReducer);
+  const {user} = useSelector(state => state.AuthReducer);
 
   // console.log('oh hello', typeof state.suggested_day)
 
@@ -193,6 +287,8 @@ const AddNew = () => {
           state.pickers.desired_tee,
           state.suggested_day,
           state.pickers.kind_listing,
+          state.hyperlink,
+          user.user_id,
         ),
       );
     }
@@ -380,7 +476,7 @@ const AddNew = () => {
         />
         <ContactInput
           label={'Hyper Link'}
-          value={state.group_title}
+          value={state.hyperlink}
           onChangeText={text =>
             setState({
               ...state,

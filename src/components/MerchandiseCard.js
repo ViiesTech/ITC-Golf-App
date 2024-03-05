@@ -7,7 +7,7 @@ import Heart from 'react-native-vector-icons/AntDesign'
 import SVGImage from './SVGImage'
 import icons from '../assets/icons'
 
-const MerchandiseCard = ({ text, image, onPress, style, desc, rating, imageStyle, favourite, heartPress }) => {
+const MerchandiseCard = ({ text, image, onPress, style, desc, rating, imageStyle, favourite, heartPress, descStyle }) => {
 
     return (
         <View style={[styles.component, style]}>
@@ -28,7 +28,7 @@ const MerchandiseCard = ({ text, image, onPress, style, desc, rating, imageStyle
                     />
                 </TouchableOpacity>
             </View>
-            <Text style={[styles.desc, { paddingTop: text.length > 45 && hp('1.6%') }]}>{desc == '' ? 'Lorem Ipsum Dolor Sit Amet, Consetetur' : desc}</Text>
+            <Text style={[styles.desc, { paddingTop: text.length > 45 && hp('1.6%') },descStyle]}>{desc == '' ? 'Lorem Ipsum Dolor Sit Amet, Consetetur' : desc}</Text>
             <View style={styles.wrapper}>
                 <StarRating
                     starSize={12}

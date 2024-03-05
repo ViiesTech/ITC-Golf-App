@@ -1830,3 +1830,36 @@ export const postReviewText = [
     text: 'RANK YOUR OVERALL EXPERINCE WITH THIS MEMBER?',
   },
 ];
+
+export const members = [
+  {
+    id: 1,
+    text: 'Test User',
+    images: images.profile,
+  },
+  {
+    id: 2,
+    text: 'Test',
+    images: images.profile,
+  },
+  {
+    id: 3,
+    text: 'User',
+    images: images.profile,
+  },
+  {
+    id: 4,
+    text: 'Hello',
+    images: images.profile,
+  },
+  {
+    id: 5,
+    text: 'Test1',
+    images: images.profile,
+  },
+  {
+    id: 6,
+    text: 'Test4',
+    images: images.profile,
+  },
+];

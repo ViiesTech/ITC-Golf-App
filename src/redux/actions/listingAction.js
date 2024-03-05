@@ -13,6 +13,8 @@ export const createListing = (
   desired_tee,
   drinking_friendly,
   private_listing,
+  hyperlink,
+  user_id,
 ) => {
   return async dispatch => {
     dispatch({
@@ -30,6 +32,8 @@ export const createListing = (
       desired_tee_box: desired_tee,
       drinking_friendly: drinking_friendly,
       private_match: private_listing,
+      hyper_link: hyperlink,
+      user_id: user_id,
     };
 
     await axios
@@ -85,6 +89,123 @@ export const ListingsByUserID = user_id => {
         console.log('my listings error ========>', error);
         dispatch({
           type: constant.GET_MY_LISTINGS_DONE,
+        });
+        return ShowToast('Some problem occured');
+      });
+  };
+};
+
+export const JoinListing = (
+  user_id,
+  post_id,
+  listing_id,
+  author_email,
+  noti_text,
+) => {
+  return async dispatch => {
+    dispatch({
+      type: constant.JOIN_LISTING,
+    });
+
+    return await axios
+      .post(
+        `${URL}/join-listing?current_user_id=${user_id}&current_post_id=${post_id}&listing_id=${listing_id}&current_post_author_email=${author_email}&notification_text=${noti_text}`,
+        {},
+        {
+          headers: {
+            Accept: 'application/json',
+          },
+        },
+      )
+      .then(res => {
+        console.log('join listing response =======>', res.data);
+        // dispatch({
+        //   type: constant.JOIN_LISTING_DONE,
+        // });
+        return res.data;
+      })
+      .catch(error => {
+        console.log('join listing error =========>', error);
+        dispatch({
+          type: constant.JOIN_LISTING_DONE,
+        });
+        return ShowToast('Some problem occured');
+      });
+  };
+};
+
+export const AcceptListing = (
+  user_id,
+  author_id,
+  user_email,
+  noti_text,
+  listing_id,
+) => {
+  return async dispatch => {
+    dispatch({
+      type: constant.ACCEPT_LISTING,
+    });
+
+    return await axios
+      .post(
+        `${URL}/accept-listing-request?sending_user_id=${user_id}&current_author_id=${author_id}&sending_user_email=${user_email}&notification_text=${noti_text}&listing_id=${listing_id}`,
+        {},
+        {
+          headers: {
+            Accept: 'application/json',
+          },
+        },
+      )
+      .then(res => {
+        console.log('accept listing response ========>', res.data);
+        dispatch({
+          type: constant.ACCEPT_LISTING_DONE,
+        });
+        return res.data;
+      })
+      .catch(error => {
+        console.log('accept listing error =======>', error);
+        dispatch({
+          type: constant.ACCEPT_LISTING_DONE,
+        });
+        return ShowToast('Some problem occured');
+      });
+  };
+};
+
+export const RejectListing = (
+  user_id,
+  author_id,
+  user_email,
+  noti_text,
+  listing_id,
+) => {
+  return async dispatch => {
+    dispatch({
+      type: constant.REJECT_LISTING,
+    });
+
+    return await axios
+      .post(
+        `${URL}/reject-request?sending_user_id=${user_id}&current_author_id=${author_id}&sending_user_email=${user_email}&notification_text=${noti_text}&listing_id=${listing_id}`,
+        {},
+        {
+          headers: {
+            Accept: 'application/json',
+          },
+        },
+      )
+      .then(res => {
+        console.log('reject listing response ========>', res.data);
+        dispatch({
+          type: constant.REJECT_LISTING_DONE,
+        });
+        return res.data;
+      })
+      .catch(error => {
+        console.log('reject listing error =======>', error);
+        dispatch({
+          type: constant.REJECT_LISTING_DONE,
         });
         return ShowToast('Some problem occured');
       });

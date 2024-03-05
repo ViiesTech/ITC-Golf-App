@@ -26,15 +26,21 @@ import {useNavigation} from '@react-navigation/native';
 import AppStatusBar from '../../components/AppStatusBar';
 import {Picker} from '@react-native-picker/picker';
 import {useDispatch, useSelector} from 'react-redux';
-import {getAllAreaCodes, getListings} from '../../redux/actions/homeAction';
+import {
+  ListingsByAreaCodes,
+  getAllAreaCodes,
+  getListings,
+} from '../../redux/actions/homeAction';
 import Sponsors from '../../components/Sponsors';
 
 const Home = () => {
   const [selectedOption, setSelectedOption] = useState('');
+  const [searchPressed, setSearchPressed] = useState(false);
 
   const width = Dimensions.get('screen').width;
 
-  const {listing, loader, area_codes} = useSelector(state => state.HomeReducer);
+  const {listing, loader, area_codes, listings_filter, listings_filter_loader} =
+    useSelector(state => state.HomeReducer);
   // console.log('listinggg', area_codes);
 
   const dispatch = useDispatch();
@@ -61,6 +67,132 @@ const Home = () => {
       </View>
     );
   }
+
+  const onSearchAreaCode = async () => {
+    if (selectedOption) {
+     await dispatch(ListingsByAreaCodes(selectedOption));
+      setSearchPressed(true);
+    } else {
+      setSearchPressed(false);
+    }
+  };
+
+  const renderAllListings = () => {
+    return listing?.map((item, index) => (
+      <View
+        style={
+          index !== 7 && {
+            borderBottomWidth: 1,
+            borderBottomColor: colors.lightgray,
+            marginBottom: hp('2.5%'),
+          }
+        }>
+        <ListingCard
+          key={item.id}
+          number={index + 1}
+          title={
+            Object.keys(item.listing_title).length > 13
+              ? 'New Listing'
+              : item.listing_title
+          }
+          // descStyle={{ width: index == 0 ? '20%' : index == 1 ? '40%' : '100%' }}
+          count={
+            item.how_many_players == 'Select a Value'
+              ? '3'
+              : item.how_many_players
+          }
+          exp={
+            item.experience_level == ''
+              ? '5 to 10 par progress-level'
+              : item.experience_level
+          }
+          date={item.course_date}
+          desc={
+            Object.keys(item.match_description).length == 4
+              ? item.match_description
+              : 'test'
+          }
+          // image={item.image}
+          onPress={() =>
+            navigation.navigate('SecondaryStack', {
+              screen: 'ListingDetails',
+              params: {item},
+            })
+          }
+        />
+      </View>
+    ));
+  };
+
+  const renderFilterListings = () => {
+    return listings_filter_loader
+      ? renderFilterLoader()
+      : listings_filter?.message
+      ? renderFilterMessage()
+      : listings_filter?.map((item, index) => (
+          <View
+            style={
+              index !== 7 && {
+                borderBottomWidth: 1,
+                borderBottomColor: colors.lightgray,
+                marginBottom: hp('2.5%'),
+              }
+            }>
+            <ListingCard
+              key={item.id}
+              number={index + 1}
+              title={
+                Object.keys(item.listing_title).length > 13
+                  ? 'New Listing'
+                  : item.listing_title
+              }
+              // descStyle={{ width: index == 0 ? '20%' : index == 1 ? '40%' : '100%' }}
+              count={
+                item.how_many_players == 'Select a Value'
+                  ? '3'
+                  : item.how_many_players
+              }
+              exp={
+                item.experience_level == ''
+                  ? '5 to 10 par progress-level'
+                  : item.experience_level
+              }
+              date={item.course_date}
+              desc={
+                Object.keys(item.match_description).length == 4
+                  ? item.match_description
+                  : 'test'
+              }
+              // image={item.image}
+              onPress={() =>
+                navigation.navigate('SecondaryStack', {
+                  screen: 'ListingDetails',
+                  params: {item},
+                })
+              }
+            />
+          </View>
+        ));
+  };
+
+  const renderFilterLoader = () => {
+    return (
+      <View style={{alignItems: 'center', marginVertical: hp('2%')}}>
+        <ActivityIndicator size={'large'} color={colors.primary} />
+      </View>
+    );
+  };
+
+  const renderFilterMessage = () => {
+    return (
+      <View style={{alignItems: 'center', marginVertical: hp('2%')}}>
+        <Text
+          style={{color: colors.white, fontWeight: 'bold', fontSize: hp('2%')}}>
+          {listings_filter?.message}
+        </Text>
+      </View>
+    );
+  };
 
   return (
     <>
@@ -118,55 +250,12 @@ const Home = () => {
               <Button
                 buttonText={'Search'}
                 icon={true}
-                onPress={() => alert('working in progress')}
+                onPress={() => onSearchAreaCode()}
               />
             </View>
             <Text style={styles.text}>Listing</Text>
             <View style={styles.cardWrapper}>
-              {listing?.map((item, index) => (
-                <View
-                  style={
-                    index !== 7 && {
-                      borderBottomWidth: 1,
-                      borderBottomColor: colors.lightgray,
-                      marginBottom: hp('2.5%'),
-                    }
-                  }>
-                  <ListingCard
-                    key={item.id}
-                    number={index + 1}
-                    title={
-                      Object.keys(item.listing_title).length == 13
-                        ? item.listing_title
-                        : 'New Listing'
-                    }
-                    // descStyle={{ width: index == 0 ? '20%' : index == 1 ? '40%' : '100%' }}
-                    count={
-                      item.how_many_players == 'Select a Value'
-                        ? '3'
-                        : item.how_many_players
-                    }
-                    exp={
-                      item.experience_level == ''
-                        ? '5 to 10 par progress-level'
-                        : item.experience_level
-                    }
-                    date={item.course_date}
-                    desc={
-                      Object.keys(item.match_description).length == 4
-                        ? item.match_description
-                        : 'test'
-                    }
-                    // image={item.image}
-                    onPress={() =>
-                      navigation.navigate('SecondaryStack', {
-                        screen: 'ListingDetails',
-                        params: {item},
-                      })
-                    }
-                  />
-                </View>
-              ))}
+              {searchPressed ? renderFilterListings() : renderAllListings()}
             </View>
             <TouchableOpacity
               style={styles.button}

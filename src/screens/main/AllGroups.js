@@ -35,8 +35,18 @@ import {useDispatch, useSelector} from 'react-redux';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {PlayersFollow} from '../../redux/actions/authAction';
 import {Picker} from '@react-native-picker/picker';
+import {
+  GroupsByAreaCodes,
+  ListingsByAreaCodes,
+  getGroups,
+  getListings,
+} from '../../redux/actions/homeAction';
 
 const AllGroups = ({route}) => {
+  const [listingsCode, setListingsCode] = useState(null);
+  const [groupsCode, setGroupsCode] = useState(null);
+  const [searchPressed, setSearchPressed] = useState(false);
+
   const {user, follow_loader, players_follow} = useSelector(
     state => state.AuthReducer,
   );
@@ -45,7 +55,7 @@ const AllGroups = ({route}) => {
 
   const {listing_id} = useSelector(state => state.ListingReducer);
 
-  console.log('listing id ========>', listing_id);
+  console.log('listing id ========>', groupsCode, listingsCode);
 
   const [state, setState] = useState({
     first_name: user.first_name,
@@ -112,6 +122,34 @@ const AllGroups = ({route}) => {
     });
   };
 
+  // const onGroupSearch = async () => {
+  //   if (groupsCode) {
+  //     await dispatch(GroupsByAreaCodes(groupsCode));
+  //   }
+  // };
+
+  // const onListingSearch = async () => {
+  //   if (listingsCode) {
+  //     await dispatch(ListingsByAreaCodes(listingsCode));
+  //   }
+  // };
+
+  useEffect(() => {
+    if (listingsCode) {
+      dispatch(ListingsByAreaCodes(listingsCode));
+    } else {
+      dispatch(getListings())
+    }
+  }, [listingsCode]);
+
+  useEffect(() => {
+    if (groupsCode) {
+      dispatch(GroupsByAreaCodes(groupsCode));
+    } else {
+      dispatch(getGroups())
+    }
+  }, [groupsCode]);
+
   return (
     <Container>
       <Header />
@@ -145,14 +183,24 @@ const AllGroups = ({route}) => {
           />
           {changeTab === 'Add New Groups' ? (
             <>
-              <SearchFilter style={{width: '100%'}} />
+              <SearchFilter
+                style={{width: '100%'}}
+                selectedValue={groupsCode}
+                // onSearchPress={() => onGroupSearch()}
+                onValueChange={value => setGroupsCode(value)}
+              />
               <View style={{height: '400%'}}>
                 <AddNewGroups />
               </View>
             </>
           ) : changeTab === 'Add New Listings' ? (
             <>
-              <SearchFilter style={{width: '100%'}} />
+              <SearchFilter
+                style={{width: '100%'}}
+                selectedValue={listingsCode}
+                // onSearchPress={() => onListingSearch()}
+                onValueChange={value => setListingsCode(value)}
+              />
               <View style={{height: '400%'}}>
                 <AddNewListings />
               </View>

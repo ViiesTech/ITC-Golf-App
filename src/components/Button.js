@@ -5,10 +5,11 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import Search from 'react-native-vector-icons/AntDesign';
 import Loader from './Loader';
 
-const Button = ({ onPress, buttonStyle, buttonText, textStyle, icon, indicator }) => {
+const Button = ({ onPress, buttonStyle, buttonText, textStyle, icon, indicator, disable }) => {
     return (
         <TouchableOpacity style={[styles.button, buttonStyle]}
             onPress={onPress}
+            disabled={disable}
             activeOpacity={0.9}
         >
             <View style={{ flexDirection: icon && 'row' }}>
