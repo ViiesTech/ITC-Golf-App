@@ -115,14 +115,14 @@ const styles = StyleSheet.create({
   },
   winText: {
     color: colors.white,
-    position: 'absolute',
-    top: hp('7%'),
+    // position: 'absolute',
+    marginTop: hp('2%'),
     fontSize: hp('1.6%'),
     fontWeight: 'bold',
   },
   loseText: {
     color: colors.white,
-    marginTop: hp('7.5%'),
+    marginTop: hp('1.5%'),
     fontSize: hp('1.5%'),
   },
   line: {

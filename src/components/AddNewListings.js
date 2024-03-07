@@ -39,12 +39,13 @@ import {
   DeleteListing,
   ListingsByUserID,
   createListing,
+  editListing,
 } from '../redux/actions/listingAction';
 import {getListings} from '../redux/actions/homeAction';
 import images from '../assets/images';
 import {Picker} from '@react-native-picker/picker';
 import {useNavigation} from '@react-navigation/native';
-import {TabActions} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 
 const Discover = () => {
   const dispatch = useDispatch();
@@ -174,7 +175,7 @@ const Discover = () => {
   return <View style={{paddingTop: hp('4%')}}>{renderAllListings()}</View>;
 };
 
-const MyListings = ({jumpTo}) => {
+const MyListings = ({jumpTo, setListingData}) => {
   const [deletePressed, setDeletePressed] = React.useState(false);
   const [loaderIndex, setLoaderIndex] = React.useState(null);
   const {my_listings, my_listings_loader, delete_loader} = useSelector(
@@ -182,8 +183,11 @@ const MyListings = ({jumpTo}) => {
   );
   const {user} = useSelector(state => state.AuthReducer);
 
+
   const dispatch = useDispatch();
   const navigation = useNavigation();
+
+  const isFocused = useIsFocused()
 
   React.useEffect(() => {
     if (deletePressed || !deletePressed) {
@@ -220,8 +224,9 @@ const MyListings = ({jumpTo}) => {
     }
   };
 
-  const onEditListing = () => {
-   jumpTo('third')
+  const onEditListing = item => {
+    jumpTo('third');
+    setListingData(item);
   };
 
   return (
@@ -234,7 +239,7 @@ const MyListings = ({jumpTo}) => {
             <MyGroupsCard
               deleteText={'Delete Listing'}
               onDeletePress={() => onDeleteListing(item.listing_id, index)}
-              onEditPress={() => onEditListing()}
+              onEditPress={() => onEditListing(item)}
               image={
                 item.feature_image
                   ? {uri: item.feature_image}
@@ -263,7 +268,7 @@ const MyListings = ({jumpTo}) => {
   );
 };
 
-const AddNew = () => {
+const AddNew = ({listingData, jumpTo}) => {
   const [state, setState] = React.useState({
     location: '',
     suggested_day: '',
@@ -293,13 +298,16 @@ const AddNew = () => {
   });
 
   const dispatch = useDispatch();
+  const navigation = useNavigation()
 
-  const {create_listing_loading} = useSelector(state => state.ListingReducer);
+  const {create_listing_loading, edit_loader} = useSelector(
+    state => state.ListingReducer,
+  );
   const {area_codes} = useSelector(state => state.HomeReducer);
   const {user} = useSelector(state => state.AuthReducer);
 
   // console.log(typeof state.smoking_friendly)
-  // console.log(state.listing_gallery)
+  console.log('dataaa', listingData);
 
   const onChoosePhoto = async (type, index) => {
     const options = {
@@ -357,27 +365,109 @@ const AddNew = () => {
     }));
   };
 
+  const initialState = () => {
+    setState({
+      location: '',
+      suggested_day: '',
+      suggested_time: '',
+      hyperlink: '',
+      pickers: {
+        area_code: '',
+        how_many_players: '',
+        itc_handshake: '',
+        desired_tee: '',
+        exp_level: '',
+      },
+      description: '',
+      image_details: {
+        name: 'No File Chosen',
+        path: '',
+      },
+      smoking_friendly: false,
+      drinking_friendly: false,
+      private_listing: false,
+    });
+  };
+
+
+  React.useEffect(() => {
+   if(listingData){ 
+    updatedState();
+  }
+  }, [listingData]);
+
+  const updatedState = () => {
+    setState({
+      location: listingData.listing_title,
+      suggested_day: listingData.course_date,
+      suggested_time: listingData.course_time,
+      hyperlink: listingData.hyper_link === 'undefined' ? '' : listingData.hyper_link,
+      pickers: {
+        area_code: listingData.area_code_match,
+        how_many_players: listingData.how_many_players,
+        itc_handshake: listingData.the_itc_handshake,
+        desired_tee: listingData.desired_tee_box,
+        exp_level: listingData.experience_level,
+      },
+      description: listingData.match_description,
+      image_details: {
+        name: !listingData.feature_image ? '' : listingData.feature_image.split('/').pop(),
+        path: !listingData.feature_image ? '' : listingData.feature_image,
+      },
+      smoking_friendly: listingData.smoking_friendly === 'true' && true,
+      drinking_friendly: listingData.drinking_friendly === 'true' && true,
+      private_listing: listingData.private_listing === 'true' && true,
+    });
+  };
+
   const onCreateListing = async () => {
-    if (!state.location) {
-      return ShowToast('Please add your location');
+    if (listingData) {
+      const res = await dispatch(editListing(
+        listingData.listing_id,
+        user.user_id,
+        state.location,
+        state.description,
+        state.suggested_day,
+        state.suggested_time,
+        state.pickers.how_many_players,
+        state.pickers.area_code,
+        state.pickers.itc_handshake,
+        state.pickers.desired_tee,
+        state.smoking_friendly,
+        state.drinking_friendly,
+        state.private_listing
+      ))
+      if(res){
+        navigation.navigate('Home')
+        initialState()
+        return ShowToast(res)
+      } else {
+        return ShowToast(res)
+      }
     } else {
-      await dispatch(
-        createListing(
-          state.location,
-          state.description,
-          state.suggested_day,
-          state.suggested_time,
-          state.pickers.how_many_players,
-          state.pickers.area_code,
-          state.pickers.itc_handshake,
-          state.pickers.desired_tee,
-          state.drinking_friendly,
-          state.private_listing,
-          state.hyperlink,
-          user.user_id,
-          state.image_details,
-        ),
-      );
+      if (!state.location) {
+        return ShowToast('Please add your location');
+      } else {
+        await dispatch(
+          createListing(
+            state.location,
+            state.description,
+            state.suggested_day,
+            state.suggested_time,
+            state.pickers.how_many_players,
+            state.pickers.area_code,
+            state.pickers.itc_handshake,
+            state.pickers.desired_tee,
+            state.drinking_friendly,
+            state.private_listing,
+            state.hyperlink,
+            user.user_id,
+            state.image_details,
+          ),
+        );
+        navigation.navigate('Home')
+        initialState()
+      }
     }
   };
 
@@ -638,8 +728,8 @@ const AddNew = () => {
         <Button
           buttonStyle={{width: '50%', borderRadius: 100, marginTop: hp('2%')}}
           onPress={() => onCreateListing()}
-          buttonText={'Add New Listings'}
-          indicator={create_listing_loading}
+          buttonText={listingData ? 'Update Listing' : 'Add New Listing'}
+          indicator={listingData ? edit_loader : create_listing_loading}
           textStyle={{color: colors.secondary}}
         />
       </View>
@@ -647,25 +737,11 @@ const AddNew = () => {
   );
 };
 
-
 // const renderScene =  SceneMap({
 //   first: () => <Discover />,
 //   second: () => <MyListings />,
 //   third: () => <AddNew />,
 // });
-
-const renderScene = ({ route, jumpTo }) => {
-  switch (route.key) {
-    case 'first':
-      return <Discover />;
-    case 'second':
-      return <MyListings jumpTo={jumpTo} />;
-    case 'third':
-      return <AddNew />;
-    default:
-      return null;
-  }
-};
 
 export const AddNewListings = () => {
   const [index, setIndex] = React.useState(0);
@@ -674,6 +750,21 @@ export const AddNewListings = () => {
     {key: 'second', title: 'My Listing'},
     {key: 'third', title: 'Add New Listings'},
   ]);
+
+  const [listingData, setListingData] = React.useState(null);
+
+  const renderScene = ({route, jumpTo}) => {
+    switch (route.key) {
+      case 'first':
+        return <Discover />;
+      case 'second':
+        return <MyListings jumpTo={jumpTo} setListingData={setListingData} />;
+      case 'third':
+        return <AddNew listingData={listingData}  jumpTo={jumpTo}/>;
+      default:
+        return null;
+    }
+  };
 
   return (
     <TabView

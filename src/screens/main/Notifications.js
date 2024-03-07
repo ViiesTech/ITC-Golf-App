@@ -26,7 +26,8 @@ import {useNavigation} from '@react-navigation/native';
 import constant from '../../redux/constant';
 
 const Notifications = () => {
-  // const [notifications, setNotifications] = useState('')
+  const [acceptPressed, setAcceptPressed] = useState(false);
+  const [rejectPressed, setRejectPressed] = useState(false);
 
   const {notification_loader, notifications} = useSelector(
     state => state.HomeReducer,
@@ -37,18 +38,18 @@ const Notifications = () => {
     state => state.GroupReducer,
   );
 
-  const navigation = useNavigation();
-
   const dispatch = useDispatch();
 
   console.log('notifications data =====>', user.user_id);
 
   useEffect(() => {
     // setNotifications(TodayNotifications)
-    if (notifications.length < 1) {
+    if (notifications.length < 1 || acceptPressed || rejectPressed) {
+      dispatch(getNotifications(user.user_id));
+    } else {
       dispatch(getNotifications(user.user_id));
     }
-  }, []);
+  }, [acceptPressed, rejectPressed]);
 
   const renderLoader = () => {
     return (
@@ -76,13 +77,14 @@ const Notifications = () => {
       ),
     );
     if (listing.message && item.status === 'pending') {
-      navigation.navigate('Home');
       dispatch({
         type: constant.ACCEPT_REQUEST_DONE,
         payload: {listingId: item.listing_id, status: listing.status},
       });
+      setAcceptPressed(true);
       return ShowToast(listing.message);
     } else {
+      setAcceptPressed(false);
       return ShowToast(listing.message);
     }
     // } else {
@@ -119,13 +121,14 @@ const Notifications = () => {
       ),
     );
     if (listing.message && item.status === 'pending') {
-      navigation.navigate('Home');
       dispatch({
         type: constant.REJECT_REQUEST_DONE,
         payload: {listingId: item.listing_id, status: 'rejected'},
       });
+      setRejectPressed(true);
       return ShowToast(listing.message);
     } else {
+      setRejectPressed(false);
       return ShowToast(listing.message);
     }
     // } else {

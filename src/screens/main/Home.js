@@ -70,7 +70,7 @@ const Home = () => {
 
   const onSearchAreaCode = async () => {
     if (selectedOption) {
-     await dispatch(ListingsByAreaCodes(selectedOption));
+      await dispatch(ListingsByAreaCodes(selectedOption));
       setSearchPressed(true);
     } else {
       setSearchPressed(false);
@@ -90,10 +90,10 @@ const Home = () => {
         <ListingCard
           key={item.id}
           number={index + 1}
-          title={
-           item.listing_title
+          title={item.listing_title}
+          image={
+            item.feature_image ? {uri: item.feature_image} : images.listing2
           }
-          image={item.feature_image ? {uri: item.feature_image} : images.listing2}
           // descStyle={{ width: index == 0 ? '20%' : index == 1 ? '40%' : '100%' }}
           count={
             item.how_many_players == 'Select a Value'
@@ -107,11 +107,7 @@ const Home = () => {
           }
           date={item.course_date}
           // descStyle={{top: Object.keys(item.listing_title).length > 13 ? hp('10%') : null}}
-          desc={
-            Object.keys(item.match_description).length == 4
-              ? item.match_description
-              : 'test'
-          }
+          desc={item.match_description}
           // image={item.image}
           onPress={() =>
             navigation.navigate('SecondaryStack', {
@@ -141,8 +137,7 @@ const Home = () => {
             <ListingCard
               key={item.id}
               number={index + 1}
-              title={ item.listing_title
-              }
+              title={item.listing_title}
               // descStyle={{ width: index == 0 ? '20%' : index == 1 ? '40%' : '100%' }}
               count={
                 item.how_many_players == 'Select a Value'
@@ -155,11 +150,7 @@ const Home = () => {
                   : item.experience_level
               }
               date={item.course_date}
-              desc={
-                Object.keys(item.match_description).length == 4
-                  ? item.match_description
-                  : 'test'
-              }
+              desc={item.match_description}
               // image={item.image}
               onPress={() =>
                 navigation.navigate('SecondaryStack', {

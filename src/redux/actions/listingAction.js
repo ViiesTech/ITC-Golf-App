@@ -2,7 +2,7 @@ import axios from 'axios';
 import constant, {URL} from '../constant';
 import {ShowToast} from '../../Custom';
 import FormData from 'form-data';
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 
 export const createListing = (
   location,
@@ -17,40 +17,43 @@ export const createListing = (
   private_listing,
   hyperlink,
   user_id,
-  photo
+  photo,
 ) => {
   return async dispatch => {
     dispatch({
       type: constant.CREATE_LISTING,
     });
 
-    var data = new FormData()
+    var data = new FormData();
 
-    data.append('location_golfclub', location)
-    data.append('description', description)
-    data.append('suggested_day', suggested_day)
-    data.append('suggested_time', suggested_time)
-    data.append('how_many_players', how_many_players)
-    data.append('area_code', area_code)
-    data.append('the_itc_handshake',itc_handshake)
-    data.append('desired_tee_box', desired_tee)
-    data.append('drinking_friendly', drinking_friendly)
-    data.append('private_match', private_listing)
-    data.append('hyper_link', hyperlink)
-    data.append('user_id', user_id)
-    if(photo) {
-      data.append('listing_picture',{
+    data.append('location_golfclub', location);
+    data.append('description', description);
+    data.append('suggested_day', suggested_day);
+    data.append('suggested_time', suggested_time);
+    data.append('how_many_players', how_many_players);
+    data.append('area_code', area_code);
+    data.append('the_itc_handshake', itc_handshake);
+    data.append('desired_tee_box', desired_tee);
+    data.append('drinking_friendly', drinking_friendly);
+    data.append('private_match', private_listing);
+    data.append('hyper_link', hyperlink);
+    data.append('user_id', user_id);
+    if (photo) {
+      data.append('listing_picture', {
         name: `${photo.name}.jpg`,
         type: 'image/jpeg',
-        uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://','')
-      })
+        uri:
+          Platform.OS === 'android'
+            ? photo.path
+            : photo.path.replace('file://', ''),
+      });
     }
 
     await axios
       .post(`${URL}/create_match`, data, {
         headers: {
           Accept: 'application/json',
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
         },
       })
       .then(res => {
@@ -154,7 +157,7 @@ export const AcceptListing = (
 ) => {
   return async dispatch => {
     dispatch({
-      type: constant.ACCEPT_LISTING,
+      type: constant.ACCEPT_REQUEST,
     });
 
     return await axios
@@ -177,7 +180,7 @@ export const AcceptListing = (
       .catch(error => {
         console.log('accept listing error =======>', error);
         dispatch({
-          type: constant.ACCEPT_LISTING_DONE,
+          type: constant.ACCEPT_REQUEST_DONE,
         });
         return ShowToast('Some problem occured');
       });
@@ -193,7 +196,7 @@ export const RejectListing = (
 ) => {
   return async dispatch => {
     dispatch({
-      type: constant.REJECT_LISTING,
+      type: constant.REJECT_REQUEST,
     });
 
     return await axios
@@ -216,7 +219,7 @@ export const RejectListing = (
       .catch(error => {
         console.log('reject listing error =======>', error);
         dispatch({
-          type: constant.REJECT_LISTING_DONE,
+          type: constant.REJECT_REQUEST_DONE,
         });
         return ShowToast('Some problem occured');
       });
@@ -226,21 +229,97 @@ export const RejectListing = (
 export const DeleteListing = (listing_id, user_id) => {
   return async dispatch => {
     dispatch({
-      type: constant.DELETE_LISTING
-    })
+      type: constant.DELETE_LISTING,
+    });
 
-    return await axios.delete(`${URL}/delete-listing/${listing_id}/${user_id}`).then((res) => {
-      console.log('delete listing response ========>', res.data)
-      dispatch({
-        type: constant.DELETE_LISTING_DONE
+    return await axios
+      .delete(`${URL}/delete-listing/${listing_id}/${user_id}`)
+      .then(res => {
+        console.log('delete listing response ========>', res.data);
+        dispatch({
+          type: constant.DELETE_LISTING_DONE,
+        });
+        return res.data.message;
       })
-      return res.data.message
-    }).catch((error) => {
-      console.log('delete listing error ========>',error)
-      dispatch({
-        type: constant.DELETE_LISTING_DONE
+      .catch(error => {
+        console.log('delete listing error ========>', error);
+        dispatch({
+          type: constant.DELETE_LISTING_DONE,
+        });
+        return ShowToast('Some problem occured');
+      });
+  };
+};
+
+export const editListing = (
+  listing_id,
+  user_id,
+  location_golfclub,
+  description,
+  suggested_day,
+  suggested_time,
+  how_many_players,
+  area_code,
+  the_itc_handshake,
+  desired_tee_box,
+  smoking_friendly,
+  drinking_friendly,
+  private_match,
+  hyper_link,
+  listing_picture,
+) => {
+  return async dispatch => {
+    dispatch({
+      type: constant.EDIT_LISTING,
+    });
+
+    var data = new FormData();
+
+    data.append('listing_id', listing_id);
+    data.append('user_id', user_id);
+    data.append('location_golfclub', location_golfclub);
+    data.append('description', description);
+    data.append('suggested_day', suggested_day);
+    data.append('suggested_time', suggested_time);
+    data.append('how_many_players', how_many_players);
+    data.append('area_code', area_code);
+    data.append('the_itc_handshake', the_itc_handshake);
+    data.append('desired_tee_box', desired_tee_box);
+    data.append('smoking_friendly', smoking_friendly);
+    data.append('drinking_friendly', drinking_friendly);
+    data.append('private_match', private_match);
+    data.append('hyper_link', hyper_link);
+    if (listing_picture) {
+      data.append('listing_picture', {
+        name: `${listing_picture.name}.jpg`,
+        type: 'image/jpeg',
+        uri:
+          Platform.OS === 'android'
+            ? listing_picture.path
+            : listing_picture.path.replace('file://', ''),
+      });
+    }
+
+    return await axios
+      .post(`${URL}/update-listing/`, data, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
       })
-      return ShowToast('Some problem occured')
-    })
-  }
-}
+      .then(res => {
+        console.log('edit listing response =========>', res.data);
+        dispatch({
+          type: constant.EDIT_LISTING_DONE,
+        });
+        return res.data.message;
+      })
+      .catch(error => {
+        console.log('edit listing error ========>', error);
+        dispatch({
+          type: constant.EDIT_LISTING_DONE,
+        });
+        return ShowToast('Some problem occured');
+      });
+  };
+};

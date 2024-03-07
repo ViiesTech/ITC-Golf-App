@@ -24,6 +24,7 @@ import {ShowToast} from '../Custom';
 import {
   DeleteGroup,
   createGroup,
+  editGroup,
   getGroupsById,
 } from '../redux/actions/groupAction';
 import moment from 'moment';
@@ -169,9 +170,9 @@ const Discover = () => {
   return <View style={{paddingTop: hp('4%')}}>{renderAllGroups()}</View>;
 };
 
-const MyGroups = () => {
+const MyGroups = ({jumpTo, setGroupData}) => {
   const [deletePressed, setDeletePressed] = React.useState(false);
-  const [loaderIndex, setLoaderIndex] = React.useState(null)
+  const [loaderIndex, setLoaderIndex] = React.useState(null);
   const {my_groups, my_groups_loader, my_groups_message, delete_loader} =
     useSelector(state => state.GroupReducer);
 
@@ -216,14 +217,17 @@ const MyGroups = () => {
   };
 
   const onDeleteGroup = async (group_id, index) => {
-    setLoaderIndex(index)
+    setLoaderIndex(index);
     const res = await dispatch(DeleteGroup(group_id, user.user_id));
     if (res) {
       setDeletePressed(true);
       return ShowToast(res);
     }
   };
-  const onEditGroup = () => {};
+  const onEditGroup = item => {
+    jumpTo('third');
+    setGroupData(item);
+  };
 
   return (
     <View style={{paddingTop: hp('4%')}}>
@@ -234,8 +238,8 @@ const MyGroups = () => {
         : my_groups?.map((item, index) => (
             <MyGroupsCard
               deleteText={'Delete Group'}
-              onEditPress={() => onEditGroup(item.group_id)}
-              onDeletePress={() => onDeleteGroup(item.group_id,index)}
+              onEditPress={() => onEditGroup(item)}
+              onDeletePress={() => onDeleteGroup(item.group_id, index)}
               image={
                 item.feature_image ? {uri: item.feature_image} : images.about1
               }
@@ -259,16 +263,16 @@ const MyGroups = () => {
   );
 };
 
-const AddNew = () => {
+const AddNew = ({jumpTo, groupData}) => {
   const [state, setState] = React.useState({
     group_title: '',
     description: '',
     hyperlink: '',
     pickers: {
-      kind_listing: 'Sample',
-      area_code: '212',
-      desired_tee: 'Front Tees',
-      itc_handshake: 'High-Five',
+      kind_listing: '',
+      area_code: '',
+      desired_tee: '',
+      itc_handshake: '',
     },
     suggested_day: '',
     private_group: false,
@@ -279,11 +283,20 @@ const AddNew = () => {
   });
 
   const dispatch = useDispatch();
-  const {create_group_loading} = useSelector(state => state.GroupReducer);
+  const navigation = useNavigation();
+  const {create_group_loading, edit_loader} = useSelector(
+    state => state.GroupReducer,
+  );
   const {area_codes} = useSelector(state => state.HomeReducer);
   const {user} = useSelector(state => state.AuthReducer);
 
-  console.log('oh hello', state.group_photo_details.path);
+  console.log('oh hello', groupData);
+
+  React.useEffect(() => {
+    if (groupData) {
+      updatedState();
+    }
+  }, [groupData]);
 
   const handlePickerChange = (pickerName, text) => {
     setState(prevState => ({
@@ -295,25 +308,73 @@ const AddNew = () => {
     }));
   };
 
+  const initialState = () => {
+    setState({
+      group_title: '',
+      description: '',
+      hyperlink: '',
+      pickers: {
+        kind_listing: '',
+        area_code: '',
+        desired_tee: '',
+        itc_handshake: '',
+      },
+      suggested_day: '',
+      private_group: false,
+      group_photo_details: {
+        name: 'No File Chosen',
+        path: '',
+      },
+    });
+  };
+
   const onCreateGroup = async () => {
-    if (!state.group_title) {
-      return ShowToast('Please add group title');
-    } else {
-      await dispatch(
-        createGroup(
+    if (groupData) {
+      const res = await dispatch(
+        editGroup(
+          groupData.group_id,
+          user.user_id,
           state.group_title,
-          state.private_group,
           state.description,
+          state.private_group,
           state.pickers.area_code,
           state.pickers.itc_handshake,
           state.pickers.desired_tee,
           state.suggested_day,
           state.pickers.kind_listing,
           state.hyperlink,
-          user.user_id,
           state.group_photo_details,
         ),
       );
+      if(res){
+        navigation.navigate('Home')
+        initialState()
+        return ShowToast(res)
+      } else {
+        return ShowToast(res)
+      }
+    } else {
+      if (!state.group_title) {
+        return ShowToast('Please add group title');
+      } else {
+        await dispatch(
+          createGroup(
+            state.group_title,
+            state.private_group,
+            state.description,
+            state.pickers.area_code,
+            state.pickers.itc_handshake,
+            state.pickers.desired_tee,
+            state.suggested_day,
+            state.pickers.kind_listing,
+            state.hyperlink,
+            user.user_id,
+            state.group_photo_details,
+          ),
+        );
+        navigation.navigate('Home');
+        initialState();
+      }
     }
   };
 
@@ -339,6 +400,29 @@ const AddNew = () => {
           },
         }));
       }
+    });
+  };
+
+  const updatedState = () => {
+    setState({
+      group_title: groupData.listing_title,
+      description: groupData.listing_content,
+      hyperlink:
+        groupData.hyper_link === 'undefined' ? '' : groupData.hyper_link,
+      pickers: {
+        kind_listing: groupData.what_kind_of_match_is_this,
+        area_code: groupData.area_code,
+        desired_tee: groupData.group_desired_teebox,
+        itc_handshake: groupData.itc_group_handshake,
+      },
+      suggested_day: groupData.suggested_day,
+      private_group: groupData.private_group === '1' && true,
+      group_photo_details: {
+        name: !groupData.feature_image
+          ? 'No File Chosen'
+          : groupData.feature_image.split('/').pop(),
+        path: !groupData.feature_image ? '' : groupData.feature_image,
+      },
     });
   };
 
@@ -510,9 +594,9 @@ const AddNew = () => {
           style={styles.input}
         />
         <Button
-          buttonText={'Create Group'}
+          buttonText={groupData ? 'Update Group' : 'Create Group'}
           textStyle={{color: colors.secondary}}
-          indicator={create_group_loading}
+          indicator={groupData ? edit_loader : create_group_loading}
           buttonStyle={{width: '50%', borderRadius: 100, marginTop: hp('2%')}}
           onPress={() => onCreateGroup()}
         />
@@ -521,12 +605,6 @@ const AddNew = () => {
   );
 };
 
-const renderScene = SceneMap({
-  first: () => <Discover />,
-  second: () => <MyGroups />,
-  third: () => <AddNew />,
-});
-
 export const AddNewGroups = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
@@ -534,6 +612,21 @@ export const AddNewGroups = () => {
     {key: 'second', title: 'My Groups'},
     {key: 'third', title: 'Add New Groups'},
   ]);
+
+  const [groupData, setGroupData] = React.useState(null);
+
+  const renderScene = ({route, jumpTo}) => {
+    switch (route.key) {
+      case 'first':
+        return <Discover />;
+      case 'second':
+        return <MyGroups jumpTo={jumpTo} setGroupData={setGroupData} />;
+      case 'third':
+        return <AddNew groupData={groupData} jumpTo={jumpTo} />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <TabView

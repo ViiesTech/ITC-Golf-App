@@ -7,6 +7,7 @@ const initialState = {
   my_groups_message: '',
   join_loading: false,
   delete_loader: false,
+  edit_loader: false,
   // accept_loader: false,
   // reject_loader: false,
 };
@@ -53,6 +54,11 @@ export default (state = initialState, action) => {
     //     ...state,
     //     reject_loader: false,
     //   };
+    case constant.EDIT_GROUP:
+      return {...state, edit_loader: true};
+
+    case constant.EDIT_GROUP_DONE:
+      return {...state, edit_loader: false};
 
     default:
       return state;

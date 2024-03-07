@@ -21,20 +21,21 @@ const ListingCard = ({
       activeOpacity={0.9}
       onPress={onPress}>
       <View style={{flexDirection: 'row'}}>
-        <Image
-          source={image}
-          style={styles.image}
-          borderRadius={12}
-        />
+        <Image source={image} style={styles.image} borderRadius={12} />
         <View style={styles.textWrapper}>
           <View style={styles.textView}>
             <Text style={styles.number}>{number}</Text>
           </View>
-          <View style={[{position: 'absolute', top: hp('8%')},descStyle]}>
-            <Text style={[styles.textStyle, ]}>{desc}</Text>
+          <View style={[descStyle]}>
+            <Text
+              style={[styles.textStyle]}
+              numberOfLines={5}
+              ellipsizeMode="tail">
+              {desc}
+            </Text>
           </View>
         </View>
-        <Text style={[styles.text,{width: Object.keys(title).length > 13 && hp('15%')}]}>{title}</Text>
+        <Text style={styles.text}>{title}</Text>
       </View>
       <View style={{marginRight: hp('1%'), paddingTop: hp('1%')}}>
         <Text style={styles.eventsText}>NO OF PLAYERS:</Text>
@@ -65,6 +66,7 @@ const styles = StyleSheet.create({
   },
   textView: {
     backgroundColor: colors.gray,
+    alignSelf: 'flex-start',
     borderRadius: 5,
     padding: hp('0.6%'),
   },
@@ -77,31 +79,38 @@ const styles = StyleSheet.create({
     color: colors.white,
     marginTop: hp('1%'),
     fontSize: hp('1.4%'),
-    // width: '40%',
+    position: 'absolute',
+    left: hp('14%'),
+    top: hp('0.1%'),
+    // flex: 1,
+    width: hp('20%'),
     fontWeight: 'bold',
   },
   eventsText: {
     color: colors.white,
-    alignSelf: 'flex-end',
+    // alignSelf: 'flex-end',
     fontWeight: 'bold',
     fontSize: hp('1.4%'),
   },
   location: {
     color: colors.white,
-    alignSelf: 'flex-end',
+    // alignSelf: 'flex-end',
     marginBottom: hp('0.5%'),
     fontSize: hp('1.4%'),
     marginTop: hp('2%'),
   },
   textStyle: {
     color: colors.white,
-    // marginTop: hp('0%'),
+    marginTop: hp('3%'),
+    width: hp('20%'),
+    // flex: 1,
     fontSize: hp('1.4%'),
-    position: 'absolute',
+    // position: 'absolute',
   },
   recordHeading: {
     color: colors.white,
-    alignSelf: 'flex-end',
+    // alignSelf: 'flex-end',
+    width: hp('15%'),
     fontSize: hp('1.4%'),
     marginTop: hp('2%'),
   },
@@ -109,6 +118,6 @@ const styles = StyleSheet.create({
     color: colors.white,
     marginTop: hp('0.5%'),
     fontSize: hp('1.4%'),
-    alignSelf: 'flex-end',
+    // alignSelf: 'flex-end',
   },
 });

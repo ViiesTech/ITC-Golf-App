@@ -31,16 +31,14 @@ const Listing = () => {
   console.log('lets see', navigation.getState().routes[1].name);
   const routeName = navigation.getState().routes[1].name;
 
-  const {listing, loader, listings_filter, listings_filter_loader} = useSelector(
-    state => state.HomeReducer,
-  );
-
+  const {listing, loader, listings_filter, listings_filter_loader} =
+    useSelector(state => state.HomeReducer);
 
   const dispatch = useDispatch();
 
   const onSearchButton = () => {
     if (selectedCode) {
-       dispatch(ListingsByAreaCodes(selectedCode));
+      dispatch(ListingsByAreaCodes(selectedCode));
       setSearchPressed(true);
     } else {
       setSearchPressed(false);
@@ -57,17 +55,13 @@ const Listing = () => {
         columnWrapperStyle={{justifyContent: 'space-between'}}
         renderItem={({item, index}) => (
           <ListingDetailCard
-          listingImage={item.feature_image ? {uri: item.feature_image} : images.listing2}
+            listingImage={
+              item.feature_image ? {uri: item.feature_image} : images.listing2
+            }
             route={routeName}
             total={index + 1}
-            title={
-             item.listing_title
-            }
-            desc={
-              Object.keys(item.match_description).length == 4
-                ? item.match_description
-                : 'test'
-            }
+            title={item.listing_title}
+            desc={item.match_description}
             date={item.course_date}
             time={item.course_time == '' ? '23:28' : item.course_time}
             exp={
@@ -123,14 +117,8 @@ const Listing = () => {
             // image={item.image}
             route={routeName}
             total={index + 1}
-            title={
-              item.listing_title
-            }
-            desc={
-              Object.keys(item.match_description).length == 4
-                ? item.match_description
-                : 'test'
-            }
+            title={item.listing_title}
+            desc={item.match_description}
             date={item.course_date}
             time={item.course_time == '' ? '23:28' : item.course_time}
             exp={

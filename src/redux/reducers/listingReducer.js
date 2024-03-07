@@ -10,6 +10,7 @@ const initialState = {
   accept_loader: false,
   reject_loader: false,
   delete_loader: false,
+  edit_loader: false
 };
 
 export default (state = initialState, action) => {
@@ -75,6 +76,12 @@ export default (state = initialState, action) => {
 
     case constant.DELETE_LISTING_DONE:
       return {...state, delete_loader: false};
+
+    case constant.EDIT_LISTING:
+      return {...state, edit_loader: true}
+      
+    case constant.EDIT_LISTING_DONE:
+      return {...state, edit_loader: false}  
 
     default:
       return state;
