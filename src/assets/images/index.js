@@ -68,6 +68,7 @@ export default {
     group1: require('../images/group1.png'),
     group2: require('../images/group2.png'),
     group3: require('../images/group3.png'),
-    group4: require('../images/group4.png')
+    group4: require('../images/group4.png'),
+    profile: require('../images/userProfile.jpeg')
 
 }

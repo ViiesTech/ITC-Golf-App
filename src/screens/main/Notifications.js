@@ -45,9 +45,9 @@ const Notifications = () => {
 
   useEffect(() => {
     // setNotifications(TodayNotifications)
-    // if (notifications.length < 1) {
-    dispatch(getNotifications(user.user_id));
-    // }
+    if (notifications.length < 1) {
+      dispatch(getNotifications(user.user_id));
+    }
   }, []);
 
   const renderLoader = () => {
@@ -65,91 +65,90 @@ const Notifications = () => {
   };
 
   const onAcceptRequest = async item => {
-    if (item.listing_id) {
-      const listing = await dispatch(
-        AcceptListing(
-          user.user_id,
-          item.listing_post_author_id,
-          user.user_email,
-          'accepted your request',
-          item.listing_id,
-        ),
-      );
-      if (listing.message && item.status === 'pending') {
-        navigation.navigate('Home');
-        dispatch({
-          type: constant.ACCEPT_LISTING_DONE,
-          payload: {listingId: item.notification_id, status: listing.status},
-        });
-        return ShowToast(listing.message);
-      } else {
-        return ShowToast(listing.message);
-      }
+    // if (item.listing_id) {
+    const listing = await dispatch(
+      AcceptListing(
+        user.user_id,
+        item.listing_post_author_id,
+        user.user_email,
+        'accepted your request',
+        item.listing_id,
+      ),
+    );
+    if (listing.message && item.status === 'pending') {
+      navigation.navigate('Home');
+      dispatch({
+        type: constant.ACCEPT_REQUEST_DONE,
+        payload: {listingId: item.listing_id, status: listing.status},
+      });
+      return ShowToast(listing.message);
     } else {
-      const group = await dispatch(
-        AcceptGroup(
-          user.user_id,
-          item.listing_post_author_id,
-          user.user_email,
-          'accepted your request',
-          item.group_id,
-        ),
-      );
-      if (group.message && item.status === 'pending') {
-        navigation.navigate('Home');
-        dispatch({
-          type: constant.ACCEPT_GROUP_DONE,
-          payload: {listingId: item.notification_id, status: 'accepted'},
-        });
-        return ShowToast(group.message);
-      } else {
-        return ShowToast(group.message);
-      }
+      return ShowToast(listing.message);
     }
+    // } else {
+    // const group = await dispatch(
+    //   AcceptGroup(
+    //     user.user_id,
+    //     item.listing_post_author_id,
+    //     user.user_email,
+    //     'accepted your request',
+    //     item.group_id,
+    //   ),
+    // );
+    // if (group.message && item.status === 'pending') {
+    //   navigation.navigate('Home');
+    //   dispatch({
+    //     type: constant.ACCEPT_GROUP_DONE,
+    //   });
+    //   return ShowToast(group.message);
+    // } else {
+    //   return ShowToast(group.message);
+    // }
+    // }
   };
 
   const onRejectRequest = async item => {
-    if (item.listing_id) {
-      const listing = await dispatch(
-        RejectListing(
-          user.user_id,
-          item.listing_post_author_id,
-          user.user_email,
-          'rejected your request',
-          item.listing_id,
-        ),
-      );
-      if (listing.message && item.status === 'pending') {
-        navigation.navigate('MainStack');
-        dispatch({
-          type: constant.REJECT_LISTING_DONE,
-          payload: {listingId: item.notification_id, status: 'rejected'},
-        });
-        return ShowToast(listing.message);
-      } else {
-        return ShowToast(listing.message);
-      }
+    // if (item.listing_id) {
+    const listing = await dispatch(
+      RejectListing(
+        user.user_id,
+        item.listing_post_author_id,
+        user.user_email,
+        'rejected your request',
+        item.listing_id,
+      ),
+    );
+    if (listing.message && item.status === 'pending') {
+      navigation.navigate('Home');
+      dispatch({
+        type: constant.REJECT_REQUEST_DONE,
+        payload: {listingId: item.listing_id, status: 'rejected'},
+      });
+      return ShowToast(listing.message);
     } else {
-      const group = await dispatch(
-        RejectGroup(
-          user.user_id,
-          item.listing_post_author_id,
-          user.user_email,
-          'rejected your request',
-          item.listing_id,
-        ),
-      );
-      if (group.message && item.status === 'pending') {
-        navigation.navigate('MainStack');
-        dispatch({
-          type: constant.REJECT_GROUP_DONE,
-          payload: {listingId: item.notification_id, status: 'rejected'},
-        });
-        return ShowToast(group.message);
-      } else {
-        return ShowToast(group.message);
-      }
+      return ShowToast(listing.message);
     }
+    // } else {
+    // const group = await dispatch(
+    //   RejectGroup(
+    //     user.user_id,
+    //     item.listing_post_author_id,
+    //     user.user_email,
+    //     'rejected your request',
+    //     item.listing_id,
+    //   ),
+    // );
+    // if (group.message && item.status === 'pending') {
+    //   navigation.navigate('Home');
+    //   dispatch({
+    //     type: constant.REJECT_GROUP_DONE,
+    //     payload: {listingId: item.notification_id, status: 'rejected'},
+    //   });
+    //   return ShowToast(group.message);
+    // } else {
+    //   return ShowToast(group.message);
+    // }
+    // }
   };
 
   return (
@@ -180,20 +179,14 @@ const Notifications = () => {
           </View>
           <View style={styles.notificationWrapper}>
             {notifications?.map(item => {
-              console.log(item.status);
+              console.log('woww', item?.status);
               return (
                 <NotificationsCard
                   image={images.notification3}
                   onAcceptPress={() => onAcceptRequest(item)}
                   accept_loader={accept_loader}
                   reject_loader={reject_loader}
-                  hidebuttons={
-                    item.status === '' ||
-                    item.status === 'accepted' ||
-                    item.status === 'rejected'
-                      ? true
-                      : false
-                  }
+                  hidebuttons={item.status === 'pending' ? false : true}
                   onRejectPress={() => onRejectRequest(item)}
                   text={item.notification_text}
                   desc={

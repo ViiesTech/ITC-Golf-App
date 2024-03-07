@@ -8,7 +8,7 @@ import SVGImage from './SVGImage';
 import icons from '../assets/icons';
 import Button from './Button';
 
-const SecondaryHeader = ({icon, text, style, link, onLinkPress, linkButton}) => {
+const SecondaryHeader = ({icon, text, style, link, onLinkPress, linkButton, headerStyle}) => {
   const navigation = useNavigation();
 
   return (
@@ -21,7 +21,7 @@ const SecondaryHeader = ({icon, text, style, link, onLinkPress, linkButton}) => 
           style={{alignSelf: 'center'}}
           onPress={() => navigation.goBack()}
         />
-        <Text style={styles.headerText}>{text}</Text>
+        <Text style={[styles.headerText,headerStyle]}>{text}</Text>
         {link && (
           <TouchableOpacity style={[styles.linkStyle,linkButton]} activeOpacity={0.9} onPress={onLinkPress}>
             <Text style={styles.textStyle}>View Link</Text>

@@ -9,7 +9,7 @@ import {
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import colors from '../assets/colors';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import {DesiredItem, TeeBox, handshake, listingPicker} from '../DummyData';
+import {TeeBox, handshake, listingPicker} from '../DummyData';
 import DiscoverCard from './DiscoverCard';
 import MyGroupsCard from './MyGroupsCard';
 import DropDownPicker from './DropDownPicker';
@@ -21,7 +21,11 @@ import Switch from './Switch';
 import {Picker} from '@react-native-picker/picker';
 import {useDispatch, useSelector} from 'react-redux';
 import {ShowToast} from '../Custom';
-import {createGroup, getGroupsById} from '../redux/actions/groupAction';
+import {
+  DeleteGroup,
+  createGroup,
+  getGroupsById,
+} from '../redux/actions/groupAction';
 import moment from 'moment';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {getGroups} from '../redux/actions/homeAction';
@@ -35,6 +39,7 @@ const Discover = () => {
   const {groups, group_loader, groups_filter, filter_loading} = useSelector(
     state => state.HomeReducer,
   );
+
   console.log('groups api data =============>', groups);
 
   React.useEffect(() => {
@@ -55,7 +60,9 @@ const Discover = () => {
         columnWrapperStyle={{justifyContent: 'space-between'}}
         renderItem={({item, index}) => (
           <DiscoverCard
-            image={images.discover2}
+            image={
+              item.feature_image ? {uri: item.feature_image} : images.discover2
+            }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
                 screen: 'GroupDetail',
@@ -159,17 +166,14 @@ const Discover = () => {
     );
   };
 
-  return (
-    <View style={{paddingTop: hp('4%')}}>
-      {!filter_loading  ? renderFilterGroups() : renderAllGroups()}
-    </View>
-  );
+  return <View style={{paddingTop: hp('4%')}}>{renderAllGroups()}</View>;
 };
 
 const MyGroups = () => {
-  const {my_groups, my_groups_loader, my_groups_message} = useSelector(
-    state => state.GroupReducer,
-  );
+  const [deletePressed, setDeletePressed] = React.useState(false);
+  const [loaderIndex, setLoaderIndex] = React.useState(null)
+  const {my_groups, my_groups_loader, my_groups_message, delete_loader} =
+    useSelector(state => state.GroupReducer);
 
   console.log('my groups from screen =============>', my_groups);
   const {user} = useSelector(state => state.AuthReducer);
@@ -179,10 +183,11 @@ const MyGroups = () => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    // if (my_groups?.length < 1) {
-    dispatch(getGroupsById(user.user_id));
-    // }
-  }, []);
+    if (deletePressed || !deletePressed) {
+      dispatch(getGroupsById(user.user_id));
+      setDeletePressed(false);
+    }
+  }, [deletePressed]);
 
   const renderLoader = () => {
     return (
@@ -210,17 +215,33 @@ const MyGroups = () => {
     );
   };
 
+  const onDeleteGroup = async (group_id, index) => {
+    setLoaderIndex(index)
+    const res = await dispatch(DeleteGroup(group_id, user.user_id));
+    if (res) {
+      setDeletePressed(true);
+      return ShowToast(res);
+    }
+  };
+  const onEditGroup = () => {};
+
   return (
     <View style={{paddingTop: hp('4%')}}>
       {my_groups_loader
         ? renderLoader()
         : my_groups?.length < 1
         ? renderMessage()
-        : my_groups?.map((item, i) => (
+        : my_groups?.map((item, index) => (
             <MyGroupsCard
-              image={images.about1}
+              deleteText={'Delete Group'}
+              onEditPress={() => onEditGroup(item.group_id)}
+              onDeletePress={() => onDeleteGroup(item.group_id,index)}
+              image={
+                item.feature_image ? {uri: item.feature_image} : images.about1
+              }
+              indicator={loaderIndex == index && delete_loader}
               title={item.listing_title}
-              count={i + 1}
+              count={index + 1}
               area_code={item.area_code}
               date={item.suggested_day}
               group={true}
@@ -229,7 +250,7 @@ const MyGroups = () => {
               onPress={() =>
                 navigation.navigate('SecondaryStack', {
                   screen: 'GroupDetail',
-                  params: {item},
+                  params: {item, type: 'my groups'},
                 })
               }
             />
@@ -262,7 +283,7 @@ const AddNew = () => {
   const {area_codes} = useSelector(state => state.HomeReducer);
   const {user} = useSelector(state => state.AuthReducer);
 
-  // console.log('oh hello', typeof state.suggested_day)
+  console.log('oh hello', state.group_photo_details.path);
 
   const handlePickerChange = (pickerName, text) => {
     setState(prevState => ({
@@ -282,6 +303,7 @@ const AddNew = () => {
         createGroup(
           state.group_title,
           state.private_group,
+          state.description,
           state.pickers.area_code,
           state.pickers.itc_handshake,
           state.pickers.desired_tee,
@@ -289,6 +311,7 @@ const AddNew = () => {
           state.pickers.kind_listing,
           state.hyperlink,
           user.user_id,
+          state.group_photo_details,
         ),
       );
     }

@@ -1384,10 +1384,10 @@ export const Tabs = [
   //   id: 2,
   //   text: 'Add Reviews',
   // },
-  {
-    id: 2,
-    text: 'Match Reviews',
-  },
+  // {
+  //   id: 2,
+  //   text: 'Match Reviews',
+  // },
 ];
 
 export const reviews = [

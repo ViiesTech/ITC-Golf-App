@@ -80,7 +80,8 @@ export const signin = (username, password) => {
           ShowToast('login successfully');
           dispatch({
             type: constant.LOGIN_DONE,
-            payload: response,
+            payload: response.response,
+            token: response.token,
           });
         } else {
           ShowToast(response.message);
@@ -274,7 +275,8 @@ export const resetPassword = (username, token, newPassword) => {
 };
 
 export const editProfile = (
-  profile_photo,
+  user_id,
+  register_id,
   firstname,
   lastname,
   area_code,
@@ -282,6 +284,7 @@ export const editProfile = (
   desired_tee_box,
   address,
   short_desc,
+  profile_photo,
 ) => {
   return async dispatch => {
     dispatch({
@@ -289,6 +292,15 @@ export const editProfile = (
     });
 
     var data = new FormData();
+    data.append('user_id', user_id);
+    data.append('author_register_id', register_id);
+    data.append('firstname', firstname);
+    data.append('lastname', lastname);
+    data.append('area_code', area_code);
+    data.append('experience_level', exp_level);
+    data.append('desired_tee_box', desired_tee_box);
+    data.append('address', address);
+    data.append('short_description', short_desc);
     if (profile_photo) {
       data.append('profile_picture', {
         name: 'image.jpg',
@@ -299,29 +311,30 @@ export const editProfile = (
             : profile_photo.replace('file://', ''),
       });
     }
-    data.append('fname', firstname);
-    data.append('last_name', lastname);
-    data.append('area_code', area_code);
-    data.append('experience_level', exp_level);
-    data.append('desired_tee_box', desired_tee_box);
-    data.append('address', address);
-    data.append('short_description', short_desc);
+
+    // return console.log('wah',data)
 
     return await axios
-      .post(`${URL}/edit-profile`, data, {
+      .post(`${URL}/update-profile`, data, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'multipart/form-data',
         },
       })
       .then(res => {
-        console.log('edit profile response ==================>', res.data);
+        console.log('edit profile response ==================>', res.data.data);
         dispatch({
           type: constant.EDIT_PROFILE_DONE,
+          payload: res.data.data,
         });
+        return res.data;
       })
       .catch(error => {
         console.log('edit profile response error =================>', error);
+        dispatch({
+          type: constant.EDIT_PROFILE_DONE,
+        });
+        return ShowToast('Some problem occured');
       });
   };
 };
@@ -363,27 +376,27 @@ export const getWishlistById = user_id => {
       type: constant.GET_WISHLIST,
     });
 
-    console.log('from action',user_id)
+    console.log('from action', user_id);
 
-      await axios
-        .get(`${URL}/wishlist-items/${user_id}`, {
-          headers: {
-            Accept: 'application/json',
-          },
-        })
-        .then(res => {
-           console.log('response of wishlist =========>',res.data)
-          dispatch({
-            type: constant.GET_WISHLIST_DONE,
-            payload: res.data,
-          });
-        })
-        .catch(error => {
-          console.log('failed to get wishlisttt =========>', error);
-          dispatch({
-            type: constant.GET_WISHLIST_DONE,
-          });
-          return ShowToast('Some problem occured');
+    await axios
+      .get(`${URL}/wishlist-items/${user_id}`, {
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+      .then(res => {
+        console.log('response of wishlist =========>', res.data);
+        dispatch({
+          type: constant.GET_WISHLIST_DONE,
+          payload: res.data,
         });
+      })
+      .catch(error => {
+        console.log('failed to get wishlisttt =========>', error);
+        dispatch({
+          type: constant.GET_WISHLIST_DONE,
+        });
+        return ShowToast('Some problem occured');
+      });
   };
 };

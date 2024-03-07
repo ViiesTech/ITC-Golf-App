@@ -112,7 +112,7 @@ export const getReviews = () => {
   };
 };
 
-export const getNotifications = (user_id) => {
+export const getNotifications = user_id => {
   return async dispatch => {
     dispatch({
       type: constant.GET_NOTIFICATIONS,
@@ -192,6 +192,35 @@ export const ListingsByAreaCodes = area_code => {
         console.log('listings filter error =========>', error);
         dispatch({
           type: constant.LISTINGS_BY_AREACODE_DONE,
+        });
+        return ShowToast('Some problem occured');
+      });
+  };
+};
+
+export const AboutSection = () => {
+  return async dispatch => {
+    dispatch({
+      type: constant.GET_ABOUT,
+    });
+
+   return await axios
+      .get(`${URL}/about-us`, {
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+      .then(res => {
+        console.log('about response ======>' ,res.data)
+        dispatch({
+          type: constant.GET_ABOUT_DONE,
+          payload: res.data.content,
+        });
+      })
+      .catch(error => {
+        console.log('about errror ======>', error);
+        dispatch({
+          type: constant.GET_ABOUT_DONE,
         });
         return ShowToast('Some problem occured');
       });

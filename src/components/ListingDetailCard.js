@@ -17,6 +17,7 @@ const ListingDetailCard = ({
   route,
   count,
   total,
+  listingImage
 }) => {
   return (
     <TouchableOpacity
@@ -24,7 +25,7 @@ const ListingDetailCard = ({
       activeOpacity={0.9}
       onPress={onPress}>
       <Image
-        source={route === 'Listing' ? images.listing2 : image}
+        source={route === 'Listing' ? listingImage : image}
         style={styles.image}
         borderRadius={10}
         resizeMode="cover"
@@ -46,7 +47,7 @@ const ListingDetailCard = ({
           <Text
             style={[
               styles.text,
-              {fontSize: hideTag && hp('1.7%'), width: '84%'},
+              {fontSize: hideTag && hp('1.7%'),},
             ]}>
             {title}
           </Text>

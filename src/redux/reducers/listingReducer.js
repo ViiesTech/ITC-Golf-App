@@ -6,8 +6,10 @@ const initialState = {
   my_listings_loader: false,
   listing_id: 0,
   join_loading: false,
+  join_group_loading: false,
   accept_loader: false,
   reject_loader: false,
+  delete_loader: false,
 };
 
 export default (state = initialState, action) => {
@@ -38,17 +40,41 @@ export default (state = initialState, action) => {
         join_loading: false,
       };
 
-    case constant.ACCEPT_LISTING:
+    case constant.JOIN_GROUP:
+      return {...state, join_group_loading: true};
+
+    case constant.JOIN_GROUP_DONE:
+      return {
+        ...state,
+        join_group_loading: false,
+        [action.payload.listingId]: action.payload.status,
+      };
+
+    case constant.ACCEPT_REQUEST:
       return {...state, accept_loader: true};
 
-    case constant.ACCEPT_LISTING_DONE:
-      return {...state, accept_loader: false};
+    case constant.ACCEPT_REQUEST_DONE:
+      return {
+        ...state,
+        accept_loader: false,
+        [action.payload.listingId]: action.payload.status,
+      };
 
-    case constant.REJECT_LISTING:
+    case constant.REJECT_REQUEST:
       return {...state, reject_loader: true};
 
-    case constant.REJECT_LISTING_DONE:
-      return {...state, reject_loader: false};
+    case constant.REJECT_REQUEST_DONE:
+      return {
+        ...state,
+        reject_loader: false,
+        [action.payload.listingId]: action.payload.status,
+      };
+
+    case constant.DELETE_LISTING:
+      return {...state, delete_loader: true};
+
+    case constant.DELETE_LISTING_DONE:
+      return {...state, delete_loader: false};
 
     default:
       return state;

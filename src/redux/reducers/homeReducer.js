@@ -14,6 +14,10 @@ const initialState = {
   filter_loading: false,
   listings_filter: [],
   listings_filter_loader: false,
+  accept_loader: false,
+  reject_loader: false,
+  about_description: '',
+  about_loader: false
 };
 
 export default (state = initialState, action) => {
@@ -68,6 +72,48 @@ export default (state = initialState, action) => {
         listings_filter: action.payload,
         listings_filter_loader: false,
       };
+
+    // case constant.ACCEPT_LISTING:
+    //   return {...state, accept_loader: true};
+
+    // case constant.ACCEPT_LISTING_DONE:
+    //   const updatedNotificationsAccept = state.notifications.map(
+    //     notification => {
+    //       if (notification.id === action.payload.notificationId) {
+    //         return {...notification, status: action.payload.status};
+    //       } else {
+    //         return notification;
+    //       }
+    //     },
+    //   );
+
+      // return {
+      //   ...state,
+      //   accept_loader: false,
+      //   notifications: updatedNotificationsAccept,
+      // };
+
+    // case constant.REJECT_LISTING:
+    //   return {...state, reject_loader: true};
+
+    // case constant.REJECT_LISTING_DONE:
+    //   const updatedNotificationsReject = state.notifications.map(
+    //     notification => {
+    //       if (notification.id === action.payload.notificationId) {
+    //         return {...notification, status: action.payload.status};
+    //       } else {
+    //         return notification;
+    //       }
+    //     },
+    //   );
+
+    //   return {...state, notifications: updatedNotificationsReject};
+
+    case constant.GET_ABOUT:
+      return {...state, about_loader: true};
+
+    case constant.GET_ABOUT_DONE:
+      return {...state, about_loader: false, about_description: action.payload};
 
     default:
       return state;

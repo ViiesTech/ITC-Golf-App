@@ -10,8 +10,8 @@ const Stack = createNativeStackNavigator()
 
 const Routes = () => {
 
-    const { user } = useSelector(state => state.AuthReducer)
-    console.log(user)
+    const { token } = useSelector(state => state.AuthReducer)
+    console.log(token)
 
     useEffect(() => {
 
@@ -27,7 +27,7 @@ const Routes = () => {
                     animation: 'fade_from_bottom'
                 }}
             >
-                {user?.token ?
+                {token ?
                     <Stack.Screen name='MainStack' component={MainStack} />
                     :
                     <Stack.Screen name='AuthStack' component={AuthStack} />

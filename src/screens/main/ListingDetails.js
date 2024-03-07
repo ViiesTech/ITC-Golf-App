@@ -48,17 +48,24 @@ const ListingDetails = ({route}) => {
     }
   }, [changeTab]);
 
-  const {item} = route.params;
+  const {item, type} = route?.params;
 
-  const itemStatus = useSelector(state => state?.ListingReducer[item.listing_id] || 'Unknown');
+  const itemStatus = useSelector(
+    state => state?.ListingReducer[item.listing_id] || 'Unknown',
+  );
   console.log(itemStatus);
 
-  console.log('reviews response from screen ===============>', item);
+  console.log(
+    'reviews response from screen ===============>',
+    Object.keys(item.match_description).length,
+  );
 
   console.log(
     'paramsssss ================>',
     Object.keys(item.match_description).length,
   );
+
+  console.log('navigation', type);
 
   const onHyperLink = async link => {
     if (link == '') {
@@ -94,133 +101,150 @@ const ListingDetails = ({route}) => {
     <Container>
       <Header />
       <SecondaryHeader
-        text={
-          Object.keys(item.listing_title).length > 13
-            ? 'New Listing'
-            : item.listing_title
-        }
+        headerStyle={{
+          width: Object.keys(item.listing_title).length > 13 && hp('25%'),
+        }}
+        text={item.listing_title}
         link={true}
         onLinkPress={() => onHyperLink(item.hyper_link)}
+        linkButton={{
+          width:
+            Object.keys(item.listing_title).length > 13 ? hp('10%') : hp('14%'),
+        }}
       />
       <ScrollView contentContainerStyle={styles.screen}>
         <View style={styles.tabView}>
           {Tabs.map(item => (
             <PersonalInfoTab
               text={item.text}
-              style={
-                changeTab == item.id
-                  ? [
-                      styles.active,
-                      {
-                        width: item.id == 2 ? '40%' : '44%',
-                      },
-                    ]
-                  : [styles.inactive, {width: item.id == 1 ? '44%' : '40%'}]
-              }
+              // style={
+              //   changeTab == item.id
+              //     ? [
+              //         styles.active,
+              //         {
+              //           width: item.id == 2 ? '40%' : '44%',
+              //         },
+              //       ]
+              //     : [styles.inactive, {width: item.id == 1 ? '44%' : '40%'}]
+              // }
               onPress={() => setChangeTab(item.id)}
-              textStyle={changeTab == item.id && {marginTop: hp('0.3%')}}
+              // textStyle={changeTab == item.id && {marginTop: hp('0.3%')}}
             />
           ))}
         </View>
         {changeTab == 1 ? (
           <>
             <View style={{paddingTop: hp('10%')}}>
-              <View style={styles.headingView}>
+              <View style={styles.imageContainer}>
+                <View style={styles.headingView}>
+                  <Text
+                    style={styles.name}
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
+                    {item.listing_title}
+                  </Text>
+                </View>
                 <Image source={images.personal1} style={styles.image} />
-                <Text style={styles.name}>
-                  {Object.keys(item.listing_title).length > 13
-                    ? 'New Listing'
-                    : item.listing_title}
-                </Text>
               </View>
             </View>
             <View style={styles.formWrapper}>
-              <View>
+              <View style={styles.detailContainer}>
                 <Text style={styles.heading}>MATCH DESCRIPTION:</Text>
-                <Text style={styles.heading}>AREA CODE:</Text>
-                <Text style={styles.heading}>PRIVATE GROUP:</Text>
-                <Text style={styles.heading}>EXPERIENCE LEVEL:</Text>
-                <View style={{paddingTop: hp('3%')}}>
-                  <Text style={styles.heading}>SUGGESTED DAY:</Text>
-                  <Text style={styles.heading}>SUGGESTED TIME:</Text>
-                  <Text style={styles.heading}>HOW MANY PLAYERS:</Text>
-                  <Text style={styles.heading}>THE ITC HANDSHAKE:</Text>
-                  <Text style={styles.heading}>SMOKING FRIENDLY:</Text>
-                  <Text style={styles.heading}>DRINKING FRIENDLY:</Text>
-                  {itemStatus === 'accepted' ? (
-                    <Button
-                      buttonText={'Go to chat'}
-                      buttonStyle={styles.button}
-                      textStyle={{color: colors.secondary}}
-                      onPress={() =>
-                        navigation.navigate('SecondaryStack', {
-                          screen: 'GroupChat',
-                          params: {title: item.listing_title},
-                        })
-                      }
-                    />
-                  ) : (
-                    <Button
-                      buttonText={
-                        itemStatus === 'Unknown' ? 'Join Listing' : itemStatus
-                      }
-                      buttonStyle={styles.button}
-                      disable={itemStatus === 'pending' ? true : false}
-                      textStyle={{color: colors.secondary}}
-                      indicator={join_loading}
-                      onPress={() => onJoin()}
-                    />
-                  )}
-                </View>
-              </View>
-              <View>
                 <View style={styles.line} />
-                <View
-                  style={[
-                    styles.line,
-                    {marginTop: hp('5.5%'), height: hp('32%')},
-                  ]}
-                />
+                <Text style={styles.text}>{item.match_description || ''}</Text>
               </View>
-              <View>
+              <View style={styles.detailContainer}>
+                <Text style={styles.heading}>AREA CODE:</Text>
+                <View style={styles.line} />
+                <Text style={styles.text}>{item.area_code_match || ''}</Text>
+              </View>
+              <View style={styles.detailContainer}>
+                <Text style={styles.heading}>PRIVATE GROUP:</Text>
+                <View style={styles.line} />
                 <Text style={styles.text}>
-                  {Object.keys(item.match_description).length == 4
-                    ? item.match_description
-                    : 'test'}
+                  {item.private_group
+                    ? 'on'
+                    : (item.private_group && 'off') || ''}
                 </Text>
+              </View>
+              <View style={styles.detailContainer}>
+                <Text style={styles.heading}>EXPERIENCE LEVEL:</Text>
+                <View style={styles.line} />
                 <Text style={styles.text}>
-                  {item.area_code_match == '' ? '214' : item.area_code_match}
+                  {item.experience_level ? item.experience_level : ''}
                 </Text>
+              </View>
+              <View style={styles.detailContainer}>
+                <Text style={styles.heading}>SUGGESTED DAY:</Text>
+                <View style={styles.line} />
                 <Text style={styles.text}>
-                  {item.private_group == '' ? 'on' : item.private_group}
+                  {item.course_date ? item.course_date : ''}
                 </Text>
-                <Text style={[styles.text, {width: '50%'}]}>
-                  {item.experience_level == ''
-                    ? '5 to 10 par progress level'
-                    : item.experience_level}
-                </Text>
-                <Text style={[styles.text, {marginTop: hp('2.5%')}]}>
-                  {item.course_date}
-                </Text>
-                <Text style={styles.text}>{item.course_time}</Text>
+              </View>
+              <View style={styles.detailContainer}>
+                <Text style={styles.heading}>SUGGESTED TIME:</Text>
+                <View style={styles.line} />
                 <Text style={styles.text}>
-                  {item.how_many_players == 'Select a Value'
-                    ? '3'
-                    : item.how_many_players}
+                  {item.course_time ? item.course_time : ''}
                 </Text>
-                <Text style={[styles.text, {width: '50%'}]}>
-                  {item.the_itc_handshake == ''
-                    ? 'CASUAL HANDSHAKE'
-                    : item.the_itc_handshake}
-                </Text>
+              </View>
+              <View style={styles.detailContainer}>
+                <Text style={styles.heading}>HOW MANY PLAYERS:</Text>
+                <View style={styles.line} />
                 <Text style={styles.text}>
-                  {item.smoking_friendly == '' ? 'on' : item.smoking_friendly}
+                  {item.how_many_players ? item.how_many_players : ''}
                 </Text>
+              </View>
+              <View style={styles.detailContainer}>
+                <Text style={styles.heading}>THE ITC HANDSHAKE:</Text>
+                <View style={styles.line} />
                 <Text style={styles.text}>
-                  {item.drinking_friendly == '' ? 'on' : item.drinking_friendly}
+                  {item.the_itc_handshake ? item.the_itc_handshake : ''}
+                </Text>
+              </View>
+              <View style={styles.detailContainer}>
+                <Text style={styles.heading}>SMOKING FRIENDLY:</Text>
+                <View style={styles.line} />
+                <Text style={styles.text}>
+                  {item.smoking_friendly
+                    ? 'on'
+                    : (item.smoking_friendly && 'off') || ''}
+                </Text>
+              </View>
+              <View style={styles.detailContainer}>
+                <Text style={styles.heading}>DRINKING FRIENDLY:</Text>
+                <View style={styles.line} />
+                <Text style={styles.text}>
+                  {item.drinking_friendly
+                    ? 'on'
+                    : (item.drinking_friendly && 'off') || ''}
                 </Text>
               </View>
             </View>
+            {itemStatus === 'accepted' || type === 'my listings' ? (
+              <Button
+                buttonText={'Go to chat'}
+                buttonStyle={styles.button}
+                textStyle={{color: colors.secondary}}
+                onPress={() =>
+                  navigation.navigate('SecondaryStack', {
+                    screen: 'GroupChat',
+                    params: {title: item.listing_title},
+                  })
+                }
+              />
+            ) : (
+              <Button
+                buttonText={
+                  itemStatus === 'Unknown' ? 'Join Listing' : itemStatus
+                }
+                buttonStyle={styles.button}
+                disable={itemStatus === 'pending' ? true : false}
+                textStyle={{color: colors.secondary}}
+                indicator={join_loading}
+                onPress={() => onJoin()}
+              />
+            )}
           </>
         ) : (
           // : changeTab == 2 ? (
@@ -284,20 +308,29 @@ const styles = StyleSheet.create({
   },
   headingView: {
     backgroundColor: colors.gray,
-    padding: hp('2%'),
     borderRadius: 10,
+    padding: hp('2%'),
+    alignItems: 'center',
+    flex: 1,
+    // marginLeft: hp('10%'),
   },
   image: {
+    // height: hp('15%'),
+    // position: 'absolute',
+    // marginLeft: hp('3%'),
+    // top: hp('-4%'),
     height: hp('15%'),
-    position: 'absolute',
-    marginLeft: hp('3%'),
-    top: hp('-4%'),
     width: hp('15%'),
+    position: 'absolute',
+    left: hp('2%'),
+    top: hp('-4%'),
   },
   name: {
     color: colors.white,
     alignSelf: 'flex-end',
-    marginRight: hp('8%'),
+    marginRight: hp('1%'),
+    width: hp('22%'),
+    // flex: 1,
     fontWeight: 'bold',
     fontSize: hp('2%'),
   },
@@ -307,31 +340,39 @@ const styles = StyleSheet.create({
     padding: hp('2%'),
     // justifyContent: 'space-between',
     paddingLeft: hp('1%'),
-    flexDirection: 'row',
+    // flexDirection: 'row',
   },
   heading: {
     color: colors.white,
-    fontSize: hp('1.8%'),
-    marginBottom: hp('6%'),
+    fontSize: hp('1.9%'),
+    width: '40%',
+    marginBottom: hp('7%'),
     fontWeight: 'bold',
   },
   formWrapper: {
-    paddingTop: hp('11%'),
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    // paddingTop: hp('11%'),
+    // flexDirection: 'row',
+    // justifyContent: 'space-between',
+    // flexDirection: 'row',
+    // alignItems: 'flex-start',
+    // justifyContent: 'space-between',
+    paddingHorizontal: hp('1%'),
+    paddingVertical: hp('9%'),
   },
   line: {
     width: 1.1,
     backgroundColor: colors.gray,
-    marginLeft: hp('5%'),
-    height: hp('48%'),
+    // marginLeft: hp('5%'),
+    // height: hp('90%'),
   },
   text: {
     color: colors.lightgray,
-    fontSize: hp('1.6%'),
-    marginBottom: hp('6%'),
-    marginLeft: hp('3.5%'),
-    marginTop: hp('0.2%'),
+    marginBottom: hp('7%'),
+    width: '40%',
+    // backgroundColor: 'green',
+    fontSize: hp('1.9%'),
+    // marginLeft: hp('3.5%'),
+    // marginTop: hp('0.2%'),
   },
   review: {
     color: colors.white,
@@ -344,10 +385,13 @@ const styles = StyleSheet.create({
   },
   active: {
     backgroundColor: colors.primary,
+    // width: hp('30%'),
+    alignSelf: 'center',
     borderWidth: 0,
   },
   button: {
-    marginTop: hp('4%'),
+    // marginTop: hp('4%'),
+    width: hp('21%'),
     borderRadius: 50,
   },
   reviewStyle: {
@@ -367,5 +411,17 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     marginBottom: hp('1%'),
     width: hp('24%'),
+  },
+  detailContainer: {
+    flexDirection: 'row',
+    // backgroundColor: 'red',
+    width: hp('43%'),
+    flex: 0.9,
+    justifyContent: 'space-between',
+  },
+  imageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: hp('1%'),
   },
 });

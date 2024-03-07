@@ -35,11 +35,16 @@ import {useDispatch, useSelector} from 'react-redux';
 import {launchImageLibrary} from 'react-native-image-picker';
 import moment from 'moment';
 import {ShowToast} from '../Custom';
-import {ListingsByUserID, createListing} from '../redux/actions/listingAction';
+import {
+  DeleteListing,
+  ListingsByUserID,
+  createListing,
+} from '../redux/actions/listingAction';
 import {getListings} from '../redux/actions/homeAction';
 import images from '../assets/images';
 import {Picker} from '@react-native-picker/picker';
 import {useNavigation} from '@react-navigation/native';
+import {TabActions} from '@react-navigation/native';
 
 const Discover = () => {
   const dispatch = useDispatch();
@@ -66,7 +71,9 @@ const Discover = () => {
         columnWrapperStyle={{justifyContent: 'space-between'}}
         renderItem={({item, index}) => (
           <DiscoverCard
-            image={images.discover1}
+            image={
+              item.feature_image ? {uri: item.feature_image} : images.discover1
+            }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
                 screen: 'ListingDetails',
@@ -74,11 +81,7 @@ const Discover = () => {
               })
             }
             count={index + 1}
-            title={
-              Object.keys(item.listing_title).length > 13
-                ? 'New Listing'
-                : item.listing_title
-            }
+            title={item.listing_title}
             // itc={
             //   item.experience_level == ''
             //     ? '5 to 10 par progress level'
@@ -92,7 +95,7 @@ const Discover = () => {
             // }
             players={item.how_many_players}
             date={item.course_date}
-            time={item.course_time == '' ? '23:28' : item.course_time}
+            time={item.course_time ? item.course_time : ''}
           />
         )}
       />
@@ -168,28 +171,26 @@ const Discover = () => {
     );
   };
 
-  return (
-    <View style={{paddingTop: hp('4%')}}>
-      {!listings_filter_loader ? renderFilterListings() : renderAllListings()}
-    </View>
-  );
+  return <View style={{paddingTop: hp('4%')}}>{renderAllListings()}</View>;
 };
 
-const MyListings = () => {
-  const {my_listings, my_listings_loader} = useSelector(
+const MyListings = ({jumpTo}) => {
+  const [deletePressed, setDeletePressed] = React.useState(false);
+  const [loaderIndex, setLoaderIndex] = React.useState(null);
+  const {my_listings, my_listings_loader, delete_loader} = useSelector(
     state => state.ListingReducer,
   );
   const {user} = useSelector(state => state.AuthReducer);
-  console.log(my_listings);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
   React.useEffect(() => {
-    // if (my_listings?.length < 1) {
-    dispatch(ListingsByUserID(user.user_id));
-    // }
-  }, []);
+    if (deletePressed || !deletePressed) {
+      dispatch(ListingsByUserID(user.user_id));
+      setDeletePressed(false);
+    }
+  }, [deletePressed]);
 
   const renderLoader = () => {
     return (
@@ -210,27 +211,44 @@ const MyListings = () => {
     );
   };
 
+  const onDeleteListing = async (listing_id, index) => {
+    setLoaderIndex(index);
+    const res = await dispatch(DeleteListing(listing_id, user.user_id));
+    if (res) {
+      setDeletePressed(true);
+      return ShowToast(res);
+    }
+  };
+
+  const onEditListing = () => {
+   jumpTo('third')
+  };
+
   return (
     <View style={{paddingTop: hp('4%')}}>
       {my_listings_loader
         ? renderLoader()
         : my_listings?.message
         ? renderMessage()
-        : my_listings?.map((item, i) => (
+        : my_listings?.map((item, index) => (
             <MyGroupsCard
-              image={images.discover1}
+              deleteText={'Delete Listing'}
+              onDeletePress={() => onDeleteListing(item.listing_id, index)}
+              onEditPress={() => onEditListing()}
+              image={
+                item.feature_image
+                  ? {uri: item.feature_image}
+                  : images.discover1
+              }
               onPress={() =>
                 navigation.navigate('SecondaryStack', {
                   screen: 'ListingDetails',
-                  params: {item},
+                  params: {item, type: 'my listings'},
                 })
               }
-              count={i + 1}
-              title={
-                item.listing_title.length > 15
-                  ? 'New Listing'
-                  : item.listing_title
-              }
+              count={index + 1}
+              indicator={index == loaderIndex && delete_loader}
+              title={item.listing_title}
               players={item.how_many_players}
               area_code={item.area_code_match}
               date={item.course_date}
@@ -263,12 +281,12 @@ const AddNew = () => {
       name: 'No File Chosen',
       path: '',
     },
-    listing_gallery: [
-      {
-        name: 'No File Chosen',
-        path: '',
-      },
-    ],
+    // listing_gallery: [
+    //   {
+    //     name: 'No File Chosen',
+    //     path: '',
+    //   },
+    // ],
     smoking_friendly: false,
     drinking_friendly: false,
     private_listing: false,
@@ -357,6 +375,7 @@ const AddNew = () => {
           state.private_listing,
           state.hyperlink,
           user.user_id,
+          state.image_details,
         ),
       );
     }
@@ -577,7 +596,7 @@ const AddNew = () => {
           alignItems: 'flex-start',
           position: 'relative',
         }}>
-        <View style={{flex: 1}}>
+        {/* <View style={{flex: 1}}>
           {state.listing_gallery.map((item, i) => {
             return (
               <UploadPicture
@@ -595,7 +614,7 @@ const AddNew = () => {
           activeOpacity={0.9}
           onPress={() => onAddMore()}>
           <Add name={'add'} color={colors.secondary} size={25} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <View style={{paddingTop: hp('2%')}}>
         <Text style={styles.text}>Additional Details</Text>
@@ -628,11 +647,25 @@ const AddNew = () => {
   );
 };
 
-const renderScene = SceneMap({
-  first: () => <Discover />,
-  second: () => <MyListings />,
-  third: () => <AddNew />,
-});
+
+// const renderScene =  SceneMap({
+//   first: () => <Discover />,
+//   second: () => <MyListings />,
+//   third: () => <AddNew />,
+// });
+
+const renderScene = ({ route, jumpTo }) => {
+  switch (route.key) {
+    case 'first':
+      return <Discover />;
+    case 'second':
+      return <MyListings jumpTo={jumpTo} />;
+    case 'third':
+      return <AddNew />;
+    default:
+      return null;
+  }
+};
 
 export const AddNewListings = () => {
   const [index, setIndex] = React.useState(0);

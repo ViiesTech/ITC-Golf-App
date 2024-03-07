@@ -13,6 +13,8 @@ const initialState = {
   players_follow: [],
   wishlist_items: [],
   wishlist_loader: false,
+  register_id: null,
+  token: ''
 };
 
 export default (state = initialState, action) => {
@@ -21,13 +23,13 @@ export default (state = initialState, action) => {
       return {...state, signup_loading: true};
 
     case constant.SIGNUP_DONE:
-      return {...state, signup_loading: false, user: action.payload};
+      return {...state, signup_loading: false};
 
     case constant.LOGIN:
       return {...state, signin_loading: true};
 
     case constant.LOGIN_DONE:
-      return {...state, signin_loading: false, user: action.payload};
+      return {...state, signin_loading: false, user: action.payload, token: action.token};
 
     case constant.EDIT_PROFILE:
       return {...state, edit_loading: true};

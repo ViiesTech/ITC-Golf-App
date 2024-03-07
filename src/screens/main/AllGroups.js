@@ -33,7 +33,7 @@ import {
 } from '../../DummyData';
 import {useDispatch, useSelector} from 'react-redux';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {PlayersFollow} from '../../redux/actions/authAction';
+import {PlayersFollow, editProfile} from '../../redux/actions/authAction';
 import {Picker} from '@react-native-picker/picker';
 import {
   GroupsByAreaCodes,
@@ -41,41 +41,43 @@ import {
   getGroups,
   getListings,
 } from '../../redux/actions/homeAction';
+import { ShowToast } from '../../Custom';
+import { useNavigation } from '@react-navigation/native'
 
 const AllGroups = ({route}) => {
   const [listingsCode, setListingsCode] = useState(null);
   const [groupsCode, setGroupsCode] = useState(null);
   const [searchPressed, setSearchPressed] = useState(false);
 
-  const {user, follow_loader, players_follow} = useSelector(
-    state => state.AuthReducer,
-  );
+  const {user, follow_loader, players_follow, edit_loading, register_id} =
+    useSelector(state => state.AuthReducer);
   const {area_codes} = useSelector(state => state.HomeReducer);
   const dispatch = useDispatch();
 
   const {listing_id} = useSelector(state => state.ListingReducer);
 
-  console.log('listing id ========>', groupsCode, listingsCode);
+  console.log('listing id ========>', user.auth_register_id);
 
   const [state, setState] = useState({
-    first_name: user.first_name,
-    last_name: user.last_name,
-    address: '',
+    first_name: user.firstname,
+    last_name: user.lastname,
+    address: user?.address ? user.address : '',
     pickers: {
-      area_code: '',
-      exp_level: '',
-      desired_tee: '',
-      itc_handshake: '',
+      area_code: user?.areacode ? user?.areacode : '',
+      exp_level: user?.experience_level ? user?.experience_level : '',
+      desired_tee: user?.desired_tee_box ? user?.desired_tee_box : '',
     },
-    description: '',
-    photoURL: '',
+    description: user?.short_description ? user?.short_description : '',
+    photoURL: user?.feature_image_url ? user?.feature_image_url : user?.featured_image_url ? user?.featured_image_url : '',
   });
 
   const {options} = route.params;
 
+  const navigation = useNavigation()
+
   const [changeTab, setChangeTab] = useState(options);
 
-  // console.log('wah', changeTab);
+  // console.log('wah', r);
 
   useEffect(() => {
     if (changeTab === 'Players You Follow' && players_follow.length < 1) {
@@ -134,21 +136,49 @@ const AllGroups = ({route}) => {
   //   }
   // };
 
-  useEffect(() => {
-    if (listingsCode) {
-      dispatch(ListingsByAreaCodes(listingsCode));
-    } else {
-      dispatch(getListings())
-    }
-  }, [listingsCode]);
+  // useEffect(() => {
+  //   if (listingsCode) {
+  //     dispatch(ListingsByAreaCodes(listingsCode));
+  //   } else {
+  //     dispatch(getListings())
+  //   }
+  // }, [listingsCode]);
 
-  useEffect(() => {
-    if (groupsCode) {
-      dispatch(GroupsByAreaCodes(groupsCode));
+  // useEffect(() => {
+  //   if (groupsCode) {
+  //     dispatch(GroupsByAreaCodes(groupsCode));
+  //   } else {
+  //     dispatch(getGroups())
+  //   }
+  // }, [groupsCode]);
+
+  const onEditPress = async () => {
+
+   if(!state.photoURL){
+    return ShowToast('Please add your photo')
+   } else { 
+    const res = await dispatch(
+      editProfile(
+        user.user_id,
+        user.auth_register_id,
+        state.first_name,
+        state.last_name,
+        state.pickers.area_code,
+        state.pickers.exp_level,
+        state.pickers.desired_tee,
+        state.address,
+        state.description,
+        state.photoURL,
+      ),
+    );
+
+    if(res.success) {
+      navigation.navigate('Profile')
+      return ShowToast(res.message)
     } else {
-      dispatch(getGroups())
-    }
-  }, [groupsCode]);
+      return ShowToast(res.message)
+    }}
+  }
 
   return (
     <Container>
@@ -245,7 +275,7 @@ const AllGroups = ({route}) => {
                 }}>
                 <Image
                   source={
-                    state.photoURL ? {uri: state.photoURL} : images.editProfile
+                    state.photoURL ? {uri: state.photoURL} : images.profile
                   }
                   resizeMode="cover"
                   style={styles.imageStyle}
@@ -385,11 +415,13 @@ const AllGroups = ({route}) => {
               />
               <View style={styles.emailCard}>
                 <Text style={{color: colors.lightgray, fontSize: hp('1.7%')}}>
-                  Backeraliison23@Gmail.Com
+                  {user.user_email}
                 </Text>
               </View>
               <Button
                 buttonText={'UPDATE MY PROFILE'}
+                indicator={edit_loading}
+                onPress={() => onEditPress()}
                 buttonStyle={{
                   width: '60%',
                   borderRadius: 100,

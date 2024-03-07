@@ -27,10 +27,14 @@ const DiscoverCard = ({
         <View style={styles.numberView}>
           <Text style={{color: colors.primary}}>{count}</Text>
         </View>
+       <View style={styles.contentWrapper}> 
         <Text style={[styles.name, titleStyle]}>
-          {!time && title.length > 21 ? 'New Group' : title}
+          {title}
         </Text>
-        <SVGImage image={icons.tee} style={{alignSelf: 'center'}} />
+        <View style={styles.svgImageContainer}>
+        <SVGImage image={icons.tee} />
+        </View>
+        </View>
       </View>
       <View style={styles.secondaryWrapper}>
         <Text style={styles.textStyle}>
@@ -78,21 +82,46 @@ const styles = StyleSheet.create({
     height: hp('22%'),
     width: '101%',
   },
+  // numberView: {
+  //   borderWidth: 1,
+  //   padding: hp('0.5%'),
+  //   alignItems: 'center',
+  //   borderRadius: 5,
+  //   borderColor: colors.gray,
+  // },
+  // name: {
+  //   color: colors.white,
+  //   fontSize: hp('1.7%'),
+  //   // flex: 1,
+  //   marginLeft: hp('1%'),
+  //   alignSelf: 'center',
+  // },
+  // textWrapper: {
+  //   flexDirection: 'row',
+  //   flex: 1,
+  //   backgroundColor: 'red',
+  //   justifyContent: 'space-between',
+  //   marginLeft: hp('1%'),
+  //   paddingTop: hp('2%'),
+  // },
   numberView: {
     borderWidth: 1,
     padding: hp('0.5%'),
     alignItems: 'center',
     borderRadius: 5,
     borderColor: colors.gray,
+    alignSelf: 'flex-start'
   },
   name: {
     color: colors.white,
     fontSize: hp('1.7%'),
+    marginLeft: hp('1%'),
     alignSelf: 'center',
+    flex: 1, 
   },
   textWrapper: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center', // Align items vertically
     marginLeft: hp('1%'),
     paddingTop: hp('2%'),
   },
@@ -131,4 +160,16 @@ const styles = StyleSheet.create({
     fontSize: hp('1.5%'),
     marginTop: hp('1%'),
   },
+  contentWrapper: {
+    flexDirection: 'row',
+    // backgroundColor: 'red',
+    // alignSelf: 'center',
+    flex: 1,
+    // alignItems: 'center',
+  },
+  svgImageContainer:{
+    // position: 'absolute',
+    marginTop: hp('0.6%')
+    // right: 0
+  }
 });

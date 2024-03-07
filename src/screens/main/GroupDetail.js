@@ -32,15 +32,15 @@ const GroupDetail = ({route}) => {
 
   const {reviews, reviews_loading} = useSelector(state => state.HomeReducer);
   const {user} = useSelector(state => state.AuthReducer);
-  const {join_loading} = useSelector(state => state.GroupReducer);
+  const {join_group_loading} = useSelector(state => state.ListingReducer);
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const {item} = route.params;
-  console.log('detail ======>', item.group_id);
+  const {item, type} = route?.params;
+  // console.log('detail ======>', Object.keys(item.listing_content).length);
 
   const itemStatus = useSelector(
-    state => state.GroupReducer[item.group_id] || 'Unknown',
+    state => state.ListingReducer[item.group_id] || 'Unknown',
   );
 
   useEffect(() => {
@@ -83,11 +83,16 @@ const GroupDetail = ({route}) => {
     <Container>
       <Header />
       <SecondaryHeader
+        headerStyle={{
+          width: Object.keys(item.listing_title)?.length > 10 && hp('25%'),
+        }}
         text={item.listing_title}
         link={true}
         linkButton={{
           width:
-            Object.keys(item.listing_title).length > 10 ? hp('10%') : hp('14%'),
+            Object.keys(item.listing_title)?.length > 10
+              ? hp('10%')
+              : hp('14%'),
         }}
         onLinkPress={() => onHyperLink(item.hyper_link)}
       />
@@ -95,92 +100,127 @@ const GroupDetail = ({route}) => {
         <View style={styles.tabView}>
           {Tabs.map(item => (
             <PersonalInfoTab
-              text={item.id == 2 ? 'Player Reviews' : item.text}
-              style={
-                changeTab == item.id
-                  ? [
-                      styles.active,
-                      {
-                        width: item.id == 2 ? '40%' : '44%',
-                      },
-                    ]
-                  : [styles.inactive, {width: item.id == 1 ? '44%' : '40%'}]
-              }
+              text={item.text}
+              // style={
+              //   changeTab == item.id
+              //     ? [
+              //         styles.active,
+              //         {
+              //           width: item.id == 2 ? '40%' : '44%',
+              //         },
+              //       ]
+              //     : [styles.inactive, {width: item.id == 1 ? '44%' : '40%'}]
+              // }
               onPress={() => setChangeTab(item.id)}
-              textStyle={changeTab == item.id && {marginTop: hp('0.3%')}}
+              // textStyle={changeTab == item.id && {marginTop: hp('0.3%')}}
             />
           ))}
         </View>
         {changeTab == 1 ? (
           <>
             <View style={styles.detailView}>
-              <View style={styles.headingView}>
+              <View style={styles.imageContainer}>
+                <View style={styles.headingView}>
+                  <Text
+                    style={styles.name}
+                    numberOfLines={1}
+                    ellipsizeMode="tail">
+                    {item.listing_title}
+                  </Text>
+                </View>
                 <Image source={images.personal1} style={styles.image} />
-                <Text
-                  style={[
-                    styles.name,
-                    {
-                      marginRight:
-                        Object.keys(item.listing_title).length > 10
-                          ? hp('3%')
-                          : hp('8%'),
-                    },
-                  ]}>
-                  {item.listing_title}
-                </Text>
               </View>
             </View>
             <View style={styles.formWrapper}>
-              <View>
+              {/* <View style={styles.leftSection}> */}
+              {/* </View> */}
+
+              {/* <View> */}
+              <View style={styles.dataRow}>
                 <Text style={styles.heading}>DESCRIPTION:</Text>
-                <Text style={styles.heading}>GROUPER'S NAME:</Text>
-                <Text style={styles.heading}>AREA CODE:</Text>
-                <Text style={styles.heading}>ITC GROUP HANDSHAKE:</Text>
-                <Text style={styles.heading}>DESIRED TEE BOX:</Text>
-                <Text style={styles.heading}>WHAT KIND OF MATCH IS THIS:</Text>
-                <Text style={styles.heading}>SUGGESTED DAY:</Text>
-                <Text style={styles.heading}>IS THIS A PRIVATE GROUP:</Text>
-                {itemStatus === 'accepted' ? (
-                  <Button
-                    buttonText={'Go to chat'}
-                    buttonStyle={styles.button}
-                    textStyle={{color: colors.secondary}}
-                    onPress={() =>
-                      navigation.navigate('SecondaryStack', {
-                        screen: 'GroupChat',
-                        params: {title: item.listing_title},
-                      })
-                    }
-                  />
-                ) : (
-                  <Button
-                    buttonText={
-                      itemStatus === 'Unknown' ? 'Join Group' : itemStatus
-                    }
-                    buttonStyle={styles.button}
-                    disable={itemStatus === 'pending' ? true : false}
-                    textStyle={{color: colors.secondary}}
-                    indicator={join_loading}
-                    onPress={() => onJoinGroup()}
-                  />
-                )}
-              </View>
-              <View style={styles.line} />
-              <View>
-                <Text style={styles.text}>{}</Text>
-                <Text style={styles.text}>{}</Text>
-                <Text style={styles.text}>{item.area_code}</Text>
-                <Text style={styles.text}>{item.itc_group_handshake}</Text>
-                <Text style={styles.text}>{item.group_desired_teebox}</Text>
-                <Text style={[styles.text, {width: '50%'}]}>
-                  {item.what_kind_of_match_is_this}
-                </Text>
-                <Text style={styles.text}>{item.suggested_day}</Text>
+                <View style={styles.line} />
                 <Text style={styles.text}>
-                  {item.private_group == 'on' ? 'Yes' : 'No'}
+                  {item.listing_content ? item.listing_content : ''}
                 </Text>
               </View>
+              <View style={styles.dataRow}>
+                <Text style={styles.heading}>GROUPER'S NAME:</Text>
+                <View style={styles.line} />
+                <Text style={styles.text}>
+                  {item.author_name ? item.author_name : ''}
+                </Text>
+              </View>
+              <View style={styles.dataRow}>
+                <Text style={styles.heading}>AREA CODE:</Text>
+                <View style={styles.line} />
+                <Text style={styles.text}>
+                  {item.area_code ? item.area_code : ''}
+                </Text>
+              </View>
+              <View style={styles.dataRow}>
+                <Text style={styles.heading}>ITC GROUP HANDSHAKE:</Text>
+                <View style={styles.line} />
+                <Text style={styles.text}>
+                  {item.itc_group_handshake ? item.itc_group_handshake : ''}
+                </Text>
+              </View>
+              <View style={styles.dataRow}>
+                <Text style={styles.heading}>DESIRED TEE BOX:</Text>
+                <View style={styles.line} />
+                <Text style={styles.text}>
+                  {item.group_desired_teebox ? item.group_desired_teebox : ''}
+                </Text>
+              </View>
+              <View style={styles.dataRow}>
+                <Text style={styles.heading}>WHAT KIND OF MATCH IS THIS:</Text>
+                <View style={styles.line} />
+                <Text style={styles.text}>
+                  {item.what_kind_of_match_is_this
+                    ? item.what_kind_of_match_is_this
+                    : ''}
+                </Text>
+              </View>
+              <View style={styles.dataRow}>
+                <Text style={styles.heading}>SUGGESTED DAY:</Text>
+                <View style={styles.line} />
+
+                <Text style={styles.text}>
+                  {item.suggested_day ? item.suggested_day : ''}
+                </Text>
+              </View>
+              <View style={styles.dataRow}>
+                <Text style={styles.heading}>IS THIS A PRIVATE GROUP:</Text>
+                <View style={styles.line} />
+                <Text style={styles.text}>
+                  {item.private_group == 'on' ? 'Yes' : 'No' || ''}
+                </Text>
+              </View>
+              {/* </View> */}
             </View>
+            {itemStatus === 'accepted' || type === 'my groups' ? (
+              <Button
+                buttonText={'Go to chat'}
+                buttonStyle={styles.button}
+                textStyle={{color: colors.secondary}}
+                onPress={() =>
+                  navigation.navigate('SecondaryStack', {
+                    screen: 'GroupChat',
+                    params: {title: item.listing_title},
+                  })
+                }
+              />
+            ) : (
+              <Button
+                buttonText={
+                  itemStatus === 'Unknown' ? 'Join Group' : itemStatus
+                }
+                buttonStyle={styles.button}
+                disable={itemStatus === 'pending' ? true : false}
+                textStyle={{color: colors.secondary}}
+                indicator={join_group_loading}
+                onPress={() => onJoinGroup()}
+              />
+            )}
           </>
         ) : (
           // : changeTab == 2 ? (
@@ -239,7 +279,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: hp('2%'),
     paddingLeft: hp('1%'),
-    flexDirection: 'row',
+    // flexDirection: 'row',
   },
   active: {
     backgroundColor: colors.primary,
@@ -250,49 +290,54 @@ const styles = StyleSheet.create({
   },
   headingView: {
     backgroundColor: colors.gray,
-    padding: hp('2%'),
     borderRadius: 10,
+    padding: hp('2%'),
+    alignItems: 'center',
+    flex: 1,
   },
   image: {
     height: hp('15%'),
-    position: 'absolute',
-    marginLeft: hp('3%'),
-    top: hp('-4%'),
     width: hp('15%'),
+    position: 'absolute',
+    left: hp('2%'),
+    top: hp('-4%'),
   },
   name: {
     color: colors.white,
     alignSelf: 'flex-end',
+    marginRight: hp('1%'),
+    width: hp('22%'),
     fontWeight: 'bold',
     fontSize: hp('2%'),
   },
   formWrapper: {
-    paddingTop: hp('11%'),
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    paddingHorizontal: hp('1%'),
+    paddingVertical: hp('9%'),
   },
   heading: {
     color: colors.white,
-    fontSize: hp('1.8%'),
-    marginBottom: hp('6%'),
+    fontSize: hp('1.9%'),
+    width: '40%',
+    marginBottom: hp('7%'),
     fontWeight: 'bold',
   },
   button: {
-    marginTop: hp('1%'),
+    // marginTop: hp('4%'),
+    width: hp('20%'),
+    // marginLeft: hp('1%'),
     borderRadius: 50,
   },
   line: {
     width: 1.1,
     backgroundColor: colors.gray,
-    marginLeft: hp('5%'),
-    height: hp('64%'),
+    // marginLeft: hp('5%'),
+    // height: hp('82%'),
   },
   text: {
     color: colors.lightgray,
-    fontSize: hp('1.6%'),
-    marginBottom: hp('6%'),
-    marginLeft: hp('3.5%'),
-    marginTop: hp('0.1%'),
+    marginBottom: hp('7%'),
+    width: '40%',
+    fontSize: hp('1.9%'),
   },
   reviewStyle: {
     backgroundColor: colors.gray,
@@ -311,5 +356,25 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     marginBottom: hp('1%'),
     width: hp('24%'),
+  },
+  leftSection: {
+    // flex: 1
+    // alignItems: 'flex-end',
+  },
+  rightSection: {
+    flex: 1,
+    // width: hp('20%'),
+    // alignItems: 'flex-start',
+  },
+  imageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: hp('1%'),
+  },
+  dataRow: {
+    flexDirection: 'row',
+    width: hp('43%'),
+    flex: 0.9,
+    justifyContent: 'space-between',
   },
 });

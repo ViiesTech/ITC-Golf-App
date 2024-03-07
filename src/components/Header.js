@@ -11,14 +11,16 @@ import { useSelector } from 'react-redux'
 const Header = ({ iconStyle, headerStyle }) => {
     const navigation = useNavigation()
 
+
     const { user } = useSelector(state => state.AuthReducer)
 
     return (
         <View style={[styles.headerView, headerStyle]}>
             <View style={{ flexDirection: 'row' }}>
                 <Image
-                    source={images.header_image}
+                    source={user?.featured_image_url ? {uri: user?.featured_image_url} : user?.feature_image_url ? {uri: user.feature_image_url} : images.profile}
                     style={styles.image}
+                    borderRadius={100}
                 />
                 <Text style={styles.headerText}>Hello {user.username}!</Text>
             </View>

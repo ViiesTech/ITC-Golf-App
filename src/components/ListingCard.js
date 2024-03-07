@@ -22,7 +22,7 @@ const ListingCard = ({
       onPress={onPress}>
       <View style={{flexDirection: 'row'}}>
         <Image
-          source={images.listing2}
+          source={image}
           style={styles.image}
           borderRadius={12}
         />
@@ -30,11 +30,11 @@ const ListingCard = ({
           <View style={styles.textView}>
             <Text style={styles.number}>{number}</Text>
           </View>
-          <View style={{position: 'absolute', top: hp('5%')}}>
-            <Text style={[styles.textStyle, descStyle]}>{desc}</Text>
+          <View style={[{position: 'absolute', top: hp('8%')},descStyle]}>
+            <Text style={[styles.textStyle, ]}>{desc}</Text>
           </View>
         </View>
-        <Text style={styles.text}>{title}</Text>
+        <Text style={[styles.text,{width: Object.keys(title).length > 13 && hp('15%')}]}>{title}</Text>
       </View>
       <View style={{marginRight: hp('1%'), paddingTop: hp('1%')}}>
         <Text style={styles.eventsText}>NO OF PLAYERS:</Text>
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: colors.white,
-    marginTop: hp('0%'),
+    // marginTop: hp('0%'),
     fontSize: hp('1.4%'),
     position: 'absolute',
   },

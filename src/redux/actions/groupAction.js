@@ -1,6 +1,8 @@
 import axios from 'axios';
 import constant, {URL} from '../constant';
 import {ShowToast} from '../../Custom';
+import {Platform} from 'react-native';
+import FormData from 'form-data';
 
 export const createGroup = (
   group_title,
@@ -12,28 +14,41 @@ export const createGroup = (
   kind_listing,
   hyperlink,
   user_id,
+  photo,
 ) => {
   return async dispatch => {
     dispatch({
       type: constant.CREATE_GROUP,
     });
 
-    let payload = {
-      listing_title: group_title,
-      private_group: private_group,
-      area_code: area_code,
-      itc_group_handshake: itc_handshake,
-      group_desired_teebox: desired_tee,
-      suggested_day: suggested_day,
-      what_kind_of_match_is_this: kind_listing,
-      hyper_link: hyperlink,
-      user_id: user_id,
-    };
+    var data = new FormData();
+
+    data.append('listing_title', group_title);
+    data.append('private_group', private_group);
+    data.append('listing_content');
+    data.append('area_code', area_code);
+    data.append('itc_group_handshake', itc_handshake);
+    data.append('group_desired_teebox', desired_tee);
+    data.append('suggested_day', suggested_day);
+    data.append('what_kind_of_match_is_this', kind_listing);
+    data.append('hyper_link', hyperlink);
+    data.append('user_id', user_id);
+    if (photo) {
+      data.append('group_picture', {
+        name: `${photo.name}.jpg`,
+        type: 'image/jpeg',
+        uri:
+          Platform.OS === 'android'
+            ? photo.path
+            : photo.path.replace('file://', ''),
+      });
+    }
 
     await axios
-      .post(`${URL}/create_group`, payload, {
+      .post(`${URL}/create_group`, data, {
         headers: {
           Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
       })
       .then(res => {
@@ -136,67 +151,106 @@ export const JoinGroup = (
   };
 };
 
-export const AcceptGroup = (
-  user_id,
-  author_id,
-  user_email,
-  noti_text,
-  group_id,
-) => {
+// export const AcceptGroup = (
+//   user_id,
+//   author_id,
+//   user_email,
+//   noti_text,
+//   group_id,
+// ) => {
+//   return async dispatch => {
+//     dispatch({
+//       type: constant.ACCEPT_GROUP,
+//     });
+
+//     return await axios
+//       .post(
+//         `${URL}/group-accept?sending_user_id=${user_id}&current_author_id=${author_id}&sending_user_email=${user_email}&notification_text=${noti_text}&group_id=${group_id}`,
+//         {},
+//         {
+//           headers: {
+//             Accept: 'application/json',
+//           },
+//         },
+//       )
+//       .then(res => {
+//         console.log('accept group respponse =====>', res.data);
+//         dispatch({
+//           type: constant.ACCEPT_GROUP_DONE,
+//         });
+//         return res.data;
+//       })
+//       .catch(error => {
+//         console.log('accept group error =========>', error);
+//         dispatch({
+//           type: constant.ACCEPT_GROUP_DONE,
+//         });
+//         return ShowToast('Some problem occured');
+//       });
+//   };
+// };
+
+// export const RejectGroup = (
+//   user_id,
+//   author_id,
+//   user_email,
+//   noti_text,
+//   group_id,
+// ) => {
+//   return async dispatch => {
+//     dispatch({
+//       type: constant.REJECT_GROUP,
+//     });
+
+//     return await axios
+//       .post(
+//         `${URL}/group-reject-request?sending_user_id=${user_id}&current_author_id=${author_id}&sending_user_email=${user_email}&notification_text=${noti_text}&group_id=${group_id}`,
+//         {},
+//         {
+//           headers: {
+//             Accept: 'application/json',
+//           },
+//         },
+//       )
+//       .then(res => {
+//         console.log('reject group response ========>', res.data);
+//         dispatch({
+//           type: constant.REJECT_GROUP_DONE,
+//         });
+//         return res.data;
+//       })
+//       .catch(error => {
+//         console.log('reject group error ==========>', error);
+//         dispatch({
+//           type: constant.REJECT_GROUP_DONE,
+//         });
+//         return ShowToast('Some problem occured');
+//       });
+//   };
+// };
+
+export const DeleteGroup = (group_id, user_id) => {
   return async dispatch => {
+
     dispatch({
-      type: constant.ACCEPT_GROUP,
-    });
+      type: constant.DELETE_GROUP
+    })
 
     return await axios
-      .post(
-        `${URL}/group-accept?sending_user_id=${user_id}&current_author_id=${author_id}&sending_user_email=${user_email}&notification_text=${noti_text}&group_id=${group_id}`,
-        {},
-        {
-          headers: {
-            Accept: 'application/json',
-          },
-        },
-      )
+      .delete(`${URL}/delete-group/${group_id}/${user_id}`)
       .then(res => {
-        console.log('accept group respponse =====>', res.data);
+        console.log('delete group response ========>', res.data);
         dispatch({
-          type: constant.ACCEPT_GROUP_DONE,
-        });
-        return res.data;
+          type: constant.DELETE_GROUP_DONE
+        })
+        return res.data.message;
       })
       .catch(error => {
-        console.log('accept group error =========>', error);
+        console.log('delete group error =======>', error);
         dispatch({
-          type: constant.ACCEPT_GROUP_DONE,
-        });
+          type: constant.DELETE_GROUP_DONE
+        })
         return ShowToast('Some problem occured');
       });
-  };
-};
-
-export const RejectGroup = (user_id, author_id, user_email, noti_text, group_id) => {
-  return async dispatch => {
-    dispatch({
-      type: constant.REJECT_GROUP
-    })
-
-    return await axios.post(`${URL}/group-reject-request?sending_user_id=${user_id}&current_author_id=${author_id}&sending_user_email=${user_email}&notification_text=${noti_text}&group_id=${group_id}`,{},{
-      headers:{
-        'Accept': 'application/json'
-      }
-    }).then((res) => {
-      console.log('reject group response ========>', res.data)
-      dispatch({
-        type: constant.REJECT_GROUP_DONE
-      })
-      return res.data
-    }).catch((error) => {
-      console.log('reject group error ==========>', error)
-      dispatch({
-        type: constant.REJECT_GROUP_DONE
-      })
-      return ShowToast('Some problem occured')
-    })
   };
 };

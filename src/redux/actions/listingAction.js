@@ -1,6 +1,8 @@
 import axios from 'axios';
 import constant, {URL} from '../constant';
 import {ShowToast} from '../../Custom';
+import FormData from 'form-data';
+import { Platform } from 'react-native';
 
 export const createListing = (
   location,
@@ -15,31 +17,40 @@ export const createListing = (
   private_listing,
   hyperlink,
   user_id,
+  photo
 ) => {
   return async dispatch => {
     dispatch({
       type: constant.CREATE_LISTING,
     });
 
-    let payload = {
-      location_golfclub: location,
-      description: description,
-      suggested_day: suggested_day,
-      suggested_time: suggested_time,
-      how_many_players: how_many_players,
-      area_code: area_code,
-      the_itc_handshake: itc_handshake,
-      desired_tee_box: desired_tee,
-      drinking_friendly: drinking_friendly,
-      private_match: private_listing,
-      hyper_link: hyperlink,
-      user_id: user_id,
-    };
+    var data = new FormData()
+
+    data.append('location_golfclub', location)
+    data.append('description', description)
+    data.append('suggested_day', suggested_day)
+    data.append('suggested_time', suggested_time)
+    data.append('how_many_players', how_many_players)
+    data.append('area_code', area_code)
+    data.append('the_itc_handshake',itc_handshake)
+    data.append('desired_tee_box', desired_tee)
+    data.append('drinking_friendly', drinking_friendly)
+    data.append('private_match', private_listing)
+    data.append('hyper_link', hyperlink)
+    data.append('user_id', user_id)
+    if(photo) {
+      data.append('listing_picture',{
+        name: `${photo.name}.jpg`,
+        type: 'image/jpeg',
+        uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://','')
+      })
+    }
 
     await axios
-      .post(`${URL}/create_match`, payload, {
+      .post(`${URL}/create_match`, data, {
         headers: {
           Accept: 'application/json',
+          'Content-Type': 'multipart/form-data'
         },
       })
       .then(res => {
@@ -158,9 +169,9 @@ export const AcceptListing = (
       )
       .then(res => {
         console.log('accept listing response ========>', res.data);
-        dispatch({
-          type: constant.ACCEPT_LISTING_DONE,
-        });
+        // dispatch({
+        //   type: constant.ACCEPT_LISTING_DONE,
+        // });
         return res.data;
       })
       .catch(error => {
@@ -197,9 +208,9 @@ export const RejectListing = (
       )
       .then(res => {
         console.log('reject listing response ========>', res.data);
-        dispatch({
-          type: constant.REJECT_LISTING_DONE,
-        });
+        // dispatch({
+        //   type: constant.REJECT_LISTING_DONE,
+        // });
         return res.data;
       })
       .catch(error => {
@@ -211,3 +222,25 @@ export const RejectListing = (
       });
   };
 };
+
+export const DeleteListing = (listing_id, user_id) => {
+  return async dispatch => {
+    dispatch({
+      type: constant.DELETE_LISTING
+    })
+
+    return await axios.delete(`${URL}/delete-listing/${listing_id}/${user_id}`).then((res) => {
+      console.log('delete listing response ========>', res.data)
+      dispatch({
+        type: constant.DELETE_LISTING_DONE
+      })
+      return res.data.message
+    }).catch((error) => {
+      console.log('delete listing error ========>',error)
+      dispatch({
+        type: constant.DELETE_LISTING_DONE
+      })
+      return ShowToast('Some problem occured')
+    })
+  }
+}

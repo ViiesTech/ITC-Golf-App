@@ -5,13 +5,19 @@ import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import colors from '../assets/colors';
 import SVGImage from './SVGImage';
 import icons from '../assets/icons';
+import Button from './Button';
 
-const MyGroupsCard = ({image, count, title, players, date, area_code, handshake, onPress, group}) => {
+const MyGroupsCard = ({image, count, title, players, date, area_code, handshake, onPress, group, deleteText, onDeletePress, onEditPress, indicator}) => {
   // console.log(title.length);
 
   return (
     <TouchableOpacity style={styles.wrapper} activeOpacity={0.9} onPress={onPress}>
       <Image source={image} style={styles.image} borderRadius={10} />
+      <TouchableOpacity style={styles.editView} activeOpacity={0.9} onPress={onEditPress}>
+          <SVGImage 
+            image={icons.edit}
+          />
+      </TouchableOpacity>
       <View style={styles.secondaryWrapper}>
         <View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -37,11 +43,18 @@ const MyGroupsCard = ({image, count, title, players, date, area_code, handshake,
             <View style={styles.border} />
             <View
               style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
+                // flexDirection: 'row',
+                // justifyContent: 'space-between',
                 paddingTop: hp('1.5%'),
               }}>
-              <View>
+                  <Button 
+                    buttonText={deleteText}
+                    onPress={onDeletePress}
+                    indicator={indicator}
+                    textStyle={{color: colors.secondary, fontSize: hp('1.8%')}}
+                    buttonStyle={styles.buttonStyle}
+                  />
+              {/* <View>
                 <Text style={styles.text2}>AREA CODE:</Text>
                 <Text style={styles.text3}>{area_code}</Text>
               </View>
@@ -49,7 +62,7 @@ const MyGroupsCard = ({image, count, title, players, date, area_code, handshake,
               <View>
                 <Text style={styles.text2}>DATE:</Text>
                 <Text style={styles.text3}>{date}</Text>
-              </View>
+              </View> */}
             </View>
           </View>
         </View>
@@ -64,7 +77,7 @@ const styles = StyleSheet.create({
   wrapper: {
     flexDirection: 'row',
     // justifyContent: 'space-around',
-    marginBottom: hp('4%'),
+    marginBottom: hp('7%'),
   },
   image: {
     height: hp('20%'),
@@ -79,6 +92,7 @@ const styles = StyleSheet.create({
   },
   name: {
     color: colors.white,
+    flex: 1,
     fontWeight: 'bold',
     fontSize: hp('1.9%'),
   },
@@ -131,4 +145,18 @@ const styles = StyleSheet.create({
     width: 1,
     backgroundColor: colors.gray,
   },
+  buttonStyle:{
+    padding: hp('0.4%')
+  },
+  editView:{
+    backgroundColor: colors.primary,
+    position: 'absolute',
+    left: hp('1.5%'),
+    top: hp('1%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+    height: hp('3%'),
+    width: hp('3%')
+  }
 });

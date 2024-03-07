@@ -21,6 +21,7 @@ import Sponsors from '../../components/Sponsors';
 import SearchFilter from '../../components/SearchFilter';
 import {ListingsByAreaCodes} from '../../redux/actions/homeAction';
 import colors from '../../assets/colors';
+import images from '../../assets/images';
 
 const Listing = () => {
   const [selectedCode, setSelectedCode] = useState(null);
@@ -56,13 +57,11 @@ const Listing = () => {
         columnWrapperStyle={{justifyContent: 'space-between'}}
         renderItem={({item, index}) => (
           <ListingDetailCard
-            // image={item.image}
+          listingImage={item.feature_image ? {uri: item.feature_image} : images.listing2}
             route={routeName}
             total={index + 1}
             title={
-              Object.keys(item.listing_title).length > 13
-                ? 'New Listing'
-                : item.listing_title
+             item.listing_title
             }
             desc={
               Object.keys(item.match_description).length == 4
@@ -125,9 +124,7 @@ const Listing = () => {
             route={routeName}
             total={index + 1}
             title={
-              Object.keys(item.listing_title).length > 13
-                ? 'New Listing'
-                : item.listing_title
+              item.listing_title
             }
             desc={
               Object.keys(item.match_description).length == 4

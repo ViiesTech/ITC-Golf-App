@@ -6,8 +6,9 @@ const initialState = {
   my_groups_loader: false,
   my_groups_message: '',
   join_loading: false,
-  accept_loader: false,
-  reject_loader: false,
+  delete_loader: false,
+  // accept_loader: false,
+  // reject_loader: false,
 };
 
 export default (state = initialState, action) => {
@@ -29,33 +30,29 @@ export default (state = initialState, action) => {
         my_groups_message: state.my_groups.length < 1 && action.message,
       };
 
-    case constant.JOIN_GROUP:
-      return {...state, join_loading: true};
+    case constant.DELETE_GROUP:
+      return {...state, delete_loader: true};
 
-    case constant.JOIN_GROUP_DONE:
-      return {
-        ...state,
-        join_loading: false,
-        [action.payload.listingId]: action.payload.status,
-      };
+    case constant.DELETE_GROUP_DONE:
+      return {...state, delete_loader: false};
 
-    case constant.ACCEPT_GROUP:
-      return {...state, accept_loader: true};
+    // case constant.ACCEPT_GROUP:
+    //   return {...state, accept_loader: true};
 
-    case constant.ACCEPT_GROUP_DONE:
-      return {
-        ...state,
-        accept_loader: false,
-      };
+    // case constant.ACCEPT_GROUP_DONE:
+    //   return {
+    //     ...state,
+    //     accept_loader: false,
+    //   };
 
-    case constant.REJECT_GROUP:
-      return {...state, reject_loader: true};
+    // case constant.REJECT_GROUP:
+    //   return {...state, reject_loader: true};
 
-    case constant.REJECT_GROUP_DONE:
-      return {
-        ...state,
-        reject_loader: false,
-      };
+    // case constant.REJECT_GROUP_DONE:
+    //   return {
+    //     ...state,
+    //     reject_loader: false,
+    //   };
 
     default:
       return state;
