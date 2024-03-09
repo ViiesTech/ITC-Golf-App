@@ -22,7 +22,7 @@ const MyGroupsCard = ({image, count, title, players, date, area_code, handshake,
         <View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={styles.name}>{title}</Text>
-            <View style={{flexDirection: 'row'}}>
+            <View style={{flexDirection: 'row',}}>
               <View style={styles.teeView}>
                 <SVGImage image={icons.teeBlack} />
               </View>
@@ -76,7 +76,7 @@ export default MyGroupsCard;
 const styles = StyleSheet.create({
   wrapper: {
     flexDirection: 'row',
-    // justifyContent: 'space-around',
+    // justifyContent: 'space-between',
     marginBottom: hp('7%'),
   },
   image: {
@@ -146,7 +146,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray,
   },
   buttonStyle:{
-    padding: hp('0.4%')
+    padding: hp('0.4%'),
+    width: hp('24%')
   },
   editView:{
     backgroundColor: colors.primary,

@@ -53,7 +53,7 @@ const ListingDetails = ({route}) => {
   const itemStatus = useSelector(
     state => state?.ListingReducer[item.listing_id] || 'Unknown',
   );
-  console.log(itemStatus);
+  console.log('acha',itemStatus);
 
   console.log(
     'reviews response from screen ===============>',
@@ -82,7 +82,7 @@ const ListingDetails = ({route}) => {
         item.author_id,
         item.listing_id,
         item.author_email,
-        'listing',
+        'wants to join you',
       ),
     );
 
@@ -144,7 +144,7 @@ const ListingDetails = ({route}) => {
                     {item.listing_title}
                   </Text>
                 </View>
-                <Image source={images.personal1} style={styles.image} />
+                <Image source={item.feature_image ? {uri:item.feature_image} : images.listing2} style={styles.image} borderRadius={100}/>
               </View>
             </View>
             <View style={styles.formWrapper}>
@@ -221,7 +221,7 @@ const ListingDetails = ({route}) => {
                 </Text>
               </View>
             </View>
-            {itemStatus === 'accepted' || type === 'my listings' ? (
+            {itemStatus === 'accepted' || type === 'my listings' || item.author_id == user.user_id  || item.private_group === 'off' ? (
               <Button
                 buttonText={'Go to chat'}
                 buttonStyle={styles.button}

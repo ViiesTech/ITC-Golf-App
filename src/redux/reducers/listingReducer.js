@@ -10,7 +10,7 @@ const initialState = {
   accept_loader: false,
   reject_loader: false,
   delete_loader: false,
-  edit_loader: false
+  edit_loader: false,
 };
 
 export default (state = initialState, action) => {
@@ -48,17 +48,23 @@ export default (state = initialState, action) => {
       return {
         ...state,
         join_group_loading: false,
-        [action.payload.listingId]: action.payload.status,
+        // [action.payload.listingId]: action.payload.status,
       };
 
     case constant.ACCEPT_REQUEST:
       return {...state, accept_loader: true};
 
+    // case constant.ACCEPT_REQUEST_DONE:
+    //   return {
+    //     ...state,
+    //     accept_loader: false,
+    //     [action.payload.listingId]: action.payload.status,
+    //   };
+
     case constant.ACCEPT_REQUEST_DONE:
       return {
         ...state,
         accept_loader: false,
-        [action.payload.listingId]: action.payload.status,
       };
 
     case constant.REJECT_REQUEST:
@@ -68,7 +74,6 @@ export default (state = initialState, action) => {
       return {
         ...state,
         reject_loader: false,
-        [action.payload.listingId]: action.payload.status,
       };
 
     case constant.DELETE_LISTING:
@@ -78,10 +83,10 @@ export default (state = initialState, action) => {
       return {...state, delete_loader: false};
 
     case constant.EDIT_LISTING:
-      return {...state, edit_loader: true}
-      
+      return {...state, edit_loader: true};
+
     case constant.EDIT_LISTING_DONE:
-      return {...state, edit_loader: false}  
+      return {...state, edit_loader: false};
 
     default:
       return state;

@@ -74,13 +74,14 @@ const styles = StyleSheet.create({
     marginBottom: hp('3.5%'),
     borderWidth: 1,
     borderColor: colors.gray,
-    height: hp('52%'),
+    // height: hp('52%'),
+    padding: hp('0.6%'),
     width: '47%',
     borderRadius: 10,
   },
   image: {
     height: hp('22%'),
-    width: '101%',
+    width: '100%'
   },
   // numberView: {
   //   borderWidth: 1,

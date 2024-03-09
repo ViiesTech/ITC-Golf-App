@@ -62,7 +62,7 @@ const Discover = () => {
         renderItem={({item, index}) => (
           <DiscoverCard
             image={
-              item.feature_image ? {uri: item.feature_image} : images.discover2
+              item.feature_image ? {uri: item.feature_image} : images.listing4
             }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
@@ -171,7 +171,6 @@ const Discover = () => {
 };
 
 const MyGroups = ({jumpTo, setGroupData}) => {
-  const [deletePressed, setDeletePressed] = React.useState(false);
   const [loaderIndex, setLoaderIndex] = React.useState(null);
   const {my_groups, my_groups_loader, my_groups_message, delete_loader} =
     useSelector(state => state.GroupReducer);
@@ -184,11 +183,8 @@ const MyGroups = ({jumpTo, setGroupData}) => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    if (deletePressed || !deletePressed) {
       dispatch(getGroupsById(user.user_id));
-      setDeletePressed(false);
-    }
-  }, [deletePressed]);
+  }, []);
 
   const renderLoader = () => {
     return (
@@ -210,7 +206,7 @@ const MyGroups = ({jumpTo, setGroupData}) => {
             fontSize: hp('2%'),
             fontWeight: 'bold',
           }}>
-          {my_groups_message}
+          {my_groups.message || 'No Groups Found'}
         </Text>
       </View>
     );
@@ -220,7 +216,7 @@ const MyGroups = ({jumpTo, setGroupData}) => {
     setLoaderIndex(index);
     const res = await dispatch(DeleteGroup(group_id, user.user_id));
     if (res) {
-      setDeletePressed(true);
+      navigation.navigate('Home')
       return ShowToast(res);
     }
   };
@@ -241,7 +237,7 @@ const MyGroups = ({jumpTo, setGroupData}) => {
               onEditPress={() => onEditGroup(item)}
               onDeletePress={() => onDeleteGroup(item.group_id, index)}
               image={
-                item.feature_image ? {uri: item.feature_image} : images.about1
+                item.feature_image ? {uri: item.feature_image} : images.discover4
               }
               indicator={loaderIndex == index && delete_loader}
               title={item.listing_title}
@@ -346,18 +342,18 @@ const AddNew = ({jumpTo, groupData}) => {
           state.group_photo_details,
         ),
       );
-      if(res){
-        navigation.navigate('Home')
-        initialState()
-        return ShowToast(res)
+      if (res) {
+        navigation.navigate('Home');
+        initialState();
+        return ShowToast(res);
       } else {
-        return ShowToast(res)
+        return ShowToast(res);
       }
     } else {
       if (!state.group_title) {
         return ShowToast('Please add group title');
       } else {
-        await dispatch(
+        const res = await dispatch(
           createGroup(
             state.group_title,
             state.private_group,
@@ -372,8 +368,10 @@ const AddNew = ({jumpTo, groupData}) => {
             state.group_photo_details,
           ),
         );
-        navigation.navigate('Home');
-        initialState();
+        if (res) {
+          navigation.navigate('Home');
+          initialState();
+        }
       }
     }
   };

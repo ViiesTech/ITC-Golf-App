@@ -26,30 +26,23 @@ import {useNavigation} from '@react-navigation/native';
 import constant from '../../redux/constant';
 
 const Notifications = () => {
-  const [acceptPressed, setAcceptPressed] = useState(false);
-  const [rejectPressed, setRejectPressed] = useState(false);
-
   const {notification_loader, notifications} = useSelector(
     state => state.HomeReducer,
   );
 
   const {user} = useSelector(state => state.AuthReducer);
   const {accept_loader, reject_loader} = useSelector(
-    state => state.GroupReducer,
+    state => state.ListingReducer,
   );
 
   const dispatch = useDispatch();
 
-  console.log('notifications data =====>', user.user_id);
+  console.log('notifications data =====>', notifications);
 
   useEffect(() => {
     // setNotifications(TodayNotifications)
-    if (notifications.length < 1 || acceptPressed || rejectPressed) {
-      dispatch(getNotifications(user.user_id));
-    } else {
-      dispatch(getNotifications(user.user_id));
-    }
-  }, [acceptPressed, rejectPressed]);
+    dispatch(getNotifications(user.user_id));
+  }, []);
 
   const renderLoader = () => {
     return (
@@ -65,8 +58,10 @@ const Notifications = () => {
     );
   };
 
-  const onAcceptRequest = async item => {
+  const onAcceptRequest = async (item, index) => {
     // if (item.listing_id) {
+      // return console.log(item.listing_id)
+    console.log(item);
     const listing = await dispatch(
       AcceptListing(
         user.user_id,
@@ -76,15 +71,14 @@ const Notifications = () => {
         item.listing_id,
       ),
     );
-    if (listing.message && item.status === 'pending') {
+    if (listing.message && item.listing_status === 'pending') {
+      notifications[index] = {...item, listing_status: 'accepted'};
       dispatch({
-        type: constant.ACCEPT_REQUEST_DONE,
-        payload: {listingId: item.listing_id, status: listing.status},
+        type: constant.GET_NOTIFICATIONS_DONE,
+        payload: notifications,
       });
-      setAcceptPressed(true);
       return ShowToast(listing.message);
     } else {
-      setAcceptPressed(false);
       return ShowToast(listing.message);
     }
     // } else {
@@ -109,7 +103,7 @@ const Notifications = () => {
     // }
   };
 
-  const onRejectRequest = async item => {
+  const onRejectRequest = async (item, index) => {
     // if (item.listing_id) {
     const listing = await dispatch(
       RejectListing(
@@ -120,15 +114,17 @@ const Notifications = () => {
         item.listing_id,
       ),
     );
-    if (listing.message && item.status === 'pending') {
+    if (listing.message && item.listing_status === 'pending') {
       dispatch({
         type: constant.REJECT_REQUEST_DONE,
-        payload: {listingId: item.listing_id, status: 'rejected'},
       });
-      setRejectPressed(true);
+      notifications[index] = {...item, listing_status: 'rejected'};
+      dispatch({
+        type: constant.GET_NOTIFICATIONS_DONE,
+        payload: notifications,
+      });
       return ShowToast(listing.message);
     } else {
-      setRejectPressed(false);
       return ShowToast(listing.message);
     }
     // } else {
@@ -181,22 +177,18 @@ const Notifications = () => {
             {/* <Text style={styles.read}>Mark As All Read</Text> */}
           </View>
           <View style={styles.notificationWrapper}>
-            {notifications?.map(item => {
+            {notifications?.map((item, index) => {
               console.log('woww', item?.status);
               return (
                 <NotificationsCard
                   image={images.notification3}
-                  onAcceptPress={() => onAcceptRequest(item)}
+                  onAcceptPress={() => onAcceptRequest(item, index)}
                   accept_loader={accept_loader}
                   reject_loader={reject_loader}
-                  hidebuttons={item.status === 'pending' ? false : true}
-                  onRejectPress={() => onRejectRequest(item)}
+                  hidebuttons={item.listing_status === 'pending' ? false : true}
+                  onRejectPress={() => onRejectRequest(item, index)}
                   text={item.notification_text}
-                  desc={
-                    item.notification_desc === ''
-                      ? 'Notifications description'
-                      : item.notification_desc
-                  }
+                  desc={item.listing_name}
                   date={moment(item.create_date).format('DD MMMM YYYY')}
                 />
               );

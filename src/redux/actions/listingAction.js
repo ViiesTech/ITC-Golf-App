@@ -49,7 +49,7 @@ export const createListing = (
       });
     }
 
-    await axios
+   return await axios
       .post(`${URL}/create_match`, data, {
         headers: {
           Accept: 'application/json',
@@ -64,11 +64,13 @@ export const createListing = (
             payload: res.data.listing_id,
           });
           ShowToast(res.data.message);
+          return res.data
         } else {
           dispatch({
             type: constant.CREATE_LISTING_DONE,
           });
           ShowToast(res.data.message);
+          return false
         }
       })
       .catch(error => {
@@ -87,7 +89,7 @@ export const ListingsByUserID = user_id => {
     });
 
     await axios
-      .get(`${URL}/matches/${user_id}`, {
+      .get(`${URL}/get-listing/?user_id=${user_id}`, {
         headers: {
           Accept: 'application/json',
         },

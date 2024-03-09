@@ -7,6 +7,7 @@ import FormData from 'form-data';
 export const createGroup = (
   group_title,
   private_group,
+  description,
   area_code,
   itc_handshake,
   desired_tee,
@@ -25,7 +26,7 @@ export const createGroup = (
 
     data.append('listing_title', group_title);
     data.append('private_group', private_group);
-    data.append('listing_content');
+    data.append('listing_content', description);
     data.append('area_code', area_code);
     data.append('itc_group_handshake', itc_handshake);
     data.append('group_desired_teebox', desired_tee);
@@ -44,7 +45,7 @@ export const createGroup = (
       });
     }
 
-    await axios
+   return await axios
       .post(`${URL}/create_group`, data, {
         headers: {
           Accept: 'application/json',
@@ -61,11 +62,13 @@ export const createGroup = (
             type: constant.CREATE_GROUP_DONE,
           });
           ShowToast(res.data.message);
+          return res.data
         } else {
           dispatch({
             type: constant.CREATE_GROUP_DONE,
           });
           ShowToast(res.data.message);
+          return false
         }
       })
       .catch(error => {

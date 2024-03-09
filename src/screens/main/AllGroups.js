@@ -41,8 +41,8 @@ import {
   getGroups,
   getListings,
 } from '../../redux/actions/homeAction';
-import { ShowToast } from '../../Custom';
-import { useNavigation } from '@react-navigation/native'
+import {ShowToast} from '../../Custom';
+import {useNavigation} from '@react-navigation/native';
 
 const AllGroups = ({route}) => {
   const [listingsCode, setListingsCode] = useState(null);
@@ -68,16 +68,20 @@ const AllGroups = ({route}) => {
       desired_tee: user?.desired_tee_box ? user?.desired_tee_box : '',
     },
     description: user?.short_description ? user?.short_description : '',
-    photoURL: user?.feature_image_url ? user?.feature_image_url : user?.featured_image_url ? user?.featured_image_url : '',
+    photoURL: user?.feature_image_url
+      ? user?.feature_image_url
+      : user?.featured_image_url
+      ? user?.featured_image_url
+      : '',
   });
 
   const {options} = route.params;
 
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   const [changeTab, setChangeTab] = useState(options);
 
-  // console.log('wah', r);
+  console.log('wah', user.short_description);
 
   useEffect(() => {
     if (changeTab === 'Players You Follow' && players_follow.length < 1) {
@@ -153,32 +157,32 @@ const AllGroups = ({route}) => {
   // }, [groupsCode]);
 
   const onEditPress = async () => {
-
-   if(!state.photoURL){
-    return ShowToast('Please add your photo')
-   } else { 
-    const res = await dispatch(
-      editProfile(
-        user.user_id,
-        user.auth_register_id,
-        state.first_name,
-        state.last_name,
-        state.pickers.area_code,
-        state.pickers.exp_level,
-        state.pickers.desired_tee,
-        state.address,
-        state.description,
-        state.photoURL,
-      ),
-    );
-
-    if(res.success) {
-      navigation.navigate('Profile')
-      return ShowToast(res.message)
+    if (!state.photoURL) {
+      return ShowToast('Please add your photo');
     } else {
-      return ShowToast(res.message)
-    }}
-  }
+      const res = await dispatch(
+        editProfile(
+          user.user_id,
+          user.auth_register_id,
+          state.first_name,
+          state.last_name,
+          state.pickers.area_code,
+          state.pickers.exp_level,
+          state.pickers.desired_tee,
+          state.address,
+          state.description,
+          state.photoURL,
+        ),
+      );
+
+      if (res.success) {
+        navigation.navigate('Profile');
+        return ShowToast(res.message);
+      } else {
+        return ShowToast(res.message);
+      }
+    }
+  };
 
   return (
     <Container>
@@ -408,6 +412,8 @@ const AllGroups = ({route}) => {
               </Text>
               <ContactInput
                 style={[styles.input, {height: hp('16%'), width: '100%'}]}
+                value={state.description}
+                onChangeText={(text) => onInputChange('description', text)}
                 // placeholder={'37 Cardinal Lane Petersburg,'}
                 textColor={colors.lightgray}
                 textAlignVertical={'top'}

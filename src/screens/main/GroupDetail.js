@@ -128,7 +128,7 @@ const GroupDetail = ({route}) => {
                     {item.listing_title}
                   </Text>
                 </View>
-                <Image source={images.personal1} style={styles.image} />
+                <Image source={item.feature_image ? {uri: item.feature_image} : images.listing4} style={styles.image} borderRadius={100}/>
               </View>
             </View>
             <View style={styles.formWrapper}>
@@ -197,7 +197,7 @@ const GroupDetail = ({route}) => {
               </View>
               {/* </View> */}
             </View>
-            {itemStatus === 'accepted' || type === 'my groups' ? (
+            {itemStatus === 'accepted' || type === 'my groups' || item.author_id == user.user_id || item.private_group === 'off' ? (
               <Button
                 buttonText={'Go to chat'}
                 buttonStyle={styles.button}

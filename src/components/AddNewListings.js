@@ -54,6 +54,8 @@ const Discover = () => {
   const {listing, loader, listings_filter, listings_filter_loader} =
     useSelector(state => state.HomeReducer);
 
+  console.log('listings', listing);
+
   React.useEffect(() => {
     // if (listing.length < 1) {
     dispatch(getListings());
@@ -73,7 +75,7 @@ const Discover = () => {
         renderItem={({item, index}) => (
           <DiscoverCard
             image={
-              item.feature_image ? {uri: item.feature_image} : images.discover1
+              item.feature_image ? {uri: item.feature_image} : images.listing2
             }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
@@ -96,7 +98,7 @@ const Discover = () => {
             // }
             players={item.how_many_players}
             date={item.course_date}
-            time={item.course_time ? item.course_time : ''}
+            time={item.course_time ? item.course_time : true}
           />
         )}
       />
@@ -176,25 +178,20 @@ const Discover = () => {
 };
 
 const MyListings = ({jumpTo, setListingData}) => {
-  const [deletePressed, setDeletePressed] = React.useState(false);
   const [loaderIndex, setLoaderIndex] = React.useState(null);
   const {my_listings, my_listings_loader, delete_loader} = useSelector(
     state => state.ListingReducer,
   );
   const {user} = useSelector(state => state.AuthReducer);
 
-
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const isFocused = useIsFocused()
+  const isFocused = useIsFocused();
 
   React.useEffect(() => {
-    if (deletePressed || !deletePressed) {
-      dispatch(ListingsByUserID(user.user_id));
-      setDeletePressed(false);
-    }
-  }, [deletePressed]);
+    dispatch(ListingsByUserID(user.user_id));
+  }, []);
 
   const renderLoader = () => {
     return (
@@ -209,7 +206,7 @@ const MyListings = ({jumpTo, setListingData}) => {
       <View style={{alignItems: 'center', paddingTop: hp('5%')}}>
         <Text
           style={{color: colors.white, fontSize: hp('2%'), fontWeight: 'bold'}}>
-          {my_listings?.message}
+          {my_listings?.message || 'No match found for the user'}
         </Text>
       </View>
     );
@@ -219,7 +216,7 @@ const MyListings = ({jumpTo, setListingData}) => {
     setLoaderIndex(index);
     const res = await dispatch(DeleteListing(listing_id, user.user_id));
     if (res) {
-      setDeletePressed(true);
+      navigation.navigate('Home');
       return ShowToast(res);
     }
   };
@@ -233,7 +230,7 @@ const MyListings = ({jumpTo, setListingData}) => {
     <View style={{paddingTop: hp('4%')}}>
       {my_listings_loader
         ? renderLoader()
-        : my_listings?.message
+        : my_listings?.message || my_listings?.length < 1
         ? renderMessage()
         : my_listings?.map((item, index) => (
             <MyGroupsCard
@@ -241,9 +238,7 @@ const MyListings = ({jumpTo, setListingData}) => {
               onDeletePress={() => onDeleteListing(item.listing_id, index)}
               onEditPress={() => onEditListing(item)}
               image={
-                item.feature_image
-                  ? {uri: item.feature_image}
-                  : images.discover1
+                item.feature_image ? {uri: item.feature_image} : images.listing2
               }
               onPress={() =>
                 navigation.navigate('SecondaryStack', {
@@ -298,7 +293,7 @@ const AddNew = ({listingData, jumpTo}) => {
   });
 
   const dispatch = useDispatch();
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   const {create_listing_loading, edit_loader} = useSelector(
     state => state.ListingReducer,
@@ -389,11 +384,10 @@ const AddNew = ({listingData, jumpTo}) => {
     });
   };
 
-
   React.useEffect(() => {
-   if(listingData){ 
-    updatedState();
-  }
+    if (listingData) {
+      updatedState();
+    }
   }, [listingData]);
 
   const updatedState = () => {
@@ -401,7 +395,8 @@ const AddNew = ({listingData, jumpTo}) => {
       location: listingData.listing_title,
       suggested_day: listingData.course_date,
       suggested_time: listingData.course_time,
-      hyperlink: listingData.hyper_link === 'undefined' ? '' : listingData.hyper_link,
+      hyperlink:
+        listingData.hyper_link === 'undefined' ? '' : listingData.hyper_link,
       pickers: {
         area_code: listingData.area_code_match,
         how_many_players: listingData.how_many_players,
@@ -411,7 +406,9 @@ const AddNew = ({listingData, jumpTo}) => {
       },
       description: listingData.match_description,
       image_details: {
-        name: !listingData.feature_image ? '' : listingData.feature_image.split('/').pop(),
+        name: !listingData.feature_image
+          ? ''
+          : listingData.feature_image.split('/').pop(),
         path: !listingData.feature_image ? '' : listingData.feature_image,
       },
       smoking_friendly: listingData.smoking_friendly === 'true' && true,
@@ -422,33 +419,35 @@ const AddNew = ({listingData, jumpTo}) => {
 
   const onCreateListing = async () => {
     if (listingData) {
-      const res = await dispatch(editListing(
-        listingData.listing_id,
-        user.user_id,
-        state.location,
-        state.description,
-        state.suggested_day,
-        state.suggested_time,
-        state.pickers.how_many_players,
-        state.pickers.area_code,
-        state.pickers.itc_handshake,
-        state.pickers.desired_tee,
-        state.smoking_friendly,
-        state.drinking_friendly,
-        state.private_listing
-      ))
-      if(res){
-        navigation.navigate('Home')
-        initialState()
-        return ShowToast(res)
+      const res = await dispatch(
+        editListing(
+          listingData.listing_id,
+          user.user_id,
+          state.location,
+          state.description,
+          state.suggested_day,
+          state.suggested_time,
+          state.pickers.how_many_players,
+          state.pickers.area_code,
+          state.pickers.itc_handshake,
+          state.pickers.desired_tee,
+          state.smoking_friendly,
+          state.drinking_friendly,
+          state.private_listing,
+        ),
+      );
+      if (res) {
+        navigation.navigate('Home');
+        initialState();
+        return ShowToast(res);
       } else {
-        return ShowToast(res)
+        return ShowToast(res);
       }
     } else {
       if (!state.location) {
         return ShowToast('Please add your location');
       } else {
-        await dispatch(
+        const res = await dispatch(
           createListing(
             state.location,
             state.description,
@@ -465,8 +464,11 @@ const AddNew = ({listingData, jumpTo}) => {
             state.image_details,
           ),
         );
-        navigation.navigate('Home')
-        initialState()
+        console.log(res);
+        if (res) {
+          navigation.navigate('Home');
+          initialState();
+        }
       }
     }
   };
@@ -760,7 +762,7 @@ export const AddNewListings = () => {
       case 'second':
         return <MyListings jumpTo={jumpTo} setListingData={setListingData} />;
       case 'third':
-        return <AddNew listingData={listingData}  jumpTo={jumpTo}/>;
+        return <AddNew listingData={listingData} jumpTo={jumpTo} />;
       default:
         return null;
     }

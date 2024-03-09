@@ -33,9 +33,9 @@ const Profile = () => {
 
   const dispatch = useDispatch();
 
-  const {user, register_id} = useSelector(state => state.AuthReducer);
+  const {user} = useSelector(state => state.AuthReducer);
 
-  console.log('user info', register_id);
+  console.log('user info', user);
 
   const onSettingsPress = async index => {
     if (index == 0) {
