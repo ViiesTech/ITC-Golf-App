@@ -11,6 +11,7 @@ const initialState = {
   reject_loader: false,
   delete_loader: false,
   edit_loader: false,
+  listing_members: []
 };
 
 export default (state = initialState, action) => {
@@ -87,6 +88,9 @@ export default (state = initialState, action) => {
 
     case constant.EDIT_LISTING_DONE:
       return {...state, edit_loader: false};
+
+    case constant.FETCH_LISTING_MEMBERS:
+      return {...state, listing_members: action.payload}  
 
     default:
       return state;

@@ -20,9 +20,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getNotifications} from '../../redux/actions/homeAction';
 import moment from 'moment';
 import {AcceptListing, RejectListing} from '../../redux/actions/listingAction';
-import {AcceptGroup, RejectGroup} from '../../redux/actions/groupAction';
 import {ShowToast} from '../../Custom';
-import {useNavigation} from '@react-navigation/native';
 import constant from '../../redux/constant';
 
 const Notifications = () => {

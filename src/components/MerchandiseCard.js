@@ -2,10 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React  from 'react'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
-import StarRating from 'react-native-star-rating-widget'
 import Heart from 'react-native-vector-icons/AntDesign'
-import SVGImage from './SVGImage'
-import icons from '../assets/icons'
 
 const MerchandiseCard = ({ text, image, onPress, style, desc, rating, imageStyle, favourite, heartPress, descStyle }) => {
 
@@ -28,8 +25,8 @@ const MerchandiseCard = ({ text, image, onPress, style, desc, rating, imageStyle
                     />
                 </TouchableOpacity>
             </View>
-            <Text style={[styles.desc, { paddingTop: text.length > 45 && hp('1.6%') },descStyle]}>{desc == '' ? 'Lorem Ipsum Dolor Sit Amet, Consetetur' : desc}</Text>
-            <View style={styles.wrapper}>
+            <Text style={[styles.desc, { paddingTop: text?.length > 45 && hp('1.6%') },descStyle]}>{desc == '' ? 'Lorem Ipsum Dolor Sit Amet, Consetetur' : desc}</Text>
+            {/* <View style={styles.wrapper}>
                 <StarRating
                     starSize={12}
                     style={{ alignSelf: 'center' }}
@@ -42,7 +39,7 @@ const MerchandiseCard = ({ text, image, onPress, style, desc, rating, imageStyle
                     style={{ alignSelf: 'center' }}
                 />
             </View>
-            <View style={styles.border} />
+            <View style={styles.border} /> */}
         </View>
     )
 }
@@ -51,7 +48,7 @@ export default MerchandiseCard
 
 const styles = StyleSheet.create({
     component: {
-        marginBottom: hp('7%'),
+        marginBottom: hp('10%'),
     },
     cardStyle: {
         borderWidth: 2,

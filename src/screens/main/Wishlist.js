@@ -13,10 +13,10 @@ import SecondaryHeader from '../../components/SecondaryHeader';
 import images from '../../assets/images';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import colors from '../../assets/colors';
-import Button from '../../components/Button';
 import {useSelector, useDispatch} from 'react-redux';
 import {getWishlistById} from '../../redux/actions/authAction';
 import MerchandiseCard from '../../components/MerchandiseCard';
+import {useNavigation} from '@react-navigation/native';
 
 const Wishlist = () => {
   const {wishlist_items, wishlist_loader, user} = useSelector(
@@ -24,13 +24,14 @@ const Wishlist = () => {
   );
 
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   console.log(wishlist_items);
 
   useEffect(() => {
-    if (wishlist_items?.length < 1) {
-      dispatch(getWishlistById(user.user_id));
-    }
+    // if (wishlist_items?.length < 1) {
+    dispatch(getWishlistById(user.user_id));
+    // }
   }, []);
 
   return (
@@ -48,13 +49,16 @@ const Wishlist = () => {
             }}>
             <ActivityIndicator size={'large'} color={colors.primary} />
           </View>
-        ) : wishlist_items.message ? (
+        ) : wishlist_items?.message ? (
           <>
-            <Image source={images.wishlist1} style={styles.image} />
-            <Text style={styles.text}>Your Wishlist is Empty</Text>
-            <Text style={styles.tap}>
-              Tap heart button to start saving your favorite items.
-            </Text>
+            <View
+              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <Image source={images.wishlist1} style={styles.image} />
+              <Text style={styles.text}>Your Wishlist is Empty</Text>
+              <Text style={styles.tap}>
+                Tap heart button to start saving your favorite items.
+              </Text>
+            </View>
           </>
         ) : (
           <FlatList
@@ -62,22 +66,25 @@ const Wishlist = () => {
             numColumns={2}
             columnWrapperStyle={{justifyContent: 'space-between'}}
             showsVerticalScrollIndicator={false}
-            renderItem={({item, index}) => (
-              <MerchandiseCard
-              //   image={{uri: item.image}}
-              //   text={item.title}
-              //   favourite={item.isFav}
-              //   desc={item.description}
-              //   rating={item.ratings}
-              // style={{marginLeft: hp('2.6%')}}
-              //   onPress={() =>
-              //     navigation.navigate('MerchandiseStack', {
-              //       screen: 'MerchandiseDetails',
-              //       params: {id: item.product_id, wishlist: item.isFav}
-              //     })
-              //   }
-              />
-            )}
+            renderItem={({item, index}) => {
+              console.log('favvv', item.isFav);
+              return (
+                <MerchandiseCard
+                  image={{uri: item.product_image}}
+                  text={item.product_name}
+                  favourite={true}
+                  desc={item.product_desc ? item.product_desc : 'Lorem ipsum'}
+                  //   rating={item.ratings}
+                  // style={{marginLeft: hp('2.6%')}}
+                  onPress={() =>
+                    navigation.navigate('MerchandiseStack', {
+                      screen: 'MerchandiseDetails',
+                      params: {id: item.product_id, wishlist: true},
+                    })
+                  }
+                />
+              );
+            }}
           />
         )}
         {/* <Button
@@ -95,8 +102,9 @@ export default Wishlist;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: hp('2%'),
+    // justifyContent: 'center',
+    // alignItems: 'center',
   },
   image: {
     height: hp('18%'),

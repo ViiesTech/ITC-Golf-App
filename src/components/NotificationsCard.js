@@ -9,9 +9,6 @@ import {
 import React from 'react';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import colors from '../assets/colors';
-import Alarm from 'react-native-vector-icons/MaterialCommunityIcons';
-import More from 'react-native-vector-icons/MaterialIcons';
-import Button from './Button';
 
 const NotificationsCard = ({
   image,

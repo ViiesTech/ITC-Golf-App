@@ -13,10 +13,9 @@ import { resetPassword } from '../../redux/actions/authAction'
 
 const UpdatePassword = ({ route }) => {
 
-    const resetToken = route.params.verifyToken
+    const code = route.params.otp
     const userName = route.params.name
 
-    const [token, setToken] = useState(resetToken)
     const [username, setUsername] = useState(userName)
     const [newPassword, setNewPassword] = useState('')
     const [cPassword, setCPassword] = useState('')
@@ -30,14 +29,12 @@ const UpdatePassword = ({ route }) => {
     const onUpdatePassword = async () => {
         if (!username) {
             return ShowToast('Please enter your username')
-        } else if (!token) {
-            return ShowToast('Please enter your verification token')
         } else if (newPassword.length < 8) {
             return ShowToast('Password is too short')
         } else if (cPassword !== newPassword) {
             return ShowToast('Password does not match')
         } else {
-            const res = await dispatch(resetPassword(username, token, newPassword))
+            const res = await dispatch(resetPassword(username, code, newPassword))
             if (res) {
                 navigation.navigate('Login')
             }
@@ -59,13 +56,6 @@ const UpdatePassword = ({ route }) => {
                         value={username}
                         onChangeText={(text) => setUsername(text)}
                         placeholder={'Username'}
-                        style={styles.input}
-                    />
-                    <InputField
-                        value={token}
-                        icon={'key'}
-                        onChangeText={(text) => setToken(text)}
-                        placeholder={'Token'}
                         style={styles.input}
                     />
                     <InputField

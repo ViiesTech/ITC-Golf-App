@@ -8,6 +8,7 @@ const initialState = {
   join_loading: false,
   delete_loader: false,
   edit_loader: false,
+  group_members: []
   // accept_loader: false,
   // reject_loader: false,
 };
@@ -59,6 +60,9 @@ export default (state = initialState, action) => {
 
     case constant.EDIT_GROUP_DONE:
       return {...state, edit_loader: false};
+
+    case constant.FETCH_GROUP_MEMBERS:
+      return {...state, group_members: action.payload}  
 
     default:
       return state;

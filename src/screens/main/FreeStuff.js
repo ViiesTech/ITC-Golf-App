@@ -35,9 +35,9 @@ const FreeStuff = () => {
   // console.log('from screen ======================>', isFavourite)
 
   useEffect(() => {
-    if (products.length < 1) {
+    // if (products.length < 1) {
       dispatch(getProducts());
-    }
+    // }
   }, []);
 
   if (products_loading) {
@@ -55,7 +55,7 @@ const FreeStuff = () => {
   }
 
   const onToggleWishlist = async (item, index) => {
-    const add = await dispatch(addToWishlist(item.product_id));
+    const add = await dispatch(addToWishlist(user.user_id, item.product_id));
     const remove = await dispatch(
       removeFromWishlist(user.user_id, item.product_id),
     );

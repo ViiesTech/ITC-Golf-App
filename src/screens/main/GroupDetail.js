@@ -13,19 +13,18 @@ import Container from '../../components/Container';
 import colors from '../../assets/colors';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import PersonalInfoTab from '../../components/PersonalInfoTab';
-import {Tabs, postReviewText} from '../../DummyData';
+import {Tabs} from '../../DummyData';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import images from '../../assets/images';
 import Button from '../../components/Button';
-import PostReview from '../../components/PostReview';
 import ReviewCard from '../../components/ReviewCard';
 import {useSelector, useDispatch} from 'react-redux';
 import {getReviews} from '../../redux/actions/homeAction';
 import {ShowToast} from '../../Custom';
-import {useNavigation} from '@react-navigation/native';
 import {JoinGroup} from '../../redux/actions/groupAction';
 import constant from '../../redux/constant';
+import {useNavigation} from '@react-navigation/native';
 
 const GroupDetail = ({route}) => {
   const [changeTab, setChangeTab] = useState(1);
@@ -34,7 +33,6 @@ const GroupDetail = ({route}) => {
   const {user} = useSelector(state => state.AuthReducer);
   const {join_group_loading} = useSelector(state => state.ListingReducer);
   const dispatch = useDispatch();
-  const navigation = useNavigation();
 
   const {item, type} = route?.params;
   // console.log('detail ======>', Object.keys(item.listing_content).length);
@@ -42,6 +40,8 @@ const GroupDetail = ({route}) => {
   const itemStatus = useSelector(
     state => state.ListingReducer[item.group_id] || 'Unknown',
   );
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (changeTab == 3 && reviews.length < 1) {
@@ -84,15 +84,13 @@ const GroupDetail = ({route}) => {
       <Header />
       <SecondaryHeader
         headerStyle={{
-          width: Object.keys(item.listing_title)?.length > 10 && hp('25%'),
+          width: Object.keys(item.listing_title)?.length > 19 && hp('25%'),
         }}
         text={item.listing_title}
         link={true}
         linkButton={{
-          width:
-            Object.keys(item.listing_title)?.length > 10
-              ? hp('10%')
-              : hp('14%'),
+          width: Object.keys(item.listing_title)?.length > 10 && hp('10%'),
+          // : hp('14%'),
         }}
         onLinkPress={() => onHyperLink(item.hyper_link)}
       />
@@ -128,7 +126,15 @@ const GroupDetail = ({route}) => {
                     {item.listing_title}
                   </Text>
                 </View>
-                <Image source={item.feature_image ? {uri: item.feature_image} : images.listing4} style={styles.image} borderRadius={100}/>
+                <Image
+                  source={
+                    item.feature_image
+                      ? {uri: item.feature_image}
+                      : images.listing4
+                  }
+                  style={styles.image}
+                  borderRadius={100}
+                />
               </View>
             </View>
             <View style={styles.formWrapper}>
@@ -197,17 +203,20 @@ const GroupDetail = ({route}) => {
               </View>
               {/* </View> */}
             </View>
-            {itemStatus === 'accepted' || type === 'my groups' || item.author_id == user.user_id || item.private_group === 'off' ? (
+            {itemStatus === 'accepted' ||
+            type === 'my groups' ||
+            item.author_id == user.user_id ||
+            item.private_group === 'off' ? (
               <Button
                 buttonText={'Go to chat'}
                 buttonStyle={styles.button}
                 textStyle={{color: colors.secondary}}
-                onPress={() =>
+                onPress={() => {
                   navigation.navigate('SecondaryStack', {
                     screen: 'GroupChat',
-                    params: {title: item.listing_title},
-                  })
-                }
+                    params: {title: item.listing_title, type: 'group', id: item.group_id},
+                  });
+                }}
               />
             ) : (
               <Button

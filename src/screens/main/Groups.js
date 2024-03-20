@@ -34,9 +34,9 @@ const Groups = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (groups.length < 1) {
+    // if (groups.length < 1) {
       dispatch(getGroups());
-    }
+    // }
   }, []);
 
   if (group_loader) {

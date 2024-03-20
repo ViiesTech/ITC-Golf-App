@@ -26,9 +26,9 @@ const About = () => {
   // console.log(about_description)
 
   useEffect(() => {
-    if (about_description == '') {
+    // if (about_description == '') {
       getAboutData();
-    }
+    // }
   }, []);
 
   const getAboutData = async () => {

@@ -6,7 +6,6 @@ import colors from '../assets/colors';
 import {useNavigation} from '@react-navigation/native';
 import SVGImage from './SVGImage';
 import icons from '../assets/icons';
-import Button from './Button';
 
 const SecondaryHeader = ({icon, text, style, link, onLinkPress, linkButton, headerStyle}) => {
   const navigation = useNavigation();
@@ -52,7 +51,7 @@ const styles = StyleSheet.create({
   linkStyle: {
     borderRadius: 100,
     padding: hp('0.9%'),
-    width: hp('14%'),
+    // width: hp('14%'),
     backgroundColor: colors.primary,
     alignSelf: 'center',
     marginTop: hp('0.4%'),

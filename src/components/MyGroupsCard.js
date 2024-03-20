@@ -1,13 +1,12 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
-import images from '../assets/images';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import colors from '../assets/colors';
 import SVGImage from './SVGImage';
 import icons from '../assets/icons';
 import Button from './Button';
 
-const MyGroupsCard = ({image, count, title, players, date, area_code, handshake, onPress, group, deleteText, onDeletePress, onEditPress, indicator}) => {
+const MyGroupsCard = ({image, count, title, players, handshake, onPress, group, deleteText, onDeletePress, onEditPress, indicator}) => {
   // console.log(title.length);
 
   return (
@@ -20,7 +19,7 @@ const MyGroupsCard = ({image, count, title, players, date, area_code, handshake,
       </TouchableOpacity>
       <View style={styles.secondaryWrapper}>
         <View>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{flexDirection: 'row',justifyContent: 'space-between'}}>
             <Text style={styles.name}>{title}</Text>
             <View style={{flexDirection: 'row',}}>
               <View style={styles.teeView}>
@@ -92,7 +91,8 @@ const styles = StyleSheet.create({
   },
   name: {
     color: colors.white,
-    flex: 1,
+    // flex: 0.8,
+    // backgroundColor: 'blue',
     fontWeight: 'bold',
     fontSize: hp('1.9%'),
   },

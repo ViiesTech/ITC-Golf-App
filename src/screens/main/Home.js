@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
@@ -14,13 +15,9 @@ import Header from '../../components/Header';
 import images from '../../assets/images';
 import colors from '../../assets/colors';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import DropDownPicker from '../../components/DropDownPicker';
-import {cardImages, listingImages, picker} from '../../DummyData';
 import ListingCard from '../../components/ListingCard';
 import Button from '../../components/Button';
 import ArrowDown from 'react-native-vector-icons/SimpleLineIcons';
-import SVGImage from '../../components/SVGImage';
-import icons from '../../assets/icons';
 import Video from 'react-native-video';
 import {useNavigation} from '@react-navigation/native';
 import AppStatusBar from '../../components/AppStatusBar';
@@ -32,6 +29,7 @@ import {
   getListings,
 } from '../../redux/actions/homeAction';
 import Sponsors from '../../components/Sponsors';
+import DropDownPicker from '../../components/DropDownPicker';
 
 const Home = () => {
   const [selectedOption, setSelectedOption] = useState('');
@@ -48,10 +46,10 @@ const Home = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (listing.length < 1 && area_codes.length < 1) {
-      dispatch(getListings());
-      dispatch(getAllAreaCodes());
-    }
+    // if (listing.length < 1 && area_codes.length < 1) {
+    dispatch(getListings());
+    dispatch(getAllAreaCodes());
+    // }
   }, []);
 
   if (loader) {
@@ -205,7 +203,7 @@ const Home = () => {
             /> */}
           </View>
           <View style={styles.textWrapper}>
-            <Text style={styles.heading}>A PLACE FOR GOLFERS</Text>
+            <Text style={styles.heading}>THE PLACE FOR GOLFERS</Text>
             <Text style={styles.message}>
               Of All Skills Level To Find Each Other
             </Text>
@@ -214,10 +212,12 @@ const Home = () => {
             <View style={styles.border}>
               <Text style={styles.textStyle}>Area Code</Text>
               <View style={styles.pickerStyle}>
-                <Picker
+              <Picker
                   selectedValue={selectedOption}
                   dropdownIconColor={colors.white}
-                  style={{color: colors.white}}
+                  style={{color: colors.white,borderColor:"red"}}
+                  itemStyle={{color:'white',fontWeight: 'bold'}}
+                  numberOfLines={1}
                   onValueChange={(itemValue, itemIndex) =>
                     setSelectedOption(itemValue)
                   }>
@@ -234,12 +234,12 @@ const Home = () => {
                     />
                   ))}
                 </Picker>
-              </View>
-              <Button
-                buttonText={'Search'}
-                icon={true}
-                onPress={() => onSearchAreaCode()}
-              />
+            </View>
+            <Button
+              buttonText={'Search'}
+              icon={true}
+              onPress={() => onSearchAreaCode()}
+            />
             </View>
             <Text style={styles.text}>Listing</Text>
             <View style={styles.cardWrapper}>

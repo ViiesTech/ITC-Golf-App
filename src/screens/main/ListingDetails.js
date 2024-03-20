@@ -16,18 +16,17 @@ import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import colors from '../../assets/colors';
 import images from '../../assets/images';
 import PersonalInfoTab from '../../components/PersonalInfoTab';
-import {ReviewImages, Tabs, postReviewText} from '../../DummyData';
 import ReviewCard from '../../components/ReviewCard';
 import SVGImage from '../../components/SVGImage';
 import icons from '../../assets/icons';
 import Button from '../../components/Button';
 import {useDispatch, useSelector} from 'react-redux';
 import {getReviews} from '../../redux/actions/homeAction';
-import PostReview from '../../components/PostReview';
 import {ShowToast} from '../../Custom';
 import {JoinListing} from '../../redux/actions/listingAction';
 import constant from '../../redux/constant';
 import {useNavigation} from '@react-navigation/native';
+import {Tabs} from '../../DummyData';
 
 const ListingDetails = ({route}) => {
   const [changeTab, setChangeTab] = useState(1);
@@ -53,7 +52,7 @@ const ListingDetails = ({route}) => {
   const itemStatus = useSelector(
     state => state?.ListingReducer[item.listing_id] || 'Unknown',
   );
-  console.log('acha',itemStatus);
+  console.log('acha', item);
 
   console.log(
     'reviews response from screen ===============>',
@@ -102,14 +101,13 @@ const ListingDetails = ({route}) => {
       <Header />
       <SecondaryHeader
         headerStyle={{
-          width: Object.keys(item.listing_title).length > 13 && hp('25%'),
+          width: Object.keys(item.listing_title).length > 19 && hp('25%'),
         }}
         text={item.listing_title}
         link={true}
         onLinkPress={() => onHyperLink(item.hyper_link)}
         linkButton={{
-          width:
-            Object.keys(item.listing_title).length > 13 ? hp('10%') : hp('14%'),
+          width: Object.keys(item.listing_title).length > 13 && hp('10%'),
         }}
       />
       <ScrollView contentContainerStyle={styles.screen}>
@@ -144,7 +142,15 @@ const ListingDetails = ({route}) => {
                     {item.listing_title}
                   </Text>
                 </View>
-                <Image source={item.feature_image ? {uri:item.feature_image} : images.listing2} style={styles.image} borderRadius={100}/>
+                <Image
+                  source={
+                    item.feature_image
+                      ? {uri: item.feature_image}
+                      : images.listing2
+                  }
+                  style={styles.image}
+                  borderRadius={100}
+                />
               </View>
             </View>
             <View style={styles.formWrapper}>
@@ -221,17 +227,20 @@ const ListingDetails = ({route}) => {
                 </Text>
               </View>
             </View>
-            {itemStatus === 'accepted' || type === 'my listings' || item.author_id == user.user_id  || item.private_group === 'off' ? (
+            {itemStatus === 'accepted' ||
+            type === 'my listings' ||
+            item.author_id == user.user_id ||
+            item.private_group === 'off' ? (
               <Button
                 buttonText={'Go to chat'}
                 buttonStyle={styles.button}
                 textStyle={{color: colors.secondary}}
-                onPress={() =>
+                onPress={() => {
                   navigation.navigate('SecondaryStack', {
                     screen: 'GroupChat',
-                    params: {title: item.listing_title},
-                  })
-                }
+                    params: {title: item.listing_title, type: 'listing'},
+                  });
+                }}
               />
             ) : (
               <Button

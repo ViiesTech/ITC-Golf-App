@@ -18,6 +18,7 @@ import MerchandiseCard from '../../components/MerchandiseCard';
 import images from '../../assets/images';
 import {useDispatch, useSelector} from 'react-redux';
 import {getProductDetails} from '../../redux/actions/productAction';
+import { ShowToast } from '../../Custom';
 
 const MerchandiseDetails = ({route}) => {
   const {id, wishlist} = route.params;
@@ -31,9 +32,9 @@ const MerchandiseDetails = ({route}) => {
   // console.log('product details from screen =========> ==========>', product_detail[id])
 
   useEffect(() => {
-    if (!product_detail[id]) {
+    // if (!product_detail[id]) {
       dispatch(getProductDetails(id));
-    }
+    // }
   }, []);
 
   if (product_detail_loading) {
@@ -69,11 +70,17 @@ const MerchandiseDetails = ({route}) => {
               buttonText={'Add To Cart'}
               textStyle={styles.buttonText}
               buttonStyle={styles.button}
+              onPress={() => {
+                return ShowToast('Coming soon')
+              }}
             />
             <Button
               buttonText={'Book Now'}
               textStyle={styles.button2Text}
               buttonStyle={styles.button2}
+              onPress={() => {
+                return ShowToast('Coming soon')
+              }}
             />
           </View>
           <View style={{marginLeft: hp('2%')}}>

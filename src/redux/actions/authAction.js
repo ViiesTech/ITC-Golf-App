@@ -185,7 +185,7 @@ export const resetPasswordLink = (username, email) => {
   };
 };
 
-export const verifyResetToken = (username, token) => {
+export const verifyOTP = (username, otp) => {
   return async dispatch => {
     dispatch({
       type: constant.VERIFY_TOKEN,
@@ -193,11 +193,11 @@ export const verifyResetToken = (username, token) => {
 
     let data = {
       username: username,
-      token: token,
+      otp: otp
     };
 
     return await axios
-      .post(`${URL}/verify-reset-token`, data, {
+      .post(`${URL}/verify-reset-otp`, data, {
         headers: {
           Accept: 'application/json',
         },
@@ -229,7 +229,7 @@ export const verifyResetToken = (username, token) => {
   };
 };
 
-export const resetPassword = (username, token, newPassword) => {
+export const resetPassword = (username, otp, newPassword) => {
   return async dispatch => {
     dispatch({
       type: constant.RESET_PASSWORD,
@@ -237,7 +237,7 @@ export const resetPassword = (username, token, newPassword) => {
 
     let data = {
       username: username,
-      token: token,
+      otp: otp,
       new_password: newPassword,
     };
 

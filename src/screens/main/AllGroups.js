@@ -21,15 +21,11 @@ import {AddNewGroups} from '../../components/AddNewGroups';
 import images from '../../assets/images';
 import Edit from 'react-native-vector-icons/Feather';
 import ContactInput from '../../components/ContactInput';
-import DropDownPicker from '../../components/DropDownPicker';
 import Button from '../../components/Button';
 import {AddNewListings} from '../../components/AddNewListings';
 import {
   DesiredItem,
   ExperienceLevel,
-  areaCode,
-  handshake,
-  profilePicker,
 } from '../../DummyData';
 import {useDispatch, useSelector} from 'react-redux';
 import {launchImageLibrary} from 'react-native-image-picker';
@@ -47,7 +43,8 @@ import {useNavigation} from '@react-navigation/native';
 const AllGroups = ({route}) => {
   const [listingsCode, setListingsCode] = useState(null);
   const [groupsCode, setGroupsCode] = useState(null);
-  const [searchPressed, setSearchPressed] = useState(false);
+  const [listingSearch, setListingSearch] = useState(false);
+  const [groupSearch, setGroupSearch] = useState(false)
 
   const {user, follow_loader, players_follow, edit_loading, register_id} =
     useSelector(state => state.AuthReducer);
@@ -56,7 +53,7 @@ const AllGroups = ({route}) => {
 
   const {listing_id} = useSelector(state => state.ListingReducer);
 
-  console.log('listing id ========>', user.auth_register_id);
+  console.log('listing id ========>', user.user_id);
 
   const [state, setState] = useState({
     first_name: user.firstname,
@@ -81,7 +78,7 @@ const AllGroups = ({route}) => {
 
   const [changeTab, setChangeTab] = useState(options);
 
-  console.log('wah', user.short_description);
+  // console.log('wah', searchPressed);
 
   useEffect(() => {
     if (changeTab === 'Players You Follow' && players_follow.length < 1) {
@@ -128,33 +125,29 @@ const AllGroups = ({route}) => {
     });
   };
 
-  // const onGroupSearch = async () => {
-  //   if (groupsCode) {
-  //     await dispatch(GroupsByAreaCodes(groupsCode));
-  //   }
-  // };
+  const onGroupSearch = async () => {
+    if (groupsCode) {
+      await dispatch(GroupsByAreaCodes(groupsCode));
+      setGroupSearch(true);
+    } else {
+      setGroupSearch(false);
+    }
+  };
 
-  // const onListingSearch = async () => {
-  //   if (listingsCode) {
-  //     await dispatch(ListingsByAreaCodes(listingsCode));
-  //   }
-  // };
+  const onListingSearch = async () => {
+    if (listingsCode) {
+      await dispatch(ListingsByAreaCodes(listingsCode));
+      setListingSearch(true);
+    } else {
+      setListingSearch(false);
+    }
+  };
 
-  // useEffect(() => {
-  //   if (listingsCode) {
-  //     dispatch(ListingsByAreaCodes(listingsCode));
-  //   } else {
-  //     dispatch(getListings())
-  //   }
-  // }, [listingsCode]);
+  useEffect(() => {
+    dispatch(getListings());
+    dispatch(getGroups());
+  }, []);
 
-  // useEffect(() => {
-  //   if (groupsCode) {
-  //     dispatch(GroupsByAreaCodes(groupsCode));
-  //   } else {
-  //     dispatch(getGroups())
-  //   }
-  // }, [groupsCode]);
 
   const onEditPress = async () => {
     if (!state.photoURL) {
@@ -220,11 +213,11 @@ const AllGroups = ({route}) => {
               <SearchFilter
                 style={{width: '100%'}}
                 selectedValue={groupsCode}
-                // onSearchPress={() => onGroupSearch()}
+                onSearchPress={() => onGroupSearch()}
                 onValueChange={value => setGroupsCode(value)}
               />
               <View style={{height: '400%'}}>
-                <AddNewGroups />
+                <AddNewGroups buttonPressed={groupSearch} />
               </View>
             </>
           ) : changeTab === 'Add New Listings' ? (
@@ -232,11 +225,11 @@ const AllGroups = ({route}) => {
               <SearchFilter
                 style={{width: '100%'}}
                 selectedValue={listingsCode}
-                // onSearchPress={() => onListingSearch()}
+                onSearchPress={() => onListingSearch()}
                 onValueChange={value => setListingsCode(value)}
               />
               <View style={{height: '400%'}}>
-                <AddNewListings />
+                <AddNewListings buttonPress={listingSearch} />
               </View>
             </>
           ) : changeTab === 'Players You Follow' ? (
@@ -413,7 +406,7 @@ const AllGroups = ({route}) => {
               <ContactInput
                 style={[styles.input, {height: hp('16%'), width: '100%'}]}
                 value={state.description}
-                onChangeText={(text) => onInputChange('description', text)}
+                onChangeText={text => onInputChange('description', text)}
                 // placeholder={'37 Cardinal Lane Petersburg,'}
                 textColor={colors.lightgray}
                 textAlignVertical={'top'}

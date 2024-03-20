@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React from 'react'
 import colors from '../assets/colors'
 import StarRating from 'react-native-star-rating-widget'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'

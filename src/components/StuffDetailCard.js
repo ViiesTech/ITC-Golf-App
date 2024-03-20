@@ -1,10 +1,8 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import colors from '../assets/colors'
-import images from '../assets/images'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import Heart from 'react-native-vector-icons/AntDesign';
-import StarRating from 'react-native-star-rating-widget'
 import ColorOptions from './ColorOptions'
 import { Colors } from '../DummyData'
 
@@ -28,12 +26,12 @@ const StuffDetailCard = ({ rating, image, title, desc, favourite }) => {
             </View>
             <View style={styles.textWrapper}>
                 <Text style={[styles.text, { width: title?.length > 45 ? '60%' : title?.length == 28 && '70%' }]}>{title}</Text>
-                <StarRating
+                {/* <StarRating
                     starSize={15}
                     style={{ marginTop: hp('1.7%') }}
                     rating={rating}
                     onChange={() => null}
-                />
+                /> */}
                 <Text style={styles.desc}>{desc !== '' ? desc : 'Lorem Ipsum Dolor Sit Amet, Consetetur'}</Text>
                 <View style={[styles.border, { width: title?.length > 45 ? '63%' : '70%' }]} />
                 <View style={{ paddingTop: hp('2%'), flexDirection: 'row' }}>

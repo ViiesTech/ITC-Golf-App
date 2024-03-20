@@ -1,8 +1,7 @@
-import {StyleSheet, View, Text} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {StyleSheet, View, Text, Platform} from 'react-native';
+import React from 'react';
 import colors from '../assets/colors';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import {filterItems, picker} from '../DummyData';
 import Button from './Button';
 import {Picker} from '@react-native-picker/picker';
 import {useSelector} from 'react-redux';
@@ -70,8 +69,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     alignSelf: 'center',
     width: '90%',
+    borderRadius: 10,
     marginTop: hp('2%'),
-    borderRadius: 15,
     padding: hp('1.7%'),
   },
   pickerStyle: {

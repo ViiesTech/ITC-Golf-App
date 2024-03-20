@@ -6,17 +6,14 @@ import {
   ActivityIndicator,
   Text,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import ListingDetailCard from '../../components/ListingDetailCard';
-import SVGImage from '../../components/SVGImage';
-import icons from '../../assets/icons';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import Loader from '../../components/Loader';
 import Sponsors from '../../components/Sponsors';
 import SearchFilter from '../../components/SearchFilter';
 import {ListingsByAreaCodes} from '../../redux/actions/homeAction';
@@ -114,7 +111,9 @@ const Listing = () => {
         columnWrapperStyle={{justifyContent: 'space-between'}}
         renderItem={({item, index}) => (
           <ListingDetailCard
-            // image={item.image}
+            listingImage={
+              item.feature_image ? {uri: item.feature_image} : images.listing2
+            }
             route={routeName}
             total={index + 1}
             title={item.listing_title}

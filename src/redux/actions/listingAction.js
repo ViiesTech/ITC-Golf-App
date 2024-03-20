@@ -14,6 +14,8 @@ export const createListing = (
   itc_handshake,
   desired_tee,
   drinking_friendly,
+  smoking_friendly,
+  experience_level,
   private_listing,
   hyperlink,
   user_id,
@@ -38,6 +40,8 @@ export const createListing = (
     data.append('private_match', private_listing);
     data.append('hyper_link', hyperlink);
     data.append('user_id', user_id);
+    data.append('experience_level', experience_level)
+    data.append('smoking_friendly', smoking_friendly)
     if (photo) {
       data.append('listing_picture', {
         name: `${photo.name}.jpg`,
@@ -266,6 +270,7 @@ export const editListing = (
   desired_tee_box,
   smoking_friendly,
   drinking_friendly,
+  experience_level,
   private_match,
   hyper_link,
   listing_picture,
@@ -291,6 +296,7 @@ export const editListing = (
     data.append('drinking_friendly', drinking_friendly);
     data.append('private_match', private_match);
     data.append('hyper_link', hyper_link);
+    data.append('experience_level', experience_level)
     if (listing_picture) {
       data.append('listing_picture', {
         name: `${listing_picture.name}.jpg`,
@@ -325,3 +331,22 @@ export const editListing = (
       });
   };
 };
+
+export const renderListingMembers = (listing_id) => {
+  return async dispatch => {
+    return await axios.get(`${URL}/listing-connected-users?list_id=${listing_id}`,{
+      headers:{
+        'Accept': 'application/json',
+      }
+    }).then((res) => {
+      console.log('listing members response =======>', res.data)
+      dispatch({
+        type: constant.FETCH_LISTING_MEMBERS,
+        payload: res.data
+      })
+    }).catch((error) => {
+      console.log('listing members error =======>', error)
+      return ShowToast('Some problem occured')
+    })
+  }
+}

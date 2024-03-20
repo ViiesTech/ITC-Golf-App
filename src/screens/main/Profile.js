@@ -27,7 +27,7 @@ import ConfirmationModal from '../../components/ConfirmationModal';
 const Profile = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
-  const url = 'https://google.com';
+  const url = 'https://inthecup.golf';
 
   const navigation = useNavigation();
 
@@ -39,7 +39,8 @@ const Profile = () => {
 
   const onSettingsPress = async index => {
     if (index == 0) {
-      navigation.navigate('SecondaryStack', {screen: 'Payments'});
+      return ShowToast('Coming soon')
+      // navigation.navigate('SecondaryStack', {screen: 'Payments'});
     } else if (index == 1) {
       navigation.navigate('SecondaryStack', {screen: 'Notifications'});
     } else if (index == 2) {
@@ -47,9 +48,11 @@ const Profile = () => {
     } else if (index == 3) {
       navigation.navigate('SecondaryStack', {screen: 'ContactUs'});
     } else if (index == 4) {
-      navigation.navigate('SecondaryStack', {screen: 'Language'});
+      // navigation.navigate('SecondaryStack', {screen: 'Language'});
+      return ShowToast('Coming soon')
     } else if (index == 5) {
-      navigation.navigate('SecondaryStack', {screen: 'Rating'});
+      // navigation.navigate('SecondaryStack', {screen: 'Rating'});
+      return ShowToast('Coming soon')
     } else if (index == 6) {
       await Linking.openURL(url);
     } else {

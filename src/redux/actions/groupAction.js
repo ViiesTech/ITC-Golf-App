@@ -45,7 +45,7 @@ export const createGroup = (
       });
     }
 
-   return await axios
+    return await axios
       .post(`${URL}/create_group`, data, {
         headers: {
           Accept: 'application/json',
@@ -62,20 +62,20 @@ export const createGroup = (
             type: constant.CREATE_GROUP_DONE,
           });
           ShowToast(res.data.message);
-          return res.data
+          return res.data;
         } else {
           dispatch({
             type: constant.CREATE_GROUP_DONE,
           });
           ShowToast(res.data.message);
-          return false
+          return false;
         }
       })
       .catch(error => {
         dispatch({
           type: constant.CREATE_GROUP_DONE,
         });
-        return ShowToast('Check your network, Try Again!' || error.code);
+        return ShowToast('Some problem occured' || error.code);
       });
   };
 };
@@ -322,4 +322,29 @@ export const editGroup = (
         return ShowToast('Some problem occured');
       });
   };
+};
+
+export const fetchGroupMembers = group_id => {
+  return async dispatch => {
+    return await axios
+      .get(`${URL}/group-connected-users?group_id=${group_id}`, {
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+      .then(res => {
+        console.log('group members response =====>', res.data);
+        dispatch({
+          type: constant.FETCH_GROUP_MEMBERS,
+          payload: res.data,
+        });
+      })
+      .catch(error => {
+        return ShowToast('Some problem occured');
+      });
+  };
+};
+
+const sendGroupMessage = () => {
+  return async dispatch => {};
 };

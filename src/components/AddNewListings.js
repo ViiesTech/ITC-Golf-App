@@ -4,22 +4,16 @@ import {
   StyleSheet,
   Text,
   FlatList,
-  TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
+import {TabView, TabBar} from 'react-native-tab-view';
 import colors from '../assets/colors';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {
-  AllListingsPicker,
-  DesiredItem,
   ExperienceLevel,
   TeeBox,
-  discovers,
-  groups,
   handshake,
   how_many_players,
-  picker,
   switchOptions,
 } from '../DummyData';
 import DiscoverCard from './DiscoverCard';
@@ -30,7 +24,6 @@ import ContactInput from './ContactInput';
 import Button from './Button';
 import UploadPicture from './UploadPicture';
 import Switch from './Switch';
-import Add from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {launchImageLibrary} from 'react-native-image-picker';
 import moment from 'moment';
@@ -45,16 +38,15 @@ import {getListings} from '../redux/actions/homeAction';
 import images from '../assets/images';
 import {Picker} from '@react-native-picker/picker';
 import {useNavigation} from '@react-navigation/native';
-import {useIsFocused} from '@react-navigation/native';
 
-const Discover = () => {
+const Discover = ({searchPressed}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const {listing, loader, listings_filter, listings_filter_loader} =
     useSelector(state => state.HomeReducer);
 
-  console.log('listings', listing);
+  // console.log('listings', searchPressed);
 
   React.useEffect(() => {
     // if (listing.length < 1) {
@@ -117,7 +109,9 @@ const Discover = () => {
         columnWrapperStyle={{justifyContent: 'space-between'}}
         renderItem={({item, index}) => (
           <DiscoverCard
-            image={images.discover1}
+            image={
+              item.feature_image ? {uri: item.feature_image} : images.listing2
+            }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
                 screen: 'ListingDetails',
@@ -125,11 +119,7 @@ const Discover = () => {
               })
             }
             count={index + 1}
-            title={
-              Object.keys(item.listing_title).length == 13
-                ? item.listing_title
-                : 'New Listing'
-            }
+            title={item.listing_title}
             // itc={
             //   item.experience_level == ''
             //     ? '5 to 10 par progress level'
@@ -143,7 +133,7 @@ const Discover = () => {
             // }
             players={item.how_many_players}
             date={item.course_date}
-            time={item.course_time == '' ? '23:28' : item.course_time}
+            time={item.course_time ? item.course_time : true}
           />
         )}
       />
@@ -174,7 +164,11 @@ const Discover = () => {
     );
   };
 
-  return <View style={{paddingTop: hp('4%')}}>{renderAllListings()}</View>;
+  return (
+    <View style={{paddingTop: hp('4%')}}>
+      {searchPressed ? renderFilterListings() : renderAllListings()}
+    </View>
+  );
 };
 
 const MyListings = ({jumpTo, setListingData}) => {
@@ -187,7 +181,6 @@ const MyListings = ({jumpTo, setListingData}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const isFocused = useIsFocused();
 
   React.useEffect(() => {
     dispatch(ListingsByUserID(user.user_id));
@@ -263,7 +256,7 @@ const MyListings = ({jumpTo, setListingData}) => {
   );
 };
 
-const AddNew = ({listingData, jumpTo}) => {
+const AddNew = ({listingData}) => {
   const [state, setState] = React.useState({
     location: '',
     suggested_day: '',
@@ -413,7 +406,7 @@ const AddNew = ({listingData, jumpTo}) => {
       },
       smoking_friendly: listingData.smoking_friendly === 'true' && true,
       drinking_friendly: listingData.drinking_friendly === 'true' && true,
-      private_listing: listingData.private_listing === 'true' && true,
+      private_listing: listingData.group === 'true' && true,
     });
   };
 
@@ -433,7 +426,10 @@ const AddNew = ({listingData, jumpTo}) => {
           state.pickers.desired_tee,
           state.smoking_friendly,
           state.drinking_friendly,
+          state.pickers.exp_level,
           state.private_listing,
+          state.hyperlink,
+          state.image_details,
         ),
       );
       if (res) {
@@ -444,8 +440,8 @@ const AddNew = ({listingData, jumpTo}) => {
         return ShowToast(res);
       }
     } else {
-      if (!state.location) {
-        return ShowToast('Please add your location');
+      if (state.location == '' || state.image_details.path == '' && state.image_details.name == 'No File Choosen') {
+        return ShowToast('Please add complete information');
       } else {
         const res = await dispatch(
           createListing(
@@ -458,6 +454,8 @@ const AddNew = ({listingData, jumpTo}) => {
             state.pickers.itc_handshake,
             state.pickers.desired_tee,
             state.drinking_friendly,
+            state.smoking_friendly,
+            state.pickers.exp_level,
             state.private_listing,
             state.hyperlink,
             user.user_id,
@@ -745,7 +743,7 @@ const AddNew = ({listingData, jumpTo}) => {
 //   third: () => <AddNew />,
 // });
 
-export const AddNewListings = () => {
+export const AddNewListings = ({buttonPress}) => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {key: 'first', title: 'Discover'},
@@ -758,7 +756,7 @@ export const AddNewListings = () => {
   const renderScene = ({route, jumpTo}) => {
     switch (route.key) {
       case 'first':
-        return <Discover />;
+        return <Discover searchPressed={buttonPress} />;
       case 'second':
         return <MyListings jumpTo={jumpTo} setListingData={setListingData} />;
       case 'third':

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import AuthContainer from '../../components/AuthContainer';
 import colors from '../../assets/colors';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -23,15 +23,11 @@ const Login = () => {
     const navigation = useNavigation()
 
     const onLoginPress = async () => {
-
         if (!username || !password) {
             return ShowToast('Please type your information')
-
         }
         else {
             await dispatch(signin(username, password))
-            setUsername('')
-            setPassword('')
         }
     }
 
@@ -41,7 +37,7 @@ const Login = () => {
                 source={images.logo}
                 style={styles.image}
             />
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1}}>
                 <View style={styles.screen}>
                     <Text style={styles.heading}>Login Account</Text>
                     <Text style={styles.text}>Please enter the details below to continue.</Text>
@@ -90,7 +86,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexGrow: 1,
         justifyContent: 'flex-end',
-        paddingBottom: hp('4%'),
+        paddingBottom: hp('10%'),
         alignItems: 'center',
     },
     image: {

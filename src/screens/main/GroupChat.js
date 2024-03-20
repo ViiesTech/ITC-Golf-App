@@ -1,11 +1,4 @@
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import Container from '../../components/Container';
 import {GiftedChat, Send, Bubble, InputToolbar} from 'react-native-gifted-chat';
@@ -14,12 +7,23 @@ import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import SendIcon from 'react-native-vector-icons/Feather';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import {members} from '../../DummyData';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchGroupMembers} from '../../redux/actions/groupAction';
+import images from '../../assets/images';
+import ChatMembers from '../../components/ChatMembers';
+import { renderListingMembers } from '../../redux/actions/listingAction';
 
 const GroupChat = ({route}) => {
   const [messages, setMessages] = useState([]);
 
-  const {title} = route?.params;
-  // console.log(title);
+  const {title, type, id} = route?.params;
+
+  const dispatch = useDispatch();
+
+  const {group_members} = useSelector(state => state.GroupReducer);
+  const { listing_members } = useSelector(state => state.ListingReducer)
+  const {user} = useSelector(state => state.AuthReducer);
+  console.log('from chat screen', user);
 
   useEffect(() => {
     setMessages([
@@ -34,6 +38,7 @@ const GroupChat = ({route}) => {
         },
       },
     ]);
+    renderGroupMembers();
   }, []);
 
   const onSend = useCallback((messages = []) => {
@@ -95,44 +100,42 @@ const GroupChat = ({route}) => {
     );
   };
 
+  const renderGroupMembers = async () => {
+    if (type == 'group') {
+      await dispatch(fetchGroupMembers(7981));
+    } else {
+      await dispatch(renderListingMembers(8031))
+    }
+  };
+
   return (
     <Container>
       <View style={{paddingTop: hp('5%')}}>
         <SecondaryHeader text={title} />
       </View>
-      <View>
-        <FlatList
-          data={members}
-          horizontal
-          contentContainerStyle={{
-            gap: hp('4%'),
-            marginRight: hp('6%'),
-            padding: hp('2%'),
-          }}
-          renderItem={({item, index}) => (
-            <View>
-              <Image
-                source={item.images}
-                style={{
-                  height: hp('7%'),
-                  width: hp('7%'),
-                  alignSelf: 'center',
-                  marginBottom: hp('2%'),
-                }}
-                borderRadius={100}
+      <View style={{padding: hp('1%')}}>
+        <View style={styles.memberContainer}>
+          {/* <Text style={styles.memberText}>Members</Text> */}
+          <FlatList
+            data={type == 'group' ? group_members : listing_members}
+            horizontal
+            contentContainerStyle={{
+              gap: hp('4%'),
+              marginRight: hp('6%'),
+              padding: hp('2%'),
+            }}
+            renderItem={({item, index}) => (
+              <ChatMembers
+                image={
+                  item.author_img_url
+                    ? {uri: item.author_img_url}
+                    : images.profile
+                }
+                text={item.user_name}
               />
-              <Text
-                style={{
-                  color: colors.white,
-                  fontSize: hp('2%'),
-                  alignSelf: 'center',
-                  fontWeight: 'bold',
-                }}>
-                {item.text}
-              </Text>
-            </View>
-          )}
-        />
+            )}
+          />
+        </View>
       </View>
       <GiftedChat
         messages={messages}
@@ -175,5 +178,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.secondary,
     color: colors.white,
     padding: hp('0.5%'),
+  },
+  memberText: {
+    color: colors.white,
+    fontWeight: 'bold',
+    fontSize: hp('2%'),
+    marginLeft: hp('3%'),
+    marginBottom: hp('1.2%'),
+  },
+  memberContainer: {
+    borderWidth: 1,
+    borderColor: colors.gray,
+    borderRadius: 10,
   },
 });

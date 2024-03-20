@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput } from 'react-native'
+import { Platform, StyleSheet, TextInput } from 'react-native'
 import React from 'react'
 import LinearGradient from 'react-native-linear-gradient'
 import colors from '../assets/colors'
@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 5,
     justifyContent: 'space-between',
-    padding: hp('0.7%'),
+    // padding: hp('0.7%'),
+    padding: Platform.OS === 'android' ? hp('0.7%') : hp('2%'),
     alignSelf: 'center',
     width: hp('40%')
   },

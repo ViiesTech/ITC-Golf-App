@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import SVGImage from './SVGImage'
-import icons from '../assets/icons'
 import BouncyCheckbox from 'react-native-bouncy-checkbox'
 
 const PaymentMethods = ({ icon, text }) => {

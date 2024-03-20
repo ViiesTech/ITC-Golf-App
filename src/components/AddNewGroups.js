@@ -6,7 +6,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
+import {TabView, TabBar} from 'react-native-tab-view';
 import colors from '../assets/colors';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {TeeBox, handshake, listingPicker} from '../DummyData';
@@ -33,7 +33,7 @@ import {getGroups} from '../redux/actions/homeAction';
 import images from '../assets/images';
 import {useNavigation} from '@react-navigation/native';
 
-const Discover = () => {
+const Discover = ({searchPressed}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -41,7 +41,7 @@ const Discover = () => {
     state => state.HomeReducer,
   );
 
-  console.log('groups api data =============>', groups);
+  // console.log('groups api data =============>', searchPressed);
 
   React.useEffect(() => {
     // if (groups.length < 1) {
@@ -133,7 +133,9 @@ const Discover = () => {
         columnWrapperStyle={{justifyContent: 'space-between'}}
         renderItem={({item, index}) => (
           <DiscoverCard
-            image={images.discover2}
+            image={
+              item.feature_image ? {uri: item.feature_image} : images.listing4
+            }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
                 screen: 'GroupDetail',
@@ -167,7 +169,11 @@ const Discover = () => {
     );
   };
 
-  return <View style={{paddingTop: hp('4%')}}>{renderAllGroups()}</View>;
+  return (
+    <View style={{paddingTop: hp('4%')}}>
+      {searchPressed ? renderFilterGroups() : renderAllGroups()}
+    </View>
+  );
 };
 
 const MyGroups = ({jumpTo, setGroupData}) => {
@@ -183,7 +189,7 @@ const MyGroups = ({jumpTo, setGroupData}) => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-      dispatch(getGroupsById(user.user_id));
+    dispatch(getGroupsById(user.user_id));
   }, []);
 
   const renderLoader = () => {
@@ -216,7 +222,7 @@ const MyGroups = ({jumpTo, setGroupData}) => {
     setLoaderIndex(index);
     const res = await dispatch(DeleteGroup(group_id, user.user_id));
     if (res) {
-      navigation.navigate('Home')
+      navigation.navigate('Home');
       return ShowToast(res);
     }
   };
@@ -237,7 +243,9 @@ const MyGroups = ({jumpTo, setGroupData}) => {
               onEditPress={() => onEditGroup(item)}
               onDeletePress={() => onDeleteGroup(item.group_id, index)}
               image={
-                item.feature_image ? {uri: item.feature_image} : images.discover4
+                item.feature_image
+                  ? {uri: item.feature_image}
+                  : images.discover4
               }
               indicator={loaderIndex == index && delete_loader}
               title={item.listing_title}
@@ -259,7 +267,7 @@ const MyGroups = ({jumpTo, setGroupData}) => {
   );
 };
 
-const AddNew = ({jumpTo, groupData}) => {
+const AddNew = ({groupData}) => {
   const [state, setState] = React.useState({
     group_title: '',
     description: '',
@@ -350,8 +358,8 @@ const AddNew = ({jumpTo, groupData}) => {
         return ShowToast(res);
       }
     } else {
-      if (!state.group_title) {
-        return ShowToast('Please add group title');
+      if (state.group_title == '' || state.group_photo_details.path == '' && state.group_photo_details.name == 'No File Choosen') {
+        return ShowToast('Please add complete information');
       } else {
         const res = await dispatch(
           createGroup(
@@ -414,7 +422,7 @@ const AddNew = ({jumpTo, groupData}) => {
         itc_handshake: groupData.itc_group_handshake,
       },
       suggested_day: groupData.suggested_day,
-      private_group: groupData.private_group === '1' && true,
+      private_group: groupData.private_group === 'false' ? false : true,
       group_photo_details: {
         name: !groupData.feature_image
           ? 'No File Chosen'
@@ -603,7 +611,7 @@ const AddNew = ({jumpTo, groupData}) => {
   );
 };
 
-export const AddNewGroups = () => {
+export const AddNewGroups = ({buttonPressed}) => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {key: 'first', title: 'Discover'},
@@ -616,7 +624,7 @@ export const AddNewGroups = () => {
   const renderScene = ({route, jumpTo}) => {
     switch (route.key) {
       case 'first':
-        return <Discover />;
+        return <Discover searchPressed={buttonPressed} />;
       case 'second':
         return <MyGroups jumpTo={jumpTo} setGroupData={setGroupData} />;
       case 'third':
