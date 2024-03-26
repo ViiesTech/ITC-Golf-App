@@ -13,27 +13,29 @@ export const signup = (
   cpassword,
 ) => {
   return async dispatch => {
-    var data = new FormData();
+    // var data = new FormData();
 
     dispatch({
       type: constant.SIGNUP,
     });
 
-    data.append('custom_user_login', username);
-    data.append('custom_user_email', email);
-    data.append('custom_user_pass', password);
-    data.append('custom_user_pass_confirm', cpassword);
-    data.append('custom_user_first', firstname);
-    data.append('custom_user_last', lastname);
+    // data.append('custom_user_login', username);
+    // data.append('custom_user_email', email);
+    // data.append('custom_user_pass', password);
+    // data.append('custom_user_pass_confirm', cpassword);
+    // data.append('custom_user_first', firstname);
+    // data.append('custom_user_last', lastname);
 
-    return await fetch(`${URL}/signup`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'multipart/form-data',
+    return await fetch(
+      `${URL}/signup?custom_user_login=${username}&custom_user_email=${email}&custom_user_pass=${password}&custom_user_pass_confirm=${cpassword}&custom_user_first=${firstname}&custom_user_last=${lastname}`,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+        },
+        body: {},
       },
-      body: data,
-    })
+    )
       .then(async res => {
         const response = await res.json();
         console.log('signup response', response);
@@ -45,7 +47,7 @@ export const signup = (
         }
       })
       .catch(error => {
-        ErrorToast(error.message);
+        console.log('signup', error);
         dispatch({
           type: constant.SIGNUP_DONE,
         });
@@ -193,7 +195,7 @@ export const verifyOTP = (username, otp) => {
 
     let data = {
       username: username,
-      otp: otp
+      otp: otp,
     };
 
     return await axios
@@ -397,6 +399,32 @@ export const getWishlistById = user_id => {
           type: constant.GET_WISHLIST_DONE,
         });
         return ShowToast('Some problem occured');
+      });
+  };
+};
+
+export const DeactivateAccount = user_id => {
+  return async dispatch => {
+    return await axios
+      .post(
+        `${URL}/account/deactivate?user_id=${user_id}`,
+        {},
+        {
+          headers: {
+            Accept: 'application/json',
+          },
+        },
+      )
+      .then(res => {
+        console.log('deactivate response =======>', res.data);
+        dispatch({
+          type: constant.DEACTIVATE_ACCOUNT,
+        });
+        return res.data;
+      })
+      .catch(error => {
+        console.log('deactivate error ========>', error);
+        return false;
       });
   };
 };

@@ -4,7 +4,7 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import colors from '../assets/colors'
 import Button from './Button'
 
-const ConfirmationModal = ({ visible, onRequestClose, onPressOut, onCancel, onConfirm }) => {
+const ConfirmationModal = ({ visible, onRequestClose, onPressOut, onCancel, onConfirm, modalText }) => {
 
     return (
         <Modal
@@ -15,7 +15,7 @@ const ConfirmationModal = ({ visible, onRequestClose, onPressOut, onCancel, onCo
         >
             <TouchableOpacity style={styles.modalWrapper} onPress={onPressOut} activeOpacity={2}>
                 <View style={styles.modalView}>
-                    <Text style={styles.text}>Are you sure you want to logout!</Text>
+                    <Text style={styles.text}>{modalText}</Text>
                     <View style={styles.buttonWrapper}>
                         <Button
                             buttonText={'Cancel'}

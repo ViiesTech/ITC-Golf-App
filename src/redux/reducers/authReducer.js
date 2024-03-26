@@ -73,6 +73,9 @@ export default (state = initialState, action) => {
     case constant.GET_WISHLIST_DONE:
       return {...state, wishlist_loader: false, wishlist_items: action.payload};
 
+    case constant.DEACTIVATE_ACCOUNT:
+      return initialState;
+
     case constant.LOGOUT:
       return initialState;
 

@@ -212,10 +212,11 @@ const GroupDetail = ({route}) => {
                 buttonStyle={styles.button}
                 textStyle={{color: colors.secondary}}
                 onPress={() => {
-                  navigation.navigate('SecondaryStack', {
-                    screen: 'GroupChat',
-                    params: {title: item.listing_title, type: 'group', id: item.group_id},
-                  });
+                  // navigation.navigate('SecondaryStack', {
+                  //   screen: 'GroupChat',
+                  //   params: {title: item.listing_title, type: 'group', id: item.group_id},
+                  // });
+                  return ShowToast('Coming Soon')
                 }}
               />
             ) : (

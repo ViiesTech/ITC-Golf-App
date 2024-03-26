@@ -23,9 +23,11 @@ import {useDispatch, useSelector} from 'react-redux';
 import constant from '../../redux/constant';
 import {ShowToast} from '../../Custom';
 import ConfirmationModal from '../../components/ConfirmationModal';
+import {DeactivateAccount} from '../../redux/actions/authAction';
 
 const Profile = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [accountModal, setAccountModal] = useState(false);
 
   const url = 'https://inthecup.golf';
 
@@ -39,7 +41,7 @@ const Profile = () => {
 
   const onSettingsPress = async index => {
     if (index == 0) {
-      return ShowToast('Coming soon')
+      return ShowToast('Coming soon');
       // navigation.navigate('SecondaryStack', {screen: 'Payments'});
     } else if (index == 1) {
       navigation.navigate('SecondaryStack', {screen: 'Notifications'});
@@ -49,14 +51,16 @@ const Profile = () => {
       navigation.navigate('SecondaryStack', {screen: 'ContactUs'});
     } else if (index == 4) {
       // navigation.navigate('SecondaryStack', {screen: 'Language'});
-      return ShowToast('Coming soon')
+      return ShowToast('Coming soon');
     } else if (index == 5) {
       // navigation.navigate('SecondaryStack', {screen: 'Rating'});
-      return ShowToast('Coming soon')
+      return ShowToast('Coming soon');
     } else if (index == 6) {
       await Linking.openURL(url);
-    } else {
+    } else if (index == 7) {
       navigation.navigate('SecondaryStack', {screen: 'About'});
+    } else {
+      setAccountModal(true);
     }
   };
 
@@ -90,11 +94,20 @@ const Profile = () => {
     }
   };
 
-  const onConfirmLogout = () => {
-    dispatch({
-      type: constant.LOGOUT,
-    });
-    return ShowToast('Logout Successfully');
+  const onConfirmLogout = async type => {
+    if (type === 'logout') {
+      dispatch({
+        type: constant.LOGOUT,
+      });
+      return ShowToast('Logout Successfully');
+    } else {
+      const res = await dispatch(DeactivateAccount(user.user_id));
+      if (res.success) {
+        return ShowToast(res.message);
+      } else {
+        return ShowToast(res.message);
+      }
+    }
   };
 
   return (
@@ -169,11 +182,22 @@ const Profile = () => {
       </ScrollView>
       <ConfirmationModal
         visible={modalVisible}
+        modalText={'Are you sure you want to logout?'}
         onPressOut={() => setModalVisible(false)}
         onCancel={() => setModalVisible(false)}
-        onConfirm={() => onConfirmLogout()}
+        onConfirm={() => onConfirmLogout('logout')}
         onRequestClose={() => {
           setModalVisible(!modalVisible);
+        }}
+      />
+      <ConfirmationModal
+        visible={accountModal}
+        onPressOut={() => setAccountModal(false)}
+        modalText={'Are you sure you want to deactivate your account?'}
+        onCancel={() => setAccountModal(false)}
+        onConfirm={() => onConfirmLogout('deactivate')}
+        onRequestClose={() => {
+          setAccountModal(!accountModal);
         }}
       />
     </Container>

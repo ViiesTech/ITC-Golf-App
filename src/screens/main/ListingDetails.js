@@ -236,10 +236,11 @@ const ListingDetails = ({route}) => {
                 buttonStyle={styles.button}
                 textStyle={{color: colors.secondary}}
                 onPress={() => {
-                  navigation.navigate('SecondaryStack', {
-                    screen: 'GroupChat',
-                    params: {title: item.listing_title, type: 'listing'},
-                  });
+                  return ShowToast('Coming Soon')
+                  // navigation.navigate('SecondaryStack', {
+                  //   screen: 'GroupChat',
+                  //   params: {title: item.listing_title, type: 'listing'},
+                  // });
                 }}
               />
             ) : (
