@@ -40,8 +40,8 @@ export const createListing = (
     data.append('private_match', private_listing);
     data.append('hyper_link', hyperlink);
     data.append('user_id', user_id);
-    data.append('experience_level', experience_level)
-    data.append('smoking_friendly', smoking_friendly)
+    data.append('experience_level', experience_level);
+    data.append('smoking_friendly', smoking_friendly);
     if (photo) {
       data.append('listing_picture', {
         name: `${photo.name}.jpg`,
@@ -53,7 +53,7 @@ export const createListing = (
       });
     }
 
-   return await axios
+    return await axios
       .post(`${URL}/create_match`, data, {
         headers: {
           Accept: 'application/json',
@@ -68,13 +68,13 @@ export const createListing = (
             payload: res.data.listing_id,
           });
           ShowToast(res.data.message);
-          return res.data
+          return res.data;
         } else {
           dispatch({
             type: constant.CREATE_LISTING_DONE,
           });
           ShowToast(res.data.message);
-          return false
+          return false;
         }
       })
       .catch(error => {
@@ -296,7 +296,7 @@ export const editListing = (
     data.append('drinking_friendly', drinking_friendly);
     data.append('private_match', private_match);
     data.append('hyper_link', hyper_link);
-    data.append('experience_level', experience_level)
+    data.append('experience_level', experience_level);
     if (listing_picture) {
       data.append('listing_picture', {
         name: `${listing_picture.name}.jpg`,
@@ -332,21 +332,55 @@ export const editListing = (
   };
 };
 
-export const renderListingMembers = (listing_id) => {
+export const renderListingMembers = listing_id => {
   return async dispatch => {
-    return await axios.get(`${URL}/listing-connected-users?list_id=${listing_id}`,{
-      headers:{
-        'Accept': 'application/json',
-      }
-    }).then((res) => {
-      console.log('listing members response =======>', res.data)
-      dispatch({
-        type: constant.FETCH_LISTING_MEMBERS,
-        payload: res.data
+    return await axios
+      .get(`${URL}/listing-connected-users?list_id=${listing_id}`, {
+        headers: {
+          Accept: 'application/json',
+        },
       })
-    }).catch((error) => {
-      console.log('listing members error =======>', error)
-      return ShowToast('Some problem occured')
-    })
-  }
-}
+      .then(res => {
+        console.log('listing members response =======>', res.data);
+        dispatch({
+          type: constant.FETCH_LISTING_MEMBERS,
+          payload: res.data,
+        });
+      })
+      .catch(error => {
+        console.log('listing members error =======>', error);
+        return ShowToast('Some problem occured');
+      });
+  };
+};
+
+export const getListingStatus = (user_id, match_id, setListingStatus) => {
+  return async dispatch => {
+    dispatch({
+      type: constant.LISTING_STATUS,
+    });
+
+    return await axios
+      .get(`${URL}/listing-status?user_id=${user_id}&match_id=${match_id}`, {
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+      .then(res => {
+        if (res.data) {
+          setListingStatus(res.data.accept_or_not);
+          dispatch({
+            type: constant.LISTING_STATUS_DONE,
+          });
+        } else {
+          dispatch({
+            type: constant.LISTING_STATUS_DONE,
+          });
+        }
+      })
+      .catch(error => {
+        console.log('failed to get the listing status ========>', error);
+        return ShowToast('Some problem occured');
+      });
+  };
+};

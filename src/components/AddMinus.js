@@ -1,13 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import Decrement from 'react-native-vector-icons/AntDesign';
 import Add from 'react-native-vector-icons/Ionicons';
+import { ShowToast } from '../Custom';
 
 const AddMinus = () => {
     return (
-        <View style={styles.cardStyle}>
+        <TouchableOpacity style={styles.cardStyle} activeOpacity={0.9} onPress={() => {
+            return ShowToast('Coming soon')
+        }}>
             <View style={styles.DecrementView}>
                 <Decrement
                     name={'minus'}
@@ -23,7 +26,7 @@ const AddMinus = () => {
                     color={colors.gray}
                 />
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 

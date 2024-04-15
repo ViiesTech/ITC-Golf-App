@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Platform } from 'react-native'
 import React, { useState } from 'react'
 import colors from '../assets/colors'
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
@@ -13,7 +13,7 @@ const DateInput = ({ heading, mode, display, icon, text, onConfirm, style }) => 
     // }
 
     return (
-        <TouchableOpacity style={{ marginBottom: hp('3%') }}
+        <TouchableOpacity style={{ marginBottom: hp('3%'), marginRight: 20 }}
             onPress={() => setIsDatePickerVisible(true)}
             activeOpacity={0.9}
         >
@@ -44,8 +44,8 @@ export default DateInput
 const styles = StyleSheet.create({
     view: {
         borderWidth: 0.3,
-        width: hp('20%'),
-        marginTop: hp('1.4%'),
+        width: wp('32%'),
+        marginTop: Platform.OS === 'ios' ? hp('3.4%') : hp('1.4%'),
         borderRadius: 10,
         padding: hp('2.4%'),
         flexDirection: 'row',

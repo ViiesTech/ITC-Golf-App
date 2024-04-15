@@ -18,7 +18,7 @@ import MerchandiseCard from '../../components/MerchandiseCard';
 import images from '../../assets/images';
 import {useDispatch, useSelector} from 'react-redux';
 import {getProductDetails} from '../../redux/actions/productAction';
-import { ShowToast } from '../../Custom';
+import {ShowToast} from '../../Custom';
 
 const MerchandiseDetails = ({route}) => {
   const {id, wishlist} = route.params;
@@ -33,7 +33,7 @@ const MerchandiseDetails = ({route}) => {
 
   useEffect(() => {
     // if (!product_detail[id]) {
-      dispatch(getProductDetails(id));
+    dispatch(getProductDetails(id));
     // }
   }, []);
 
@@ -60,7 +60,11 @@ const MerchandiseDetails = ({route}) => {
         showsVerticalScrollIndicator={false}>
         <StuffDetailCard
           title={product_detail[id]?.title}
-          image={{uri: product_detail[id]?.image}}
+          image={
+            product_detail[id]?.image
+              ? {uri: product_detail[id]?.image}
+              : images.dummy
+          }
           favourite={wishlist}
           desc={product_detail[id]?.description}
         />
@@ -71,7 +75,7 @@ const MerchandiseDetails = ({route}) => {
               textStyle={styles.buttonText}
               buttonStyle={styles.button}
               onPress={() => {
-                return ShowToast('Coming soon')
+                return ShowToast('Coming soon');
               }}
             />
             <Button
@@ -79,7 +83,7 @@ const MerchandiseDetails = ({route}) => {
               textStyle={styles.button2Text}
               buttonStyle={styles.button2}
               onPress={() => {
-                return ShowToast('Coming soon')
+                return ShowToast('Coming soon');
               }}
             />
           </View>
@@ -102,12 +106,18 @@ const MerchandiseDetails = ({route}) => {
             image={images.stuff3}
             desc={'Lorem Ipsum Dolor Sit Amet, Consetetur'}
             text={'Golf Gloves'}
+            onPress={() => {
+              return ShowToast('Coming Soon');
+            }}
             descStyle={{top: hp('27.5%')}}
           />
           <MerchandiseCard
             image={images.stuff4}
             imageStyle={{height: hp('18%'), width: '54%'}}
-            style={{marginLeft: hp('2.6%')}}
+            style={{}}
+            onPress={() => {
+              return ShowToast('Coming Soon');
+            }}
             desc={'Lorem Ipsum Dolor Sit Amet, Consetetur'}
             descStyle={{top: hp('27.5%')}}
             text={'Golf Tees'}
@@ -122,7 +132,7 @@ export default MerchandiseDetails;
 
 const styles = StyleSheet.create({
   screen: {
-    padding: hp('1.6%'),
+    padding: hp('1%'),
     paddingTop: hp('5%'),
   },
   wrapper: {

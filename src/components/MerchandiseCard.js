@@ -1,7 +1,7 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React  from 'react'
 import colors from '../assets/colors'
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
+import { heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen'
 import Heart from 'react-native-vector-icons/AntDesign'
 
 const MerchandiseCard = ({ text, image, onPress, style, desc, rating, imageStyle, favourite, heartPress, descStyle }) => {
@@ -15,7 +15,7 @@ const MerchandiseCard = ({ text, image, onPress, style, desc, rating, imageStyle
                     style={[styles.image, imageStyle]}
                 />
             </TouchableOpacity>
-            <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+            <View style={{  flexDirection: 'row' }}> 
                 <Text style={styles.productName}>{text}</Text>
                 <TouchableOpacity style={styles.heartView} activeOpacity={0.9} onPress={heartPress}>
                     <Heart
@@ -54,7 +54,8 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         padding: hp('1.5%'),
         borderRadius: 10,
-        width: '100%',
+        // width: Platform.OS === 'ios' ? hp('18%') : '100%',
+        width: wp('42%'),
         borderColor: colors.gray
     },
     image: {
@@ -76,16 +77,16 @@ const styles = StyleSheet.create({
         top: hp('29.5%'),
         marginTop: hp('1%'),
     },
-    wrapper: {
-        paddingTop: 50,
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-    },
-    verticleLine: {
-        backgroundColor: colors.gray,
-        width: 1,
-        height: hp('3%')
-    },
+    // wrapper: {
+    //     paddingTop: 50,
+    //     justifyContent: 'space-between',
+    //     flexDirection: 'row',
+    // },
+    // verticleLine: {
+    //     backgroundColor: colors.gray,
+    //     width: 1,
+    //     height: hp('3%')
+    // },
     heartView: {
         backgroundColor: colors.primary,
         borderRadius: 5,
@@ -95,10 +96,10 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         justifyContent: 'center'
     },
-    border: {
-        borderBottomColor: colors.gray,
-        marginTop: hp('2%'),
-        width: '100%',
-        borderBottomWidth: 0.8
-    }
+    // border: {
+    //     borderBottomColor: colors.gray,
+    //     marginTop: hp('2%'),
+    //     width: '100%',
+    //     borderBottomWidth: 0.8
+    // }
 })

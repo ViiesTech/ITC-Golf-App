@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Platform } from 'react-native'
 import React from 'react'
 import colors from '../assets/colors'
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { Screens } from '../DummyData'
 
 const AllOptionsCard = ({ active, onChangeTab }) => {
@@ -33,11 +33,12 @@ const styles = StyleSheet.create({
         padding: hp('1.6%'),
         flexDirection: 'row',
         justifyContent: 'space-evenly',
+        // gap: 0.1,
         flexWrap: 'wrap'
     },
     text: {
         alignSelf: 'center',
-        fontSize: hp('1.4%'),
+        fontSize: Platform.OS === 'ios' ? hp('1.1%') : hp('1.4%'),
         fontWeight: 'bold'
     },
     line: {

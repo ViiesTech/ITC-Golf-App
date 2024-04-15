@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import React from 'react';
 import Home from '../screens/main/Home';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -34,7 +34,7 @@ const BottomStack = () => {
         tabBarShowLabel: false,
         tabBarStyle: {
           borderTopWidth: 0,
-          height: 80,
+          height: Platform.OS === 'ios' ? 100 : 80,
           backgroundColor: 'rgb(65,65,60)',
         },
       }}>
@@ -176,7 +176,7 @@ export default MainStack;
 const styles = StyleSheet.create({
   iconView: {
     backgroundColor: '#373636',
-    height: hp('6.5%'),
+    height:  hp('6.5%'),
     alignItems: 'center',
     borderRadius: 100,
     justifyContent: 'center',

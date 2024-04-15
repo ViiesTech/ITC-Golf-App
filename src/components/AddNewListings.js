@@ -5,6 +5,7 @@ import {
   Text,
   FlatList,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import {TabView, TabBar} from 'react-native-tab-view';
 import colors from '../assets/colors';
@@ -60,14 +61,55 @@ const Discover = ({searchPressed}) => {
         <ActivityIndicator size={'large'} color={colors.primary} />
       </View>
     ) : (
+      // <ScrollView style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+      // <View
+      //   style={{
+      //     flex: 1,
+      //     flexDirection: 'row',
+      //     flexWrap: 'wrap',
+      //     justifyContent: 'space-between',
+      //   }}>
+      //   {listing.map((item, index) => (
+      //     <DiscoverCard
+      //       image={
+      //         item.feature_image ? {uri: item.feature_image} : images.dummy
+      //       }
+      //       onPress={() =>
+      //         navigation.navigate('SecondaryStack', {
+      //           screen: 'ListingDetails',
+      //           params: {item},
+      //         })
+      //       }
+      //       count={index + 1}
+      //       title={item.listing_title}
+      //       // itc={
+      //       //   item.experience_level == ''
+      //       //     ? '5 to 10 par progress level'
+      //       //     : item.experience_level
+      //       // }
+      //       itc={item.the_itc_handshake}
+      //       // desc={
+      //       //   Object.keys(item.match_description).length == 4
+      //       //     ? item.match_description
+      //       //     : 'test'
+      //       // }
+      //       players={item.how_many_players}
+      //       date={item.course_date}
+      //       time={item.course_time ? item.course_time : true}
+      //     />
+      //   ))}
+      // </View>
+      // </ScrollView>
       <FlatList
         data={listing}
         numColumns={2}
+        scrollEnabled={true}
         columnWrapperStyle={{justifyContent: 'space-between'}}
+        style={{flexGrow: 1}}
         renderItem={({item, index}) => (
           <DiscoverCard
             image={
-              item.feature_image ? {uri: item.feature_image} : images.listing2
+              item.feature_image ? {uri: item.feature_image} : images.dummy
             }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
@@ -110,7 +152,7 @@ const Discover = ({searchPressed}) => {
         renderItem={({item, index}) => (
           <DiscoverCard
             image={
-              item.feature_image ? {uri: item.feature_image} : images.listing2
+              item.feature_image ? {uri: item.feature_image} : images.dummy
             }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
@@ -181,7 +223,6 @@ const MyListings = ({jumpTo, setListingData}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-
   React.useEffect(() => {
     dispatch(ListingsByUserID(user.user_id));
   }, []);
@@ -231,7 +272,7 @@ const MyListings = ({jumpTo, setListingData}) => {
               onDeletePress={() => onDeleteListing(item.listing_id, index)}
               onEditPress={() => onEditListing(item)}
               image={
-                item.feature_image ? {uri: item.feature_image} : images.listing2
+                item.feature_image ? {uri: item.feature_image} : images.dummy
               }
               onPress={() =>
                 navigation.navigate('SecondaryStack', {
@@ -440,7 +481,11 @@ const AddNew = ({listingData}) => {
         return ShowToast(res);
       }
     } else {
-      if (state.location == '' || state.image_details.path == '' && state.image_details.name == 'No File Choosen') {
+      if (
+        state.location == '' ||
+        (state.image_details.path == '' &&
+          state.image_details.name == 'No File Choosen')
+      ) {
         return ShowToast('Please add complete information');
       } else {
         const res = await dispatch(

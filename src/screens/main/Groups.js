@@ -110,7 +110,7 @@ const Groups = () => {
                   count={index + 1}
                   image={
                     item.featured_image_url == false
-                      ? images.group1
+                      ? images.dummy
                       : {uri: item.featured_image_url}
                   }
                   title={item.listing_title}
@@ -153,7 +153,7 @@ const Groups = () => {
             hideTag
             route={routeName}
             count={index + 1}
-            image={item.feature_image ? {uri: item.feature_image} : images.listing4}
+            image={item.feature_image ? {uri: item.feature_image} : images.dummy}
             title={item.listing_title}
             desc={
               item.group_desired_teebox == ''

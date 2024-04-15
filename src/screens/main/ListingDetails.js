@@ -12,7 +12,7 @@ import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import colors from '../../assets/colors';
 import images from '../../assets/images';
 import PersonalInfoTab from '../../components/PersonalInfoTab';
@@ -35,7 +35,7 @@ const ListingDetails = ({route}) => {
   const navigation = useNavigation();
   // console.log('kiaaa',navigation.getState().index)
 
-  const {reviews, reviews_loading, listing} = useSelector(
+  const {reviews, reviews_loading} = useSelector(
     state => state.HomeReducer,
   );
   const {user} = useSelector(state => state.AuthReducer);
@@ -54,15 +54,15 @@ const ListingDetails = ({route}) => {
   );
   console.log('acha', item);
 
-  console.log(
-    'reviews response from screen ===============>',
-    Object.keys(item.match_description).length,
-  );
+  // console.log(
+  //   'reviews response from screen ===============>',
+  //   Object.keys(item.match_description).length,
+  // );
 
-  console.log(
-    'paramsssss ================>',
-    Object.keys(item.match_description).length,
-  );
+  // console.log(
+  //   'paramsssss ================>',
+  //   Object.keys(item.match_description).length,
+  // );
 
   console.log('navigation', type);
 
@@ -101,13 +101,13 @@ const ListingDetails = ({route}) => {
       <Header />
       <SecondaryHeader
         headerStyle={{
-          width: Object.keys(item.listing_title).length > 19 && hp('25%'),
+          width: Object.keys(item.listing_title).length > 19  ? wp('45%') : null,
         }}
         text={item.listing_title}
         link={true}
         onLinkPress={() => onHyperLink(item.hyper_link)}
         linkButton={{
-          width: Object.keys(item.listing_title).length > 13 && hp('10%'),
+          width: Object.keys(item.listing_title).length > 13 ? wp('20%') : null,
         }}
       />
       <ScrollView contentContainerStyle={styles.screen}>
@@ -146,7 +146,7 @@ const ListingDetails = ({route}) => {
                   source={
                     item.feature_image
                       ? {uri: item.feature_image}
-                      : images.listing2
+                      : images.dummy
                   }
                   style={styles.image}
                   borderRadius={100}

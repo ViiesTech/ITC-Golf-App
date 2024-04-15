@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     alignSelf: 'center',
     marginTop: hp('0.4%'),
-    marginHorizontal: hp('3%'),
+    marginHorizontal: hp('2.5%'),
     alignItems: 'center',
   },
   textStyle: {

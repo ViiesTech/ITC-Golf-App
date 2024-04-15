@@ -53,7 +53,7 @@ const Listing = () => {
         renderItem={({item, index}) => (
           <ListingDetailCard
             listingImage={
-              item.feature_image ? {uri: item.feature_image} : images.listing2
+              item.feature_image ? {uri: item.feature_image} : images.dummy
             }
             route={routeName}
             total={index + 1}
@@ -112,7 +112,7 @@ const Listing = () => {
         renderItem={({item, index}) => (
           <ListingDetailCard
             listingImage={
-              item.feature_image ? {uri: item.feature_image} : images.listing2
+              item.feature_image ? {uri: item.feature_image} : images.dummy
             }
             route={routeName}
             total={index + 1}

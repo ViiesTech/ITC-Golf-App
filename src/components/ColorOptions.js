@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     card: {
         borderWidth: 0.7,
         borderColor: colors.lightgray,
-        width: '14%',
+        width: hp('4%'),
         padding: hp('0.5%'),
         alignItems: 'center',
         borderRadius: 5,

@@ -23,10 +23,7 @@ import Edit from 'react-native-vector-icons/Feather';
 import ContactInput from '../../components/ContactInput';
 import Button from '../../components/Button';
 import {AddNewListings} from '../../components/AddNewListings';
-import {
-  DesiredItem,
-  ExperienceLevel,
-} from '../../DummyData';
+import {DesiredItem, ExperienceLevel} from '../../DummyData';
 import {useDispatch, useSelector} from 'react-redux';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {PlayersFollow, editProfile} from '../../redux/actions/authAction';
@@ -44,7 +41,7 @@ const AllGroups = ({route}) => {
   const [listingsCode, setListingsCode] = useState(null);
   const [groupsCode, setGroupsCode] = useState(null);
   const [listingSearch, setListingSearch] = useState(false);
-  const [groupSearch, setGroupSearch] = useState(false)
+  const [groupSearch, setGroupSearch] = useState(false);
 
   const {user, follow_loader, players_follow, edit_loading, register_id} =
     useSelector(state => state.AuthReducer);
@@ -148,7 +145,6 @@ const AllGroups = ({route}) => {
     dispatch(getGroups());
   }, []);
 
-
   const onEditPress = async () => {
     if (!state.photoURL) {
       return ShowToast('Please add your photo');
@@ -188,6 +184,7 @@ const AllGroups = ({route}) => {
               changeTab === 'Add New Groups'
                 ? hp('660%')
                 : changeTab === 'Add New Listings' && hp('325%'),
+            flexGrow: 1,
           },
         ]}
         showsVerticalScrollIndicator={false}>
@@ -216,9 +213,9 @@ const AllGroups = ({route}) => {
                 onSearchPress={() => onGroupSearch()}
                 onValueChange={value => setGroupsCode(value)}
               />
-              <View style={{height: '400%'}}>
-                <AddNewGroups buttonPressed={groupSearch} />
-              </View>
+              {/* <View style={{height: '400%'}}> */}
+              <AddNewGroups buttonPressed={groupSearch} />
+              {/* </View> */}
             </>
           ) : changeTab === 'Add New Listings' ? (
             <>
@@ -314,6 +311,7 @@ const AllGroups = ({route}) => {
                   selectedValue={state.pickers.area_code}
                   dropdownIconColor={colors.white}
                   style={{color: colors.white}}
+                  itemStyle={{color: 'white', fontWeight: 'bold'}}
                   onValueChange={(itemValue, itemIndex) =>
                     onPickerValueChange('area_code', itemValue)
                   }>
@@ -341,6 +339,7 @@ const AllGroups = ({route}) => {
                   <View style={styles.pickerStyle}>
                     <Picker
                       selectedValue={state.pickers.exp_level}
+                      itemStyle={{color: 'white', fontWeight: 'bold'}}
                       dropdownIconColor={colors.white}
                       style={{color: colors.white}}
                       onValueChange={(itemValue, itemIndex) =>
@@ -366,6 +365,7 @@ const AllGroups = ({route}) => {
                   <View style={styles.pickerStyle}>
                     <Picker
                       selectedValue={state.pickers.desired_tee}
+                      itemStyle={{color: 'white', fontWeight: 'bold'}}
                       dropdownIconColor={colors.white}
                       style={{color: colors.white}}
                       onValueChange={(itemValue, itemIndex) =>
@@ -392,7 +392,7 @@ const AllGroups = ({route}) => {
                 placeholder={'37 Cardinal Lane Petersburg,'}
                 value={state.address}
                 onChangeText={text => onInputChange('address', text)}
-                style={[styles.input, {width: hp('45%')}]}
+                style={[styles.input, {width: '100%'}]}
                 textColor={colors.lightgray}
               />
               <Text

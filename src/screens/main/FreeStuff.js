@@ -22,6 +22,7 @@ import colors from '../../assets/colors';
 import {ShowToast} from '../../Custom';
 import constant from '../../redux/constant';
 import Sponsors from '../../components/Sponsors';
+import images from '../../assets/images';
 
 const FreeStuff = () => {
   const navigation = useNavigation();
@@ -60,7 +61,6 @@ const FreeStuff = () => {
       removeFromWishlist(user.user_id, item.product_id),
     );
     if (add.success && !products[index].isFav) {
-      //   console.log('kia hogya hai jani', products[index].isFav);
       //   alert('add to favourite');
       products[index] = {...item, isFav: true};
       dispatch({
@@ -70,7 +70,6 @@ const FreeStuff = () => {
       return ShowToast(add.message);
     } else if (remove.success && products[index].isFav) {
       //   alert('remove from favourite');
-      //   console.log('or sunao jani remove horhe ho ya nai', remove.message);
       products[index] = {...item, isFav: false};
       dispatch({
         type: constant.RENDER_PRODUCT_DONE,
@@ -92,7 +91,7 @@ const FreeStuff = () => {
           showsVerticalScrollIndicator={false}
           renderItem={({item, index}) => (
             <MerchandiseCard
-              image={{uri: item.image}}
+              image={item.image ? {uri: item.image} : images.dummy}
               text={item.title}
               heartPress={() => onToggleWishlist(item, index)}
               favourite={item.isFav}
@@ -118,7 +117,7 @@ export default FreeStuff;
 
 const styles = StyleSheet.create({
   screen: {
-    padding: hp('2%'),
+    padding: hp('1.7%'),
   },
   errorMessage: {
     color: colors.primary,

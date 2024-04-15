@@ -25,7 +25,8 @@ const StuffDetailCard = ({ rating, image, title, desc, favourite }) => {
                 </View>
             </View>
             <View style={styles.textWrapper}>
-                <Text style={[styles.text, { width: title?.length > 45 ? '60%' : title?.length == 28 && '70%' }]}>{title}</Text>
+                <Text style={[styles.text, {  }]}>{title}</Text>
+
                 {/* <StarRating
                     starSize={15}
                     style={{ marginTop: hp('1.7%') }}
@@ -33,17 +34,18 @@ const StuffDetailCard = ({ rating, image, title, desc, favourite }) => {
                     onChange={() => null}
                 /> */}
                 <Text style={styles.desc}>{desc !== '' ? desc : 'Lorem Ipsum Dolor Sit Amet, Consetetur'}</Text>
-                <View style={[styles.border, { width: title?.length > 45 ? '63%' : '70%' }]} />
+                <View style={[styles.border, {  }]} />
                 <View style={{ paddingTop: hp('2%'), flexDirection: 'row' }}>
                     {Colors.map((item, i) => (
                         <ColorOptions
-                            style={chooseOptions == i ? { backgroundColor: colors.gray, borderWidth: 0 } : { backgroundColor: 'transparent', width: title?.length > 45 ? '12.5%' : ' 14%' }}
+                            style={chooseOptions == i ? { backgroundColor: colors.gray, borderWidth: 0 } : { backgroundColor: 'transparent',  }}
                             onPress={() => setChooseOptions(i)}
                             image={item.image}
                         />
                     ))}
                 </View>
             </View>
+
         </View>
     )
 }
@@ -80,6 +82,7 @@ const styles = StyleSheet.create({
     },
     textWrapper: {
         marginLeft: hp('1%'),
+        flex: 2,
         marginTop: hp('1%')
     },
     text: {
@@ -89,7 +92,7 @@ const styles = StyleSheet.create({
     },
     desc: {
         color: colors.lightgray,
-        width: '60%',
+        // width: '60%',
         marginTop: hp('2%')
     },
     border: {

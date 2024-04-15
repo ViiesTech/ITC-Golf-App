@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { Platform, StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         borderRadius: 10,
-        padding: hp('1%'),
+        padding: Platform.OS === 'ios' ? hp('2%') : hp('1%'),
         marginTop: hp('2%'),
     },
     input: {

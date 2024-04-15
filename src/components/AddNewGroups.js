@@ -5,10 +5,11 @@ import {
   Text,
   FlatList,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import {TabView, TabBar} from 'react-native-tab-view';
 import colors from '../assets/colors';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {TeeBox, handshake, listingPicker} from '../DummyData';
 import DiscoverCard from './DiscoverCard';
 import MyGroupsCard from './MyGroupsCard';
@@ -62,7 +63,7 @@ const Discover = ({searchPressed}) => {
         renderItem={({item, index}) => (
           <DiscoverCard
             image={
-              item.feature_image ? {uri: item.feature_image} : images.listing4
+              item.feature_image ? {uri: item.feature_image} : images.dummy
             }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
@@ -134,7 +135,7 @@ const Discover = ({searchPressed}) => {
         renderItem={({item, index}) => (
           <DiscoverCard
             image={
-              item.feature_image ? {uri: item.feature_image} : images.listing4
+              item.feature_image ? {uri: item.feature_image} : images.dummy
             }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
@@ -245,7 +246,7 @@ const MyGroups = ({jumpTo, setGroupData}) => {
               image={
                 item.feature_image
                   ? {uri: item.feature_image}
-                  : images.discover4
+                  : images.dummy
               }
               indicator={loaderIndex == index && delete_loader}
               title={item.listing_title}
@@ -460,14 +461,16 @@ const AddNew = ({groupData}) => {
         textAlignVertical={'top'}
         style={[styles.input, {height: hp('15%')}]}
       />
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+
+      <View style={{flexDirection: 'row', justifyContent: 'space-between',  }}>
         <View>
           <Text style={styles.textStyle}>What Kind Of Listing Is This?</Text>
-          <View style={[styles.pickerStyle, {width: '85%'}]}>
+          <View style={[styles.pickerStyle, {width: wp('40%')}]}>
             <Picker
               selectedValue={state.pickers.kind_listing}
               dropdownIconColor={colors.white}
               style={{color: colors.white}}
+              itemStyle={{fontWeight: 'bold', color: colors.white}}
               onValueChange={(itemValue, itemIndex) =>
                 handlePickerChange('kind_listing', itemValue)
               }>
@@ -505,6 +508,7 @@ const AddNew = ({groupData}) => {
           selectedValue={state.pickers.itc_handshake}
           dropdownIconColor={colors.white}
           style={{color: colors.white}}
+          itemStyle={{fontWeight: 'bold', color: colors.white}}
           onValueChange={(itemValue, itemIndex) =>
             handlePickerChange('itc_handshake', itemValue)
           }>
@@ -528,6 +532,7 @@ const AddNew = ({groupData}) => {
           selectedValue={state.pickers.area_code}
           dropdownIconColor={colors.white}
           style={{color: colors.white}}
+          itemStyle={{fontWeight: 'bold', color: colors.white}}
           onValueChange={(itemValue, itemIndex) =>
             handlePickerChange('area_code', itemValue)
           }>
@@ -554,6 +559,7 @@ const AddNew = ({groupData}) => {
           value3={item.pickerText3}
           value4={item.pickerText4}
           value5={item.pickerText5}
+          iosStyle={{color: colors.white, fontWeight: 'bold'}}
           value6={item.pickerText6}
           onValueChange={itemValue =>
             handlePickerChange('desired_tee', itemValue)
@@ -704,6 +710,7 @@ const styles = StyleSheet.create({
   textStyle: {
     color: colors.white,
     fontSize: hp('1.8%'),
+    width: Platform.OS === 'ios' && '80%',
     fontWeight: 'bold',
   },
 });

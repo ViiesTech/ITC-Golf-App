@@ -78,6 +78,7 @@ const Home = () => {
   const renderAllListings = () => {
     return listing?.map((item, index) => (
       <View
+        key={index}
         style={
           index !== 7 && {
             borderBottomWidth: 1,
@@ -89,9 +90,7 @@ const Home = () => {
           key={item.id}
           number={index + 1}
           title={item.listing_title}
-          image={
-            item.feature_image ? {uri: item.feature_image} : images.listing2
-          }
+          image={item.feature_image ? {uri: item.feature_image} : images.dummy}
           // descStyle={{ width: index == 0 ? '20%' : index == 1 ? '40%' : '100%' }}
           count={
             item.how_many_players == 'Select a Value'
@@ -125,6 +124,7 @@ const Home = () => {
       ? renderFilterMessage()
       : listings_filter?.map((item, index) => (
           <View
+            key={index}
             style={
               index !== 7 && {
                 borderBottomWidth: 1,
@@ -149,7 +149,9 @@ const Home = () => {
               }
               date={item.course_date}
               desc={item.match_description}
-              // image={item.image}
+              image={
+                item.feature_image ? {uri: item.feature_image} : images.dummy
+              }
               onPress={() =>
                 navigation.navigate('SecondaryStack', {
                   screen: 'ListingDetails',
@@ -212,11 +214,11 @@ const Home = () => {
             <View style={styles.border}>
               <Text style={styles.textStyle}>Area Code</Text>
               <View style={styles.pickerStyle}>
-              <Picker
+                <Picker
                   selectedValue={selectedOption}
                   dropdownIconColor={colors.white}
-                  style={{color: colors.white,borderColor:"red"}}
-                  itemStyle={{color:'white',fontWeight: 'bold'}}
+                  style={{color: colors.white, borderColor: 'red'}}
+                  itemStyle={{color: 'white', fontWeight: 'bold'}}
                   numberOfLines={1}
                   onValueChange={(itemValue, itemIndex) =>
                     setSelectedOption(itemValue)
@@ -226,20 +228,21 @@ const Home = () => {
                     value={null}
                     style={{color: colors.secondary}}
                   />
-                  {area_codes?.map(item => (
+                  {area_codes?.map((item, ind) => (
                     <Picker.Item
+                      key={ind}
                       label={item}
                       value={item}
                       style={{color: colors.secondary}}
                     />
                   ))}
                 </Picker>
-            </View>
-            <Button
-              buttonText={'Search'}
-              icon={true}
-              onPress={() => onSearchAreaCode()}
-            />
+              </View>
+              <Button
+                buttonText={'Search'}
+                icon={true}
+                onPress={() => onSearchAreaCode()}
+              />
             </View>
             <Text style={styles.text}>Listing</Text>
             <View style={styles.cardWrapper}>

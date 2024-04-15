@@ -21,7 +21,7 @@ const DiscoverCard = ({
 //   console.log(desc.length);
 
   return (
-    <TouchableOpacity style={styles.wrapper} activeOpacity={0.9} onPress={onPress}>
+    <View style={styles.wrapper} activeOpacity={0.9} onPress={onPress}>
       <Image source={image} style={styles.image} borderRadius={10} />
       <View style={styles.textWrapper}>
         <View style={styles.numberView}>
@@ -63,7 +63,7 @@ const DiscoverCard = ({
           </View>
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     borderColor: colors.gray,
     // height: hp('52%'),
     padding: hp('0.6%'),
-    width: '47%',
+    width: '46%',
     borderRadius: 10,
   },
   image: {

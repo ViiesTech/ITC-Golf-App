@@ -11,7 +11,7 @@ import {
 import React, {useState, useEffect} from 'react';
 import Container from '../../components/Container';
 import colors from '../../assets/colors';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import PersonalInfoTab from '../../components/PersonalInfoTab';
 import {Tabs} from '../../DummyData';
 import Header from '../../components/Header';
@@ -84,12 +84,12 @@ const GroupDetail = ({route}) => {
       <Header />
       <SecondaryHeader
         headerStyle={{
-          width: Object.keys(item.listing_title)?.length > 19 && hp('25%'),
+          width: Object.keys(item.listing_title)?.length > 19 ? wp('45%') : null,
         }}
         text={item.listing_title}
         link={true}
         linkButton={{
-          width: Object.keys(item.listing_title)?.length > 10 && hp('10%'),
+          width: Object.keys(item.listing_title)?.length > 13 ? wp('24%') : null
           // : hp('14%'),
         }}
         onLinkPress={() => onHyperLink(item.hyper_link)}
@@ -130,7 +130,7 @@ const GroupDetail = ({route}) => {
                   source={
                     item.feature_image
                       ? {uri: item.feature_image}
-                      : images.listing4
+                      : images.dummy
                   }
                   style={styles.image}
                   borderRadius={100}
