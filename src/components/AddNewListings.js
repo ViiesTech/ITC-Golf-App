@@ -6,10 +6,14 @@ import {
   FlatList,
   ActivityIndicator,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import {TabView, TabBar} from 'react-native-tab-view';
 import colors from '../assets/colors';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import {
   ExperienceLevel,
   TeeBox,
@@ -47,7 +51,7 @@ const Discover = ({searchPressed}) => {
   const {listing, loader, listings_filter, listings_filter_loader} =
     useSelector(state => state.HomeReducer);
 
-  // console.log('listings', searchPressed);
+  console.log('listings', searchPressed);
 
   React.useEffect(() => {
     // if (listing.length < 1) {
@@ -239,7 +243,11 @@ const MyListings = ({jumpTo, setListingData}) => {
     return (
       <View style={{alignItems: 'center', paddingTop: hp('5%')}}>
         <Text
-          style={{color: colors.white, fontSize: hp('2%'), fontWeight: 'bold'}}>
+          style={{
+            color: colors.white,
+            fontSize: hp('2%'),
+            fontWeight: 'bold',
+          }}>
           {my_listings?.message || 'No match found for the user'}
         </Text>
       </View>
@@ -268,6 +276,7 @@ const MyListings = ({jumpTo, setListingData}) => {
         ? renderMessage()
         : my_listings?.map((item, index) => (
             <MyGroupsCard
+              key={index}
               deleteText={'Delete Listing'}
               onDeletePress={() => onDeleteListing(item.listing_id, index)}
               onEditPress={() => onEditListing(item)}
@@ -334,9 +343,6 @@ const AddNew = ({listingData}) => {
   );
   const {area_codes} = useSelector(state => state.HomeReducer);
   const {user} = useSelector(state => state.AuthReducer);
-
-  // console.log(typeof state.smoking_friendly)
-  console.log('dataaa', listingData);
 
   const onChoosePhoto = async (type, index) => {
     const options = {
@@ -507,7 +513,6 @@ const AddNew = ({listingData}) => {
             state.image_details,
           ),
         );
-        console.log(res);
         if (res) {
           navigation.navigate('Home');
           initialState();
@@ -586,8 +591,9 @@ const AddNew = ({listingData}) => {
                 value={null}
                 style={{color: colors.secondary}}
               />
-              {area_codes?.map(item => (
+              {area_codes?.map((item, ind) => (
                 <Picker.Item
+                  key={ind}
                   label={item}
                   value={item}
                   style={{color: colors.secondary}}
@@ -611,8 +617,9 @@ const AddNew = ({listingData}) => {
                 value={null}
                 style={{color: colors.secondary}}
               />
-              {how_many_players.map(item => (
+              {how_many_players.map((item, ind) => (
                 <Picker.Item
+                  key={ind}
                   label={item.pickerText}
                   value={item.pickerText}
                   style={{color: colors.secondary}}
@@ -636,8 +643,9 @@ const AddNew = ({listingData}) => {
                 value={null}
                 style={{color: colors.secondary}}
               />
-              {handshake.map(item => (
+              {handshake.map((item, ind) => (
                 <Picker.Item
+                  key={ind}
                   label={item.pickerText}
                   value={item.pickerText}
                   style={{color: colors.secondary}}
@@ -661,8 +669,9 @@ const AddNew = ({listingData}) => {
                 value={null}
                 style={{color: colors.secondary}}
               />
-              {ExperienceLevel.map(item => (
+              {ExperienceLevel.map((item, ind) => (
                 <Picker.Item
+                  key={ind}
                   label={item.pickerText}
                   value={item.pickerText}
                   style={{color: colors.secondary}}
@@ -671,8 +680,9 @@ const AddNew = ({listingData}) => {
             </Picker>
           </View>
         </View>
-        {TeeBox.map(item => (
+        {TeeBox.map((item, ind) => (
           <DropDownPicker
+            key={ind}
             text={item.text}
             iconColor={colors.lightgray}
             itemStyle={{color: colors.lightgray}}
@@ -732,24 +742,24 @@ const AddNew = ({listingData}) => {
           position: 'relative',
         }}>
         {/* <View style={{flex: 1}}>
-          {state.listing_gallery.map((item, i) => {
-            return (
-              <UploadPicture
-                text={i == 0 && 'Listing Gallery'}
-                buttonStyle={{width: hp('16%')}}
-                chooseFile={() => onChoosePhoto('gallery', i)}
-                style={{width: hp('37%')}}
-                fileName={item.name}
-              />
-            );
-          })}
-        </View>
-        <TouchableOpacity
-          style={styles.addView}
-          activeOpacity={0.9}
-          onPress={() => onAddMore()}>
-          <Add name={'add'} color={colors.secondary} size={25} />
-        </TouchableOpacity> */}
+        {state.listing_gallery.map((item, i) => {
+          return (
+            <UploadPicture
+              text={i == 0 && 'Listing Gallery'}
+              buttonStyle={{width: hp('16%')}}
+              chooseFile={() => onChoosePhoto('gallery', i)}
+              style={{width: hp('37%')}}
+              fileName={item.name}
+            />
+          );
+        })}
+      </View>
+      <TouchableOpacity
+        style={styles.addView}
+        activeOpacity={0.9}
+        onPress={() => onAddMore()}>
+        <Add name={'add'} color={colors.secondary} size={25} />
+      </TouchableOpacity> */}
       </View>
       <View style={{paddingTop: hp('2%')}}>
         <Text style={styles.text}>Additional Details</Text>
@@ -760,8 +770,9 @@ const AddNew = ({listingData}) => {
             flexWrap: 'wrap',
             justifyContent: 'space-between',
           }}>
-          {switchOptions.map(item => (
+          {switchOptions.map((item, key) => (
             <Switch
+              key={key}
               text={item.text}
               isOn={state[item.props]}
               color={state[item.props] ? colors.secondary : colors.lightgray}
@@ -782,14 +793,14 @@ const AddNew = ({listingData}) => {
   );
 };
 
-// const renderScene =  SceneMap({
-//   first: () => <Discover />,
-//   second: () => <MyListings />,
-//   third: () => <AddNew />,
-// });
-
 export const AddNewListings = ({buttonPress}) => {
-  const [index, setIndex] = React.useState(0);
+  // const renderScene =  SceneMap({
+  //   first: () => <Discover />,
+  //   second: () => <MyListings />,
+  //   third: () => <AddNew />,
+  // });
+
+  const [index, setIndex] = React.useState('first');
   const [routes] = React.useState([
     {key: 'first', title: 'Discover'},
     {key: 'second', title: 'My Listing'},
@@ -798,49 +809,144 @@ export const AddNewListings = ({buttonPress}) => {
 
   const [listingData, setListingData] = React.useState(null);
 
-  const renderScene = ({route, jumpTo}) => {
-    switch (route.key) {
-      case 'first':
-        return <Discover searchPressed={buttonPress} />;
-      case 'second':
-        return <MyListings jumpTo={jumpTo} setListingData={setListingData} />;
-      case 'third':
-        return <AddNew listingData={listingData} jumpTo={jumpTo} />;
-      default:
-        return null;
-    }
-  };
+  // const renderScene = ({route, jumpTo}) => {
+  //   switch (route.key) {
+  //     case 'first':
+  //       return <Discover searchPressed={buttonPress} />;
+  //     case 'second':
+  //       return <MyListings jumpTo={jumpTo} setListingData={setListingData} />;
+  //     case 'third':
+  //       return <AddNew listingData={listingData} jumpTo={jumpTo} />;
+  //     default:
+  //       return null;
+  //   }
+  // };
+
+  // return (
+  //   <TabView
+  //     navigationState={{index, routes}}
+  //     style={{marginTop: hp('2.5%')}}
+  //     renderScene={renderScene}
+  //     onIndexChange={setIndex}
+  //     renderTabBar={styling => (
+  //       <TabBar
+  //         indicatorStyle={styles.indicatorStyle}
+  //         {...styling}
+  //         style={{
+  //           backgroundColor: colors.white,
+  //           borderRadius: 10,
+  //           height: hp('6.8%'),
+  //           justifyContent: 'center',
+  //         }}
+  //         renderLabel={({route}) => (
+  //           <Text
+  //             style={{
+  //               color: colors.secondary,
+  //               // marginTop: hp('0.5%'),
+  //               fontWeight: 'bold',
+  //               fontSize: hp('1.5%'),
+  //             }}>
+  //             {route.title}
+  //           </Text>
+  //         )}
+  //       />
+  //     )}
+  //   />
+  // );
 
   return (
-    <TabView
-      navigationState={{index, routes}}
-      style={{marginTop: hp('2.5%')}}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      renderTabBar={styling => (
-        <TabBar
-          indicatorStyle={styles.indicatorStyle}
-          {...styling}
-          style={{
-            backgroundColor: colors.white,
-            borderRadius: 10,
-            height: hp('6.8%'),
-            justifyContent: 'center',
-          }}
-          renderLabel={({route}) => (
-            <Text
-              style={{
-                color: colors.secondary,
-                // marginTop: hp('0.5%'),
-                fontWeight: 'bold',
-                fontSize: hp('1.5%'),
-              }}>
-              {route.title}
-            </Text>
-          )}
-        />
-      )}
-    />
+    <>
+      <View
+        style={{
+          backgroundColor: colors.white,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-evenly',
+          marginTop: hp('2.5%'),
+          paddingVertical: hp(0.5),
+          borderRadius: hp(1),
+        }}>
+        <TouchableOpacity
+          onPress={() => setIndex('first')}
+          style={[
+            index == 'first'
+              ? {
+                  backgroundColor: colors.primary,
+                  paddingVertical: 10,
+                  borderRadius: 10,
+                }
+              : null,
+            {
+              width: wp(25),
+              alignItems: 'center',
+            },
+          ]}>
+          <Text
+            style={{
+              color: colors.secondary,
+              fontWeight: 'bold',
+              fontSize: hp('1.5%'),
+            }}>
+            Discover
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setIndex('second')}
+          style={[
+            index == 'second'
+              ? {
+                  backgroundColor: colors.primary,
+                  paddingVertical: 10,
+                  borderRadius: 10,
+                }
+              : null,
+            {
+              width: wp(25),
+              alignItems: 'center',
+            },
+          ]}>
+          <Text
+            style={{
+              color: colors.secondary,
+              fontWeight: 'bold',
+              fontSize: hp('1.5%'),
+            }}>
+            My listing
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setIndex('third')}
+          style={[
+            index == 'third'
+              ? {
+                  backgroundColor: colors.primary,
+                  paddingVertical: 10,
+                  borderRadius: 10,
+                }
+              : null,
+            {
+              width: wp(25),
+              alignItems: 'center',
+            },
+          ]}>
+          <Text
+            style={{
+              color: colors.secondary,
+              fontWeight: 'bold',
+              fontSize: hp('1.5%'),
+            }}>
+            Add New Listing
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {index == 'first' ? (
+        <Discover searchPressed={buttonPress} />
+      ) : index == 'second' ? (
+        <MyListings setListingData={setListingData} />
+      ) : index == 'third' ? (
+        <AddNew listingData={listingData} />
+      ) : null}
+    </>
   );
 };
 
@@ -849,7 +955,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     width: '30%',
     bottom: hp('1%'),
-    // marginLeft: hp('0.5%'
     left: 5,
     alignItems: 'center',
     borderRadius: 50,

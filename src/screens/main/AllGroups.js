@@ -50,8 +50,6 @@ const AllGroups = ({route}) => {
 
   const {listing_id} = useSelector(state => state.ListingReducer);
 
-  console.log('listing id ========>', user.user_id);
-
   const [state, setState] = useState({
     first_name: user.firstname,
     last_name: user.lastname,
@@ -74,8 +72,6 @@ const AllGroups = ({route}) => {
   const navigation = useNavigation();
 
   const [changeTab, setChangeTab] = useState(options);
-
-  // console.log('wah', searchPressed);
 
   useEffect(() => {
     if (changeTab === 'Players You Follow' && players_follow.length < 1) {

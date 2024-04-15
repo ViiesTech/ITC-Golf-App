@@ -11,7 +11,6 @@ export const getAllAreaCodes = () => {
         },
       })
       .then(res => {
-        console.log('all area codes response ===========>', res.data);
         dispatch({
           type: constant.GET_AREA_CODES,
           payload: res.data,
@@ -19,6 +18,7 @@ export const getAllAreaCodes = () => {
       })
       .catch(error => {
         console.log('area codes error ========>', error);
+        console.log('area codes error ========>', error.response.data.message);
         return ShowToast('Some problem occured');
       });
   };
@@ -38,7 +38,6 @@ export const getListings = () => {
     })
       .then(async res => {
         const data = await res.json();
-        console.log('listing response =======================>', data);
         dispatch({
           type: constant.GET_LISTING_DONE,
           payload: data,
@@ -68,7 +67,6 @@ export const getGroups = () => {
     })
       .then(async res => {
         const group = await res.json();
-        console.log('group responsee ============>', group);
         dispatch({
           type: constant.GET_GROUPS_DONE,
           payload: group,
@@ -204,14 +202,14 @@ export const AboutSection = () => {
       type: constant.GET_ABOUT,
     });
 
-   return await axios
+    return await axios
       .get(`${URL}/about-us`, {
         headers: {
           Accept: 'application/json',
         },
       })
       .then(res => {
-        console.log('about response ======>' ,res.data)
+        console.log('about response ======>', res.data);
         dispatch({
           type: constant.GET_ABOUT_DONE,
           payload: res.data.content,
