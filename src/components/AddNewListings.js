@@ -5,7 +5,6 @@ import {
   Text,
   FlatList,
   ActivityIndicator,
-  ScrollView,
 } from 'react-native';
 import {TabView, TabBar} from 'react-native-tab-view';
 import colors from '../assets/colors';
@@ -105,7 +104,7 @@ const Discover = ({searchPressed}) => {
         numColumns={2}
         scrollEnabled={true}
         columnWrapperStyle={{justifyContent: 'space-between'}}
-        style={{flexGrow: 1}}
+        // style={{flexGrow: 1}}
         renderItem={({item, index}) => (
           <DiscoverCard
             image={

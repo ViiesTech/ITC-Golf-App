@@ -12,7 +12,10 @@ import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import colors from '../../assets/colors';
 import images from '../../assets/images';
 import PersonalInfoTab from '../../components/PersonalInfoTab';
@@ -23,23 +26,28 @@ import Button from '../../components/Button';
 import {useDispatch, useSelector} from 'react-redux';
 import {getReviews} from '../../redux/actions/homeAction';
 import {ShowToast} from '../../Custom';
-import {JoinListing} from '../../redux/actions/listingAction';
+import {getListingStatus, JoinListing} from '../../redux/actions/listingAction';
 import constant from '../../redux/constant';
 import {useNavigation} from '@react-navigation/native';
 import {Tabs} from '../../DummyData';
 
 const ListingDetails = ({route}) => {
   const [changeTab, setChangeTab] = useState(1);
+  const [listingStatus, setListingStatus] = useState(null);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
   // console.log('kiaaa',navigation.getState().index)
 
-  const {reviews, reviews_loading} = useSelector(
-    state => state.HomeReducer,
-  );
+  const {reviews, reviews_loading} = useSelector(state => state.HomeReducer);
   const {user} = useSelector(state => state.AuthReducer);
-  const {join_loading} = useSelector(state => state.ListingReducer);
+  const {join_loading, status_loader} = useSelector(
+    state => state.ListingReducer,
+  );
+
+  useEffect(() => {
+    dispatch(getListingStatus(user.user_id, item.listing_id, setListingStatus));
+  }, []);
 
   useEffect(() => {
     if (changeTab == 3 && reviews.length < 1) {
@@ -52,7 +60,7 @@ const ListingDetails = ({route}) => {
   const itemStatus = useSelector(
     state => state?.ListingReducer[item.listing_id] || 'Unknown',
   );
-  console.log('acha', item);
+  // console.log('acha', item);
 
   // console.log(
   //   'reviews response from screen ===============>',
@@ -64,7 +72,7 @@ const ListingDetails = ({route}) => {
   //   Object.keys(item.match_description).length,
   // );
 
-  console.log('navigation', type);
+  console.log('navigation', item.listing_id);
 
   const onHyperLink = async link => {
     if (link == '') {
@@ -98,214 +106,235 @@ const ListingDetails = ({route}) => {
 
   return (
     <Container>
-      <Header />
-      <SecondaryHeader
-        headerStyle={{
-          width: Object.keys(item.listing_title).length > 19  ? wp('45%') : null,
-        }}
-        text={item.listing_title}
-        link={true}
-        onLinkPress={() => onHyperLink(item.hyper_link)}
-        linkButton={{
-          width: Object.keys(item.listing_title).length > 13 ? wp('20%') : null,
-        }}
-      />
-      <ScrollView contentContainerStyle={styles.screen}>
-        <View style={styles.tabView}>
-          {Tabs.map(item => (
-            <PersonalInfoTab
-              text={item.text}
-              // style={
-              //   changeTab == item.id
-              //     ? [
-              //         styles.active,
-              //         {
-              //           width: item.id == 2 ? '40%' : '44%',
-              //         },
-              //       ]
-              //     : [styles.inactive, {width: item.id == 1 ? '44%' : '40%'}]
-              // }
-              onPress={() => setChangeTab(item.id)}
-              // textStyle={changeTab == item.id && {marginTop: hp('0.3%')}}
-            />
-          ))}
+      {status_loader ? (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator size={'large'} color={colors.primary} />
         </View>
-        {changeTab == 1 ? (
-          <>
-            <View style={{paddingTop: hp('10%')}}>
-              <View style={styles.imageContainer}>
-                <View style={styles.headingView}>
-                  <Text
-                    style={styles.name}
-                    numberOfLines={1}
-                    ellipsizeMode="tail">
-                    {item.listing_title}
-                  </Text>
-                </View>
-                <Image
-                  source={
-                    item.feature_image
-                      ? {uri: item.feature_image}
-                      : images.dummy
-                  }
-                  style={styles.image}
-                  borderRadius={100}
+      ) : (
+        <>
+          <Header />
+          <SecondaryHeader
+            headerStyle={{
+              width:
+                Object.keys(item.listing_title).length > 19 ? wp('45%') : null,
+            }}
+            text={item.listing_title}
+            link={true}
+            onLinkPress={() => onHyperLink(item.hyper_link)}
+            linkButton={{
+              width:
+                Object.keys(item.listing_title).length > 13 ? wp('20%') : null,
+            }}
+          />
+          <ScrollView contentContainerStyle={styles.screen}>
+            <View style={styles.tabView}>
+              {Tabs.map(item => (
+                <PersonalInfoTab
+                  text={item.text}
+                  // style={
+                  //   changeTab == item.id
+                  //     ? [
+                  //         styles.active,
+                  //         {
+                  //           width: item.id == 2 ? '40%' : '44%',
+                  //         },
+                  //       ]
+                  //     : [styles.inactive, {width: item.id == 1 ? '44%' : '40%'}]
+                  // }
+                  onPress={() => setChangeTab(item.id)}
+                  // textStyle={changeTab == item.id && {marginTop: hp('0.3%')}}
                 />
-              </View>
+              ))}
             </View>
-            <View style={styles.formWrapper}>
-              <View style={styles.detailContainer}>
-                <Text style={styles.heading}>MATCH DESCRIPTION:</Text>
-                <View style={styles.line} />
-                <Text style={styles.text}>{item.match_description || ''}</Text>
-              </View>
-              <View style={styles.detailContainer}>
-                <Text style={styles.heading}>AREA CODE:</Text>
-                <View style={styles.line} />
-                <Text style={styles.text}>{item.area_code_match || ''}</Text>
-              </View>
-              <View style={styles.detailContainer}>
-                <Text style={styles.heading}>PRIVATE GROUP:</Text>
-                <View style={styles.line} />
-                <Text style={styles.text}>
-                  {item.private_group
-                    ? 'on'
-                    : (item.private_group && 'off') || ''}
-                </Text>
-              </View>
-              <View style={styles.detailContainer}>
-                <Text style={styles.heading}>EXPERIENCE LEVEL:</Text>
-                <View style={styles.line} />
-                <Text style={styles.text}>
-                  {item.experience_level ? item.experience_level : ''}
-                </Text>
-              </View>
-              <View style={styles.detailContainer}>
-                <Text style={styles.heading}>SUGGESTED DAY:</Text>
-                <View style={styles.line} />
-                <Text style={styles.text}>
-                  {item.course_date ? item.course_date : ''}
-                </Text>
-              </View>
-              <View style={styles.detailContainer}>
-                <Text style={styles.heading}>SUGGESTED TIME:</Text>
-                <View style={styles.line} />
-                <Text style={styles.text}>
-                  {item.course_time ? item.course_time : ''}
-                </Text>
-              </View>
-              <View style={styles.detailContainer}>
-                <Text style={styles.heading}>HOW MANY PLAYERS:</Text>
-                <View style={styles.line} />
-                <Text style={styles.text}>
-                  {item.how_many_players ? item.how_many_players : ''}
-                </Text>
-              </View>
-              <View style={styles.detailContainer}>
-                <Text style={styles.heading}>THE ITC HANDSHAKE:</Text>
-                <View style={styles.line} />
-                <Text style={styles.text}>
-                  {item.the_itc_handshake ? item.the_itc_handshake : ''}
-                </Text>
-              </View>
-              <View style={styles.detailContainer}>
-                <Text style={styles.heading}>SMOKING FRIENDLY:</Text>
-                <View style={styles.line} />
-                <Text style={styles.text}>
-                  {item.smoking_friendly
-                    ? 'on'
-                    : (item.smoking_friendly && 'off') || ''}
-                </Text>
-              </View>
-              <View style={styles.detailContainer}>
-                <Text style={styles.heading}>DRINKING FRIENDLY:</Text>
-                <View style={styles.line} />
-                <Text style={styles.text}>
-                  {item.drinking_friendly
-                    ? 'on'
-                    : (item.drinking_friendly && 'off') || ''}
-                </Text>
-              </View>
-            </View>
-            {itemStatus === 'accepted' ||
-            type === 'my listings' ||
-            item.author_id == user.user_id ||
-            item.private_group === 'off' ? (
-              <Button
-                buttonText={'Go to chat'}
-                buttonStyle={styles.button}
-                textStyle={{color: colors.secondary}}
-                onPress={() => {
-                  return ShowToast('Coming Soon')
-                  // navigation.navigate('SecondaryStack', {
-                  //   screen: 'GroupChat',
-                  //   params: {title: item.listing_title, type: 'listing'},
-                  // });
-                }}
-              />
-            ) : (
-              <Button
-                buttonText={
-                  itemStatus === 'Unknown' ? 'Join Listing' : itemStatus
-                }
-                buttonStyle={styles.button}
-                disable={itemStatus === 'pending' ? true : false}
-                textStyle={{color: colors.secondary}}
-                indicator={join_loading}
-                onPress={() => onJoin()}
-              />
-            )}
-          </>
-        ) : (
-          // : changeTab == 2 ? (
-          //   <View style={styles.reviewStyle}>
-          //     <Text style={styles.reviewHeading}>POST A REVIEW</Text>
-          //     <View style={{paddingTop: hp('3%')}}>
-          //       {postReviewText.map(item => (
-          //         <PostReview text={item.text} />
-          //       ))}
-          //     </View>
-          //     <View style={{paddingTop: hp('1%')}}>
-          //       <Button
-          //         buttonText={'Post a review'}
-          //         onPress={() => alert('working in progress')}
-          //         buttonStyle={styles.buttonStyle}
-          //       />
-          //     </View>
-          //   </View>
-          // )
-          <>
-            <ScrollView
-              contentContainerStyle={{
-                paddingTop: hp('5%'),
-                paddingBottom: hp('10%'),
-              }}>
-              <Text style={styles.review}>Reviews</Text>
-              {changeTab == 3 && reviews_loading ? (
-                <View style={{alignItems: 'center', marginVertical: hp('6%')}}>
-                  <ActivityIndicator size={'large'} color={colors.primary} />
+            {changeTab == 1 ? (
+              <>
+                <View style={{paddingTop: hp('10%')}}>
+                  <View style={styles.imageContainer}>
+                    <View style={styles.headingView}>
+                      <Text
+                        style={styles.name}
+                        numberOfLines={1}
+                        ellipsizeMode="tail">
+                        {item.listing_title}
+                      </Text>
+                    </View>
+                    <Image
+                      source={
+                        item.feature_image
+                          ? {uri: item.feature_image}
+                          : images.dummy
+                      }
+                      style={styles.image}
+                      borderRadius={100}
+                    />
+                  </View>
                 </View>
-              ) : (
-                <View style={{paddingTop: hp('3%')}}>
-                  <FlatList
-                    data={reviews}
-                    numColumns={2}
-                    columnWrapperStyle={{justifyContent: 'space-between'}}
-                    renderItem={({item, index}) => (
-                      <ReviewCard
-                        image={images.review1}
-                        name={item.reviews_title}
-                        ratings={item}
-                      />
-                    )}
+                <View style={styles.formWrapper}>
+                  <View style={styles.detailContainer}>
+                    <Text style={styles.heading}>MATCH DESCRIPTION:</Text>
+                    <View style={styles.line} />
+                    <Text style={styles.text}>
+                      {item.match_description || ''}
+                    </Text>
+                  </View>
+                  <View style={styles.detailContainer}>
+                    <Text style={styles.heading}>AREA CODE:</Text>
+                    <View style={styles.line} />
+                    <Text style={styles.text}>
+                      {item.area_code_match || ''}
+                    </Text>
+                  </View>
+                  <View style={styles.detailContainer}>
+                    <Text style={styles.heading}>PRIVATE GROUP:</Text>
+                    <View style={styles.line} />
+                    <Text style={styles.text}>
+                      {item.private_group
+                        ? 'on'
+                        : (item.private_group && 'off') || ''}
+                    </Text>
+                  </View>
+                  <View style={styles.detailContainer}>
+                    <Text style={styles.heading}>EXPERIENCE LEVEL:</Text>
+                    <View style={styles.line} />
+                    <Text style={styles.text}>
+                      {item.experience_level ? item.experience_level : ''}
+                    </Text>
+                  </View>
+                  <View style={styles.detailContainer}>
+                    <Text style={styles.heading}>SUGGESTED DAY:</Text>
+                    <View style={styles.line} />
+                    <Text style={styles.text}>
+                      {item.course_date ? item.course_date : ''}
+                    </Text>
+                  </View>
+                  <View style={styles.detailContainer}>
+                    <Text style={styles.heading}>SUGGESTED TIME:</Text>
+                    <View style={styles.line} />
+                    <Text style={styles.text}>
+                      {item.course_time ? item.course_time : ''}
+                    </Text>
+                  </View>
+                  <View style={styles.detailContainer}>
+                    <Text style={styles.heading}>HOW MANY PLAYERS:</Text>
+                    <View style={styles.line} />
+                    <Text style={styles.text}>
+                      {item.how_many_players ? item.how_many_players : ''}
+                    </Text>
+                  </View>
+                  <View style={styles.detailContainer}>
+                    <Text style={styles.heading}>THE ITC HANDSHAKE:</Text>
+                    <View style={styles.line} />
+                    <Text style={styles.text}>
+                      {item.the_itc_handshake ? item.the_itc_handshake : ''}
+                    </Text>
+                  </View>
+                  <View style={styles.detailContainer}>
+                    <Text style={styles.heading}>SMOKING FRIENDLY:</Text>
+                    <View style={styles.line} />
+                    <Text style={styles.text}>
+                      {item.smoking_friendly
+                        ? 'on'
+                        : (item.smoking_friendly && 'off') || ''}
+                    </Text>
+                  </View>
+                  <View style={styles.detailContainer}>
+                    <Text style={styles.heading}>DRINKING FRIENDLY:</Text>
+                    <View style={styles.line} />
+                    <Text style={styles.text}>
+                      {item.drinking_friendly
+                        ? 'on'
+                        : (item.drinking_friendly && 'off') || ''}
+                    </Text>
+                  </View>
+                </View>
+                {itemStatus === 'accepted' ||
+                type === 'my listings' ||
+                item.author_id == user.user_id ||
+                item.private_group === 'off' ? (
+                  <Button
+                    buttonText={'Go to chat'}
+                    buttonStyle={styles.button}
+                    textStyle={{color: colors.secondary}}
+                    onPress={() => {
+                      return ShowToast('Coming Soon');
+                      // navigation.navigate('SecondaryStack', {
+                      //   screen: 'GroupChat',
+                      //   params: {title: item.listing_title, type: 'listing'},
+                      // });
+                    }}
                   />
-                </View>
-              )}
-              <SVGImage image={icons.pageEnd} style={{alignSelf: 'center'}} />
-            </ScrollView>
-          </>
-        )}
-      </ScrollView>
+                ) : (
+                  <Button
+                    buttonText={
+                      itemStatus === 'Unknown' ? 'Join Listing' : itemStatus
+                    }
+                    buttonStyle={styles.button}
+                    disable={itemStatus === 'pending' ? true : false}
+                    textStyle={{color: colors.secondary}}
+                    indicator={join_loading}
+                    onPress={() => onJoin()}
+                  />
+                )}
+              </>
+            ) : (
+              // : changeTab == 2 ? (
+              //   <View style={styles.reviewStyle}>
+              //     <Text style={styles.reviewHeading}>POST A REVIEW</Text>
+              //     <View style={{paddingTop: hp('3%')}}>
+              //       {postReviewText.map(item => (
+              //         <PostReview text={item.text} />
+              //       ))}
+              //     </View>
+              //     <View style={{paddingTop: hp('1%')}}>
+              //       <Button
+              //         buttonText={'Post a review'}
+              //         onPress={() => alert('working in progress')}
+              //         buttonStyle={styles.buttonStyle}
+              //       />
+              //     </View>
+              //   </View>
+              // )
+              <>
+                <ScrollView
+                  contentContainerStyle={{
+                    paddingTop: hp('5%'),
+                    paddingBottom: hp('10%'),
+                  }}>
+                  <Text style={styles.review}>Reviews</Text>
+                  {changeTab == 3 && reviews_loading ? (
+                    <View
+                      style={{alignItems: 'center', marginVertical: hp('6%')}}>
+                      <ActivityIndicator
+                        size={'large'}
+                        color={colors.primary}
+                      />
+                    </View>
+                  ) : (
+                    <View style={{paddingTop: hp('3%')}}>
+                      <FlatList
+                        data={reviews}
+                        numColumns={2}
+                        columnWrapperStyle={{justifyContent: 'space-between'}}
+                        renderItem={({item, index}) => (
+                          <ReviewCard
+                            image={images.review1}
+                            name={item.reviews_title}
+                            ratings={item}
+                          />
+                        )}
+                      />
+                    </View>
+                  )}
+                  <SVGImage
+                    image={icons.pageEnd}
+                    style={{alignSelf: 'center'}}
+                  />
+                </ScrollView>
+              </>
+            )}
+          </ScrollView>
+        </>
+      )}
     </Container>
   );
 };
@@ -339,7 +368,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     alignSelf: 'flex-end',
     marginRight: hp('1%'),
-    width: hp('22%'),
+    width: hp('18%'),
     // flex: 1,
     fontWeight: 'bold',
     fontSize: hp('2%'),

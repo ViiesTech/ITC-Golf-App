@@ -184,7 +184,6 @@ const AllGroups = ({route}) => {
               changeTab === 'Add New Groups'
                 ? hp('660%')
                 : changeTab === 'Add New Listings' && hp('325%'),
-            flexGrow: 1,
           },
         ]}
         showsVerticalScrollIndicator={false}>

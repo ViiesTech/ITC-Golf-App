@@ -367,6 +367,7 @@ export const getListingStatus = (user_id, match_id, setListingStatus) => {
         },
       })
       .then(res => {
+        console.log('response listing status', res.data.data.accept_or_not)
         if (res.data) {
           setListingStatus(res.data.accept_or_not);
           dispatch({
