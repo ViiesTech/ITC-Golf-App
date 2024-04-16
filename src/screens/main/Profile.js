@@ -37,8 +37,6 @@ const Profile = () => {
 
   const {user} = useSelector(state => state.AuthReducer);
 
-  console.log('user info', user);
-
   const onSettingsPress = async index => {
     if (index == 0) {
       return ShowToast('Coming soon');
