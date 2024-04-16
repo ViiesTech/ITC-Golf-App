@@ -175,17 +175,6 @@ const AllGroups = ({route}) => {
       <ScrollView
         contentContainerStyle={[
           styles.wrapper,
-          {
-            // paddingBottom:
-            //   changeTab === 'Add New Groups'
-            //     ? hp('660%')
-            //     : changeTab === 'Add New Listings' && hp('325%'),
-            // flexGrow: 1,
-            paddingBottom:
-              changeTab === 'Add New Groups'
-                ? hp('660%')
-                : changeTab === 'Add New Listings' && hp('325%'),
-          },
         ]}
         showsVerticalScrollIndicator={false}>
         <SecondaryHeader
