@@ -45,6 +45,10 @@ export const getListings = () => {
       })
       .catch(error => {
         console.log('listing errrorr =================>', error);
+        console.log(
+          'listing errrorr =================>',
+          error.response.data.message,
+        );
         dispatch({
           type: constant.GET_LISTING_DONE,
         });

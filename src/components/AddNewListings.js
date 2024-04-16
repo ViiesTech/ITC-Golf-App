@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import {TabView, TabBar} from 'react-native-tab-view';
 import colors from '../assets/colors';
@@ -217,7 +218,7 @@ const Discover = ({searchPressed}) => {
   );
 };
 
-const MyListings = ({jumpTo, setListingData}) => {
+const MyListings = ({setIndex, setListingData}) => {
   const [loaderIndex, setLoaderIndex] = React.useState(null);
   const {my_listings, my_listings_loader, delete_loader} = useSelector(
     state => state.ListingReducer,
@@ -264,7 +265,7 @@ const MyListings = ({jumpTo, setListingData}) => {
   };
 
   const onEditListing = item => {
-    jumpTo('third');
+    setIndex('third');
     setListingData(item);
   };
 
@@ -521,13 +522,13 @@ const AddNew = ({listingData}) => {
     }
   };
 
-  const onAddMore = () => {
-    const modifiedArr = [...state.listing_gallery, state.image_details];
-    setState({
-      ...state,
-      listing_gallery: modifiedArr,
-    });
-  };
+  // const onAddMore = () => {
+  //   const modifiedArr = [...state.listing_gallery, state.image_details];
+  //   setState({
+  //     ...state,
+  //     listing_gallery: modifiedArr,
+  //   });
+  // };
 
   return (
     <View style={styles.addnewWrapper}>
@@ -582,6 +583,7 @@ const AddNew = ({listingData}) => {
             <Picker
               selectedValue={state.pickers.area_code}
               dropdownIconColor={colors.white}
+              itemStyle={{color: colors.white}}
               style={{color: colors.white}}
               onValueChange={(itemValue, itemIndex) =>
                 handlePickerChange('area_code', itemValue)
@@ -609,6 +611,7 @@ const AddNew = ({listingData}) => {
               selectedValue={state.pickers.how_many_players}
               dropdownIconColor={colors.white}
               style={{color: colors.white}}
+              itemStyle={{color: colors.white}}
               onValueChange={(itemValue, itemIndex) =>
                 handlePickerChange('how_many_players', itemValue)
               }>
@@ -634,6 +637,7 @@ const AddNew = ({listingData}) => {
             <Picker
               selectedValue={state.pickers.itc_handshake}
               dropdownIconColor={colors.white}
+              itemStyle={{color: colors.white}}
               style={{color: colors.white}}
               onValueChange={(itemValue, itemIndex) =>
                 handlePickerChange('itc_handshake', itemValue)
@@ -660,6 +664,7 @@ const AddNew = ({listingData}) => {
             <Picker
               selectedValue={state.pickers.exp_level}
               dropdownIconColor={colors.white}
+              itemStyle={{color: colors.white}}
               style={{color: colors.white}}
               onValueChange={(itemValue, itemIndex) =>
                 handlePickerChange('exp_level', itemValue)
@@ -684,6 +689,7 @@ const AddNew = ({listingData}) => {
           <DropDownPicker
             key={ind}
             text={item.text}
+            iosStyle={{color: colors.white}}
             iconColor={colors.lightgray}
             itemStyle={{color: colors.lightgray}}
             selectedValue={state.pickers.desired_tee}
@@ -782,11 +788,11 @@ const AddNew = ({listingData}) => {
           ))}
         </View>
         <Button
-          buttonStyle={{width: '50%', borderRadius: 100, marginTop: hp('2%')}}
+          buttonStyle={{ width: '50%', borderRadius: 100, marginTop: hp('2%')}}
           onPress={() => onCreateListing()}
           buttonText={listingData ? 'Update Listing' : 'Add New Listing'}
           indicator={listingData ? edit_loader : create_listing_loading}
-          textStyle={{color: colors.secondary}}
+          textStyle={{color: colors.secondary, fontSize: Platform.OS === 'ios' && hp(1.8)}}
         />
       </View>
     </View>
@@ -860,7 +866,7 @@ export const AddNewListings = ({buttonPress}) => {
         style={{
           backgroundColor: colors.white,
           flexDirection: 'row',
-          alignItems: 'center',
+          alignItem: 'center',
           justifyContent: 'space-evenly',
           marginTop: hp('2.5%'),
           paddingVertical: hp(0.5),
@@ -872,13 +878,14 @@ export const AddNewListings = ({buttonPress}) => {
             index == 'first'
               ? {
                   backgroundColor: colors.primary,
-                  paddingVertical: 10,
-                  borderRadius: 10,
+                  borderRadius: 30,
                 }
               : null,
             {
               width: wp(25),
               alignItems: 'center',
+              justifyContent: 'center',
+              height: hp(5),
             },
           ]}>
           <Text
@@ -896,13 +903,14 @@ export const AddNewListings = ({buttonPress}) => {
             index == 'second'
               ? {
                   backgroundColor: colors.primary,
-                  paddingVertical: 10,
-                  borderRadius: 10,
+                  borderRadius: 30,
                 }
               : null,
             {
               width: wp(25),
               alignItems: 'center',
+              justifyContent: 'center',
+              height: hp(5),
             },
           ]}>
           <Text
@@ -920,13 +928,14 @@ export const AddNewListings = ({buttonPress}) => {
             index == 'third'
               ? {
                   backgroundColor: colors.primary,
-                  paddingVertical: 10,
-                  borderRadius: 10,
+                  borderRadius: 30,
                 }
               : null,
             {
               width: wp(25),
               alignItems: 'center',
+              justifyContent: 'center',
+              height: hp(5),
             },
           ]}>
           <Text
@@ -942,7 +951,7 @@ export const AddNewListings = ({buttonPress}) => {
       {index == 'first' ? (
         <Discover searchPressed={buttonPress} />
       ) : index == 'second' ? (
-        <MyListings setListingData={setListingData} />
+        <MyListings setListingData={setListingData} setIndex={setIndex} />
       ) : index == 'third' ? (
         <AddNew listingData={listingData} />
       ) : null}

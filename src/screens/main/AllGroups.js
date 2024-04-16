@@ -176,11 +176,11 @@ const AllGroups = ({route}) => {
         contentContainerStyle={[
           styles.wrapper,
           {
-            paddingBottom:
-              changeTab === 'Add New Groups'
-                ? hp('660%')
-                : changeTab === 'Add New Listings' && hp('325%'),
-            flexGrow: 1,
+            // paddingBottom:
+            //   changeTab === 'Add New Groups'
+            //     ? hp('660%')
+            //     : changeTab === 'Add New Listings' && hp('325%'),
+            // flexGrow: 1,
           },
         ]}
         showsVerticalScrollIndicator={false}>
@@ -221,9 +221,9 @@ const AllGroups = ({route}) => {
                 onSearchPress={() => onListingSearch()}
                 onValueChange={value => setListingsCode(value)}
               />
-              <View style={{height: '400%'}}>
+              {/* <View style={{height: '400%'}}> */}
                 <AddNewListings buttonPress={listingSearch} />
-              </View>
+              {/* </View> */}
             </>
           ) : changeTab === 'Players You Follow' ? (
             follow_loader ? (
@@ -542,7 +542,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     paddingTop: hp('3%'),
-    paddingBottom: hp('20%'),
+    // paddingBottom: hp('3%'),
   },
   textStyle: {
     color: colors.white,

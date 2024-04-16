@@ -6,8 +6,8 @@ import {
   FlatList,
   ActivityIndicator,
   Platform,
+  TouchableOpacity
 } from 'react-native';
-import {TabView, TabBar} from 'react-native-tab-view';
 import colors from '../assets/colors';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {TeeBox, handshake, listingPicker} from '../DummyData';
@@ -177,7 +177,7 @@ const Discover = ({searchPressed}) => {
   );
 };
 
-const MyGroups = ({jumpTo, setGroupData}) => {
+const MyGroups = ({setIndex, setGroupData}) => {
   const [loaderIndex, setLoaderIndex] = React.useState(null);
   const {my_groups, my_groups_loader, my_groups_message, delete_loader} =
     useSelector(state => state.GroupReducer);
@@ -228,7 +228,7 @@ const MyGroups = ({jumpTo, setGroupData}) => {
     }
   };
   const onEditGroup = item => {
-    jumpTo('third');
+    setIndex('third');
     setGroupData(item);
   };
 
@@ -618,7 +618,7 @@ const AddNew = ({groupData}) => {
 };
 
 export const AddNewGroups = ({buttonPressed}) => {
-  const [index, setIndex] = React.useState(0);
+  const [index, setIndex] = React.useState('first');
   const [routes] = React.useState([
     {key: 'first', title: 'Discover'},
     {key: 'second', title: 'My Groups'},
@@ -627,50 +627,148 @@ export const AddNewGroups = ({buttonPressed}) => {
 
   const [groupData, setGroupData] = React.useState(null);
 
-  const renderScene = ({route, jumpTo}) => {
-    switch (route.key) {
-      case 'first':
-        return <Discover searchPressed={buttonPressed} />;
-      case 'second':
-        return <MyGroups jumpTo={jumpTo} setGroupData={setGroupData} />;
-      case 'third':
-        return <AddNew groupData={groupData} jumpTo={jumpTo} />;
-      default:
-        return null;
-    }
-  };
+  // const renderScene = ({route, jumpTo}) => {
+  //   switch (route.key) {
+  //     case 'first':
+  //       return <Discover searchPressed={buttonPressed} />;
+  //     case 'second':
+  //       return <MyGroups jumpTo={jumpTo} setGroupData={setGroupData} />;
+  //     case 'third':
+  //       return <AddNew groupData={groupData} jumpTo={jumpTo} />;
+  //     default:
+  //       return null;
+  //   }
+  // };
+
+  // return (
+  //   <TabView
+  //     navigationState={{index, routes}}
+  //     style={{marginTop: hp('2.5%')}}
+  //     renderScene={renderScene}
+  //     onIndexChange={setIndex}
+  //     renderTabBar={styling => (
+  //       <TabBar
+  //         indicatorStyle={styles.indicatorStyle}
+  //         {...styling}
+  //         style={{
+  //           backgroundColor: colors.white,
+  //           borderRadius: 10,
+  //           justifyContent: 'center',
+  //           height: hp('6.8%'),
+  //         }}
+  //         renderLabel={({route}) => (
+  //           <Text
+  //             style={{
+  //               color: colors.secondary,
+  //               fontWeight: 'bold',
+  //               // marginRight: 2,
+  //               // marginTop: hp('0.4%'),
+  //               fontSize: hp('1.5%'),
+  //             }}>
+  //             {route.title}
+  //           </Text>
+  //         )}
+  //       />
+  //     )}
+  //   />
+  // );
 
   return (
-    <TabView
-      navigationState={{index, routes}}
-      style={{marginTop: hp('2.5%')}}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      renderTabBar={styling => (
-        <TabBar
-          indicatorStyle={styles.indicatorStyle}
-          {...styling}
-          style={{
-            backgroundColor: colors.white,
-            borderRadius: 10,
-            justifyContent: 'center',
-            height: hp('6.8%'),
-          }}
-          renderLabel={({route}) => (
-            <Text
-              style={{
-                color: colors.secondary,
-                fontWeight: 'bold',
-                // marginRight: 2,
-                // marginTop: hp('0.4%'),
-                fontSize: hp('1.5%'),
-              }}>
-              {route.title}
-            </Text>
-          )}
-        />
-      )}
-    />
+    <>
+      <View
+        style={{
+          backgroundColor: colors.white,
+          flexDirection: 'row',
+          alignItem: 'center',
+          justifyContent: 'space-evenly',
+          marginTop: hp('2.5%'),
+          paddingVertical: hp(0.5),
+          borderRadius: hp(1),
+        }}>
+        <TouchableOpacity
+          onPress={() => setIndex('first')}
+          style={[
+            index == 'first'
+              ? {
+                  backgroundColor: colors.primary,
+                  borderRadius: 30,
+                }
+              : null,
+            {
+              width: wp(25),
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: hp(5),
+            },
+          ]}>
+          <Text
+            style={{
+              color: colors.secondary,
+              fontWeight: 'bold',
+              fontSize: hp('1.5%'),
+            }}>
+            Discover
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setIndex('second')}
+          style={[
+            index == 'second'
+              ? {
+                  backgroundColor: colors.primary,
+                  borderRadius: 30,
+                }
+              : null,
+            {
+              width: wp(25),
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: hp(5),
+            },
+          ]}>
+          <Text
+            style={{
+              color: colors.secondary,
+              fontWeight: 'bold',
+              fontSize: hp('1.5%'),
+            }}>
+            My Groups
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setIndex('third')}
+          style={[
+            index == 'third'
+              ? {
+                  backgroundColor: colors.primary,
+                  borderRadius: 30,
+                }
+              : null,
+            {
+              width: wp(25),
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: hp(5),
+            },
+          ]}>
+          <Text
+            style={{
+              color: colors.secondary,
+              fontWeight: 'bold',
+              fontSize: hp('1.5%'),
+            }}>
+            Add New Groups
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {index == 'first' ? (
+        <Discover searchPressed={buttonPressed} />
+      ) : index == 'second' ? (
+        <MyGroups setGroupData={setGroupData} setIndex={setIndex} />
+      ) : index == 'third' ? (
+        <AddNew groupData={groupData} />
+      ) : null}
+    </>
   );
 };
 
