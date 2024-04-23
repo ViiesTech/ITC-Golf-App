@@ -50,7 +50,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         join_group_loading: false,
-        // [action.payload.listingId]: action.payload.status,
+        [action.payload.listingId]: action.payload.status,
       };
 
     case constant.ACCEPT_REQUEST:

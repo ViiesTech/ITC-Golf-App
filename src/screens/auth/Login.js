@@ -20,8 +20,8 @@ import {signin} from '../../redux/actions/authAction';
 import {ShowToast} from '../../Custom';
 
 const Login = () => {
-  const [username, setUsername] = useState('Testuser');
-  const [password, setPassword] = useState('12345678');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const dispatch = useDispatch();
 

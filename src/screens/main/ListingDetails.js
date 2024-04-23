@@ -45,6 +45,8 @@ const ListingDetails = ({route}) => {
     state => state.ListingReducer,
   );
 
+  const {item, type} = route?.params;
+
   useEffect(() => {
     dispatch(getListingStatus(user.user_id, item.listing_id, setListingStatus));
   }, []);
@@ -55,12 +57,10 @@ const ListingDetails = ({route}) => {
     }
   }, [changeTab]);
 
-  const {item, type} = route?.params;
-
   const itemStatus = useSelector(
     state => state?.ListingReducer[item.listing_id] || 'Unknown',
   );
-  // console.log('acha', item);
+  console.log('acha', listingStatus);
 
   // console.log(
   //   'reviews response from screen ===============>',
@@ -72,7 +72,7 @@ const ListingDetails = ({route}) => {
   //   Object.keys(item.match_description).length,
   // );
 
-  console.log('navigation', item.listing_id);
+  console.log('navigation', itemStatus);
 
   const onHyperLink = async link => {
     if (link == '') {
@@ -247,7 +247,7 @@ const ListingDetails = ({route}) => {
                     </Text>
                   </View>
                 </View>
-                {itemStatus === 'accepted' ||
+                {listingStatus === '1' ||
                 type === 'my listings' ||
                 item.author_id == user.user_id ||
                 item.private_group === 'off' ? (
@@ -266,10 +266,12 @@ const ListingDetails = ({route}) => {
                 ) : (
                   <Button
                     buttonText={
-                      itemStatus === 'Unknown' ? 'Join Listing' : itemStatus
+                        itemStatus === 'pending'
+                        ? 'Pending'
+                        : 'Join Listing'
                     }
                     buttonStyle={styles.button}
-                    disable={itemStatus === 'pending' ? true : false}
+                    disable={listingStatus === '0' ? true : false}
                     textStyle={{color: colors.secondary}}
                     indicator={join_loading}
                     onPress={() => onJoin()}

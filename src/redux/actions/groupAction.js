@@ -348,3 +348,38 @@ export const fetchGroupMembers = group_id => {
 const sendGroupMessage = () => {
   return async dispatch => {};
 };
+
+export const getGroupStatus = (user_id, group_id, setGroupStatus) => {
+  return async dispatch => {
+    dispatch({
+      type: constant.GROUP_STATUS,
+    });
+
+    return await axios
+      .get(`${URL}/group-status?user_id=${user_id}&group_id=${group_id}`, {
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+      .then(res => {
+        console.log('response group status', res.data);
+        if (res.data) {
+          setGroupStatus(res.data.data.accept_or_not);
+          dispatch({
+            type: constant.GROUP_STATUS_DONE,
+          });
+        } else {
+          dispatch({
+            type: constant.GROUP_STATUS_DONE,
+          });
+        }
+      })
+      .catch(error => {
+        console.log('failed to get the group status ========>', error);
+        dispatch({
+          type: constant.GROUP_STATUS_DONE,
+        });
+        // return ShowToast('Some problem occured');
+      });
+  };
+};

@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
@@ -36,6 +37,8 @@ import {
 } from '../../redux/actions/homeAction';
 import {ShowToast} from '../../Custom';
 import {useNavigation} from '@react-navigation/native';
+import {AndroidPermissionHandler, iosPermissionHandler, requestGalleryPermissionAndroid} from '../../utils/PermissionHandler';
+import { PERMISSIONS, request } from 'react-native-permissions';
 
 const AllGroups = ({route}) => {
   const [listingsCode, setListingsCode] = useState(null);
@@ -79,6 +82,10 @@ const AllGroups = ({route}) => {
     }
   }, []);
 
+  // const iosPermission = () => {
+   
+  // }
+
   const onInputChange = (value, text) => {
     setState(prevState => ({
       ...prevState,
@@ -97,25 +104,30 @@ const AllGroups = ({route}) => {
   };
 
   const onChangePhoto = async () => {
-    const options = {
-      title: 'Select Image',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-        quality: 0.5,
-      },
-    };
+    const status = await iosPermissionHandler()
+    if (status === 'granted') {
+      const options = {
+        title: 'Select Image',
+        storageOptions: {
+          skipBackup: true,
+          path: 'images',
+          quality: 0.5,
+        },
+      };
 
-    await launchImageLibrary(options, async response => {
-      if (response.didCancel) {
-        console.log('cancelled', response.didCancel);
-      } else {
-        setState(prevState => ({
-          ...prevState,
-          photoURL: response.assets[0].uri,
-        }));
-      }
-    });
+      await launchImageLibrary(options, async response => {
+        if (response.didCancel) {
+          console.log('cancelled', response.didCancel);
+        } else {
+          setState(prevState => ({
+            ...prevState,
+            photoURL: response.assets[0].uri,
+          }));
+        }
+      });
+    } else {
+      return ShowToast('Permission denied');
+    }
   };
 
   const onGroupSearch = async () => {
@@ -173,9 +185,7 @@ const AllGroups = ({route}) => {
     <Container>
       <Header />
       <ScrollView
-        contentContainerStyle={[
-          styles.wrapper,
-        ]}
+        contentContainerStyle={[styles.wrapper]}
         showsVerticalScrollIndicator={false}>
         <SecondaryHeader
           text={
@@ -215,7 +225,7 @@ const AllGroups = ({route}) => {
                 onValueChange={value => setListingsCode(value)}
               />
               {/* <View style={{height: '400%'}}> */}
-                <AddNewListings buttonPress={listingSearch} />
+              <AddNewListings buttonPress={listingSearch} />
               {/* </View> */}
             </>
           ) : changeTab === 'Players You Follow' ? (

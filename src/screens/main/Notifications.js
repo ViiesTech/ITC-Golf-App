@@ -56,9 +56,15 @@ const Notifications = () => {
     );
   };
 
+  // const markAsRead = () => {
+  //   dispatch({
+  //     type: con
+  //   })
+  // }
+
   const onAcceptRequest = async (item, index) => {
     // if (item.listing_id) {
-      // return console.log(item.listing_id)
+    // return console.log(item.listing_id)
     console.log(item);
     const listing = await dispatch(
       AcceptListing(
@@ -154,7 +160,7 @@ const Notifications = () => {
       <SecondaryHeader text={'Notifications'} icon={true} />
       {notification_loader ? (
         renderLoader()
-      ) : notifications.length < 1 ? (
+      ) : notifications?.length < 1 ? (
         <>
           <View
             style={{

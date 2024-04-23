@@ -22,26 +22,35 @@ import ReviewCard from '../../components/ReviewCard';
 import {useSelector, useDispatch} from 'react-redux';
 import {getReviews} from '../../redux/actions/homeAction';
 import {ShowToast} from '../../Custom';
-import {JoinGroup} from '../../redux/actions/groupAction';
+import {getGroupStatus, JoinGroup} from '../../redux/actions/groupAction';
 import constant from '../../redux/constant';
 import {useNavigation} from '@react-navigation/native';
 
 const GroupDetail = ({route}) => {
   const [changeTab, setChangeTab] = useState(1);
-
+  const [groupStatus, setGroupStatus] = useState(null)
   const {reviews, reviews_loading} = useSelector(state => state.HomeReducer);
   const {user} = useSelector(state => state.AuthReducer);
   const {join_group_loading} = useSelector(state => state.ListingReducer);
+  const { status_loader } = useSelector(state => state.GroupReducer)
   const dispatch = useDispatch();
 
   const {item, type} = route?.params;
-  // console.log('detail ======>', Object.keys(item.listing_content).length);
+  console.log('detail ======>', item.group_id);
+
+  useEffect(() => {
+
+    dispatch(getGroupStatus(user.user_id, item.group_id, setGroupStatus))
+
+  },[])
 
   const itemStatus = useSelector(
     state => state.ListingReducer[item.group_id] || 'Unknown',
   );
 
   const navigation = useNavigation();
+
+  console.log('status', itemStatus)
 
   useEffect(() => {
     if (changeTab == 3 && reviews.length < 1) {
@@ -81,6 +90,15 @@ const GroupDetail = ({route}) => {
 
   return (
     <Container>
+      {status_loader ?
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <ActivityIndicator 
+              size={'large'}
+              color={colors.primary}
+            />
+        </View>
+        :
+        <>
       <Header />
       <SecondaryHeader
         headerStyle={{
@@ -114,7 +132,7 @@ const GroupDetail = ({route}) => {
             />
           ))}
         </View>
-        {changeTab == 1 ? (
+        {/* {changeTab == 1 ? ( */}
           <>
             <View style={styles.detailView}>
               <View style={styles.imageContainer}>
@@ -203,7 +221,7 @@ const GroupDetail = ({route}) => {
               </View>
               {/* </View> */}
             </View>
-            {itemStatus === 'accepted' ||
+            {groupStatus === '1' ||
             type === 'my groups' ||
             item.author_id == user.user_id ||
             item.private_group === 'off' ? (
@@ -222,17 +240,17 @@ const GroupDetail = ({route}) => {
             ) : (
               <Button
                 buttonText={
-                  itemStatus === 'Unknown' ? 'Join Group' : itemStatus
+                  itemStatus === 'pending' ? 'Pending' : 'Join Group'
                 }
                 buttonStyle={styles.button}
-                disable={itemStatus === 'pending' ? true : false}
+                disable={groupStatus === '0' ? true : false}
                 textStyle={{color: colors.secondary}}
                 indicator={join_group_loading}
                 onPress={() => onJoinGroup()}
               />
             )}
           </>
-        ) : (
+        {/* ) : (
           // : changeTab == 2 ? (
           //   <View style={styles.reviewStyle}>
           //     <Text style={styles.reviewHeading}>POST A REVIEW</Text>
@@ -250,30 +268,32 @@ const GroupDetail = ({route}) => {
           //     </View>
           //   </View>
           // )
-          <>
-            <View style={{paddingTop: hp('3%')}}>
-              {changeTab == 3 && reviews_loading ? (
-                <View style={{alignItems: 'center', marginVertical: hp('6%')}}>
-                  <ActivityIndicator size={'large'} color={colors.primary} />
-                </View>
-              ) : (
-                <FlatList
-                  data={reviews}
-                  numColumns={2}
-                  columnWrapperStyle={{justifyContent: 'space-between'}}
-                  renderItem={({item, index}) => (
-                    <ReviewCard
-                      image={images.review1}
-                      name={item.reviews_title}
-                      ratings={item}
-                    />
-                  )}
-                />
-              )}
-            </View>
-          </>
-        )}
+          // <>
+          //   <View style={{paddingTop: hp('3%')}}>
+          //     {changeTab == 3 && reviews_loading ? (
+          //       <View style={{alignItems: 'center', marginVertical: hp('6%')}}>
+          //         <ActivityIndicator size={'large'} color={colors.primary} />
+          //       </View>
+          //     ) : (
+          //       <FlatList
+          //         data={reviews}
+          //         numColumns={2}
+          //         columnWrapperStyle={{justifyContent: 'space-between'}}
+          //         renderItem={({item, index}) => (
+          //           <ReviewCard
+          //             image={images.review1}
+          //             name={item.reviews_title}
+          //             ratings={item}
+          //           />
+          //         )}
+          //       />
+          //     )}
+          //   </View>
+          // </>
+        )} */}
       </ScrollView>
+      </>
+      }
     </Container>
   );
 };
@@ -316,7 +336,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     alignSelf: 'flex-end',
     marginRight: hp('1%'),
-    width: hp('22%'),
+    width: hp('20%'),
     fontWeight: 'bold',
     fontSize: hp('2%'),
   },

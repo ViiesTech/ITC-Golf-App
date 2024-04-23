@@ -17,7 +17,7 @@ const initialState = {
   accept_loader: false,
   reject_loader: false,
   about_description: '',
-  about_loader: false
+  about_loader: false,
 };
 
 export default (state = initialState, action) => {
@@ -49,9 +49,23 @@ export default (state = initialState, action) => {
     case constant.GET_NOTIFICATIONS_DONE:
       return {
         ...state,
+        // notifications: state.notifications.length > 0 ? [
+        //   ...state.notifications,
+        //   {...action.payload, read: false},
+        // ] : state.notifications,
         notifications: action.payload,
         notification_loader: false,
       };
+
+    // case constant.MARK_NOTIFICATION_AS_READ:
+    //   return {
+    //     ...state,
+    //     notifications: state.notifications.map(notification =>
+    //       notification.notification_id === action.payload
+    //         ? { ...notification, read: true }
+    //         : notification
+    //     ),
+    //   }
 
     case constant.GROUPS_BY_AREACODE:
       return {...state, filter_loading: true};
@@ -87,11 +101,11 @@ export default (state = initialState, action) => {
     //     },
     //   );
 
-      // return {
-      //   ...state,
-      //   accept_loader: false,
-      //   notifications: updatedNotificationsAccept,
-      // };
+    // return {
+    //   ...state,
+    //   accept_loader: false,
+    //   notifications: updatedNotificationsAccept,
+    // };
 
     // case constant.REJECT_LISTING:
     //   return {...state, reject_loader: true};

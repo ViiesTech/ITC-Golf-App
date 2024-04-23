@@ -5,11 +5,9 @@ import {
   Text,
   FlatList,
   ActivityIndicator,
-  ScrollView,
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import {TabView, TabBar} from 'react-native-tab-view';
 import colors from '../assets/colors';
 import {
   heightPercentageToDP as hp,

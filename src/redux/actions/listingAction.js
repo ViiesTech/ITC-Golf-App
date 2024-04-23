@@ -367,9 +367,9 @@ export const getListingStatus = (user_id, match_id, setListingStatus) => {
         },
       })
       .then(res => {
-        console.log('response listing status', res.data.data.accept_or_not)
+        console.log('response listing status', res.data)
         if (res.data) {
-          setListingStatus(res.data.accept_or_not);
+          setListingStatus(res.data.data.accept_or_not);
           dispatch({
             type: constant.LISTING_STATUS_DONE,
           });
@@ -381,7 +381,10 @@ export const getListingStatus = (user_id, match_id, setListingStatus) => {
       })
       .catch(error => {
         console.log('failed to get the listing status ========>', error);
-        return ShowToast('Some problem occured');
+        dispatch({
+          type: constant.LISTING_STATUS_DONE,
+        });
+        // return ShowToast('Some problem occured');
       });
   };
 };

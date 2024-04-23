@@ -36,7 +36,13 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Location required</string>
+	  <key>NSCameraUsageDescription</key>
+  <string>ITC GOLF wants to access your camera</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+  <string>ITC GOLF wants to access your Gallery</string>
+   <key>NSPhotoLibraryAddUsageDescription</key>
+  <string>Phone library is required</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Zocial.ttf</string>

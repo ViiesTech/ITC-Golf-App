@@ -6,22 +6,38 @@ import SVGImage from './SVGImage';
 import icons from '../assets/icons';
 import Button from './Button';
 
-const MyGroupsCard = ({image, count, title, players, handshake, onPress, group, deleteText, onDeletePress, onEditPress, indicator}) => {
+const MyGroupsCard = ({
+  image,
+  count,
+  title,
+  players,
+  handshake,
+  onPress,
+  group,
+  deleteText,
+  onDeletePress,
+  onEditPress,
+  indicator,
+}) => {
   // console.log(title.length);
 
   return (
-    <TouchableOpacity style={styles.wrapper} activeOpacity={0.9} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.wrapper}
+      activeOpacity={0.9}
+      onPress={onPress}>
       <Image source={image} style={styles.image} borderRadius={10} />
-      <TouchableOpacity style={styles.editView} activeOpacity={0.9} onPress={onEditPress}>
-          <SVGImage 
-            image={icons.edit}
-          />
+      <TouchableOpacity
+        style={styles.editView}
+        activeOpacity={0.9}
+        onPress={onEditPress}>
+        <SVGImage image={icons.edit} />
       </TouchableOpacity>
       <View style={styles.secondaryWrapper}>
         <View>
-          <View style={{flexDirection: 'row',justifyContent: 'space-between'}}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={styles.name}>{title}</Text>
-            <View style={{flexDirection: 'row',}}>
+            <View style={{flexDirection: 'row'}}>
               <View style={styles.teeView}>
                 <SVGImage image={icons.teeBlack} />
               </View>
@@ -37,7 +53,10 @@ const MyGroupsCard = ({image, count, title, players, handshake, onPress, group, 
             </Text>
             <Text style={[styles.text, {marginTop: hp('0.5%')}]}>
               {group ? 'ITC_GROUP_HANDSHAKE:' : 'ITC HANDSHAKE:'}
-              <Text style={{color: colors.white}}> {handshake}</Text>
+              <Text style={{color: colors.white, width: hp(20)}}>
+                {' '}
+                {handshake}
+              </Text>
             </Text>
             <View style={styles.border} />
             <View
@@ -46,13 +65,13 @@ const MyGroupsCard = ({image, count, title, players, handshake, onPress, group, 
                 // justifyContent: 'space-between',
                 paddingTop: hp('1.5%'),
               }}>
-                  <Button 
-                    buttonText={deleteText}
-                    onPress={onDeletePress}
-                    indicator={indicator}
-                    textStyle={{color: colors.secondary, fontSize: hp('1.8%')}}
-                    buttonStyle={styles.buttonStyle}
-                  />
+              <Button
+                buttonText={deleteText}
+                onPress={onDeletePress}
+                indicator={indicator}
+                textStyle={{color: colors.secondary, fontSize: hp('1.8%')}}
+                buttonStyle={styles.buttonStyle}
+              />
               {/* <View>
                 <Text style={styles.text2}>AREA CODE:</Text>
                 <Text style={styles.text3}>{area_code}</Text>
@@ -84,8 +103,9 @@ const styles = StyleSheet.create({
   },
   secondaryWrapper: {
     // flexDirection: 'row',
-    marginLeft: hp('1%'),
+    marginLeft: hp(1),
     marginTop: hp('1%'),
+    // backgroundColor: 'blue'
     // flex: 1,
     // justifyContent: 'space-between'
   },
@@ -109,8 +129,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    height: hp('3%'),
-    width: hp('3%'),
+    height: hp(3),
+    width: hp(2.5),
     borderRadius: 5,
     marginLeft: hp('1%'),
     borderColor: colors.lightgray,
@@ -118,7 +138,9 @@ const styles = StyleSheet.create({
   textWrapper: {
     // position: 'absolute',
     // backgroundColor: 'red',
-    width: hp('26%'),
+    // flex: 1,
+    width: hp(25),
+    // marginLeft: hp(1),
     marginTop: hp('1.5%'),
   },
   text: {
@@ -145,11 +167,11 @@ const styles = StyleSheet.create({
     width: 1,
     backgroundColor: colors.gray,
   },
-  buttonStyle:{
+  buttonStyle: {
     padding: hp('0.4%'),
-    width: hp('24%')
+    width: hp('24%'),
   },
-  editView:{
+  editView: {
     backgroundColor: colors.primary,
     position: 'absolute',
     left: hp('1.5%'),
@@ -158,6 +180,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 5,
     height: hp('3%'),
-    width: hp('3%')
-  }
+    width: hp('3%'),
+  },
 });
