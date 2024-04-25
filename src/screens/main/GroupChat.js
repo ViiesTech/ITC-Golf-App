@@ -13,7 +13,7 @@ import colors from '../../assets/colors';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import SendIcon from 'react-native-vector-icons/Feather';
 import SecondaryHeader from '../../components/SecondaryHeader';
-import {members} from '../../DummyData';
+import {members} from '../../utils/DummyData';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchGroupMembers} from '../../redux/actions/groupAction';
 import images from '../../assets/images';

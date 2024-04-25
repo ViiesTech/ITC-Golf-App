@@ -23,6 +23,7 @@ import {ShowToast} from '../../Custom';
 import constant from '../../redux/constant';
 import Sponsors from '../../components/Sponsors';
 import images from '../../assets/images';
+import FastImage from 'react-native-fast-image';
 
 const FreeStuff = () => {
   const navigation = useNavigation();
@@ -91,7 +92,7 @@ const FreeStuff = () => {
           showsVerticalScrollIndicator={false}
           renderItem={({item, index}) => (
             <MerchandiseCard
-              image={item.image ? {uri: item.image} : images.dummy}
+              image={item.image ? {uri: item.image, priority: FastImage.priority.high} : images.dummy}
               text={item.title}
               heartPress={() => onToggleWishlist(item, index)}
               favourite={item.isFav}

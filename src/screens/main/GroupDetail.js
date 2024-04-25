@@ -13,7 +13,7 @@ import Container from '../../components/Container';
 import colors from '../../assets/colors';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import PersonalInfoTab from '../../components/PersonalInfoTab';
-import {Tabs} from '../../DummyData';
+import {Tabs} from '../../utils/DummyData';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import images from '../../assets/images';
@@ -25,6 +25,7 @@ import {ShowToast} from '../../Custom';
 import {getGroupStatus, JoinGroup} from '../../redux/actions/groupAction';
 import constant from '../../redux/constant';
 import {useNavigation} from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 
 const GroupDetail = ({route}) => {
   const [changeTab, setChangeTab] = useState(1);
@@ -144,14 +145,14 @@ const GroupDetail = ({route}) => {
                     {item.listing_title}
                   </Text>
                 </View>
-                <Image
+                <FastImage
                   source={
                     item.feature_image
-                      ? {uri: item.feature_image}
+                      ? {uri: item.feature_image, priority: FastImage.priority.high}
                       : images.dummy
                   }
+                  resizeMode={FastImage.resizeMode.cover}
                   style={styles.image}
-                  borderRadius={100}
                 />
               </View>
             </View>
@@ -331,6 +332,7 @@ const styles = StyleSheet.create({
     height: hp('15%'),
     width: hp('15%'),
     position: 'absolute',
+    borderRadius: 100,
     left: hp('2%'),
     top: hp('-4%'),
   },

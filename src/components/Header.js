@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
 import images from '../assets/images';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -7,6 +7,7 @@ import SVGImage from './SVGImage';
 import icons from '../assets/icons';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
+import FastImage from 'react-native-fast-image';
 
 const Header = ({iconStyle, headerStyle}) => {
   const [isNewNotification, setIsNewNotification] = useState(false);
@@ -18,16 +19,16 @@ const Header = ({iconStyle, headerStyle}) => {
   return (
     <View style={[styles.headerView, headerStyle]}>
       <View style={{flexDirection: 'row'}}>
-        <Image
-          source={
-            user?.featured_image_url
-              ? {uri: user?.featured_image_url}
-              : user?.feature_image_url
-              ? {uri: user.feature_image_url}
-              : images.profile
-          }
+      <FastImage
+            source={
+              user?.featured_image_url
+                ? {uri: user?.featured_image_url, priority: FastImage.priority.high}
+                : user?.feature_image_url
+                ? {uri: user.feature_image_url, priority: FastImage.priority.high}
+                : images.profile
+            }
+            resizeMode={FastImage.resizeMode.cover}
           style={styles.image}
-          borderRadius={100}
         />
         <Text style={styles.headerText}>Hello {user.username}!</Text>
       </View>
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
   },
   image: {
     height: hp('6.5%'),
+    borderRadius: 100,
     width: hp('6.5%'),
   },
   headerText: {

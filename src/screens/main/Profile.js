@@ -15,7 +15,7 @@ import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import images from '../../assets/images';
 import colors from '../../assets/colors';
 import ProfileOptions from '../../components/ProfileOptions';
-import {MainSettings, Options, settings} from '../../DummyData';
+import {MainSettings, Options, settings} from '../../utils/DummyData';
 import ProfileSettings from '../../components/ProfileSettings';
 import {useNavigation} from '@react-navigation/native';
 import Arrow from 'react-native-vector-icons/FontAwesome6';
@@ -24,6 +24,7 @@ import constant from '../../redux/constant';
 import {ShowToast} from '../../Custom';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import {DeactivateAccount} from '../../redux/actions/authAction';
+import FastImage from 'react-native-fast-image';
 
 const Profile = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -114,16 +115,16 @@ const Profile = () => {
       <SecondaryHeader text={'Profile'} />
       <ScrollView contentContainerStyle={styles.screen}>
         <View style={{flexDirection: 'row'}}>
-          <Image
+          <FastImage
             source={
               user?.featured_image_url
-                ? {uri: user?.featured_image_url}
+                ? {uri: user?.featured_image_url, priority: FastImage.priority.high}
                 : user?.feature_image_url
-                ? {uri: user.feature_image_url}
+                ? {uri: user.feature_image_url, priority: FastImage.priority.high}
                 : images.profile
             }
+            resizeMode={FastImage.resizeMode.cover}
             style={styles.profileImage}
-            borderRadius={10}
           />
           <View style={styles.wrapper}>
             <Text style={styles.name}>
@@ -211,6 +212,7 @@ const styles = StyleSheet.create({
   },
   profileImage: {
     height: hp('18%'),
+    borderRadius: 10,
     width: hp('18%'),
   },
   wrapper: {

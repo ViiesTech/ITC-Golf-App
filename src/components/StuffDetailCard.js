@@ -4,7 +4,8 @@ import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import Heart from 'react-native-vector-icons/AntDesign';
 import ColorOptions from './ColorOptions'
-import { Colors } from '../DummyData'
+import { Colors } from '../utils/DummyData'
+import FastImage from 'react-native-fast-image';
 
 const StuffDetailCard = ({ rating, image, title, desc, favourite }) => {
     const [chooseOptions, setChooseOptions] = useState(0)
@@ -12,8 +13,9 @@ const StuffDetailCard = ({ rating, image, title, desc, favourite }) => {
     return (
         <View style={styles.wrapper}>
             <View style={styles.cardStyle}>
-                <Image
+                <FastImage
                     source={image}
+                    resizeMode={FastImage.resizeMode.cover}
                     style={styles.image}
                 />
                 <View style={styles.heartView}>

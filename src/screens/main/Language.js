@@ -7,7 +7,7 @@ import ContactInput from '../../components/ContactInput'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import colors from '../../assets/colors'
 import LanguagesName from '../../components/LanguagesName'
-import { AllLanguages } from '../../DummyData'
+import { AllLanguages } from '../../utils/DummyData'
 import { useDispatch, useSelector } from 'react-redux'
 import constant from '../../redux/constant'
 

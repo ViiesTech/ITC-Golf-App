@@ -19,6 +19,7 @@ import images from '../../assets/images';
 import {useDispatch, useSelector} from 'react-redux';
 import {getProductDetails} from '../../redux/actions/productAction';
 import {ShowToast} from '../../Custom';
+import FastImage from 'react-native-fast-image';
 
 const MerchandiseDetails = ({route}) => {
   const {id, wishlist} = route.params;
@@ -62,7 +63,10 @@ const MerchandiseDetails = ({route}) => {
           title={product_detail[id]?.title}
           image={
             product_detail[id]?.image
-              ? {uri: product_detail[id]?.image}
+              ? {
+                  uri: product_detail[id]?.image,
+                  priority: FastImage.priority.high,
+                }
               : images.dummy
           }
           favourite={wishlist}

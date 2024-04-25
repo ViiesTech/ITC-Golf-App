@@ -3,7 +3,7 @@ import React from 'react';
 import colors from '../assets/colors';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import ReviewGiven from './ReviewGiven';
-import {reviews} from '../DummyData';
+import {reviews} from '../utils/DummyData';
 
 const ReviewCard = ({image, name, ratings}) => {
   return (

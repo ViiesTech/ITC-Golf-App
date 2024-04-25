@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Platform } from 'react-native
 import React from 'react'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { Screens } from '../DummyData'
+import { Screens } from '../utils/DummyData'
 
 const AllOptionsCard = ({ active, onChangeTab }) => {
 

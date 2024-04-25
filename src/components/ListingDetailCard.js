@@ -1,7 +1,8 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import colors from '../assets/colors';
+import FastImage from 'react-native-fast-image';
 
 const ListingDetailCard = ({
   image,
@@ -23,11 +24,11 @@ const ListingDetailCard = ({
       style={{marginBottom: hp('10%'), width: '45%'}}
       activeOpacity={0.9}
       onPress={onPress}>
-      <Image
+      <FastImage
         source={route === 'Listing' ? listingImage : image}
         style={styles.image}
         borderRadius={10}
-        resizeMode="cover"
+        resizeMode={FastImage.resizeMode.cover}
       />
       {!hideTag && (
         <View style={styles.textView}>

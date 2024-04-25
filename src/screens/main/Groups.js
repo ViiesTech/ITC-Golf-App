@@ -19,6 +19,7 @@ import {useNavigation} from '@react-navigation/native';
 import SearchFilter from '../../components/SearchFilter';
 import Sponsors from '../../components/Sponsors';
 import images from '../../assets/images';
+import FastImage from 'react-native-fast-image';
 
 const Groups = () => {
   const navigation = useNavigation();
@@ -153,7 +154,7 @@ const Groups = () => {
             hideTag
             route={routeName}
             count={index + 1}
-            image={item.feature_image ? {uri: item.feature_image} : images.dummy}
+            image={item.feature_image ? {uri: item.feature_image, priority: FastImage.priority.high} : images.dummy}
             title={item.listing_title}
             desc={
               item.group_desired_teebox == ''

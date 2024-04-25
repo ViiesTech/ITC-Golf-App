@@ -24,7 +24,7 @@ import Edit from 'react-native-vector-icons/Feather';
 import ContactInput from '../../components/ContactInput';
 import Button from '../../components/Button';
 import {AddNewListings} from '../../components/AddNewListings';
-import {DesiredItem, ExperienceLevel} from '../../DummyData';
+import {DesiredItem, ExperienceLevel} from '../../utils/DummyData';
 import {useDispatch, useSelector} from 'react-redux';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {PlayersFollow, editProfile} from '../../redux/actions/authAction';
@@ -37,8 +37,13 @@ import {
 } from '../../redux/actions/homeAction';
 import {ShowToast} from '../../Custom';
 import {useNavigation} from '@react-navigation/native';
-import {AndroidPermissionHandler, iosPermissionHandler, requestGalleryPermissionAndroid} from '../../utils/PermissionHandler';
-import { PERMISSIONS, request } from 'react-native-permissions';
+import {
+  AndroidPermissionHandler,
+  iosPermissionHandler,
+  requestGalleryPermissionAndroid,
+} from '../../utils/PermissionHandler';
+import {PERMISSIONS, request} from 'react-native-permissions';
+import FastImage from 'react-native-fast-image';
 
 const AllGroups = ({route}) => {
   const [listingsCode, setListingsCode] = useState(null);
@@ -83,7 +88,7 @@ const AllGroups = ({route}) => {
   }, []);
 
   // const iosPermission = () => {
-   
+
   // }
 
   const onInputChange = (value, text) => {
@@ -104,7 +109,7 @@ const AllGroups = ({route}) => {
   };
 
   const onChangePhoto = async () => {
-    const status = await iosPermissionHandler()
+    const status = await iosPermissionHandler();
     if (status === 'granted') {
       const options = {
         title: 'Select Image',
@@ -266,13 +271,14 @@ const AllGroups = ({route}) => {
                   width: '40%',
                   marginTop: hp('2%'),
                 }}>
-                <Image
+                <FastImage
                   source={
-                    state.photoURL ? {uri: state.photoURL} : images.profile
+                    state.photoURL
+                      ? {uri: state.photoURL, priority: FastImage.priority.high}
+                      : images.profile
                   }
-                  resizeMode="cover"
+                  resizeMode={FastImage.resizeMode.cover}
                   style={styles.imageStyle}
-                  borderRadius={10}
                 />
                 <TouchableOpacity
                   style={styles.editView}
@@ -508,6 +514,7 @@ const styles = StyleSheet.create({
   },
   imageStyle: {
     height: hp('14%'),
+    borderRadius: 10,
     width: '100%',
   },
   editView: {

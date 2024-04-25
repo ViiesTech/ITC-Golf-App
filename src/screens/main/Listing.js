@@ -19,6 +19,7 @@ import SearchFilter from '../../components/SearchFilter';
 import {ListingsByAreaCodes} from '../../redux/actions/homeAction';
 import colors from '../../assets/colors';
 import images from '../../assets/images';
+import FastImage from 'react-native-fast-image';
 
 const Listing = () => {
   const [selectedCode, setSelectedCode] = useState(null);
@@ -53,7 +54,9 @@ const Listing = () => {
         renderItem={({item, index}) => (
           <ListingDetailCard
             listingImage={
-              item.feature_image ? {uri: item.feature_image} : images.dummy
+              item.feature_image
+                ? {uri: item.feature_image, priority: FastImage.priority.high}
+                : images.dummy
             }
             route={routeName}
             total={index + 1}
@@ -112,7 +115,9 @@ const Listing = () => {
         renderItem={({item, index}) => (
           <ListingDetailCard
             listingImage={
-              item.feature_image ? {uri: item.feature_image} : images.dummy
+              item.feature_image
+                ? {uri: item.feature_image, priority: FastImage.priority.high}
+                : images.dummy
             }
             route={routeName}
             total={index + 1}

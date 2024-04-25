@@ -19,7 +19,7 @@ import {
   handshake,
   how_many_players,
   switchOptions,
-} from '../DummyData';
+} from '../utils/DummyData';
 import DiscoverCard from './DiscoverCard';
 import MyGroupsCard from './MyGroupsCard';
 import DropDownPicker from './DropDownPicker';
@@ -42,6 +42,7 @@ import {getListings} from '../redux/actions/homeAction';
 import images from '../assets/images';
 import {Picker} from '@react-native-picker/picker';
 import {useNavigation} from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 
 const Discover = ({searchPressed}) => {
   const dispatch = useDispatch();
@@ -112,7 +113,7 @@ const Discover = ({searchPressed}) => {
         renderItem={({item, index}) => (
           <DiscoverCard
             image={
-              item.feature_image ? {uri: item.feature_image} : images.dummy
+              item.feature_image ? {uri: item.feature_image, priority: FastImage.priority.high} : images.dummy
             }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
@@ -155,7 +156,7 @@ const Discover = ({searchPressed}) => {
         renderItem={({item, index}) => (
           <DiscoverCard
             image={
-              item.feature_image ? {uri: item.feature_image} : images.dummy
+              item.feature_image ? {uri: item.feature_image, priority: FastImage.priority.high} : images.dummy
             }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
@@ -280,7 +281,7 @@ const MyListings = ({setIndex, setListingData}) => {
               onDeletePress={() => onDeleteListing(item.listing_id, index)}
               onEditPress={() => onEditListing(item)}
               image={
-                item.feature_image ? {uri: item.feature_image} : images.dummy
+                item.feature_image ? {uri: item.feature_image, priority: FastImage.priority.high} : images.dummy
               }
               onPress={() =>
                 navigation.navigate('SecondaryStack', {

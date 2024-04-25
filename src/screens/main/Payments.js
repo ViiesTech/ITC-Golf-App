@@ -9,7 +9,7 @@ import SVGImage from '../../components/SVGImage'
 import icons from '../../assets/icons'
 import Arrow from 'react-native-vector-icons/SimpleLineIcons'
 import PaymentMethods from '../../components/PaymentMethods'
-import { CalculateTotal, methods } from '../../DummyData'
+import { CalculateTotal, methods } from '../../utils/DummyData'
 import Button from '../../components/Button'
 
 const Payments = () => {

@@ -1,17 +1,18 @@
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {  Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React  from 'react'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen'
 import Heart from 'react-native-vector-icons/AntDesign'
+import FastImage from 'react-native-fast-image'
 
 const MerchandiseCard = ({ text, image, onPress, style, desc, rating, imageStyle, favourite, heartPress, descStyle }) => {
 
     return (
         <View style={[styles.component, style]}>
             <TouchableOpacity style={styles.cardStyle} onPress={onPress} activeOpacity={0.9}>
-                <Image
+                <FastImage
                     source={image}
-                    resizeMode='cover'
+                    resizeMode={FastImage.resizeMode.cover}
                     style={[styles.image, imageStyle]}
                 />
             </TouchableOpacity>

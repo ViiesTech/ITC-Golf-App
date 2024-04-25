@@ -2,6 +2,7 @@ import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import colors from '../assets/colors';
+import FastImage from 'react-native-fast-image';
 
 const ListingCard = ({
   image,
@@ -20,7 +21,12 @@ const ListingCard = ({
       activeOpacity={0.9}
       onPress={onPress}>
       <View style={{flexDirection: 'row'}}>
-        <Image source={image} style={styles.image} borderRadius={12} />
+        <FastImage
+          source={image}
+          style={styles.image}
+          borderRadius={12}
+          resizeMode={FastImage.resizeMode.cover}
+        />
         <View style={styles.textWrapper}>
           <View style={styles.textView}>
             <Text style={styles.number}>{number}</Text>

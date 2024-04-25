@@ -30,6 +30,7 @@ import {
 } from '../../redux/actions/homeAction';
 import Sponsors from '../../components/Sponsors';
 import DropDownPicker from '../../components/DropDownPicker';
+import FastImage from 'react-native-fast-image';
 
 const Home = () => {
   const [selectedOption, setSelectedOption] = useState('');
@@ -90,7 +91,7 @@ const Home = () => {
           key={item.id}
           number={index + 1}
           title={item.listing_title}
-          image={item.feature_image ? {uri: item.feature_image} : images.dummy}
+          image={item.feature_image ? {uri: item.feature_image, priority: FastImage.priority.high} : images.dummy}
           // descStyle={{ width: index == 0 ? '20%' : index == 1 ? '40%' : '100%' }}
           count={
             item.how_many_players == 'Select a Value'
@@ -149,9 +150,7 @@ const Home = () => {
               }
               date={item.course_date}
               desc={item.match_description}
-              image={
-                item.feature_image ? {uri: item.feature_image} : images.dummy
-              }
+              image={item.feature_image ? {uri: item.feature_image, priority: FastImage.priority.high} : images.dummy}
               onPress={() =>
                 navigation.navigate('SecondaryStack', {
                   screen: 'ListingDetails',

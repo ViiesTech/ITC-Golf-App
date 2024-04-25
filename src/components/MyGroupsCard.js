@@ -5,6 +5,7 @@ import colors from '../assets/colors';
 import SVGImage from './SVGImage';
 import icons from '../assets/icons';
 import Button from './Button';
+import FastImage from 'react-native-fast-image';
 
 const MyGroupsCard = ({
   image,
@@ -26,7 +27,11 @@ const MyGroupsCard = ({
       style={styles.wrapper}
       activeOpacity={0.9}
       onPress={onPress}>
-      <Image source={image} style={styles.image} borderRadius={10} />
+      <FastImage
+        source={image}
+        style={styles.image}
+        resizeMode={FastImage.resizeMode.cover}
+      />
       <TouchableOpacity
         style={styles.editView}
         activeOpacity={0.9}
@@ -99,6 +104,7 @@ const styles = StyleSheet.create({
   },
   image: {
     height: hp('20%'),
+    borderRadius: 10,
     width: hp('18%'),
   },
   secondaryWrapper: {

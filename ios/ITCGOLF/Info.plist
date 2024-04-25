@@ -40,7 +40,7 @@
 	  <key>NSCameraUsageDescription</key>
   <string>App needs to access your camera</string>
     <key>NSPhotoLibraryUsageDescription</key>
-  <string>App would like to access your Gallery</string>
+  <string>App would like to access your gallery to upload a picture</string>
    <key>NSPhotoLibraryAddUsageDescription</key>
   <string>Phone library is required</string>
 	<key>UIAppFonts</key>

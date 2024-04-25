@@ -29,7 +29,8 @@ import {ShowToast} from '../../Custom';
 import {getListingStatus, JoinListing} from '../../redux/actions/listingAction';
 import constant from '../../redux/constant';
 import {useNavigation} from '@react-navigation/native';
-import {Tabs} from '../../DummyData';
+import {Tabs} from '../../utils/DummyData';
+import FastImage from 'react-native-fast-image';
 
 const ListingDetails = ({route}) => {
   const [changeTab, setChangeTab] = useState(1);
@@ -158,14 +159,14 @@ const ListingDetails = ({route}) => {
                         {item.listing_title}
                       </Text>
                     </View>
-                    <Image
+                    <FastImage
                       source={
                         item.feature_image
-                          ? {uri: item.feature_image}
+                          ? {uri: item.feature_image, priority: FastImage.priority.high}
                           : images.dummy
                       }
+                      resizeMode={FastImage.resizeMode.cover}
                       style={styles.image}
-                      borderRadius={100}
                     />
                   </View>
                 </View>
@@ -365,6 +366,7 @@ const styles = StyleSheet.create({
     height: hp('15%'),
     width: hp('15%'),
     position: 'absolute',
+    borderRadius: 100,
     left: hp('2%'),
     top: hp('-4%'),
   },

@@ -1,6 +1,6 @@
 import { Image, StyleSheet, TouchableOpacity, View, Linking } from 'react-native'
 import React from 'react'
-import { listingImages } from '../DummyData'
+import { listingImages } from '../utils/DummyData'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import SVGImage from './SVGImage'
 import icons from '../assets/icons'

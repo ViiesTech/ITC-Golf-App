@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import colors from '../assets/colors';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
-import {TeeBox, handshake, listingPicker} from '../DummyData';
+import {TeeBox, handshake, listingPicker} from '../utils/DummyData';
 import DiscoverCard from './DiscoverCard';
 import MyGroupsCard from './MyGroupsCard';
 import DropDownPicker from './DropDownPicker';
@@ -33,6 +33,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {getGroups} from '../redux/actions/homeAction';
 import images from '../assets/images';
 import {useNavigation} from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 
 const Discover = ({searchPressed}) => {
   const dispatch = useDispatch();
@@ -63,7 +64,7 @@ const Discover = ({searchPressed}) => {
         renderItem={({item, index}) => (
           <DiscoverCard
             image={
-              item.feature_image ? {uri: item.feature_image} : images.dummy
+              item.feature_image ? {uri: item.feature_image, priority: FastImage.priority.high} : images.dummy
             }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
@@ -135,7 +136,7 @@ const Discover = ({searchPressed}) => {
         renderItem={({item, index}) => (
           <DiscoverCard
             image={
-              item.feature_image ? {uri: item.feature_image} : images.dummy
+              item.feature_image ? {uri: item.feature_image, priority: FastImage.priority.high} : images.dummy
             }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
@@ -245,7 +246,7 @@ const MyGroups = ({setIndex, setGroupData}) => {
               onDeletePress={() => onDeleteGroup(item.group_id, index)}
               image={
                 item.feature_image
-                  ? {uri: item.feature_image}
+                  ? {uri: item.feature_image, priority: FastImage.priority.high}
                   : images.dummy
               }
               indicator={loaderIndex == index && delete_loader}

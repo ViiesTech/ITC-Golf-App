@@ -4,6 +4,7 @@ import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import colors from '../assets/colors';
 import SVGImage from './SVGImage';
 import icons from '../assets/icons';
+import FastImage from 'react-native-fast-image';
 
 const DiscoverCard = ({
   image,
@@ -16,32 +17,36 @@ const DiscoverCard = ({
   time,
   count,
   onPress,
-  group
+  group,
 }) => {
-//   console.log(desc.length);
+  //   console.log(desc.length);
 
   return (
     <View style={styles.wrapper} activeOpacity={0.9} onPress={onPress}>
-      <Image source={image} style={styles.image} borderRadius={10} />
+      <FastImage
+        source={image}
+        style={styles.image}
+        resizeMode={FastImage.resizeMode.cover}
+      />
       <View style={styles.textWrapper}>
         <View style={styles.numberView}>
           <Text style={{color: colors.primary}}>{count}</Text>
         </View>
-       <View style={styles.contentWrapper}> 
-        <Text style={[styles.name, titleStyle]}>
-          {title}
-        </Text>
-        <View style={styles.svgImageContainer}>
-        <SVGImage image={icons.tee} />
-        </View>
+        <View style={styles.contentWrapper}>
+          <Text style={[styles.name, titleStyle]}>{title}</Text>
+          <View style={styles.svgImageContainer}>
+            <SVGImage image={icons.tee} />
+          </View>
         </View>
       </View>
       <View style={styles.secondaryWrapper}>
         <Text style={styles.textStyle}>
-            {group ? 'Desired Tee Box:' : 'Total Players:'}
+          {group ? 'Desired Tee Box:' : 'Total Players:'}
           <Text style={styles.textStyle}> {players}</Text>
         </Text>
-        <Text style={styles.loseText}>ITC_HANDSHAKE:<Text style={styles.loseText}> {itc}</Text></Text>
+        <Text style={styles.loseText}>
+          ITC_HANDSHAKE:<Text style={styles.loseText}> {itc}</Text>
+        </Text>
         <View style={styles.border} />
         <View
           style={{
@@ -81,7 +86,8 @@ const styles = StyleSheet.create({
   },
   image: {
     height: hp('22%'),
-    width: '100%'
+    borderRadius: 10,
+    width: '100%',
   },
   // numberView: {
   //   borderWidth: 1,
@@ -111,14 +117,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     borderColor: colors.gray,
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
   },
   name: {
     color: colors.white,
     fontSize: hp('1.7%'),
     marginLeft: hp('1%'),
     alignSelf: 'center',
-    flex: 1, 
+    flex: 1,
   },
   textWrapper: {
     flexDirection: 'row',
@@ -168,9 +174,9 @@ const styles = StyleSheet.create({
     flex: 1,
     // alignItems: 'center',
   },
-  svgImageContainer:{
+  svgImageContainer: {
     // position: 'absolute',
-    marginTop: hp('0.6%')
+    marginTop: hp('0.6%'),
     // right: 0
-  }
+  },
 });
