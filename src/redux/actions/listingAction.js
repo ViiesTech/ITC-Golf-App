@@ -367,7 +367,7 @@ export const getListingStatus = (user_id, match_id, setListingStatus) => {
         },
       })
       .then(res => {
-        console.log('response listing status', res.data)
+        console.log('response listing status', res.data);
         if (res.data) {
           setListingStatus(res.data.data.accept_or_not);
           dispatch({
@@ -386,5 +386,24 @@ export const getListingStatus = (user_id, match_id, setListingStatus) => {
         });
         // return ShowToast('Some problem occured');
       });
+  };
+};
+
+export const sendListingMessage = (
+  user_id,
+  group_member_id,
+  listing_id,
+  message,
+) => {
+  return async dispatch => {
+    dispatch({
+      type: constant.SEND_LISTING_MESSAGE,
+    });
+
+    var data = new FormData();
+
+    data.append('');
+
+    await axios.post('');
   };
 };

@@ -256,11 +256,11 @@ const ListingDetails = ({route}) => {
                     buttonStyle={styles.button}
                     textStyle={{color: colors.secondary}}
                     onPress={() => {
-                      return ShowToast('Coming Soon');
-                      // navigation.navigate('SecondaryStack', {
-                      //   screen: 'GroupChat',
-                      //   params: {title: item.listing_title, type: 'listing'},
-                      // });
+                      // return ShowToast('Coming Soon');
+                      navigation.navigate('SecondaryStack', {
+                        screen: 'GroupChat',
+                        params: {title: item.listing_title, type: 'listing', listing_id: item.listing_id,owner_id: item.author_id},
+                      });
                     }}
                   />
                 ) : (

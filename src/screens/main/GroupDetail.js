@@ -36,7 +36,7 @@ const GroupDetail = ({route}) => {
   const dispatch = useDispatch();
 
   const {item, type} = route?.params;
-  console.log('detail ======>', item.group_id);
+  // console.log('detail ======>', item.group_id);
 
   useEffect(() => {
 
@@ -50,7 +50,7 @@ const GroupDetail = ({route}) => {
 
   const navigation = useNavigation();
 
-  console.log('status', itemStatus)
+  // console.log('status', itemStatus)
 
   useEffect(() => {
     if (changeTab == 3 && reviews.length < 1) {
@@ -230,11 +230,11 @@ const GroupDetail = ({route}) => {
                 buttonStyle={styles.button}
                 textStyle={{color: colors.secondary}}
                 onPress={() => {
-                  // navigation.navigate('SecondaryStack', {
-                  //   screen: 'GroupChat',
-                  //   params: {title: item.listing_title, type: 'group', id: item.group_id},
-                  // });
-                  return ShowToast('Coming Soon')
+                  navigation.navigate('SecondaryStack', {
+                    screen: 'GroupChat',
+                    params: {title: item.listing_title, type: 'group', id: item.group_id},
+                  });
+                  // return ShowToast('Coming Soon')
                 }}
               />
             ) : (
