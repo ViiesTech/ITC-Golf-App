@@ -27,7 +27,7 @@ const ListingDetailCard = ({
       <FastImage
         source={route === 'Listing' ? listingImage : image}
         style={styles.image}
-        borderRadius={10}
+        // borderRadius={10}
         resizeMode={FastImage.resizeMode.cover}
       />
       {!hideTag && (
@@ -87,6 +87,7 @@ export default ListingDetailCard;
 const styles = StyleSheet.create({
   image: {
     height: hp('25%'),
+    borderRadius: 10,
     width: '97%',
   },
   textView: {
