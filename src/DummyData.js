@@ -1163,7 +1163,7 @@ export const settings = [
   },
   {
     id: 9,
-    text: 'Deactivate Account',
+    text: 'Delete Account',
     icon: icons.person,
   },
 ];

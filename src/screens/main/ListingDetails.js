@@ -256,25 +256,27 @@ const ListingDetails = ({route}) => {
                     buttonStyle={styles.button}
                     textStyle={{color: colors.secondary}}
                     onPress={() => {
-                      // return ShowToast('Coming Soon');
-                      navigation.navigate('SecondaryStack', {
-                        screen: 'GroupChat',
-                        params: {title: item.listing_title, type: 'listing', listing_id: item.listing_id,owner_id: item.author_id},
-                      });
+                      return ShowToast('Coming Soon');
+                      // navigation.navigate('SecondaryStack', {
+                      //   screen: 'GroupChat',
+                      //   params: {title: item.listing_title, type: 'listing', listing_id: item.listing_id,owner_id: item.author_id},
+                      // });
                     }}
                   />
                 ) : (
                   <Button
-                    buttonText={
-                        itemStatus === 'pending'
-                        ? 'Pending'
-                        : 'Join Listing'
-                    }
+                    // buttonText={
+                    //     itemStatus === 'pending'
+                    //      || listingStatus === '0' ? 'Pending'
+                    //     : 'Join Listing'
+                    // }
+                    buttonText={'Join Listing'}
                     buttonStyle={styles.button}
-                    disable={listingStatus === '0' ? true : false}
+                    // disable={listingStatus === '0' ? true : false}
                     textStyle={{color: colors.secondary}}
                     indicator={join_loading}
-                    onPress={() => onJoin()}
+                    onPress={() => ShowToast('Coming Soon')}
+                    // onPress={() => onJoin()}
                   />
                 )}
               </>
