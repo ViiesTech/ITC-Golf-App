@@ -4,7 +4,7 @@ import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import Search from 'react-native-vector-icons/Feather'
 
-const ContactInput = ({ style,inputStyle, label, placeholder, value, onChangeText, textAlignVertical, textColor, icon, keyboardType }) => {
+const ContactInput = ({ style,inputStyle, label, placeholder, value, onChangeText, textAlignVertical, textColor, icon, keyboardType, multiline }) => {
     return (
         <View>
             <Text style={styles.labelText}>{label}</Text>
@@ -16,6 +16,7 @@ const ContactInput = ({ style,inputStyle, label, placeholder, value, onChangeTex
                     keyboardType={keyboardType}
                     onChangeText={onChangeText}
                     placeholderTextColor={textColor}
+                    multiline={multiline}
                     textAlignVertical={textAlignVertical}
                 />
                 {icon &&

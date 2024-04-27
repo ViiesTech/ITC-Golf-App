@@ -22,7 +22,7 @@ const DiscoverCard = ({
   //   console.log(desc.length);
 
   return (
-    <View style={styles.wrapper} activeOpacity={0.9} onPress={onPress}>
+    <TouchableOpacity style={styles.wrapper} activeOpacity={0.9} onPress={onPress}>
       <FastImage
         source={image}
         style={styles.image}
@@ -68,7 +68,7 @@ const DiscoverCard = ({
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

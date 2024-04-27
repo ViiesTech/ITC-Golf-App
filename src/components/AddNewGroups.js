@@ -459,8 +459,9 @@ const AddNew = ({groupData}) => {
             description: text,
           })
         }
-        textAlignVertical={'top'}
-        style={[styles.input, {height: hp('15%')}]}
+        // textAlignVertical={'top'}
+        multiline={true}
+        style={styles.input}
       />
 
       <View style={{flexDirection: 'row', justifyContent: 'space-between',  }}>

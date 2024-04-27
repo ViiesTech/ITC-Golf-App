@@ -24,7 +24,6 @@ const ListingCard = ({
         <FastImage
           source={image}
           style={styles.image}
-          borderRadius={12}
           resizeMode={FastImage.resizeMode.cover}
         />
         <View style={styles.textWrapper}>
@@ -63,6 +62,7 @@ const styles = StyleSheet.create({
   },
   image: {
     height: hp('11%'),
+    borderRadius: 12,
     width: hp('10%'),
   },
   textWrapper: {

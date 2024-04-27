@@ -638,7 +638,7 @@ const AddNew = ({listingData}) => {
               dropdownIconColor={colors.white}
               itemStyle={{color: colors.white}}
               style={{color: colors.white}}
-              onValueChange={(itemValue, itemIndex) =>
+              onValueChange={(itemValue) =>
                 handlePickerChange('itc_handshake', itemValue)
               }>
               <Picker.Item
@@ -720,8 +720,9 @@ const AddNew = ({listingData}) => {
             description: text,
           })
         }
-        textAlignVertical={'top'}
-        style={[styles.input, {height: hp('15%')}]}
+        // textAlignVertical={'top'}
+        multiline={true}
+        style={styles.input}
       />
       <UploadPicture
         text={'Image'}
@@ -791,7 +792,7 @@ const AddNew = ({listingData}) => {
           onPress={() => onCreateListing()}
           buttonText={listingData ? 'Update Listing' : 'Add New Listing'}
           indicator={listingData ? edit_loader : create_listing_loading}
-          textStyle={{color: colors.secondary, fontSize: Platform.OS === 'ios' && hp(1.8)}}
+          textStyle={{color: colors.secondary, fontSize: Platform.OS === 'ios' ? hp(1.8) : hp(2.3)}}
         />
       </View>
     </View>

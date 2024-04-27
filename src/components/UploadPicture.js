@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: colors.lightgray,
+        // flex: 1,
         alignSelf: 'center',
         fontSize: hp('2%'),
         marginLeft: hp('2%')

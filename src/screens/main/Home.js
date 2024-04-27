@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
-  Platform,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
@@ -29,7 +28,6 @@ import {
   getListings,
 } from '../../redux/actions/homeAction';
 import Sponsors from '../../components/Sponsors';
-import DropDownPicker from '../../components/DropDownPicker';
 import FastImage from 'react-native-fast-image';
 
 const Home = () => {

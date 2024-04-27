@@ -409,12 +409,13 @@ const AllGroups = ({route}) => {
                 ITC GIVEAWAY AND RAFFLE ADDRESS
               </Text>
               <ContactInput
-                style={[styles.input, {height: hp('16%'), width: '100%'}]}
+                style={[styles.input, {width: '100%'}]}
                 value={state.description}
                 onChangeText={text => onInputChange('description', text)}
                 // placeholder={'37 Cardinal Lane Petersburg,'}
                 textColor={colors.lightgray}
-                textAlignVertical={'top'}
+                // textAlignVertical={'top'}
+                multiline={true}
                 label={'Short Description:'}
               />
               <View style={styles.emailCard}>
