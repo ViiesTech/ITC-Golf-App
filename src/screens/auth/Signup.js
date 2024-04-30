@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexGrow: 1,
     paddingTop: hp('7%'),
-    paddingBottom: hp('39%')
+    // paddingBottom: hp(2)
   },
   image: {
     height: hp('16%'),

@@ -1,9 +1,9 @@
-import { ImageBackground, StyleSheet } from 'react-native'
+import { ImageBackground,  StyleSheet } from 'react-native'
 import React from 'react'
 import images from '../assets/images'
 
 const AuthContainer = ({ children }) => {
-    return (
+    return (  
         <ImageBackground
             source={images.auth_background}
             style={styles.imageStyle}

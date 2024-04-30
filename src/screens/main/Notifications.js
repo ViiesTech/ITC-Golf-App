@@ -6,7 +6,7 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, { useEffect} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -56,15 +56,10 @@ const Notifications = () => {
     );
   };
 
-  // const markAsRead = () => {
-  //   dispatch({
-  //     type: con
-  //   })
-  // }
+ 
 
   const onAcceptRequest = async (item, index) => {
-    // if (item.listing_id) {
-    // return console.log(item.listing_id)
+  
     console.log(item);
     const listing = await dispatch(
       AcceptListing(
@@ -85,26 +80,7 @@ const Notifications = () => {
     } else {
       return ShowToast(listing.message);
     }
-    // } else {
-    // const group = await dispatch(
-    //   AcceptGroup(
-    //     user.user_id,
-    //     item.listing_post_author_id,
-    //     user.user_email,
-    //     'accepted your request',
-    //     item.group_id,
-    //   ),
-    // );
-    // if (group.message && item.status === 'pending') {
-    //   navigation.navigate('Home');
-    //   dispatch({
-    //     type: constant.ACCEPT_GROUP_DONE,
-    //   });
-    //   return ShowToast(group.message);
-    // } else {
-    //   return ShowToast(group.message);
-    // }
-    // }
+   
   };
 
   const onRejectRequest = async (item, index) => {
@@ -185,10 +161,11 @@ const Notifications = () => {
               console.log('woww', item?.status);
               return (
                 <NotificationsCard
-                  image={images.notification3}
+                  image={images.dummy}
                   onAcceptPress={() => onAcceptRequest(item, index)}
                   accept_loader={accept_loader}
                   reject_loader={reject_loader}
+                  status={item.listing_status}
                   hidebuttons={item.listing_status === 'pending' ? false : true}
                   onRejectPress={() => onRejectRequest(item, index)}
                   text={item.notification_text}

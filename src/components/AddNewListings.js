@@ -344,6 +344,8 @@ const AddNew = ({listingData}) => {
   const {area_codes} = useSelector(state => state.HomeReducer);
   const {user} = useSelector(state => state.AuthReducer);
 
+  console.log('user_id', user.user_id)
+
   const onChoosePhoto = async (type, index) => {
     const options = {
       title: 'Select Image',

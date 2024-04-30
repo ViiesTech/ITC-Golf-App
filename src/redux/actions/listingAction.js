@@ -389,12 +389,7 @@ export const getListingStatus = (user_id, match_id, setListingStatus) => {
   };
 };
 
-export const sendListingMessage = (
-  user_id,
-  group_member_id,
-  listing_id,
-  message,
-) => {
+export const sendListingMessage = (user_id, listing_id, message) => {
   return async dispatch => {
     dispatch({
       type: constant.SEND_LISTING_MESSAGE,
@@ -402,8 +397,53 @@ export const sendListingMessage = (
 
     var data = new FormData();
 
-    data.append('');
+    data.append('from_user_id', user_id);
+    data.append('listing_id', listing_id);
+    data.append('message', message);
 
-    await axios.post('');
+    await axios
+      .post(
+        `${URL}/listing-chat?from_user_id=${user_id}&listing_id=${listing_id}&message=${message}`,
+        data,
+        {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      )
+      .then(res => {
+        console.log('listing message send successfully', res.data.message);
+      })
+      .catch(error => {
+        console.log('error sending listing message ========>', error);
+        return ShowToast('Some problem occured');
+      });
+  };
+};
+
+export const ListingMessages = (match_id, setMessages) => {
+  return async dispatch => {
+    dispatch({
+      type: constant.FETCH_LISTING_MESSAGES,
+    });
+
+    await axios
+      .get(`${URL}/listing-chat-history?match_id=${match_id}`, {
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+      .then(res => {
+        console.log('resss', res.data);
+        setMessages(res.data);
+        dispatch({
+          type: constant.FETCH_LISTING_MESSAGES_DONE,
+        });
+      })
+      .catch(error => {
+        console.log('listing fetch messages error ===========>', error);
+        return ShowToast('Some problem occured');
+      });
   };
 };

@@ -1,7 +1,6 @@
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   StyleSheet,
   Text,
   View,
@@ -13,12 +12,15 @@ import colors from '../../assets/colors';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import SendIcon from 'react-native-vector-icons/Feather';
 import SecondaryHeader from '../../components/SecondaryHeader';
-import {members} from '../../utils/DummyData';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchGroupMembers} from '../../redux/actions/groupAction';
 import images from '../../assets/images';
 import ChatMembers from '../../components/ChatMembers';
-import {renderListingMembers} from '../../redux/actions/listingAction';
+import {
+  ListingMessages,
+  renderListingMembers,
+  sendListingMessage,
+} from '../../redux/actions/listingAction';
 
 const GroupChat = ({route}) => {
   const [messages, setMessages] = useState([]);
@@ -31,28 +33,30 @@ const GroupChat = ({route}) => {
   const {group_members} = useSelector(state => state.GroupReducer);
   const {listing_members} = useSelector(state => state.ListingReducer);
   const {user} = useSelector(state => state.AuthReducer);
-  console.log('from chat screen', user);
+  console.log('from chat screen', messages);
 
   useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: 'ok',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-    ]);
+    // setInterval(() => {
+      if (type === 'listing') {
+        fetchListingMessages();
+      }
+    // }, 5000);
   }, []);
 
-  const onSend = useCallback((messages = []) => {
+  const fetchListingMessages = async () => {
+    await dispatch(ListingMessages(listing_id, setMessages));
+  };
+
+  const onSend = useCallback(async (messages = []) => {
     console.log('new message', messages)
     setMessages(previousMessages =>
       GiftedChat.append(previousMessages, messages),
     );
+    if (type === 'listing') {
+      await dispatch(
+        sendListingMessage(user.user_id, listing_id, messages[0].text),
+      );
+    }
   }, []);
 
   const renderSend = props => {
@@ -153,7 +157,7 @@ const GroupChat = ({route}) => {
                 }}
                 renderItem={({item, index}) => (
                   <ChatMembers
-                  key={index}
+                    key={index}
                     image={
                       item.author_img_url
                         ? {uri: item.author_img_url}
@@ -170,12 +174,12 @@ const GroupChat = ({route}) => {
             onSend={messages => onSend(messages)}
             user={{
               _id: user.user_id,
-              name: user.username
-              // avatar: user.featured_image_url
+              name: user.username,
+              avatar: user.featured_image_url
             }}
-            // showAvatarForEveryMessage
+            showAvatarForEveryMessage
             // showUserAvatar
-            // renderUsernameOnMessage={true}
+            renderUsernameOnMessage={true}
             renderSend={renderSend}
             renderBubble={renderBubble}
             alwaysShowSend

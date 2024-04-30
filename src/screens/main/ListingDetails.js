@@ -90,7 +90,7 @@ const ListingDetails = ({route}) => {
         item.author_id,
         item.listing_id,
         item.author_email,
-        'wants to join you',
+        `${user.username} wants to join you`,
       ),
     );
 
@@ -162,7 +162,10 @@ const ListingDetails = ({route}) => {
                     <FastImage
                       source={
                         item.feature_image
-                          ? {uri: item.feature_image, priority: FastImage.priority.high}
+                          ? {
+                              uri: item.feature_image,
+                              priority: FastImage.priority.high,
+                            }
                           : images.dummy
                       }
                       resizeMode={FastImage.resizeMode.cover}
@@ -257,26 +260,30 @@ const ListingDetails = ({route}) => {
                     buttonStyle={styles.button}
                     textStyle={{color: colors.secondary}}
                     onPress={() => {
-                      return ShowToast('Coming Soon');
-                      // navigation.navigate('SecondaryStack', {
-                      //   screen: 'GroupChat',
-                      //   params: {title: item.listing_title, type: 'listing', listing_id: item.listing_id,owner_id: item.author_id},
-                      // });
+                      // return ShowToast('Coming Soon');
+                      navigation.navigate('SecondaryStack', {
+                        screen: 'GroupChat',
+                        params: {
+                          title: item.listing_title,
+                          type: 'listing',
+                          listing_id: item.listing_id,
+                          owner_id: item.author_id,
+                        },
+                      });
                     }}
                   />
                 ) : (
                   <Button
-                    // buttonText={
-                    //     itemStatus === 'pending'
-                    //      || listingStatus === '0' ? 'Pending'
-                    //     : 'Join Listing'
-                    // }
-                    buttonText={'Join Listing'}
+                    buttonText={
+                      itemStatus === 'pending' || listingStatus === '0'
+                        ? 'Pending'
+                        : 'Join Listing'
+                    }
                     buttonStyle={styles.button}
-                    // disable={listingStatus === '0' ? true : false}
+                    disable={listingStatus === '0' ? true : false}
                     textStyle={{color: colors.secondary}}
                     indicator={join_loading}
-                    onPress={() => ShowToast('Coming Soon')}
+                    onPress={() => onJoin()}
                     // onPress={() => onJoin()}
                   />
                 )}

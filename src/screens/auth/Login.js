@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexGrow: 1,
     justifyContent: 'flex-end',
-    paddingBottom: hp('10%'),
+    paddingBottom: hp(8),
     alignItems: 'center',
   },
   image: {

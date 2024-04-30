@@ -20,6 +20,7 @@ const NotificationsCard = ({
   accept_loader,
   reject_loader,
   hidebuttons,
+  status
 }) => {
   return (
     <View style={styles.wrapper}>
@@ -42,7 +43,7 @@ const NotificationsCard = ({
               style={{alignSelf: 'center'}}
             /> */}
             {/* <Text style={styles.date}>{date}</Text>  */}
-            {!hidebuttons && (
+            {!hidebuttons ? (
               <>
                 <TouchableOpacity
                   style={styles.button}
@@ -73,6 +74,8 @@ const NotificationsCard = ({
                   )}
                 </TouchableOpacity>
               </>
+            ) : (
+              <Text style={styles.statusText}>{status}</Text>
             )}
           </View>
         </View>
@@ -124,5 +127,10 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: hp('1.7%'),
     fontWeight: 'bold',
+  },
+  statusText: {
+    fontSize: hp('1.3%'),
+    color: colors.lightgray,
+    marginBottom: 2,
   },
 });

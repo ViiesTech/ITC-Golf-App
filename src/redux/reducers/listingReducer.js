@@ -93,13 +93,13 @@ export default (state = initialState, action) => {
     case constant.FETCH_LISTING_MEMBERS:
       return {...state, listing_members: action.payload}  
 
-      
 
     case constant.LISTING_STATUS:
       return {...state, status_loader: true}
       
     case constant.LISTING_STATUS_DONE:
       return {...state, status_loader: false}  
+
 
     default:
       return state;
