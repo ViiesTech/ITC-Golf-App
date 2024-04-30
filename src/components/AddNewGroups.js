@@ -360,8 +360,8 @@ const AddNew = ({groupData}) => {
         return ShowToast(res);
       }
     } else {
-      if (state.group_title == '' || state.group_photo_details.path == '' && state.group_photo_details.name == 'No File Choosen') {
-        return ShowToast('Please add complete information');
+      if (state.group_title == '') {
+        return ShowToast('Please add the group title');
       } else {
         const res = await dispatch(
           createGroup(

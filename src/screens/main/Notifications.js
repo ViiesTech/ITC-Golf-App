@@ -6,7 +6,7 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
-import React, { useEffect} from 'react';
+import React, {useEffect} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -56,17 +56,13 @@ const Notifications = () => {
     );
   };
 
- 
-
   const onAcceptRequest = async (item, index) => {
-  
-    console.log(item);
+    // return console.log('selected item',item.listing_sender_id);
     const listing = await dispatch(
       AcceptListing(
+        item.listing_sender_id,
         user.user_id,
-        item.listing_post_author_id,
-        user.user_email,
-        'accepted your request',
+        `${user.username} accepted your request`,
         item.listing_id,
       ),
     );
@@ -80,7 +76,6 @@ const Notifications = () => {
     } else {
       return ShowToast(listing.message);
     }
-   
   };
 
   const onRejectRequest = async (item, index) => {
@@ -90,7 +85,7 @@ const Notifications = () => {
         user.user_id,
         item.listing_post_author_id,
         user.user_email,
-        'rejected your request',
+        `${user.username} rejected your request`,
         item.listing_id,
       ),
     );
@@ -161,7 +156,11 @@ const Notifications = () => {
               console.log('woww', item?.status);
               return (
                 <NotificationsCard
-                  image={images.dummy}
+                  image={
+                    item.listing_image === 'image not found'
+                      ? images.dummy
+                      : {uri: item.listing_image}
+                  }
                   onAcceptPress={() => onAcceptRequest(item, index)}
                   accept_loader={accept_loader}
                   reject_loader={reject_loader}

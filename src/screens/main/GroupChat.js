@@ -37,11 +37,17 @@ const GroupChat = ({route}) => {
 
   useEffect(() => {
     // setInterval(() => {
-      if (type === 'listing') {
-        fetchListingMessages();
-      }
+      // if (type === 'listing') {
+      //   fetchListingMessages();
+      // }
     // }, 5000);
   }, []);
+
+  useEffect(() => {
+
+    renderChatMembers()
+
+  },[])
 
   const fetchListingMessages = async () => {
     await dispatch(ListingMessages(listing_id, setMessages));
@@ -119,11 +125,11 @@ const GroupChat = ({route}) => {
     );
   };
 
-  const renderGroupMembers = async () => {
+  const renderChatMembers = async () => {
     if (type == 'group') {
-      await dispatch(fetchGroupMembers(7981));
+      await dispatch(fetchGroupMembers(listing_id));
     } else {
-      await dispatch(renderListingMembers(8031));
+      await dispatch(renderListingMembers(listing_id));
     }
   };
 

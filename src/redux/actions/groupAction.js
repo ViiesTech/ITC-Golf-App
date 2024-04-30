@@ -34,7 +34,7 @@ export const createGroup = (
     data.append('what_kind_of_match_is_this', kind_listing);
     data.append('hyper_link', hyperlink);
     data.append('user_id', user_id);
-    if (photo) {
+    if (photo?.path) {
       data.append('group_picture', {
         name: `${photo.name}.jpg`,
         type: 'image/jpeg',
@@ -72,10 +72,11 @@ export const createGroup = (
         }
       })
       .catch(error => {
+        console.log('group creating error', error)
         dispatch({
           type: constant.CREATE_GROUP_DONE,
         });
-        return ShowToast('Some problem occured' || error.code);
+        return ShowToast('Some problem occured');
       });
   };
 };

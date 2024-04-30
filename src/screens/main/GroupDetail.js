@@ -75,7 +75,7 @@ const GroupDetail = ({route}) => {
         item.author_id,
         item.private_group,
         item.author_email,
-        'wants to join you',
+        `${user.username} wants to join your group`,
       ),
     );
     if (res.success) {
@@ -231,25 +231,23 @@ const GroupDetail = ({route}) => {
                 buttonStyle={styles.button}
                 textStyle={{color: colors.secondary}}
                 onPress={() => {
-                  // navigation.navigate('SecondaryStack', {
-                  //   screen: 'GroupChat',
-                  //   params: {title: item.listing_title, type: 'group', id: item.group_id},
-                  // });
-                  return ShowToast('Coming Soon')
+                  navigation.navigate('SecondaryStack', {
+                    screen: 'GroupChat',
+                    params: {title: item.listing_title, type: 'group', id: item.group_id},
+                  });
                 }}
               />
             ) : (
               <Button
-                // buttonText={
-                //   itemStatus === 'pending' || listingStatus === '0' ? 'Pending' : 'Join Group'
-                // }
-                buttonText={'Join Group'}
+                buttonText={
+                  itemStatus === 'pending' || groupStatus === '0' ? 'Pending' : 'Join Group'
+                }
                 buttonStyle={styles.button}
-                // disable={groupStatus === '0' ? true : false}
+                disable={groupStatus === '0' ? true : false}
                 textStyle={{color: colors.secondary}}
                 indicator={join_group_loading}
-                // onPress={() => onJoinGroup()}
-                onPress={() =>  ShowToast('Coming soon')}
+                onPress={() => onJoinGroup()}
+                // onPress={() =>  ShowToast('Coming soon')}
               />
             )}
           </>

@@ -103,10 +103,11 @@ const styles = StyleSheet.create({
   },
   Textwrapper: {
     marginLeft: hp('1.5%'),
-    marginTop: hp('1%'),
+    // marginTop: hp('1%'),
   },
   text: {
     color: colors.white,
+    width: hp(30),
     marginBottom: hp('1%'),
     fontWeight: 'bold',
     fontSize: hp('1.8%'),

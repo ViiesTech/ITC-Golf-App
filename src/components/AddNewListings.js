@@ -113,7 +113,9 @@ const Discover = ({searchPressed}) => {
         renderItem={({item, index}) => (
           <DiscoverCard
             image={
-              item.feature_image ? {uri: item.feature_image, priority: FastImage.priority.high} : images.dummy
+              item.feature_image
+                ? {uri: item.feature_image, priority: FastImage.priority.high}
+                : images.dummy
             }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
@@ -156,7 +158,9 @@ const Discover = ({searchPressed}) => {
         renderItem={({item, index}) => (
           <DiscoverCard
             image={
-              item.feature_image ? {uri: item.feature_image, priority: FastImage.priority.high} : images.dummy
+              item.feature_image
+                ? {uri: item.feature_image, priority: FastImage.priority.high}
+                : images.dummy
             }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
@@ -281,7 +285,9 @@ const MyListings = ({setIndex, setListingData}) => {
               onDeletePress={() => onDeleteListing(item.listing_id, index)}
               onEditPress={() => onEditListing(item)}
               image={
-                item.feature_image ? {uri: item.feature_image, priority: FastImage.priority.high} : images.dummy
+                item.feature_image
+                  ? {uri: item.feature_image, priority: FastImage.priority.high}
+                  : images.dummy
               }
               onPress={() =>
                 navigation.navigate('SecondaryStack', {
@@ -344,7 +350,7 @@ const AddNew = ({listingData}) => {
   const {area_codes} = useSelector(state => state.HomeReducer);
   const {user} = useSelector(state => state.AuthReducer);
 
-  console.log('user_id', user.user_id)
+  console.log('user_id', user.user_id);
 
   const onChoosePhoto = async (type, index) => {
     const options = {
@@ -489,12 +495,8 @@ const AddNew = ({listingData}) => {
         return ShowToast(res);
       }
     } else {
-      if (
-        state.location == '' ||
-        (state.image_details.path == '' &&
-          state.image_details.name == 'No File Choosen')
-      ) {
-        return ShowToast('Please add complete information');
+      if (state.location == '') {
+        return ShowToast('Please add the listing title');
       } else {
         const res = await dispatch(
           createListing(
@@ -640,7 +642,7 @@ const AddNew = ({listingData}) => {
               dropdownIconColor={colors.white}
               itemStyle={{color: colors.white}}
               style={{color: colors.white}}
-              onValueChange={(itemValue) =>
+              onValueChange={itemValue =>
                 handlePickerChange('itc_handshake', itemValue)
               }>
               <Picker.Item
@@ -790,11 +792,14 @@ const AddNew = ({listingData}) => {
           ))}
         </View>
         <Button
-          buttonStyle={{ width: '50%', borderRadius: 100, marginTop: hp('2%')}}
+          buttonStyle={{width: '50%', borderRadius: 100, marginTop: hp('2%')}}
           onPress={() => onCreateListing()}
           buttonText={listingData ? 'Update Listing' : 'Add New Listing'}
           indicator={listingData ? edit_loader : create_listing_loading}
-          textStyle={{color: colors.secondary, fontSize: Platform.OS === 'ios' ? hp(1.8) : hp(2.3)}}
+          textStyle={{
+            color: colors.secondary,
+            fontSize: Platform.OS === 'ios' ? hp(1.8) : hp(2.3),
+          }}
         />
       </View>
     </View>

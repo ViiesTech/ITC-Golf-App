@@ -42,7 +42,7 @@ export const createListing = (
     data.append('user_id', user_id);
     data.append('experience_level', experience_level);
     data.append('smoking_friendly', smoking_friendly);
-    if (photo) {
+    if (photo?.path) {
       data.append('listing_picture', {
         name: `${photo.name}.jpg`,
         type: 'image/jpeg',
@@ -51,7 +51,7 @@ export const createListing = (
             ? photo.path
             : photo.path.replace('file://', ''),
       });
-    }
+    } 
 
     return await axios
       .post(`${URL}/create_match`, data, {
@@ -78,10 +78,11 @@ export const createListing = (
         }
       })
       .catch(error => {
+        console.log('create listing error', error)
         dispatch({
           type: constant.CREATE_LISTING_DONE,
         });
-        return ShowToast('Check your network, Try Again!' || error.code);
+        return ShowToast('Some problem occured');
       });
   };
 };
@@ -155,9 +156,8 @@ export const JoinListing = (
 };
 
 export const AcceptListing = (
+  listing_sender_id,
   user_id,
-  author_id,
-  user_email,
   noti_text,
   listing_id,
 ) => {
@@ -168,7 +168,7 @@ export const AcceptListing = (
 
     return await axios
       .post(
-        `${URL}/accept-listing-request?sending_user_id=${user_id}&current_author_id=${author_id}&sending_user_email=${user_email}&notification_text=${noti_text}&listing_id=${listing_id}`,
+        `${URL}/accept-listing-request?sending_user_id=${listing_sender_id}&current_author_id=${user_id}&notification_text=${noti_text}&listing_id=${listing_id}`,
         {},
         {
           headers: {
@@ -178,9 +178,9 @@ export const AcceptListing = (
       )
       .then(res => {
         console.log('accept listing response ========>', res.data);
-        // dispatch({
-        //   type: constant.ACCEPT_LISTING_DONE,
-        // });
+        dispatch({
+          type: constant.ACCEPT_REQUEST_DONE,
+        });
         return res.data;
       })
       .catch(error => {
@@ -217,9 +217,9 @@ export const RejectListing = (
       )
       .then(res => {
         console.log('reject listing response ========>', res.data);
-        // dispatch({
-        //   type: constant.REJECT_LISTING_DONE,
-        // });
+        dispatch({
+          type: constant.REJECT_REQUEST_DONE,
+        });
         return res.data;
       })
       .catch(error => {

@@ -40,8 +40,9 @@ const ListingDetails = ({route}) => {
   const navigation = useNavigation();
   // console.log('kiaaa',navigation.getState().index)
 
-  const {reviews, reviews_loading} = useSelector(state => state.HomeReducer);
+  // const {reviews, reviews_loading} = useSelector(state => state.HomeReducer);
   const {user} = useSelector(state => state.AuthReducer);
+  console.log('android user', user.user_id)
   const {join_loading, status_loader} = useSelector(
     state => state.ListingReducer,
   );
@@ -52,11 +53,11 @@ const ListingDetails = ({route}) => {
     dispatch(getListingStatus(user.user_id, item.listing_id, setListingStatus));
   }, []);
 
-  useEffect(() => {
-    if (changeTab == 3 && reviews.length < 1) {
-      dispatch(getReviews());
-    }
-  }, [changeTab]);
+  // useEffect(() => {
+  //   if (changeTab == 3 && reviews.length < 1) {
+  //     dispatch(getReviews());
+  //   }
+  // }, [changeTab]);
 
   const itemStatus = useSelector(
     state => state?.ListingReducer[item.listing_id] || 'Unknown',
@@ -90,7 +91,7 @@ const ListingDetails = ({route}) => {
         item.author_id,
         item.listing_id,
         item.author_email,
-        `${user.username} wants to join you`,
+        `${user.username} wants to join your listing`,
       ),
     );
 
