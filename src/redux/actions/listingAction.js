@@ -51,7 +51,7 @@ export const createListing = (
             ? photo.path
             : photo.path.replace('file://', ''),
       });
-    } 
+    }
 
     return await axios
       .post(`${URL}/create_match`, data, {
@@ -78,7 +78,7 @@ export const createListing = (
         }
       })
       .catch(error => {
-        console.log('create listing error', error)
+        console.log('create listing error', error);
         dispatch({
           type: constant.CREATE_LISTING_DONE,
         });
@@ -423,7 +423,9 @@ export const sendListingMessage = (user_id, listing_id, message) => {
 };
 
 export const ListingMessages = (match_id, setMessages) => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const currentUserId = getState().AuthReducer.user.user_id;
+    console.log('yahooo', currentUserId);
     dispatch({
       type: constant.FETCH_LISTING_MESSAGES,
     });
@@ -436,7 +438,16 @@ export const ListingMessages = (match_id, setMessages) => {
       })
       .then(res => {
         console.log('resss', res.data);
-        setMessages(res.data);
+        const filterData = res.data.filter(message => {
+          if (message.user._id !== currentUserId) {
+            res.data.sort(
+              (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+            );
+          } else {
+            console.log('your if condition is not working')
+          }
+        });
+        setMessages(filterData);
         dispatch({
           type: constant.FETCH_LISTING_MESSAGES_DONE,
         });
