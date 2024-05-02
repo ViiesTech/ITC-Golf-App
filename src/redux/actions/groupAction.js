@@ -72,7 +72,7 @@ export const createGroup = (
         }
       })
       .catch(error => {
-        console.log('group creating error', error)
+        console.log('group creating error', error);
         dispatch({
           type: constant.CREATE_GROUP_DONE,
         });
@@ -247,6 +247,77 @@ export const editGroup = (
   };
 };
 
+export const AcceptGroup = (
+  sending_user_id,
+  author_id,
+  noti_text,
+  group_id,
+) => {
+  return async dispatch => {
+    dispatch({
+      type: constant.ACCEPT_REQUEST,
+    });
+
+    return await axios
+      .post(
+        `${URL}/group-accept?sending_user_id=${sending_user_id}&current_author_id=${author_id}&notification_text=${noti_text}&group_id=${group_id}`,
+        {},
+        {
+          headers: {
+            Accept: 'application/json',
+          },
+        },
+      )
+      .then(res => {
+        console.log('accept group response ====>', res.data);
+        if (res.data.success) {
+          dispatch({
+            type: constant.ACCEPT_REQUEST_DONE,
+          });
+        } else {
+          dispatch({
+            type: constant.ACCEPT_REQUEST_DONE,
+          });
+        }
+        return res.data;
+      })
+      .catch(error => {
+        console.log('acceot group error ======>', error);
+        dispatch({
+          type: constant.ACCEPT_REQUEST_DONE,
+        });
+        return ShowToast('Some problem occured');
+      });
+  };
+};
+
+export const RejectGroup = (sending_user_id, author_id,noti_text,group_id) => {
+  return async dispatch => {
+
+    dispatch({
+      type: constant.REJECT_REQUEST
+    })
+
+    return await axios.post(`${URL}/group-reject-request?sending_user_id=${sending_user_id}&current_author_id=${author_id}&notification_text=${noti_text}&listing_id=${group_id}`,{},{
+      headers:{
+        'Accept': 'application/json'
+      }
+    }).then((res) => {
+      console.log('reject group response =====>', res.data)
+      dispatch({
+        type: constant.REJECT_REQUEST_DONE
+      })
+      return res.data
+    }).catch((error) => {
+      console.log('reject group error ========>', error)
+      dispatch({
+        type: constant.REJECT_REQUEST_DONE
+      })
+      return ShowToast('Some problem occured')
+    })
+  }
+}
+
 export const fetchGroupMembers = group_id => {
   return async dispatch => {
     return await axios
@@ -270,48 +341,54 @@ export const fetchGroupMembers = group_id => {
 
 export const sendGroupMessage = (user_id, group_id, message) => {
   return async dispatch => {
+    var data = new FormData();
 
-    var data = new FormData()
+    data.append('from_user_id', user_id);
+    data.append('group_id', group_id);
+    data.append('message', message);
 
-    data.append('from_user_id',user_id)
-    data.append('group_id', group_id)
-    data.append('message', message)
-
-    await axios.post(`${URL}/group-chat?from_user_id=${user_id}&message=${message}&group_id=${group_id}`,data, {
-      headers:{
-        'Accept': 'application/json',
-        "Content-Type": 'multipart/form-data'
-      }
-    }).then((res) => {
-      console.log('group message send response =======>', res.data)
-    }).catch(error => {
-      console.log('group message send error =========>', error)
-      return ShowToast('Some problem occured')
-    })
-
+    await axios
+      .post(
+        `${URL}/group-chat?from_user_id=${user_id}&message=${message}&group_id=${group_id}`,
+        data,
+        {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      )
+      .then(res => {
+        console.log('group message send response =======>', res.data);
+      })
+      .catch(error => {
+        console.log('group message send error =========>', error);
+        return ShowToast('Some problem occured');
+      });
   };
 };
 
 export const groupMessages = (group_id, setMessages) => {
   return async dispatch => {
-    
-    await axios.get(`${URL}/group-chat-history?group_id=${group_id}`,{
-      headers: {
-        'Accept': 'application/json',
-      }
-    }).then((res) => {
-      console.log('fetch group messages response =======>',res.data)
-      const sortedMessages = res.data.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-      );
-      setMessages(sortedMessages)
-    }).catch((error) => {
-      console.log('error fetching group messages ======>',error)
-      return ShowToast('Some problem occured')
-    })
-  }
-
-}
+    await axios
+      .get(`${URL}/group-chat-history?group_id=${group_id}`, {
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+      .then(res => {
+        console.log('fetch group messages response =======>', res.data);
+        const sortedMessages = res.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+        );
+        setMessages(sortedMessages);
+      })
+      .catch(error => {
+        console.log('error fetching group messages ======>', error);
+        return ShowToast('Some problem occured');
+      });
+  };
+};
 
 export const getGroupStatus = (user_id, group_id, setGroupStatus) => {
   return async dispatch => {

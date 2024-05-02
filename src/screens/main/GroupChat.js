@@ -25,11 +25,11 @@ import {
   renderListingMembers,
   sendListingMessage,
 } from '../../redux/actions/listingAction';
+import constant from '../../redux/constant';
 
 const GroupChat = ({route}) => {
   const [messages, setMessages] = useState([]);
   const [chatLoader, setChatLoader] = useState(false);
-  const [lastMessageId, setLastMessageId] = useState(null);
 
   const {title, type, listing_id, owner_id} = route?.params;
 
@@ -39,16 +39,13 @@ const GroupChat = ({route}) => {
   const {listing_members} = useSelector(state => state.ListingReducer);
   const {user} = useSelector(state => state.AuthReducer);
   // console.log('group members =======>', group_members);
-  console.log('listing members ======>', messages.map(message => message.user._id  == user.user_id));
+  console.log('listing members ======>', user);
 
   useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     // if (lastMessageId) {
-        renderChatHistory()
-  //     // }
-  //   }, 5000);
-
-  //   return () => clearInterval(interval);
+    const interval = setInterval(() => {
+      renderChatHistory();
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -56,7 +53,7 @@ const GroupChat = ({route}) => {
   }, []);
 
   const onSend = useCallback(async (newMessage = []) => {
-    console.log('new message', newMessage[0].user._id == user.user_id);
+    console.log('new messagess', newMessage);
     setMessages(previousMessages =>
       GiftedChat.append(previousMessages, newMessage),
     );
@@ -64,12 +61,11 @@ const GroupChat = ({route}) => {
       await dispatch(
         sendListingMessage(user.user_id, listing_id, newMessage[0].text),
       );
+    } else {
+      await dispatch(
+        sendGroupMessage(user.user_id, listing_id, messages[0].text),
+      );
     }
-    //  else {
-    //   await dispatch(
-    //     sendGroupMessage(user.user_id, listing_id, messages[0].text),
-    //   );
-    // }
   }, []);
 
   const renderSend = props => {
@@ -142,13 +138,18 @@ const GroupChat = ({route}) => {
   };
 
   const renderChatHistory = async () => {
-    // setMessages([]);
-    if (type === 'listing') {
-      await dispatch(ListingMessages(listing_id, setMessages));
-    } else {
-      await dispatch(groupMessages(listing_id, setMessages));
+    // setChatLoader(true);
+    try {
+      if (type === 'listing') {
+        await dispatch(ListingMessages(listing_id, setMessages));
+      } else {
+        await dispatch(groupMessages(listing_id, setMessages));
+      }
+    } catch (error) {
+      console.log('error fetching messages ======>', error);
+    } finally {
+      // setChatLoader(false);
     }
-   
   };
 
   const renderLoader = () => {
@@ -179,9 +180,9 @@ const GroupChat = ({route}) => {
                   marginRight: hp('6%'),
                   padding: hp('2%'),
                 }}
-                renderItem={({item, index}) => (
+                renderItem={({item, ind}) => (
                   <ChatMembers
-                    key={index}
+                    key={item.ID}
                     image={
                       item.author_img_url
                         ? {uri: item.author_img_url}
@@ -197,11 +198,14 @@ const GroupChat = ({route}) => {
             // messages={messages.filter(message => message.user._id !== user.user_id)}
             messages={messages}
             // key={user.user_id}
+            isLoadingEarlier={true}
             onSend={messages => onSend(messages)}
             user={{
-              _id: user.user_id,
+              _id: user.user_id.toString(),
               name: user.username,
-              avatar: user.featured_image_url,
+              avatar: user.featured_image_url
+                ? user.featured_image_url
+                : user.featured_image_url,
             }}
             showAvatarForEveryMessage
             renderUsernameOnMessage={true}

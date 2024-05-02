@@ -22,6 +22,7 @@ import moment from 'moment';
 import {AcceptListing, RejectListing} from '../../redux/actions/listingAction';
 import {ShowToast} from '../../Custom';
 import constant from '../../redux/constant';
+import {AcceptGroup, RejectGroup} from '../../redux/actions/groupAction';
 
 const Notifications = () => {
   const {notification_loader, notifications} = useSelector(
@@ -58,71 +59,88 @@ const Notifications = () => {
 
   const onAcceptRequest = async (item, index) => {
     // return console.log('selected item',item.listing_sender_id);
-    const listing = await dispatch(
-      AcceptListing(
-        item.listing_sender_id,
-        user.user_id,
-        `${user.username} accepted your request`,
-        item.listing_id,
-      ),
-    );
-    if (listing.message && item.listing_status === 'pending') {
-      notifications[index] = {...item, listing_status: 'accepted'};
-      dispatch({
-        type: constant.GET_NOTIFICATIONS_DONE,
-        payload: notifications,
-      });
-      return ShowToast(listing.message);
+    if (item.listing_type === 'listing') {
+      const listing = await dispatch(
+        AcceptListing(
+          item.listing_sender_id,
+          user.user_id,
+          `${user.username} accepted your request`,
+          item.listing_id,
+        ),
+      );
+      if (listing.message && item.listing_status === 'pending') {
+        notifications[index] = {...item, listing_status: 'accepted'};
+        dispatch({
+          type: constant.GET_NOTIFICATIONS_DONE,
+          payload: notifications,
+        });
+        return ShowToast(listing.message);
+      } else {
+        return ShowToast(listing.message);
+      }
     } else {
-      return ShowToast(listing.message);
+      const group = await dispatch(
+        AcceptGroup(
+          item.listing_sender_id,
+          user.user_id,
+          `${user.username} accepted your request`,
+          item.listing_id,
+        ),
+      );
+      if (group.success && item.listing_status === 'pending') {
+        notifications[index] = {...item, listing_status: 'accepted'};
+        dispatch({
+          type: constant.GET_NOTIFICATIONS_DONE,
+          payload: notifications,
+        });
+        return ShowToast(group.message);
+      } else {
+        return ShowToast(group.message);
+      }
     }
   };
 
   const onRejectRequest = async (item, index) => {
     // if (item.listing_id) {
-    const listing = await dispatch(
-      RejectListing(
-        user.user_id,
-        item.listing_post_author_id,
-        user.user_email,
-        `${user.username} rejected your request`,
-        item.listing_id,
-      ),
-    );
-    if (listing.message && item.listing_status === 'pending') {
-      dispatch({
-        type: constant.REJECT_REQUEST_DONE,
-      });
-      notifications[index] = {...item, listing_status: 'rejected'};
-      dispatch({
-        type: constant.GET_NOTIFICATIONS_DONE,
-        payload: notifications,
-      });
-      return ShowToast(listing.message);
+    if (item.listing_type === 'listing') {
+      const listing = await dispatch(
+        RejectListing(
+          item.listing_sender_id,
+          user.user_id,
+          `${user.username} rejected your request`,
+          item.listing_id,
+        ),
+      );
+      if (listing.message && item.listing_status === 'pending') {
+        notifications[index] = {...item, listing_status: 'rejected'};
+        dispatch({
+          type: constant.GET_NOTIFICATIONS_DONE,
+          payload: notifications,
+        });
+        return ShowToast(listing.message);
+      } else {
+        return ShowToast(listing.message);
+      }
     } else {
-      return ShowToast(listing.message);
+      const group = await dispatch(
+        RejectGroup(
+          item.listing_sender_id,
+          user.user_id,
+          `${user.username} rejected your request`,
+          item.listing_id,
+        ),
+      );
+      if (group.message && item.listing_status === 'pending') {
+        notifications[index] = {...item, listing_status: 'rejected'};
+        dispatch({
+          type: constant.GET_NOTIFICATIONS_DONE,
+          payload: notifications,
+        });
+        return ShowToast(group.message);
+      } else {
+        return ShowToast(group.message);
+      }
     }
-    // } else {
-    // const group = await dispatch(
-    //   RejectGroup(
-    //     user.user_id,
-    //     item.listing_post_author_id,
-    //     user.user_email,
-    //     'rejected your request',
-    //     item.listing_id,
-    //   ),
-    // );
-    // if (group.message && item.status === 'pending') {
-    //   navigation.navigate('Home');
-    //   dispatch({
-    //     type: constant.REJECT_GROUP_DONE,
-    //     payload: {listingId: item.notification_id, status: 'rejected'},
-    //   });
-    //   return ShowToast(group.message);
-    // } else {
-    //   return ShowToast(group.message);
-    // }
-    // }
   };
 
   return (
@@ -153,7 +171,7 @@ const Notifications = () => {
           </View>
           <View style={styles.notificationWrapper}>
             {notifications?.map((item, index) => {
-              console.log('woww', item?.status);
+              console.log('woww', item.listing_id);
               return (
                 <NotificationsCard
                   image={

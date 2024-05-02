@@ -194,9 +194,8 @@ export const AcceptListing = (
 };
 
 export const RejectListing = (
-  user_id,
+  sending_user_id,
   author_id,
-  user_email,
   noti_text,
   listing_id,
 ) => {
@@ -207,7 +206,7 @@ export const RejectListing = (
 
     return await axios
       .post(
-        `${URL}/reject-request?sending_user_id=${user_id}&current_author_id=${author_id}&sending_user_email=${user_email}&notification_text=${noti_text}&listing_id=${listing_id}`,
+        `${URL}/reject-request?sending_user_id=${sending_user_id}&current_author_id=${author_id}&notification_text=${noti_text}&listing_id=${listing_id}`,
         {},
         {
           headers: {
@@ -217,9 +216,11 @@ export const RejectListing = (
       )
       .then(res => {
         console.log('reject listing response ========>', res.data);
-        dispatch({
-          type: constant.REJECT_REQUEST_DONE,
-        });
+        if (res.data.message) {
+          dispatch({
+            type: constant.REJECT_REQUEST_DONE,
+          });
+        }
         return res.data;
       })
       .catch(error => {
@@ -391,10 +392,6 @@ export const getListingStatus = (user_id, match_id, setListingStatus) => {
 
 export const sendListingMessage = (user_id, listing_id, message) => {
   return async dispatch => {
-    dispatch({
-      type: constant.SEND_LISTING_MESSAGE,
-    });
-
     var data = new FormData();
 
     data.append('from_user_id', user_id);
@@ -423,12 +420,7 @@ export const sendListingMessage = (user_id, listing_id, message) => {
 };
 
 export const ListingMessages = (match_id, setMessages) => {
-  return async (dispatch, getState) => {
-    const currentUserId = getState().AuthReducer.user.user_id;
-    console.log('yahooo', currentUserId);
-    dispatch({
-      type: constant.FETCH_LISTING_MESSAGES,
-    });
+  return async dispatch => {
 
     await axios
       .get(`${URL}/listing-chat-history?match_id=${match_id}`, {
@@ -437,20 +429,12 @@ export const ListingMessages = (match_id, setMessages) => {
         },
       })
       .then(res => {
-        console.log('resss', res.data);
-        const filterData = res.data.filter(message => {
-          if (message.user._id !== currentUserId) {
-            res.data.sort(
-              (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-            );
-          } else {
-            console.log('your if condition is not working')
-          }
-        });
-        setMessages(filterData);
-        dispatch({
-          type: constant.FETCH_LISTING_MESSAGES_DONE,
-        });
+        // console.log('resss', res.data)
+
+        const sortedMessages = res.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+        );
+        setMessages(sortedMessages);
       })
       .catch(error => {
         console.log('listing fetch messages error ===========>', error);
