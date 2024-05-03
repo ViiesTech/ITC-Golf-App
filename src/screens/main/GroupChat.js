@@ -25,13 +25,12 @@ import {
   renderListingMembers,
   sendListingMessage,
 } from '../../redux/actions/listingAction';
-import constant from '../../redux/constant';
 
 const GroupChat = ({route}) => {
   const [messages, setMessages] = useState([]);
   const [chatLoader, setChatLoader] = useState(false);
 
-  const {title, type, listing_id, owner_id} = route?.params;
+  const {title, type, listing_id} = route?.params;
 
   const dispatch = useDispatch();
 
@@ -39,12 +38,12 @@ const GroupChat = ({route}) => {
   const {listing_members} = useSelector(state => state.ListingReducer);
   const {user} = useSelector(state => state.AuthReducer);
   // console.log('group members =======>', group_members);
-  console.log('listing members ======>', user);
+  // console.log('listing members ======>', listing_members);
 
   useEffect(() => {
     const interval = setInterval(() => {
       renderChatHistory();
-    }, 1000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -63,7 +62,7 @@ const GroupChat = ({route}) => {
       );
     } else {
       await dispatch(
-        sendGroupMessage(user.user_id, listing_id, messages[0].text),
+        sendGroupMessage(user.user_id, listing_id, newMessage[0].text),
       );
     }
   }, []);
@@ -130,11 +129,13 @@ const GroupChat = ({route}) => {
   };
 
   const renderChatMembers = async () => {
+    setChatLoader(true)
     if (type == 'group') {
       await dispatch(fetchGroupMembers(listing_id));
     } else {
       await dispatch(renderListingMembers(listing_id));
     }
+    setChatLoader(false)
   };
 
   const renderChatHistory = async () => {
@@ -203,8 +204,8 @@ const GroupChat = ({route}) => {
             user={{
               _id: user.user_id.toString(),
               name: user.username,
-              avatar: user.featured_image_url
-                ? user.featured_image_url
+              avatar: user.feature_image_url
+                ? user.feature_image_url
                 : user.featured_image_url,
             }}
             showAvatarForEveryMessage

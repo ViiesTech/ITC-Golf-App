@@ -239,7 +239,6 @@ const GroupDetail = ({route}) => {
                         title: item.listing_title,
                         type: 'group',
                         listing_id: item.group_id,
-                        owner_id: item.author_id,
                       },
                     });
                   }}

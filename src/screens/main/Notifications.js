@@ -36,7 +36,7 @@ const Notifications = () => {
 
   const dispatch = useDispatch();
 
-  console.log('notifications data =====>', notifications);
+  // console.log('notifications data =====>', notifications);
 
   useEffect(() => {
     // setNotifications(TodayNotifications)

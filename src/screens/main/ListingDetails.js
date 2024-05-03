@@ -268,7 +268,6 @@ const ListingDetails = ({route}) => {
                           title: item.listing_title,
                           type: 'listing',
                           listing_id: item.listing_id,
-                          owner_id: item.author_id,
                         },
                       });
                     }}
