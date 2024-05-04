@@ -37,7 +37,7 @@ const GroupDetail = ({route}) => {
   const dispatch = useDispatch();
 
   const {item, type} = route?.params;
-  // console.log('detail ======>', item.group_id);
+  console.log('detail ======>', item.group_id);
 
   useEffect(() => {
     dispatch(getGroupStatus(user.user_id, item.group_id, setGroupStatus));

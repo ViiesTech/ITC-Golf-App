@@ -6,7 +6,7 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -25,6 +25,8 @@ import constant from '../../redux/constant';
 import {AcceptGroup, RejectGroup} from '../../redux/actions/groupAction';
 
 const Notifications = () => {
+  const [isIndex, setIsIndex] = useState(0);
+
   const {notification_loader, notifications} = useSelector(
     state => state.HomeReducer,
   );
@@ -59,6 +61,7 @@ const Notifications = () => {
 
   const onAcceptRequest = async (item, index) => {
     // return console.log('selected item',item.listing_sender_id);
+    setIsIndex(index);
     if (item.listing_type === 'listing') {
       const listing = await dispatch(
         AcceptListing(
@@ -102,6 +105,7 @@ const Notifications = () => {
 
   const onRejectRequest = async (item, index) => {
     // if (item.listing_id) {
+    setIsIndex(index);
     if (item.listing_type === 'listing') {
       const listing = await dispatch(
         RejectListing(
@@ -180,8 +184,8 @@ const Notifications = () => {
                       : {uri: item.listing_image}
                   }
                   onAcceptPress={() => onAcceptRequest(item, index)}
-                  accept_loader={accept_loader}
-                  reject_loader={reject_loader}
+                  accept_loader={index == isIndex && accept_loader}
+                  reject_loader={index == isIndex && reject_loader}
                   status={item.listing_status}
                   hidebuttons={item.listing_status === 'pending' ? false : true}
                   onRejectPress={() => onRejectRequest(item, index)}

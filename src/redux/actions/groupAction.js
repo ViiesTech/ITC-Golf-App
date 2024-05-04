@@ -130,7 +130,7 @@ export const JoinGroup = (
 
     return await axios
       .post(
-        `${URL}/join-group?current_user_id=${user_id}&current_group_id=${group_id}&current_post_author_id_for_group=${post_id}&private_or_not=${private_or_not}&current_post_author_email_for_group=${author_email}&notification_text=${noti_text}`,
+        `${URL}/join-group?current_user_id=${user_id}&current_group_id=${group_id}&current_post_author_id_for_group=${post_id}&private_or_not=${private_or_not}&current_post_author_email=${author_email}&notification_text=${noti_text}}`,
         {},
         {
           headers: {
@@ -291,32 +291,43 @@ export const AcceptGroup = (
   };
 };
 
-export const RejectGroup = (sending_user_id, author_id,noti_text,group_id) => {
+export const RejectGroup = (
+  sending_user_id,
+  author_id,
+  noti_text,
+  group_id,
+) => {
   return async dispatch => {
-
     dispatch({
-      type: constant.REJECT_REQUEST
-    })
+      type: constant.REJECT_REQUEST,
+    });
 
-    return await axios.post(`${URL}/group-reject-request?sending_user_id=${sending_user_id}&current_author_id=${author_id}&notification_text=${noti_text}&listing_id=${group_id}`,{},{
-      headers:{
-        'Accept': 'application/json'
-      }
-    }).then((res) => {
-      console.log('reject group response =====>', res.data)
-      dispatch({
-        type: constant.REJECT_REQUEST_DONE
+    return await axios
+      .post(
+        `${URL}/group-reject-request?sending_user_id=${sending_user_id}&current_author_id=${author_id}&notification_text=${noti_text}&listing_id=${group_id}`,
+        {},
+        {
+          headers: {
+            Accept: 'application/json',
+          },
+        },
+      )
+      .then(res => {
+        console.log('reject group response =====>', res.data);
+        dispatch({
+          type: constant.REJECT_REQUEST_DONE,
+        });
+        return res.data;
       })
-      return res.data
-    }).catch((error) => {
-      console.log('reject group error ========>', error)
-      dispatch({
-        type: constant.REJECT_REQUEST_DONE
-      })
-      return ShowToast('Some problem occured')
-    })
-  }
-}
+      .catch(error => {
+        console.log('reject group error ========>', error);
+        dispatch({
+          type: constant.REJECT_REQUEST_DONE,
+        });
+        return ShowToast('Some problem occured');
+      });
+  };
+};
 
 export const fetchGroupMembers = group_id => {
   return async dispatch => {
