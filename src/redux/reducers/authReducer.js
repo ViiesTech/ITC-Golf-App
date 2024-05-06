@@ -11,7 +11,6 @@ const initialState = {
   verify_loading: false,
   follow_loader: false,
   players_follow: [],
-  wishlist_items: [],
   wishlist_loader: false,
   register_id: null,
   token: '',
@@ -71,7 +70,7 @@ export default (state = initialState, action) => {
       return {...state, wishlist_loader: true};
 
     case constant.GET_WISHLIST_DONE:
-      return {...state, wishlist_loader: false, wishlist_items: action.payload}; 
+      return {...state, wishlist_loader: false}; 
 
     case constant.DEACTIVATE_ACCOUNT:
       return initialState;

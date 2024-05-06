@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -19,18 +19,19 @@ import MerchandiseCard from '../../components/MerchandiseCard';
 import {useNavigation} from '@react-navigation/native';
 
 const Wishlist = () => {
-  const {wishlist_items, wishlist_loader, user} = useSelector(
+  const [wishlistItems, setWishlistItems] = useState([])
+  const {wishlist_loader, user} = useSelector(
     state => state.AuthReducer,
   );
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  console.log(wishlist_items);
+  console.log('itemss ',wishlistItems);
 
   useEffect(() => {
     // if (wishlist_items?.length < 1) {
-    dispatch(getWishlistById(user.user_id));
+    dispatch(getWishlistById(user.user_id, setWishlistItems));
     // }
   }, []);
 
@@ -49,7 +50,7 @@ const Wishlist = () => {
             }}>
             <ActivityIndicator size={'large'} color={colors.primary} />
           </View>
-        ) : wishlist_items?.message ? (
+        ) : wishlistItems?.message ? (
           <>
             <View
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -62,7 +63,7 @@ const Wishlist = () => {
           </>
         ) : (
           <FlatList
-            data={wishlist_items}
+            data={wishlistItems}
             numColumns={2}
             columnWrapperStyle={{justifyContent: 'space-between'}}
             showsVerticalScrollIndicator={false}

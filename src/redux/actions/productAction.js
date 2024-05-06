@@ -63,9 +63,12 @@ export const addToWishlist = (user_id, product_id) => {
     var data = new FormData();
 
     data.append('product_id', product_id);
+    data.append('user_id', user_id)
+
+    // return console.log('dataaa', data)
 
     return await axios
-      .post(`${URL}/wishlist/add/?user_id=${user_id}&product_id=${product_id}`, {
+      .post(`${URL}/wishlist/add`,data, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'multipart/form-data',

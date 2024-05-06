@@ -38,7 +38,7 @@ const FreeStuff = () => {
 
   useEffect(() => {
     // if (products.length < 1) {
-      dispatch(getProducts());
+    dispatch(getProducts());
     // }
   }, []);
 
@@ -57,20 +57,20 @@ const FreeStuff = () => {
   }
 
   const onToggleWishlist = async (item, index) => {
-    const add = await dispatch(addToWishlist(user.user_id, item.product_id));
-    const remove = await dispatch(
-      removeFromWishlist(user.user_id, item.product_id),
-    );
-    if (add.success && !products[index].isFav) {
+    if (!products[index].isFav) {
       //   alert('add to favourite');
+      const add = await dispatch(addToWishlist(user.user_id, item.product_id));
       products[index] = {...item, isFav: true};
       dispatch({
         type: constant.RENDER_PRODUCT_DONE,
         payload: products,
       });
       return ShowToast(add.message);
-    } else if (remove.success && products[index].isFav) {
+    } else if (products[index].isFav) {
       //   alert('remove from favourite');
+      const remove = await dispatch(
+        removeFromWishlist(user.user_id, item.product_id),
+      );
       products[index] = {...item, isFav: false};
       dispatch({
         type: constant.RENDER_PRODUCT_DONE,
@@ -92,7 +92,11 @@ const FreeStuff = () => {
           showsVerticalScrollIndicator={false}
           renderItem={({item, index}) => (
             <MerchandiseCard
-              image={item.image ? {uri: item.image, priority: FastImage.priority.high} : images.dummy}
+              image={
+                item.image
+                  ? {uri: item.image, priority: FastImage.priority.high}
+                  : images.dummy
+              }
               text={item.title}
               heartPress={() => onToggleWishlist(item, index)}
               favourite={item.isFav}
