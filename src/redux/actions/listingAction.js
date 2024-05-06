@@ -140,9 +140,9 @@ export const JoinListing = (
       )
       .then(res => {
         console.log('join listing response =======>', res.data);
-        // dispatch({
-        //   type: constant.JOIN_LISTING_DONE,
-        // });
+        dispatch({
+          type: constant.JOIN_LISTING_DONE,
+        });
         return res.data;
       })
       .catch(error => {
@@ -370,7 +370,7 @@ export const getListingStatus = (user_id, match_id, setListingStatus) => {
       .then(res => {
         console.log('response listing status', res.data);
         if (res.data) {
-          setListingStatus(res.data.data.accept_or_not);
+          setListingStatus(res.data);
           dispatch({
             type: constant.LISTING_STATUS_DONE,
           });

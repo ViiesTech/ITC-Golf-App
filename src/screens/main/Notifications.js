@@ -140,6 +140,10 @@ const Notifications = () => {
           type: constant.GET_NOTIFICATIONS_DONE,
           payload: notifications,
         });
+        // dispatch({
+        //   type: constant.JOIN_GROUP_DONE,
+        //   payload: {listingId: item.listing_id, status: res.status},
+        // });
         return ShowToast(group.message);
       } else {
         return ShowToast(group.message);

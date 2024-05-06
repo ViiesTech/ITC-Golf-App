@@ -1,5 +1,4 @@
 import {
-  Image,
   StyleSheet,
   Text,
   View,
@@ -38,7 +37,6 @@ const ListingDetails = ({route}) => {
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  // console.log('kiaaa',navigation.getState().index)
 
   // const {reviews, reviews_loading} = useSelector(state => state.HomeReducer);
   const {user} = useSelector(state => state.AuthReducer);
@@ -59,22 +57,11 @@ const ListingDetails = ({route}) => {
   //   }
   // }, [changeTab]);
 
-  const itemStatus = useSelector(
-    state => state?.ListingReducer[item.listing_id] || 'Unknown',
-  );
+  // const itemStatus = useSelector(
+  //   state => state?.ListingReducer[item.listing_id] || 'Unknown',
+  // );
   console.log('acha', listingStatus);
 
-  // console.log(
-  //   'reviews response from screen ===============>',
-  //   Object.keys(item.match_description).length,
-  // );
-
-  // console.log(
-  //   'paramsssss ================>',
-  //   Object.keys(item.match_description).length,
-  // );
-
-  console.log('navigation', itemStatus);
 
   const onHyperLink = async link => {
     if (link == '') {
@@ -96,9 +83,9 @@ const ListingDetails = ({route}) => {
     );
 
     if (res.success) {
+      setListingStatus(res.status)
       dispatch({
         type: constant.JOIN_LISTING_DONE,
-        payload: {listingId: item.listing_id, status: res.status},
       });
       return ShowToast(res.message);
     } else {
@@ -252,7 +239,7 @@ const ListingDetails = ({route}) => {
                     </Text>
                   </View>
                 </View>
-                {listingStatus === '1' ||
+                {listingStatus?.data?.accept_or_not === '1' ||
                 type === 'my listings' ||
                 item.author_id == user.user_id ||
                 item.private_group === 'off' ? (
@@ -275,12 +262,12 @@ const ListingDetails = ({route}) => {
                 ) : (
                   <Button
                     buttonText={
-                      itemStatus === 'pending' || listingStatus === '0'
+                      listingStatus === 'pending' || listingStatus?.data?.accept_or_not === '0'
                         ? 'Pending'
                         : 'Join Listing'
                     }
                     buttonStyle={styles.button}
-                    disable={listingStatus === '0' ? true : false}
+                    disable={listingStatus === 'pending' || listingStatus?.data?.accept_or_not === '0' ? true : false}
                     textStyle={{color: colors.secondary}}
                     indicator={join_loading}
                     onPress={() => onJoin()}

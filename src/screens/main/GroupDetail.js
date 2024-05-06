@@ -43,13 +43,13 @@ const GroupDetail = ({route}) => {
     dispatch(getGroupStatus(user.user_id, item.group_id, setGroupStatus));
   }, []);
 
-  const itemStatus = useSelector(
-    state => state.ListingReducer[item.group_id] || 'Unknown',
-  );
+  // const itemStatus = useSelector(
+  //   state => state.ListingReducer[item.group_id] || 'Unknown',
+  // );
 
   const navigation = useNavigation();
 
-  // console.log('status', item)
+  console.log('status');
 
   useEffect(() => {
     if (changeTab == 3 && reviews.length < 1) {
@@ -77,9 +77,9 @@ const GroupDetail = ({route}) => {
       ),
     );
     if (res.success) {
+      setGroupStatus(res.status);
       dispatch({
         type: constant.JOIN_GROUP_DONE,
-        payload: {listingId: item.group_id, status: res.status},
       });
       return ShowToast(res.message);
     } else {
@@ -224,7 +224,7 @@ const GroupDetail = ({route}) => {
                 </View>
                 {/* </View> */}
               </View>
-              {groupStatus === '1' ||
+              {groupStatus?.data?.accept_or_not === '1' ||
               type === 'my groups' ||
               item.author_id == user.user_id ||
               item.private_group === 'off' ? (
@@ -246,12 +246,18 @@ const GroupDetail = ({route}) => {
               ) : (
                 <Button
                   buttonText={
-                    itemStatus === 'pending' || groupStatus === '0'
+                    groupStatus === 'pending' ||
+                    groupStatus?.data?.accept_or_not === '0'
                       ? 'Pending'
                       : 'Join Group'
                   }
                   buttonStyle={styles.button}
-                  disable={groupStatus === '0' ? true : false}
+                  disable={
+                    groupStatus === 'pending' ||
+                    groupStatus?.data?.accept_or_not === '0'
+                      ? true
+                      : false
+                  }
                   textStyle={{color: colors.secondary}}
                   indicator={join_group_loading}
                   onPress={() => onJoinGroup()}

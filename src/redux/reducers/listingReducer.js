@@ -39,29 +39,11 @@ export default (state = initialState, action) => {
     case constant.JOIN_LISTING_DONE:
       return {
         ...state,
-        [action.payload.listingId]: action.payload.status,
         join_loading: false,
-      };
-
-    case constant.JOIN_GROUP:
-      return {...state, join_group_loading: true};
-
-    case constant.JOIN_GROUP_DONE:
-      return {
-        ...state,
-        join_group_loading: false,
-        [action.payload.listingId]: action.payload.status,
       };
 
     case constant.ACCEPT_REQUEST:
       return {...state, accept_loader: true};
-
-    // case constant.ACCEPT_REQUEST_DONE:
-    //   return {
-    //     ...state,
-    //     accept_loader: false,
-    //     [action.payload.listingId]: action.payload.status,
-    //   };
 
     case constant.ACCEPT_REQUEST_DONE:
       return {

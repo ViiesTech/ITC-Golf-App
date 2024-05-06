@@ -302,9 +302,10 @@ export const RejectGroup = (
       type: constant.REJECT_REQUEST,
     });
 
+
     return await axios
       .post(
-        `${URL}/group-reject-request?sending_user_id=${sending_user_id}&current_author_id=${author_id}&notification_text=${noti_text}&listing_id=${group_id}`,
+        `${URL}/group-reject-request?sending_user_id=${sending_user_id}&current_author_id=${author_id}&notification_text=${noti_text}&group_id=${group_id}`,
         {},
         {
           headers: {
@@ -416,7 +417,7 @@ export const getGroupStatus = (user_id, group_id, setGroupStatus) => {
       .then(res => {
         console.log('response group status', res.data);
         if (res.data) {
-          setGroupStatus(res.data.data.accept_or_not);
+          setGroupStatus(res.data);
           dispatch({
             type: constant.GROUP_STATUS_DONE,
           });

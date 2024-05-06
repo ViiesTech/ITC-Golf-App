@@ -10,8 +10,6 @@ const initialState = {
   edit_loader: false,
   status_loader: false,
   group_members: [],
-  // accept_loader: false,
-  // reject_loader: false,
 };
 
 export default (state = initialState, action) => {
@@ -39,23 +37,15 @@ export default (state = initialState, action) => {
     case constant.DELETE_GROUP_DONE:
       return {...state, delete_loader: false};
 
-    // case constant.ACCEPT_GROUP:
-    //   return {...state, accept_loader: true};
+    case constant.JOIN_GROUP:
+      return {...state, join_group_loading: true};
 
-    // case constant.ACCEPT_GROUP_DONE:
-    //   return {
-    //     ...state,
-    //     accept_loader: false,
-    //   };
+    case constant.JOIN_GROUP_DONE:
+      return {
+        ...state,
+        join_group_loading: false,
+      };
 
-    // case constant.REJECT_GROUP:
-    //   return {...state, reject_loader: true};
-
-    // case constant.REJECT_GROUP_DONE:
-    //   return {
-    //     ...state,
-    //     reject_loader: false,
-    //   };
     case constant.EDIT_GROUP:
       return {...state, edit_loader: true};
 
