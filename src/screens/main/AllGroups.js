@@ -3,7 +3,6 @@ import {
   View,
   ScrollView,
   Text,
-  Image,
   TouchableOpacity,
   ActivityIndicator,
   Platform,
@@ -32,18 +31,13 @@ import {Picker} from '@react-native-picker/picker';
 import {
   GroupsByAreaCodes,
   ListingsByAreaCodes,
-  getGroups,
-  getListings,
 } from '../../redux/actions/homeAction';
 import {ShowToast} from '../../Custom';
 import {useNavigation} from '@react-navigation/native';
 import {
   androidPermissionHandler,
-  AndroidPermissionHandler,
   iosPermissionHandler,
-  requestGalleryPermissionAndroid,
-} from '../../utils/PermissionHandler';
-import {PERMISSIONS, request} from 'react-native-permissions';
+} from '../../utils/HelperFunctions';
 import FastImage from 'react-native-fast-image';
 
 const AllGroups = ({route}) => {
@@ -51,13 +45,17 @@ const AllGroups = ({route}) => {
   const [groupsCode, setGroupsCode] = useState(null);
   const [listingSearch, setListingSearch] = useState(false);
   const [groupSearch, setGroupSearch] = useState(false);
+  const [players, setPlayers] = useState([]);
 
-  const {user, follow_loader, players_follow, edit_loading, register_id} =
-    useSelector(state => state.AuthReducer);
+  const {user, follow_loader, edit_loading} = useSelector(
+    state => state.AuthReducer,
+  );
   const {area_codes} = useSelector(state => state.HomeReducer);
   const dispatch = useDispatch();
 
   const {listing_id} = useSelector(state => state.ListingReducer);
+
+  // console.log('listing id =======>', listing_id)
 
   const [state, setState] = useState({
     first_name: user.firstname,
@@ -83,14 +81,10 @@ const AllGroups = ({route}) => {
   const [changeTab, setChangeTab] = useState(options);
 
   useEffect(() => {
-    if (changeTab === 'Players You Follow' && players_follow.length < 1) {
-      dispatch(PlayersFollow(user.user_id, listing_id));
+    if (changeTab === 'Players You Follow') {
+      dispatch(PlayersFollow(user.user_id, listing_id, setPlayers));
     }
   }, []);
-
-  // const iosPermission = () => {
-
-  // }
 
   const onInputChange = (value, text) => {
     setState(prevState => ({
@@ -165,11 +159,6 @@ const AllGroups = ({route}) => {
       setListingSearch(false);
     }
   };
-
-  useEffect(() => {
-    dispatch(getListings());
-    dispatch(getGroups());
-  }, []);
 
   const onEditPress = async () => {
     if (!state.photoURL) {
@@ -251,7 +240,7 @@ const AllGroups = ({route}) => {
               <View style={{alignItems: 'center', marginVertical: hp('4%')}}>
                 <ActivityIndicator size={'large'} color={colors.primary} />
               </View>
-            ) : players_follow.length < 1 ? (
+            ) : players.length < 1 ? (
               <View style={{alignItems: 'center', marginVertical: hp('4%')}}>
                 <Text
                   style={{
@@ -263,7 +252,7 @@ const AllGroups = ({route}) => {
                 </Text>
               </View>
             ) : (
-              players_follow.map(item => {
+              players.map(item => {
                 return (
                   <View style={styles.followCard}>
                     <Text style={styles.userName}>USER NAME:</Text>

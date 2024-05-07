@@ -2,11 +2,13 @@ import {
   Image,
   ScrollView,
   StyleSheet,
+  RefreshControl,
   Text,
   View,
   TouchableOpacity,
   Dimensions,
   ActivityIndicator,
+  FlatList,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
@@ -33,11 +35,14 @@ import FastImage from 'react-native-fast-image';
 const Home = () => {
   const [selectedOption, setSelectedOption] = useState('');
   const [searchPressed, setSearchPressed] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [listings, setListings] = useState([]);
 
   const width = Dimensions.get('screen').width;
 
-  const {listing, loader, area_codes, listings_filter, listings_filter_loader} =
-    useSelector(state => state.HomeReducer);
+  const {loader, area_codes, listings_filter, listings_filter_loader} = useSelector(
+    state => state.HomeReducer,
+  );
   // console.log('listinggg', area_codes);
 
   const dispatch = useDispatch();
@@ -46,7 +51,7 @@ const Home = () => {
 
   useEffect(() => {
     // if (listing.length < 1 && area_codes.length < 1) {
-    dispatch(getListings());
+    dispatch(getListings(setListings));
     dispatch(getAllAreaCodes());
     // }
   }, []);
@@ -75,45 +80,59 @@ const Home = () => {
   };
 
   const renderAllListings = () => {
-    return listing?.map((item, index) => (
-      <View
-        key={index}
-        style={
-          index !== 7 && {
-            borderBottomWidth: 1,
-            borderBottomColor: colors.lightgray,
-            marginBottom: hp('2.5%'),
-          }
-        }>
-        <ListingCard
-          key={item.id}
-          number={index + 1}
-          title={item.listing_title}
-          image={item.feature_image ? {uri: item.feature_image, priority: FastImage.priority.high} : images.dummy}
-          // descStyle={{ width: index == 0 ? '20%' : index == 1 ? '40%' : '100%' }}
-          count={
-            item.how_many_players == 'Select a Value'
-              ? '3'
-              : item.how_many_players
-          }
-          exp={
-            item.experience_level == ''
-              ? '5 to 10 par progress-level'
-              : item.experience_level
-          }
-          date={item.course_date}
-          // descStyle={{top: Object.keys(item.listing_title).length > 13 ? hp('10%') : null}}
-          desc={item.match_description}
-          // image={item.image}
-          onPress={() =>
-            navigation.navigate('SecondaryStack', {
-              screen: 'ListingDetails',
-              params: {item},
-            })
-          }
-        />
-      </View>
-    ));
+    return (
+      <FlatList
+        data={listings}
+        renderItem={({item, index}) => {
+          return (
+            <View
+              key={index}
+              style={
+                index !== 7 && {
+                  borderBottomWidth: 1,
+                  borderBottomColor: colors.lightgray,
+                  marginBottom: hp('2.5%'),
+                }
+              }>
+              <ListingCard
+                key={item.id}
+                number={index + 1}
+                title={item.listing_title}
+                image={
+                  item.feature_image
+                    ? {
+                        uri: item.feature_image,
+                        priority: FastImage.priority.high,
+                      }
+                    : images.dummy
+                }
+                // descStyle={{ width: index == 0 ? '20%' : index == 1 ? '40%' : '100%' }}
+                count={
+                  item.how_many_players == 'Select a Value'
+                    ? '3'
+                    : item.how_many_players
+                }
+                exp={
+                  item.experience_level == ''
+                    ? '5 to 10 par progress-level'
+                    : item.experience_level
+                }
+                date={item.course_date}
+                // descStyle={{top: Object.keys(item.listing_title).length > 13 ? hp('10%') : null}}
+                desc={item.match_description}
+                // image={item.image}
+                onPress={() =>
+                  navigation.navigate('SecondaryStack', {
+                    screen: 'ListingDetails',
+                    params: {item},
+                  })
+                }
+              />
+            </View>
+          );
+        }}
+      />
+    );
   };
 
   const renderFilterListings = () => {
@@ -148,7 +167,11 @@ const Home = () => {
               }
               date={item.course_date}
               desc={item.match_description}
-              image={item.feature_image ? {uri: item.feature_image, priority: FastImage.priority.high} : images.dummy}
+              image={
+                item.feature_image
+                  ? {uri: item.feature_image, priority: FastImage.priority.high}
+                  : images.dummy
+              }
               onPress={() =>
                 navigation.navigate('SecondaryStack', {
                   screen: 'ListingDetails',
@@ -179,11 +202,29 @@ const Home = () => {
     );
   };
 
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      dispatch(getListings(setListings));
+      dispatch(getAllAreaCodes());
+      setRefreshing(false);
+    }, 3000);
+  };
+
   return (
     <>
       <AppStatusBar />
       <Container>
-        <ScrollView>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              onRefresh={() => handleRefresh()}
+              colors={[colors.primary]}
+              tintColor={colors.primary}
+              refreshing={refreshing}
+            />
+          }>
           <View style={styles.headerWrapper}>
             <Header />
           </View>

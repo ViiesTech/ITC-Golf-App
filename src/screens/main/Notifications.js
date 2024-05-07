@@ -5,6 +5,7 @@ import {
   View,
   Image,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
@@ -26,10 +27,10 @@ import {AcceptGroup, RejectGroup} from '../../redux/actions/groupAction';
 
 const Notifications = () => {
   const [isIndex, setIsIndex] = useState(0);
+  const [notifications, setNotifications] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const {notification_loader, notifications} = useSelector(
-    state => state.HomeReducer,
-  );
+  const {notification_loader} = useSelector(state => state.HomeReducer);
 
   const {user} = useSelector(state => state.AuthReducer);
   const {accept_loader, reject_loader} = useSelector(
@@ -42,7 +43,7 @@ const Notifications = () => {
 
   useEffect(() => {
     // setNotifications(TodayNotifications)
-    dispatch(getNotifications(user.user_id));
+    dispatch(getNotifications(user.user_id, setNotifications));
   }, []);
 
   const renderLoader = () => {
@@ -151,6 +152,14 @@ const Notifications = () => {
     }
   };
 
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      dispatch(getNotifications(user.user_id, setNotifications));
+      setRefreshing(false);
+    }, 3000);
+  };
+
   return (
     <Container>
       <Header />
@@ -172,6 +181,14 @@ const Notifications = () => {
       ) : (
         <ScrollView
           contentContainerStyle={styles.screen}
+          refreshControl={
+            <RefreshControl
+              onRefresh={() => handleRefresh()}
+              refreshing={refreshing}
+              colors={[colors.primary]}
+              tintColor={colors.primary}
+            />
+          }
           showsVerticalScrollIndicator={false}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             {/* <Text style={styles.heading}>Today</Text> */}

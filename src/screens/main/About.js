@@ -27,7 +27,7 @@ const About = () => {
 
   useEffect(() => {
     // if (about_description == '') {
-      getAboutData();
+    getAboutData();
     // }
   }, []);
 
@@ -75,24 +75,6 @@ const About = () => {
                 />
               </View>
             </View>
-            {/* <Text style={styles.heading}>About-Us</Text>
-                    <View style={{ paddingTop: hp('3%') }}>
-                        <Text style={styles.aboutText}>Lorem Ipsum Dolor Sit Amet, Consetetur Sadipscing Elitr, Sed Diam Nonumy Eirmod Tempor Invidunt.{'\n'}{'\n'}{'\n'}
-
-                            Ut Labore Et Dolore Magna Aliquyam Erat, Sed Diam Voluptua. At Vero Eos Et Accusam Et Justo Duo Dolores Et Ea Rebum. Stet Clita Kasd Gubergren, No Sea Takimata Sanctus Est Lorem Ipsum Dolor Sit Amet. Lorem Ipsum Dolor Sit Amet.{'\n'}{'\n'}{'\n'}
-
-                            Consetetur Sadipscing Elitr, Sed Diam Nonumy Eirmod Tempor Invidunt Ut Labore Et Dolore Magna Aliquyam Erat, Sed Diam Voluptua. At Vero Eos Et Accusam Et Justo Duo Dolores Et Ea Rebum.{'\n'}{'\n'}{'\n'}
-
-                            Lorem Ipsum Dolor Sit Amet, Consetetur Sadipscing Elitr, Sed Diam Nonumy Eirmod Tempor Invidunt.{'\n'}{'\n'}{'\n'}
-                            Lorem Ipsum Dolor Sit Amet, Consetetur Sadipscing Elitr, Sed Diam Nonumy Eirmod Tempor Invidunt. {'\n'}{'\n'}{'\n'}
-
-                            Ut Labore Et Dolore Magna Aliquyam Erat, Sed Diam Voluptua. At Vero Eos Et Accusam Et Justo Duo Dolores Et Ea Rebum. Stet Clita Kasd Gubergren, No Sea Takimata Sanctus Est Lorem Ipsum Dolor Sit Amet. Lorem Ipsum Dolor Sit Amet.{'\n'}{'\n'}{'\n'}
-
-                            Consetetur Sadipscing Elitr, Sed Diam Nonumy Eirmod Tempor Invidunt Ut Labore Et Dolore Magna Aliquyam Erat, Sed Diam Voluptua. At Vero Eos Et Accusam Et Justo Duo Dolores Et Ea Rebum.{'\n'}{'\n'}{'\n'}
-
-                            Lorem Ipsum Dolor Sit Amet, Consetetur Sadipscing Elitr, Sed Diam Nonumy Eirmod Tempor Invidunt.
-                        </Text>
-                    </View> */}
           </View>
         </ScrollView>
       )}

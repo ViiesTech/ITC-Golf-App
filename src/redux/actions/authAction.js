@@ -340,7 +340,7 @@ export const editProfile = (
   };
 };
 
-export const PlayersFollow = (user_id, listing_id) => {
+export const PlayersFollow = (user_id, listing_id, setPlayers) => {
   return async dispatch => {
     dispatch({
       type: constant.PLAYERS_FOLLOW,
@@ -356,9 +356,9 @@ export const PlayersFollow = (user_id, listing_id) => {
         },
       )
       .then(res => {
+        setPlayers(res.data)
         dispatch({
           type: constant.PLAYERS_FOLLOW_DONE,
-          payload: res.data,
         });
       })
       .catch(error => {

@@ -36,10 +36,11 @@ import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 
 const Discover = ({searchPressed}) => {
+  const [groups, setGroups] = React.useState([])
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const {groups, group_loader, groups_filter, filter_loading} = useSelector(
+  const {group_loader, groups_filter, filter_loading} = useSelector(
     state => state.HomeReducer,
   );
 
@@ -47,7 +48,7 @@ const Discover = ({searchPressed}) => {
 
   React.useEffect(() => {
     // if (groups.length < 1) {
-    dispatch(getGroups());
+    dispatch(getGroups(setGroups));
     // }
   }, []);
 
@@ -180,7 +181,8 @@ const Discover = ({searchPressed}) => {
 
 const MyGroups = ({setIndex, setGroupData}) => {
   const [loaderIndex, setLoaderIndex] = React.useState(null);
-  const {my_groups, my_groups_loader, my_groups_message, delete_loader} =
+  const [my_groups, setMy_groups] = React.useState([])
+  const {my_groups_loader, delete_loader} =
     useSelector(state => state.GroupReducer);
 
   console.log('my groups from screen =============>', my_groups);
@@ -191,7 +193,7 @@ const MyGroups = ({setIndex, setGroupData}) => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(getGroupsById(user.user_id));
+    dispatch(getGroupsById(user.user_id, setMy_groups));
   }, []);
 
   const renderLoader = () => {
@@ -628,52 +630,6 @@ export const AddNewGroups = ({buttonPressed}) => {
   ]);
 
   const [groupData, setGroupData] = React.useState(null);
-
-  // const renderScene = ({route, jumpTo}) => {
-  //   switch (route.key) {
-  //     case 'first':
-  //       return <Discover searchPressed={buttonPressed} />;
-  //     case 'second':
-  //       return <MyGroups jumpTo={jumpTo} setGroupData={setGroupData} />;
-  //     case 'third':
-  //       return <AddNew groupData={groupData} jumpTo={jumpTo} />;
-  //     default:
-  //       return null;
-  //   }
-  // };
-
-  // return (
-  //   <TabView
-  //     navigationState={{index, routes}}
-  //     style={{marginTop: hp('2.5%')}}
-  //     renderScene={renderScene}
-  //     onIndexChange={setIndex}
-  //     renderTabBar={styling => (
-  //       <TabBar
-  //         indicatorStyle={styles.indicatorStyle}
-  //         {...styling}
-  //         style={{
-  //           backgroundColor: colors.white,
-  //           borderRadius: 10,
-  //           justifyContent: 'center',
-  //           height: hp('6.8%'),
-  //         }}
-  //         renderLabel={({route}) => (
-  //           <Text
-  //             style={{
-  //               color: colors.secondary,
-  //               fontWeight: 'bold',
-  //               // marginRight: 2,
-  //               // marginTop: hp('0.4%'),
-  //               fontSize: hp('1.5%'),
-  //             }}>
-  //             {route.title}
-  //           </Text>
-  //         )}
-  //       />
-  //     )}
-  //   />
-  // );
 
   return (
     <>

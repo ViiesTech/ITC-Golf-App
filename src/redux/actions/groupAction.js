@@ -81,7 +81,7 @@ export const createGroup = (
   };
 };
 
-export const getGroupsById = user_id => {
+export const getGroupsById = (user_id, setMy_groups) => {
   return async dispatch => {
     console.log('user id ======>', user_id);
 
@@ -97,10 +97,11 @@ export const getGroupsById = user_id => {
       })
       .then(res => {
         console.log('my groups response ==========>', res.data);
+        setMy_groups(res.data)
         dispatch({
           type: constant.GET_MY_GROUPS_DONE,
-          payload: res.data,
-          message: 'No groups found',
+          // payload: res.data,
+          // message: 'No groups found',
         });
       })
       .catch(error => {

@@ -45,17 +45,19 @@ import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 
 const Discover = ({searchPressed}) => {
+  const [listings, setListings] = React.useState([])
+
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const {listing, loader, listings_filter, listings_filter_loader} =
+  const {loader, listings_filter,listings_filter_loader} =
     useSelector(state => state.HomeReducer);
 
   console.log('listings', searchPressed);
 
   React.useEffect(() => {
     // if (listing.length < 1) {
-    dispatch(getListings());
+    dispatch(getListings(setListings));
     // }
   }, []);
 
@@ -65,47 +67,8 @@ const Discover = ({searchPressed}) => {
         <ActivityIndicator size={'large'} color={colors.primary} />
       </View>
     ) : (
-      // <ScrollView style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-      // <View
-      //   style={{
-      //     flex: 1,
-      //     flexDirection: 'row',
-      //     flexWrap: 'wrap',
-      //     justifyContent: 'space-between',
-      //   }}>
-      //   {listing.map((item, index) => (
-      //     <DiscoverCard
-      //       image={
-      //         item.feature_image ? {uri: item.feature_image} : images.dummy
-      //       }
-      //       onPress={() =>
-      //         navigation.navigate('SecondaryStack', {
-      //           screen: 'ListingDetails',
-      //           params: {item},
-      //         })
-      //       }
-      //       count={index + 1}
-      //       title={item.listing_title}
-      //       // itc={
-      //       //   item.experience_level == ''
-      //       //     ? '5 to 10 par progress level'
-      //       //     : item.experience_level
-      //       // }
-      //       itc={item.the_itc_handshake}
-      //       // desc={
-      //       //   Object.keys(item.match_description).length == 4
-      //       //     ? item.match_description
-      //       //     : 'test'
-      //       // }
-      //       players={item.how_many_players}
-      //       date={item.course_date}
-      //       time={item.course_time ? item.course_time : true}
-      //     />
-      //   ))}
-      // </View>
-      // </ScrollView>
       <FlatList
-        data={listing}
+        data={listings}
         numColumns={2}
         scrollEnabled={true}
         columnWrapperStyle={{justifyContent: 'space-between'}}
@@ -223,7 +186,8 @@ const Discover = ({searchPressed}) => {
 
 const MyListings = ({setIndex, setListingData}) => {
   const [loaderIndex, setLoaderIndex] = React.useState(null);
-  const {my_listings, my_listings_loader, delete_loader} = useSelector(
+  const [my_listings, setMy_listings] = React.useState([])
+  const {my_listings_loader, delete_loader} = useSelector(
     state => state.ListingReducer,
   );
   const {user} = useSelector(state => state.AuthReducer);
@@ -232,7 +196,7 @@ const MyListings = ({setIndex, setListingData}) => {
   const navigation = useNavigation();
 
   React.useEffect(() => {
-    dispatch(ListingsByUserID(user.user_id));
+    dispatch(ListingsByUserID(user.user_id, setMy_listings));
   }, []);
 
   const renderLoader = () => {
@@ -807,11 +771,6 @@ const AddNew = ({listingData}) => {
 };
 
 export const AddNewListings = ({buttonPress}) => {
-  // const renderScene =  SceneMap({
-  //   first: () => <Discover />,
-  //   second: () => <MyListings />,
-  //   third: () => <AddNew />,
-  // });
 
   const [index, setIndex] = React.useState('first');
   const [routes] = React.useState([
@@ -821,51 +780,6 @@ export const AddNewListings = ({buttonPress}) => {
   ]);
 
   const [listingData, setListingData] = React.useState(null);
-
-  // const renderScene = ({route, jumpTo}) => {
-  //   switch (route.key) {
-  //     case 'first':
-  //       return <Discover searchPressed={buttonPress} />;
-  //     case 'second':
-  //       return <MyListings jumpTo={jumpTo} setListingData={setListingData} />;
-  //     case 'third':
-  //       return <AddNew listingData={listingData} jumpTo={jumpTo} />;
-  //     default:
-  //       return null;
-  //   }
-  // };
-
-  // return (
-  //   <TabView
-  //     navigationState={{index, routes}}
-  //     style={{marginTop: hp('2.5%')}}
-  //     renderScene={renderScene}
-  //     onIndexChange={setIndex}
-  //     renderTabBar={styling => (
-  //       <TabBar
-  //         indicatorStyle={styles.indicatorStyle}
-  //         {...styling}
-  //         style={{
-  //           backgroundColor: colors.white,
-  //           borderRadius: 10,
-  //           height: hp('6.8%'),
-  //           justifyContent: 'center',
-  //         }}
-  //         renderLabel={({route}) => (
-  //           <Text
-  //             style={{
-  //               color: colors.secondary,
-  //               // marginTop: hp('0.5%'),
-  //               fontWeight: 'bold',
-  //               fontSize: hp('1.5%'),
-  //             }}>
-  //             {route.title}
-  //           </Text>
-  //         )}
-  //       />
-  //     )}
-  //   />
-  // );
 
   return (
     <>

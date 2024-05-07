@@ -5,7 +5,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -22,19 +22,21 @@ import {ShowToast} from '../../Custom';
 import FastImage from 'react-native-fast-image';
 
 const MerchandiseDetails = ({route}) => {
+  const [product_detail, setProduct_detail] = useState({})
+
   const {id, wishlist} = route.params;
-  console.log('product idd params ==========>', wishlist);
+  console.log('product idd params ==========>', id);
 
   const dispatch = useDispatch();
 
-  const {product_detail, product_detail_loading} = useSelector(
+  const {product_detail_loading} = useSelector(
     state => state.ProductReducer,
   );
   // console.log('product details from screen =========> ==========>', product_detail[id])
 
   useEffect(() => {
     // if (!product_detail[id]) {
-    dispatch(getProductDetails(id));
+    dispatch(getProductDetails(id, setProduct_detail));
     // }
   }, []);
 
@@ -60,17 +62,17 @@ const MerchandiseDetails = ({route}) => {
         contentContainerStyle={styles.screen}
         showsVerticalScrollIndicator={false}>
         <StuffDetailCard
-          title={product_detail[id]?.title}
+          title={product_detail.title}
           image={
-            product_detail[id]?.image
+            product_detail.image
               ? {
-                  uri: product_detail[id]?.image,
+                  uri: product_detail.image,
                   priority: FastImage.priority.high,
                 }
               : images.dummy
           }
           favourite={wishlist}
-          desc={product_detail[id]?.description}
+          desc={product_detail.description}
         />
         <View style={styles.wrapper}>
           <View style={{flexDirection: 'row'}}>

@@ -24,7 +24,7 @@ export const getAllAreaCodes = () => {
   };
 };
 
-export const getListings = () => {
+export const getListings = setListings => {
   return async dispatch => {
     dispatch({
       type: constant.GET_LISTING,
@@ -38,9 +38,9 @@ export const getListings = () => {
     })
       .then(async res => {
         const data = await res.json();
+        setListings(data);
         dispatch({
           type: constant.GET_LISTING_DONE,
-          payload: data,
         });
       })
       .catch(error => {
@@ -52,12 +52,12 @@ export const getListings = () => {
         dispatch({
           type: constant.GET_LISTING_DONE,
         });
-        return ShowToast('Check your network, Try Again!' || error.code);
+        return ShowToast('Some problem occured' || error.code);
       });
   };
 };
 
-export const getGroups = () => {
+export const getGroups = (setGroups) => {
   return async dispatch => {
     dispatch({
       type: constant.GET_GROUPS,
@@ -71,9 +71,9 @@ export const getGroups = () => {
     })
       .then(async res => {
         const group = await res.json();
+        setGroups(group)
         dispatch({
           type: constant.GET_GROUPS_DONE,
-          payload: group,
         });
       })
       .catch(error => {
@@ -81,7 +81,7 @@ export const getGroups = () => {
         dispatch({
           type: constant.GET_GROUPS_DONE,
         });
-        return ShowToast('Check your network, Try Again!' || error.code);
+        return ShowToast('Some problem occured' || error.code);
       });
   };
 };
@@ -114,7 +114,7 @@ export const getReviews = () => {
   };
 };
 
-export const getNotifications = user_id => {
+export const getNotifications = (user_id, setNotifications) => {
   return async dispatch => {
     dispatch({
       type: constant.GET_NOTIFICATIONS,
@@ -127,9 +127,9 @@ export const getNotifications = user_id => {
         },
       })
       .then(res => {
+        setNotifications(res.data)
         dispatch({
           type: constant.GET_NOTIFICATIONS_DONE,
-          payload: res.data,
         });
       })
       .catch(error => {
@@ -142,7 +142,7 @@ export const getNotifications = user_id => {
   };
 };
 
-export const GroupsByAreaCodes = area_code => {
+export const GroupsByAreaCodes = (area_code) => {
   return async dispatch => {
     dispatch({
       type: constant.GROUPS_BY_AREACODE,
@@ -158,7 +158,7 @@ export const GroupsByAreaCodes = area_code => {
         console.log('groups filter response =========>', res.data);
         dispatch({
           type: constant.GROUPS_BY_AREACODE_DONE,
-          payload: res.data,
+          payload: res.data
         });
       })
       .catch(error => {
@@ -171,7 +171,7 @@ export const GroupsByAreaCodes = area_code => {
   };
 };
 
-export const ListingsByAreaCodes = area_code => {
+export const ListingsByAreaCodes = (area_code) => {
   return async dispatch => {
     dispatch({
       type: constant.LISTINGS_BY_AREACODE,
@@ -216,7 +216,7 @@ export const AboutSection = () => {
         console.log('about response ======>', res.data);
         dispatch({
           type: constant.GET_ABOUT_DONE,
-          payload: res.data.content,
+          payload: res.data.content
         });
       })
       .catch(error => {

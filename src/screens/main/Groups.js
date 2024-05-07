@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   ScrollView,
   Text,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
@@ -25,10 +26,13 @@ const Groups = () => {
   const navigation = useNavigation();
   const [selectedCode, setSelectedCode] = useState(null);
   const [searchPressed, setSearchPressed] = useState(false);
+  const [groups, setGroups] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const {group_loader, groups, groups_filter, filter_loading, area_codes} =
-    useSelector(state => state.HomeReducer);
-  console.log('from group screen =============>', groups_filter);
+  const {group_loader, groups_filter, filter_loading} = useSelector(
+    state => state.HomeReducer,
+  );
+  // console.log('from group screen =============>', groups_filter);
 
   const routeName = navigation.getState().routes[3].name;
 
@@ -36,7 +40,7 @@ const Groups = () => {
 
   useEffect(() => {
     // if (groups.length < 1) {
-      dispatch(getGroups());
+    dispatch(getGroups(setGroups));
     // }
   }, []);
 
@@ -154,7 +158,11 @@ const Groups = () => {
             hideTag
             route={routeName}
             count={index + 1}
-            image={item.feature_image ? {uri: item.feature_image, priority: FastImage.priority.high} : images.dummy}
+            image={
+              item.feature_image
+                ? {uri: item.feature_image, priority: FastImage.priority.high}
+                : images.dummy
+            }
             title={item.listing_title}
             desc={
               item.group_desired_teebox == ''
@@ -187,10 +195,27 @@ const Groups = () => {
     }
   };
 
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      dispatch(getGroups(setGroups));
+      setRefreshing(false);
+    }, 3000);
+  };
+
   return (
     <Container>
       <Header />
-      <ScrollView contentContainerStyle={styles.screen}>
+      <ScrollView
+        contentContainerStyle={styles.screen}
+        refreshControl={
+          <RefreshControl
+            onRefresh={() => handleRefresh()}
+            colors={[colors.primary]}
+            tintColor={colors.primary}
+            refreshing={refreshing}
+          />
+        }>
         <SearchFilter
           selectedValue={selectedCode}
           onValueChange={itemValue => setSelectedCode(itemValue)}

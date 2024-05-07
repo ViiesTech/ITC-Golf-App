@@ -5,8 +5,9 @@ import {
   ScrollView,
   ActivityIndicator,
   Text,
+  RefreshControl,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -16,7 +17,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import Sponsors from '../../components/Sponsors';
 import SearchFilter from '../../components/SearchFilter';
-import {ListingsByAreaCodes} from '../../redux/actions/homeAction';
+import {getListings, ListingsByAreaCodes} from '../../redux/actions/homeAction';
 import colors from '../../assets/colors';
 import images from '../../assets/images';
 import FastImage from 'react-native-fast-image';
@@ -24,15 +25,36 @@ import FastImage from 'react-native-fast-image';
 const Listing = () => {
   const [selectedCode, setSelectedCode] = useState(null);
   const [searchPressed, setSearchPressed] = useState(false);
+  const [listings, setListings] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const navigation = useNavigation();
-  console.log('lets see', navigation.getState().routes[1].name);
+  // console.log('lets see', navigation.getState().routes[1].name);
   const routeName = navigation.getState().routes[1].name;
 
-  const {listing, loader, listings_filter, listings_filter_loader} =
-    useSelector(state => state.HomeReducer);
+  const {loader,listings_filter, listings_filter_loader} = useSelector(
+    state => state.HomeReducer,
+  );
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getListings(setListings));
+  }, []);
+
+  if (loader) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.secondary,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ActivityIndicator size={'large'} color={colors.primary} />
+      </View>
+    );
+  }
 
   const onSearchButton = () => {
     if (selectedCode) {
@@ -46,7 +68,7 @@ const Listing = () => {
   const renderAllListings = () => {
     return (
       <FlatList
-        data={listing}
+        data={listings}
         showsVerticalScrollIndicator={false}
         numColumns={2}
         contentContainerStyle={{padding: hp('2.5%')}}
@@ -142,10 +164,27 @@ const Listing = () => {
     );
   };
 
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      dispatch(getListings(setListings));
+      setRefreshing(false);
+    }, 3000);
+  };
+
   return (
     <Container>
       <Header />
-      <ScrollView contentContainerStyle={styles.screen}>
+      <ScrollView
+        contentContainerStyle={styles.screen}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => handleRefresh()}
+            colors={[colors.primary]}
+            tintColor={colors.primary}
+          />
+        }>
         <SearchFilter
           selectedValue={selectedCode}
           onValueChange={value => setSelectedCode(value)}

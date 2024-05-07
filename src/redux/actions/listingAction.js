@@ -87,7 +87,7 @@ export const createListing = (
   };
 };
 
-export const ListingsByUserID = user_id => {
+export const ListingsByUserID = (user_id, setMy_listings) => {
   return async dispatch => {
     dispatch({
       type: constant.GET_MY_LISTINGS,
@@ -101,9 +101,9 @@ export const ListingsByUserID = user_id => {
       })
       .then(res => {
         console.log('my listing response ===========>', res.data);
+        setMy_listings(res.data)
         dispatch({
           type: constant.GET_MY_LISTINGS_DONE,
-          payload: res.data,
         });
       })
       .catch(error => {

@@ -1,11 +1,12 @@
 import {
   ActivityIndicator,
   FlatList,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -26,19 +27,20 @@ import images from '../../assets/images';
 import FastImage from 'react-native-fast-image';
 
 const FreeStuff = () => {
+  const [products, setProducts] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
   const navigation = useNavigation();
 
   const dispatch = useDispatch();
 
-  const {products, products_loading} = useSelector(
-    state => state.ProductReducer,
-  );
+  const {products_loading} = useSelector(state => state.ProductReducer);
   const {user} = useSelector(state => state.AuthReducer);
-  // console.log('from screen ======================>', isFavourite)
+  // console.log('from screen ======================>', products[0].isFav)
 
   useEffect(() => {
     // if (products.length < 1) {
-    dispatch(getProducts());
+    dispatch(getProducts(setProducts));
     // }
   }, []);
 
@@ -60,31 +62,44 @@ const FreeStuff = () => {
     if (!products[index].isFav) {
       //   alert('add to favourite');
       const add = await dispatch(addToWishlist(user.user_id, item.product_id));
-      products[index] = {...item, isFav: true};
-      dispatch({
-        type: constant.RENDER_PRODUCT_DONE,
-        payload: products,
-      });
+      const updatedProducts = [...products];
+      updatedProducts[index] = {...item, isFav: true};
+      setProducts(updatedProducts);
       return ShowToast(add.message);
     } else if (products[index].isFav) {
       //   alert('remove from favourite');
       const remove = await dispatch(
         removeFromWishlist(user.user_id, item.product_id),
       );
-      products[index] = {...item, isFav: false};
-      dispatch({
-        type: constant.RENDER_PRODUCT_DONE,
-        payload: products,
-      });
+      const updatedProducts = [...products];
+      updatedProducts[index] = {...item, isFav: false};
+      setProducts(updatedProducts);
       return ShowToast(remove.message);
     }
+  };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      dispatch(getProducts(setProducts));
+      setRefreshing(false);
+    }, 3000);
   };
 
   return (
     <Container>
       <Header />
       <SecondaryHeader text={'Free Stuff Merchandise'} />
-      <ScrollView contentContainerStyle={styles.screen}>
+      <ScrollView
+        contentContainerStyle={styles.screen}
+        refreshControl={
+          <RefreshControl
+            onRefresh={() => handleRefresh()}
+            colors={[colors.primary]}
+            tintColor={colors.primary}
+            refreshing={refreshing}
+          />
+        }>
         <FlatList
           data={products}
           numColumns={2}

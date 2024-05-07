@@ -1,9 +1,9 @@
 import constant from "../constant"
 
 const initialState = {
-    products: [],
+    // products: [],
     products_loading: false,
-    product_detail: {},
+    // product_detail: {},
     product_detail_loading: false,
 }
 
@@ -20,10 +20,11 @@ export default (state = initialState, action) => {
 
         case constant.RENDER_DETAILS_DONE:
             return {
-                ...state, product_detail_loading: false, product_detail: {
-                    ...state.product_detail,
-                    [action.payload.product_id]: action.payload
-                }
+                ...state, product_detail_loading: false,
+                //  product_detail: {
+                //     ...state.product_detail,
+                //     [action.payload.product_id]: action.payload
+                // }
             }
 
         default:

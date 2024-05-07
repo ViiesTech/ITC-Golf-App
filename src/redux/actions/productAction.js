@@ -3,7 +3,7 @@ import constant, {URL} from '../constant';
 import {ShowToast} from '../../Custom';
 import FormData from 'form-data';
 
-export const getProducts = () => {
+export const getProducts = setProducts => {
   return async dispatch => {
     dispatch({
       type: constant.RENDER_PRODUCT,
@@ -17,21 +17,21 @@ export const getProducts = () => {
       })
       .then(res => {
         // console.log('products response =======================>', res.data)
+        setProducts(res.data);
         dispatch({
           type: constant.RENDER_PRODUCT_DONE,
-          payload: res.data,
         });
       })
       .catch(error => {
         dispatch({
           type: constant.RENDER_PRODUCT_DONE,
         });
-        return ShowToast('Check your network, Try Again!' || error.code);
+        return ShowToast('Some problem occured' || error.code);
       });
   };
 };
 
-export const getProductDetails = product_id => {
+export const getProductDetails = (product_id, setProduct_detail) => {
   return async dispatch => {
     dispatch({
       type: constant.RENDER_DETAILS,
@@ -44,9 +44,9 @@ export const getProductDetails = product_id => {
         },
       })
       .then(res => {
+        setProduct_detail(res.data);
         dispatch({
           type: constant.RENDER_DETAILS_DONE,
-          payload: res.data,
         });
       })
       .catch(error => {
@@ -62,13 +62,13 @@ export const addToWishlist = (user_id, product_id) => {
   return async dispatch => {
     var data = new FormData();
 
+    data.append('user_id', user_id);
     data.append('product_id', product_id);
-    data.append('user_id', user_id)
 
     // return console.log('dataaa', data)
 
     return await axios
-      .post(`${URL}/wishlist/add`,data, {
+      .post(`${URL}/wishlist/add`, data, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'multipart/form-data',
@@ -83,7 +83,7 @@ export const addToWishlist = (user_id, product_id) => {
         }
       })
       .catch(error => {
-        console.log(error);
+        console.log('error adding favourite',error);
         return ShowToast('Some problem occured');
       });
   };
