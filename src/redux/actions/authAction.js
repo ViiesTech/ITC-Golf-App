@@ -371,7 +371,7 @@ export const PlayersFollow = (user_id, listing_id, setPlayers) => {
   };
 };
 
-export const getWishlistById = (user_id, setWishlistItems) => {
+export const getWishlistById = (user_id) => {
   return async dispatch => {
     dispatch({
       type: constant.GET_WISHLIST,
@@ -387,9 +387,10 @@ export const getWishlistById = (user_id, setWishlistItems) => {
       })
       .then(res => {
         console.log('response of wishlist =========>', res.data);
-        setWishlistItems(res.data)
+        // setWishlistItems(res.data)
         dispatch({
           type: constant.GET_WISHLIST_DONE,
+          payload: res.data
         });
       })
       .catch(error => {

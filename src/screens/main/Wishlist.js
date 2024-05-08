@@ -19,19 +19,17 @@ import MerchandiseCard from '../../components/MerchandiseCard';
 import {useNavigation} from '@react-navigation/native';
 
 const Wishlist = () => {
-  const [wishlistItems, setWishlistItems] = useState([])
-  const {wishlist_loader, user} = useSelector(
-    state => state.AuthReducer,
-  );
+  // const [wishlistItems, setWishlistItems] = useState([]);
+  const {wishlist_items, wishlist_loader, user} = useSelector(state => state.AuthReducer);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  console.log('itemss ',wishlistItems);
+  console.log('itemss ', wishlist_items);
 
   useEffect(() => {
     // if (wishlist_items?.length < 1) {
-    dispatch(getWishlistById(user.user_id, setWishlistItems));
+    dispatch(getWishlistById(user.user_id));
     // }
   }, []);
 
@@ -50,7 +48,7 @@ const Wishlist = () => {
             }}>
             <ActivityIndicator size={'large'} color={colors.primary} />
           </View>
-        ) : wishlistItems?.message ? (
+        ) : wishlist_items?.message ? (
           <>
             <View
               style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -63,17 +61,17 @@ const Wishlist = () => {
           </>
         ) : (
           <FlatList
-            data={wishlistItems}
+            data={wishlist_items}
             numColumns={2}
             columnWrapperStyle={{justifyContent: 'space-between'}}
             showsVerticalScrollIndicator={false}
             renderItem={({item, index}) => {
-              console.log('favvv', item.isFav);
+              // console.log('favvv', item.isFav);
               return (
                 <MerchandiseCard
                   image={{uri: item.product_image}}
                   text={item.product_name}
-                  favourite={true}
+                  favourite={item.favourite == '' ? true : item.favourite}
                   desc={item.product_desc ? item.product_desc : 'Lorem ipsum'}
                   //   rating={item.ratings}
                   // style={{marginLeft: hp('2.6%')}}

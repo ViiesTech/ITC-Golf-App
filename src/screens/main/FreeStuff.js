@@ -20,7 +20,6 @@ import {
   removeFromWishlist,
 } from '../../redux/actions/productAction';
 import colors from '../../assets/colors';
-import {ShowToast} from '../../Custom';
 import constant from '../../redux/constant';
 import Sponsors from '../../components/Sponsors';
 import images from '../../assets/images';
@@ -35,7 +34,7 @@ const FreeStuff = () => {
   const dispatch = useDispatch();
 
   const {products_loading} = useSelector(state => state.ProductReducer);
-  const {user} = useSelector(state => state.AuthReducer);
+  const {user, wishlist_items} = useSelector(state => state.AuthReducer);
   // console.log('from screen ======================>', products[0].isFav)
 
   useEffect(() => {
@@ -59,22 +58,22 @@ const FreeStuff = () => {
   }
 
   const onToggleWishlist = async (item, index) => {
-    if (!products[index].isFav) {
-      //   alert('add to favourite');
-      const add = await dispatch(addToWishlist(user.user_id, item.product_id));
-      const updatedProducts = [...products];
-      updatedProducts[index] = {...item, isFav: true};
-      setProducts(updatedProducts);
-      return ShowToast(add.message);
-    } else if (products[index].isFav) {
-      //   alert('remove from favourite');
+    if (products[index].favorite) {
       const remove = await dispatch(
         removeFromWishlist(user.user_id, item.product_id),
       );
       const updatedProducts = [...products];
-      updatedProducts[index] = {...item, isFav: false};
+      updatedProducts[index] = {...item, favorite: false};
       setProducts(updatedProducts);
       return ShowToast(remove.message);
+      //  return alert('add to favourite');
+    } else {
+      //  return alert('remove from favourite');
+      const add = await dispatch(addToWishlist(user.user_id, item.product_id));
+      const updatedProducts = [...products];
+      updatedProducts[index] = {...item, favorite: true};
+      setProducts(updatedProducts);
+      return ShowToast(add.message);
     }
   };
 
@@ -85,6 +84,9 @@ const FreeStuff = () => {
       setRefreshing(false);
     }, 3000);
   };
+
+
+  console.log('productsss', products);
 
   return (
     <Container>
@@ -114,14 +116,14 @@ const FreeStuff = () => {
               }
               text={item.title}
               heartPress={() => onToggleWishlist(item, index)}
-              favourite={item.isFav}
+              favourite={item.favorite}
               desc={item.description}
               rating={item.ratings}
               // style={{marginLeft: hp('2.6%')}}
               onPress={() =>
                 navigation.navigate('MerchandiseStack', {
                   screen: 'MerchandiseDetails',
-                  params: {id: item.product_id, wishlist: item.isFav},
+                  params: {id: item.product_id, wishlist: item.favorite},
                 })
               }
             />

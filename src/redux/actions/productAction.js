@@ -4,7 +4,9 @@ import {ShowToast} from '../../Custom';
 import FormData from 'form-data';
 
 export const getProducts = setProducts => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const wishlist = getState().AuthReducer.wishlist_items
+
     dispatch({
       type: constant.RENDER_PRODUCT,
     });
@@ -17,7 +19,13 @@ export const getProducts = setProducts => {
       })
       .then(res => {
         // console.log('products response =======================>', res.data)
-        setProducts(res.data);
+        const update = res.data?.map(product => ({
+          ...product,
+          favorite: wishlist?.some(
+            item => item.product_id == product.product_id.toString(),
+          ),
+        }));
+        setProducts(update);
         dispatch({
           type: constant.RENDER_PRODUCT_DONE,
         });
