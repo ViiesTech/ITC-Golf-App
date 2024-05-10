@@ -104,41 +104,49 @@ export const settings = [
     id: 1,
     text: 'Payment',
     icon: icons.payment,
+    nav: 'Payments'
   },
   {
     id: 2,
     text: 'Configure Notifications',
     icon: icons.bell,
+    nav: 'Notifications'
   },
   {
     id: 3,
     text: 'Wishlist',
     icon: icons.wishlist,
+    nav: 'Wishlist'
   },
   {
     id: 4,
     text: 'Contact Us',
     icon: icons.contact,
+    nav: 'ContactUs'
   },
   {
     id: 5,
     text: 'Language',
     icon: icons.language,
+    nav: 'Language'
   },
   {
     id: 6,
     text: 'Rate This App',
     icon: icons.rate,
+    nav: 'Rating'
   },
   {
     id: 7,
     text: 'License',
     icon: icons.license,
+    url: 'https://inthecup.golf'
   },
   {
     id: 8,
     text: 'About Us',
     icon: icons.about,
+    nav: 'About'
   },
   {
     id: 9,
@@ -147,41 +155,41 @@ export const settings = [
   },
 ];
 
-// export const methods = [
-//   {
-//     id: 1,
-//     text: 'Apple Pay',
-//     icon: icons.apple,
-//   },
-//   {
-//     id: 2,
-//     text: 'Mastercard',
-//     icon: icons.mastercard,
-//   },
-//   {
-//     id: 3,
-//     text: 'Paypal',
-//     icon: icons.paypal,
-//   },
-// ];
+export const methods = [
+  {
+    id: 1,
+    text: 'Apple Pay',
+    icon: icons.apple,
+  },
+  {
+    id: 2,
+    text: 'Mastercard',
+    icon: icons.mastercard,
+  },
+  {
+    id: 3,
+    text: 'Paypal',
+    icon: icons.paypal,
+  },
+];
 
-// export const CalculateTotal = [
-//   {
-//     id: 1,
-//     text: 'Sub Total:',
-//     price: '$550',
-//   },
-//   {
-//     id: 2,
-//     text: 'Delivery:',
-//     price: '$20',
-//   },
-//   {
-//     id: 3,
-//     text: 'Total:',
-//     price: '$570',
-//   },
-// ];
+export const CalculateTotal = [
+  {
+    id: 1,
+    text: 'Sub Total:',
+    price: '$550',
+  },
+  {
+    id: 2,
+    text: 'Delivery:',
+    price: '$20',
+  },
+  {
+    id: 3,
+    text: 'Total:',
+    price: '$570',
+  },
+];
 
 // export const TodayNotifications = [
 //   {

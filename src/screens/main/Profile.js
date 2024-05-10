@@ -2,7 +2,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   ScrollView,
   TouchableOpacity,
   Linking,
@@ -38,28 +37,14 @@ const Profile = () => {
 
   const {user} = useSelector(state => state.AuthReducer);
 
-  const onSettingsPress = async index => {
-    if (index == 0) {
-      return ShowToast('Coming soon');
-      // navigation.navigate('SecondaryStack', {screen: 'Payments'});
-    } else if (index == 1) {
-      navigation.navigate('SecondaryStack', {screen: 'Notifications'});
-    } else if (index == 2) {
-      navigation.navigate('SecondaryStack', {screen: 'Wishlist'});
-    } else if (index == 3) {
-      navigation.navigate('SecondaryStack', {screen: 'ContactUs'});
-    } else if (index == 4) {
-      // navigation.navigate('SecondaryStack', {screen: 'Language'});
-      return ShowToast('Coming soon');
-    } else if (index == 5) {
-      // navigation.navigate('SecondaryStack', {screen: 'Rating'});
-      return ShowToast('Coming soon');
-    } else if (index == 6) {
-      await Linking.openURL(url);
-    } else if (index == 7) {
-      navigation.navigate('SecondaryStack', {screen: 'About'});
-    } else {
+  const onSettingsPress = async (item, index) => {
+    console.log('navv', item)
+    if (index == 6) {
+      await Linking.openURL(item.url);
+    } else if (index == 8) {
       setAccountModal(true);
+    } else {
+      navigation.navigate('SecondaryStack',{screen: item.nav});
     }
   };
 
@@ -118,9 +103,15 @@ const Profile = () => {
           <FastImage
             source={
               user?.featured_image_url
-                ? {uri: user?.featured_image_url, priority: FastImage.priority.high}
+                ? {
+                    uri: user?.featured_image_url,
+                    priority: FastImage.priority.high,
+                  }
                 : user?.feature_image_url
-                ? {uri: user.feature_image_url, priority: FastImage.priority.high}
+                ? {
+                    uri: user.feature_image_url,
+                    priority: FastImage.priority.high,
+                  }
                 : images.profile
             }
             resizeMode={FastImage.resizeMode.cover}
@@ -173,7 +164,7 @@ const Profile = () => {
                 key={i}
                 text={item.text}
                 icon={item.icon}
-                onPress={() => onSettingsPress(i)}
+                onPress={() => onSettingsPress(item, i)}
               />
             ))}
           </View>

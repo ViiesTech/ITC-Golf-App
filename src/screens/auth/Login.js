@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
   Image,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -97,6 +96,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexGrow: 1,
     justifyContent: 'flex-end',
+    // backgroundColor: 'blue',
     paddingBottom: hp(8),
     alignItems: 'center',
   },

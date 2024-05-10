@@ -24,6 +24,7 @@ import FastImage from 'react-native-fast-image';
 const MerchandiseDetails = ({route}) => {
   const [product_detail, setProduct_detail] = useState({})
 
+
   const {id, wishlist} = route.params;
   console.log('product idd params ==========>', id);
 
