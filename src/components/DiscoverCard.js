@@ -22,7 +22,10 @@ const DiscoverCard = ({
   //   console.log(desc.length);
 
   return (
-    <TouchableOpacity style={styles.wrapper} activeOpacity={0.9} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.wrapper}
+      activeOpacity={0.9}
+      onPress={onPress}>
       <FastImage
         source={image}
         style={styles.image}
@@ -61,8 +64,12 @@ const DiscoverCard = ({
           </View>
           <View style={styles.verticleLine} />
           <View>
-            <Text style={styles.heading}>{time ? 'TIME:' : 'AREA CODE:'}</Text>
-            <Text style={[styles.text2, {marginLeft: time ? 0 : hp('2%')}]}>
+            <View style={{alignItems: 'flex-end'}}>
+              <Text style={styles.heading}>
+                {time ? 'TIME:' : 'AREA CODE:'}
+              </Text>
+            </View>
+            <Text style={[styles.text2, {alignSelf: 'flex-end'}]}>
               {time ? time : area_code}
             </Text>
           </View>

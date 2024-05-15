@@ -40,10 +40,9 @@ const Home = () => {
 
   const width = Dimensions.get('screen').width;
 
-  const {loader, area_codes, listings_filter, listings_filter_loader} = useSelector(
-    state => state.HomeReducer,
-  );
-  // console.log('listinggg', area_codes);
+  const {loader, area_codes, listings_filter, listings_filter_loader} =
+    useSelector(state => state.HomeReducer);
+  // console.log('listinggg filtered =====>', listings_filter?.length < 1);
 
   const dispatch = useDispatch();
 
@@ -138,7 +137,7 @@ const Home = () => {
   const renderFilterListings = () => {
     return listings_filter_loader
       ? renderFilterLoader()
-      : listings_filter?.message
+      : listings_filter?.message 
       ? renderFilterMessage()
       : listings_filter?.map((item, index) => (
           <View

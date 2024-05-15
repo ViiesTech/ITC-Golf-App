@@ -6,10 +6,13 @@ import {
   FlatList,
   ActivityIndicator,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import colors from '../assets/colors';
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import {TeeBox, handshake, listingPicker} from '../utils/DummyData';
 import DiscoverCard from './DiscoverCard';
 import MyGroupsCard from './MyGroupsCard';
@@ -34,9 +37,10 @@ import {getGroups} from '../redux/actions/homeAction';
 import images from '../assets/images';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
+import {timeFormatting} from '../utils/HelperFunctions';
 
 const Discover = ({searchPressed}) => {
-  const [groups, setGroups] = React.useState([])
+  const [groups, setGroups] = React.useState([]);
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -65,7 +69,9 @@ const Discover = ({searchPressed}) => {
         renderItem={({item, index}) => (
           <DiscoverCard
             image={
-              item.feature_image ? {uri: item.feature_image, priority: FastImage.priority.high} : images.dummy
+              item.feature_image
+                ? {uri: item.feature_image, priority: FastImage.priority.high}
+                : images.dummy
             }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
@@ -78,12 +84,8 @@ const Discover = ({searchPressed}) => {
             count={index + 1}
             group={true}
             players={item.group_desired_teebox}
-            date={
-              item.suggested_day == '02/18/24' ? item.suggested_day : '02/18/24'
-            }
-            area_code={
-              item.area_code === 'Select a Area Code' ? '240' : item.area_code
-            }
+            date={timeFormatting(item.suggested_day)}
+            area_code={item.area_code}
             desc={
               item.group_desired_teebox.length == 0
                 ? 'All Other'
@@ -137,7 +139,9 @@ const Discover = ({searchPressed}) => {
         renderItem={({item, index}) => (
           <DiscoverCard
             image={
-              item.feature_image ? {uri: item.feature_image, priority: FastImage.priority.high} : images.dummy
+              item.feature_image
+                ? {uri: item.feature_image, priority: FastImage.priority.high}
+                : images.dummy
             }
             onPress={() =>
               navigation.navigate('SecondaryStack', {
@@ -150,20 +154,16 @@ const Discover = ({searchPressed}) => {
             count={index + 1}
             group={true}
             players={item.group_desired_teebox}
-            date={
-              item.suggested_day == '02/18/24' ? item.suggested_day : '02/18/24'
-            }
-            area_code={
-              item.area_code === 'Select a Area Code' ? '240' : item.area_code
-            }
+            date={timeFormatting(item.suggested_day)}
+            area_code={item.area_code}
             desc={
               item.group_desired_teebox.length == 0
-                ? 'All Other'
+                ? 'Select'
                 : item.group_desired_teebox
             }
             itc={
               item.itc_group_handshake.length == 0
-                ? 'CASUAL HANDSHAKE'
+                ? 'Select'
                 : item.itc_group_handshake
             }
           />
@@ -181,9 +181,10 @@ const Discover = ({searchPressed}) => {
 
 const MyGroups = ({setIndex, setGroupData}) => {
   const [loaderIndex, setLoaderIndex] = React.useState(null);
-  const [my_groups, setMy_groups] = React.useState([])
-  const {my_groups_loader, delete_loader} =
-    useSelector(state => state.GroupReducer);
+  const [my_groups, setMy_groups] = React.useState([]);
+  const {my_groups_loader, delete_loader} = useSelector(
+    state => state.GroupReducer,
+  );
 
   console.log('my groups from screen =============>', my_groups);
   const {user} = useSelector(state => state.AuthReducer);
@@ -226,7 +227,8 @@ const MyGroups = ({setIndex, setGroupData}) => {
     setLoaderIndex(index);
     const res = await dispatch(DeleteGroup(group_id, user.user_id));
     if (res) {
-      navigation.navigate('Home');
+      // navigation.navigate('Home');
+      dispatch(getGroupsById(user.user_id, setMy_groups))
       return ShowToast(res);
     }
   };
@@ -466,7 +468,7 @@ const AddNew = ({groupData}) => {
         style={styles.input}
       />
 
-      <View style={{flexDirection: 'row', justifyContent: 'space-between',  }}>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <View>
           <Text style={styles.textStyle}>What Kind Of Listing Is This?</Text>
           <View style={[styles.pickerStyle, {width: wp('40%')}]}>
@@ -498,12 +500,12 @@ const AddNew = ({groupData}) => {
           onConfirm={date =>
             setState({
               ...state,
-              suggested_day: moment(date).format('MM/DD/YY'),
+              suggested_day: moment(date).format('MM/DD/YYYY'),
             })
           }
           icon={'date-range'}
           style={{padding: hp('2.3%')}}
-          text={state.suggested_day !== '' ? state.suggested_day : 'mm/dd/yy'}
+          text={state.suggested_day !== '' ? state.suggested_day : 'mm/dd/yyyy'}
         />
       </View>
       <Text style={styles.textStyle}>IN THE CUP HANDSHAKE</Text>

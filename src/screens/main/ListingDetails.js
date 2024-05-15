@@ -30,6 +30,7 @@ import constant from '../../redux/constant';
 import {useNavigation} from '@react-navigation/native';
 import {Tabs} from '../../utils/DummyData';
 import FastImage from 'react-native-fast-image';
+import {timeFormatting} from '../../utils/HelperFunctions';
 
 const ListingDetails = ({route}) => {
   const [changeTab, setChangeTab] = useState(1);
@@ -40,7 +41,7 @@ const ListingDetails = ({route}) => {
 
   // const {reviews, reviews_loading} = useSelector(state => state.HomeReducer);
   const {user} = useSelector(state => state.AuthReducer);
-  console.log('android user', user.user_id)
+  console.log('android user', user.user_id);
   const {join_loading, status_loader} = useSelector(
     state => state.ListingReducer,
   );
@@ -57,17 +58,19 @@ const ListingDetails = ({route}) => {
   //   }
   // }, [changeTab]);
 
-  // const itemStatus = useSelector(
-  //   state => state?.ListingReducer[item.listing_id] || 'Unknown',
-  // );
-  console.log('acha', listingStatus);
-
+  console.log('listing join status =======>', listingStatus);
 
   const onHyperLink = async link => {
     if (link == '') {
-      return ShowToast('Hyperlink not found');
+      return ShowToast('link not found');
     } else {
-      await Linking.openURL(link);
+      const supported = await Linking.canOpenURL(link);
+      if (supported) {
+        alert('haha')
+        await Linking.openURL(link);
+      } else {
+        return ShowToast('Invalid url');
+      }
     }
   };
 
@@ -83,7 +86,7 @@ const ListingDetails = ({route}) => {
     );
 
     if (res.success) {
-      setListingStatus(res.status)
+      setListingStatus(res.status);
       dispatch({
         type: constant.JOIN_LISTING_DONE,
       });
@@ -203,7 +206,7 @@ const ListingDetails = ({route}) => {
                     <Text style={styles.heading}>SUGGESTED TIME:</Text>
                     <View style={styles.line} />
                     <Text style={styles.text}>
-                      {item.course_time ? item.course_time : ''}
+                      {timeFormatting(item.course_time)}
                     </Text>
                   </View>
                   <View style={styles.detailContainer}>
@@ -262,12 +265,18 @@ const ListingDetails = ({route}) => {
                 ) : (
                   <Button
                     buttonText={
-                      listingStatus === 'pending' || listingStatus?.data?.accept_or_not === '0'
+                      listingStatus === 'pending' ||
+                      listingStatus?.data?.accept_or_not === '0'
                         ? 'Pending'
                         : 'Join Listing'
                     }
                     buttonStyle={styles.button}
-                    disable={listingStatus === 'pending' || listingStatus?.data?.accept_or_not === '0' ? true : false}
+                    disable={
+                      listingStatus === 'pending' ||
+                      listingStatus?.data?.accept_or_not === '0'
+                        ? true
+                        : false
+                    }
                     textStyle={{color: colors.secondary}}
                     indicator={join_loading}
                     onPress={() => onJoin()}

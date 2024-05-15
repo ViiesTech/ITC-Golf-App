@@ -21,6 +21,7 @@ import SearchFilter from '../../components/SearchFilter';
 import Sponsors from '../../components/Sponsors';
 import images from '../../assets/images';
 import FastImage from 'react-native-fast-image';
+import { timeFormatting } from '../../utils/HelperFunctions';
 
 const Groups = () => {
   const navigation = useNavigation();
@@ -121,14 +122,10 @@ const Groups = () => {
                   title={item.listing_title}
                   desc={
                     item.group_desired_teebox == ''
-                      ? 'All Other'
+                      ? 'Select'
                       : item.group_desired_teebox
                   }
-                  date={
-                    item.suggested_day == '02/18/24'
-                      ? item.suggested_day
-                      : '02/18/24'
-                  }
+                  date={timeFormatting(item.suggested_day)}
                   area={item.area_code}
                   onPress={() =>
                     navigation.navigate('SecondaryStack', {
@@ -166,12 +163,10 @@ const Groups = () => {
             title={item.listing_title}
             desc={
               item.group_desired_teebox == ''
-                ? 'All Other'
+                ? 'Select'
                 : item.group_desired_teebox
             }
-            date={
-              item.suggested_day == '02/18/24' ? item.suggested_day : '02/18/24'
-            }
+            date={item.suggested_day}
             area={item.area_code}
             onPress={() =>
               navigation.navigate('SecondaryStack', {

@@ -2,7 +2,7 @@ import constant from '../constant';
 
 const initialState = {
   create_listing_loading: false,
-  my_listings: [],
+  // my_listings: [],
   my_listings_loader: false,
   listing_id: 0,
   join_loading: false,
@@ -31,7 +31,7 @@ export default (state = initialState, action) => {
       return {...state, my_listings_loader: true};
 
     case constant.GET_MY_LISTINGS_DONE:
-      return {...state, my_listings_loader: false, my_listings: action.payload};
+      return {...state, my_listings_loader: false, };
 
     case constant.JOIN_LISTING:
       return {...state, join_loading: true};

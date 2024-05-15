@@ -26,6 +26,7 @@ import {getGroupStatus, JoinGroup} from '../../redux/actions/groupAction';
 import constant from '../../redux/constant';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
+import { timeFormatting } from '../../utils/HelperFunctions';
 
 const GroupDetail = ({route}) => {
   const [changeTab, setChangeTab] = useState(1);
@@ -59,9 +60,14 @@ const GroupDetail = ({route}) => {
 
   const onHyperLink = async link => {
     if (link == '') {
-      return ShowToast('Hyperlink not found');
+      return ShowToast('link not found');
     } else {
-      await Linking.openURL(link);
+      const supported = await Linking.canOpenURL(link);
+      if (supported) {
+        await Linking.openURL(link);
+      } else {
+        return ShowToast('Invalid url');
+      }
     }
   };
 
@@ -212,7 +218,8 @@ const GroupDetail = ({route}) => {
                   <View style={styles.line} />
 
                   <Text style={styles.text}>
-                    {item.suggested_day ? item.suggested_day : ''}
+                    {/* {timeFormatting(item.suggested_day)} */}
+                    {item.suggested_day}
                   </Text>
                 </View>
                 <View style={styles.dataRow}>

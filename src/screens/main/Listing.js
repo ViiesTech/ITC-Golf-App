@@ -21,6 +21,7 @@ import {getListings, ListingsByAreaCodes} from '../../redux/actions/homeAction';
 import colors from '../../assets/colors';
 import images from '../../assets/images';
 import FastImage from 'react-native-fast-image';
+import { timeFormatting } from '../../utils/HelperFunctions';
 
 const Listing = () => {
   const [selectedCode, setSelectedCode] = useState(null);
@@ -37,6 +38,8 @@ const Listing = () => {
   );
 
   const dispatch = useDispatch();
+
+  // console.log('filtered resultsss ======>', typeof moment(new Date()).format('MM/DD/YY'))
 
   useEffect(() => {
     dispatch(getListings(setListings));
@@ -85,7 +88,7 @@ const Listing = () => {
             title={item.listing_title}
             desc={item.match_description}
             date={item.course_date}
-            time={item.course_time == '' ? '23:28' : item.course_time}
+            time={timeFormatting(item.course_time)}
             exp={
               item.experience_level == ''
                 ? '5 to 10 par progress level'
@@ -125,7 +128,7 @@ const Listing = () => {
   const renderFilterListings = () => {
     return listings_filter_loader ? (
       renderLoader()
-    ) : listings_filter?.message ? (
+    ) : listings_filter?.message  ? (
       renderMessage()
     ) : (
       <FlatList
@@ -146,7 +149,7 @@ const Listing = () => {
             title={item.listing_title}
             desc={item.match_description}
             date={item.course_date}
-            time={item.course_time == '' ? '23:28' : item.course_time}
+            time={timeFormatting(item.course_time)}
             exp={
               item.experience_level == ''
                 ? '5 to 10 par progress level'

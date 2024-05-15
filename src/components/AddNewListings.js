@@ -43,15 +43,17 @@ import images from '../assets/images';
 import {Picker} from '@react-native-picker/picker';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
+import {timeFormatting} from '../utils/HelperFunctions';
 
 const Discover = ({searchPressed}) => {
-  const [listings, setListings] = React.useState([])
+  const [listings, setListings] = React.useState([]);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const {loader, listings_filter,listings_filter_loader} =
-    useSelector(state => state.HomeReducer);
+  const {loader, listings_filter, listings_filter_loader} = useSelector(
+    state => state.HomeReducer,
+  );
 
   console.log('listings', searchPressed);
 
@@ -101,7 +103,7 @@ const Discover = ({searchPressed}) => {
             // }
             players={item.how_many_players}
             date={item.course_date}
-            time={item.course_time ? item.course_time : true}
+            time={timeFormatting(item.course_time)}
           />
         )}
       />
@@ -146,7 +148,7 @@ const Discover = ({searchPressed}) => {
             // }
             players={item.how_many_players}
             date={item.course_date}
-            time={item.course_time ? item.course_time : true}
+            time={timeFormatting(item.course_time)}
           />
         )}
       />
@@ -186,7 +188,7 @@ const Discover = ({searchPressed}) => {
 
 const MyListings = ({setIndex, setListingData}) => {
   const [loaderIndex, setLoaderIndex] = React.useState(null);
-  const [my_listings, setMy_listings] = React.useState([])
+  const [my_listings, setMy_listings] = React.useState([]);
   const {my_listings_loader, delete_loader} = useSelector(
     state => state.ListingReducer,
   );
@@ -226,7 +228,8 @@ const MyListings = ({setIndex, setListingData}) => {
     setLoaderIndex(index);
     const res = await dispatch(DeleteListing(listing_id, user.user_id));
     if (res) {
-      navigation.navigate('Home');
+      // navigation.navigate('Home');
+      dispatch(ListingsByUserID(user.user_id, setMy_listings))
       return ShowToast(res);
     }
   };
@@ -267,7 +270,7 @@ const MyListings = ({setIndex, setListingData}) => {
               date={item.course_date}
               handshake={
                 item.the_itc_handshake == ''
-                  ? 'CASUAL HANDSHAKE'
+                  ? 'Select'
                   : item.the_itc_handshake
               }
             />
@@ -452,6 +455,7 @@ const AddNew = ({listingData}) => {
         ),
       );
       if (res) {
+        // setIndex('second')
         navigation.navigate('Home');
         initialState();
         return ShowToast(res);
@@ -516,10 +520,10 @@ const AddNew = ({listingData}) => {
           onConfirm={date =>
             setState({
               ...state,
-              suggested_day: moment(date).format('MM/DD/YY'),
+              suggested_day: moment(date).format('MM/DD/YYYY'),
             })
           }
-          text={state.suggested_day !== '' ? state.suggested_day : 'mm/dd/yy'}
+          text={state.suggested_day !== '' ? state.suggested_day : 'mm/dd/yyyy'}
           icon={'date-range'}
           mode={'date'}
         />
@@ -771,7 +775,6 @@ const AddNew = ({listingData}) => {
 };
 
 export const AddNewListings = ({buttonPress}) => {
-
   const [index, setIndex] = React.useState('first');
   const [routes] = React.useState([
     {key: 'first', title: 'Discover'},

@@ -17,7 +17,7 @@ const ListingDetailCard = ({
   route,
   count,
   total,
-  listingImage
+  listingImage,
 }) => {
   return (
     <TouchableOpacity
@@ -44,11 +44,7 @@ const ListingDetailCard = ({
               alignItems: 'center',
             }
           }>
-          <Text
-            style={[
-              styles.text,
-              {fontSize: hideTag && hp('1.7%'),},
-            ]}>
+          <Text style={[styles.text, {fontSize: hideTag && hp('1.7%')}]}>
             {title}
           </Text>
           {hideTag && (
@@ -71,7 +67,11 @@ const ListingDetailCard = ({
             <Text style={styles.fontStyle}>{date}</Text>
           </View>
           <View style={{paddingTop: hp('3%')}}>
-            <Text style={styles.textStyle}>{time ? 'TIME:' : 'AREA-CODE'}</Text>
+            <View style={{alignItems: 'flex-end'}}>
+              <Text style={styles.textStyle}>
+                {time ? 'TIME:' : 'AREA-CODE'}
+              </Text>
+            </View>
             <Text style={[styles.fontStyle, {alignSelf: 'flex-end'}]}>
               {time ? time : area}
             </Text>

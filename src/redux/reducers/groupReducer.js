@@ -2,9 +2,9 @@ import constant from '../constant';
 
 const initialState = {
   create_group_loading: false,
-  my_groups: [],
+  // my_groups: [],
   my_groups_loader: false,
-  my_groups_message: '',
+  // my_groups_message: '',
   join_loading: false,
   delete_loader: false,
   edit_loader: false,
@@ -27,8 +27,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         my_groups_loader: false,
-        my_groups: action.payload,
-        my_groups_message: state.my_groups.length < 1 && action.message,
+        // my_groups: action.payload,
+        // my_groups_message: state.my_groups.length < 1 && action.message,
       };
 
     case constant.DELETE_GROUP:

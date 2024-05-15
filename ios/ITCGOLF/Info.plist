@@ -65,6 +65,12 @@
 		<string>Entypo.ttf</string>
 		<string>AntDesign.ttf</string>
 	</array>
+	<key>LSApplicationQueriesSchemes</key>
+<array>
+    <string>http</string>
+    <string>https</string>
+</array>
+
 	<key>UILaunchStoryboardName</key>
 	<string>Launch Screen.storyboar</string>
 	<key>UIRequiredDeviceCapabilities</key>

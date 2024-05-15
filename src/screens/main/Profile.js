@@ -183,7 +183,7 @@ const Profile = () => {
       <ConfirmationModal
         visible={accountModal}
         onPressOut={() => setAccountModal(false)}
-        modalText={'Are you sure you want to deactivate your account?'}
+        modalText={'Are you sure you want to delete your account?'}
         onCancel={() => setAccountModal(false)}
         onConfirm={() => onConfirmLogout('deactivate')}
         onRequestClose={() => {
