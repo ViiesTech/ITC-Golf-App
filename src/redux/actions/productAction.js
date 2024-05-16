@@ -5,7 +5,8 @@ import FormData from 'form-data';
 
 export const getProducts = setProducts => {
   return async (dispatch, getState) => {
-    const wishlist = getState().AuthReducer.wishlist_items
+    const wishlist = getState().AuthReducer.wishlist_items;
+    // console.log('wishlistttt', wishlist)
 
     dispatch({
       type: constant.RENDER_PRODUCT,
@@ -18,14 +19,19 @@ export const getProducts = setProducts => {
         },
       })
       .then(res => {
-        // console.log('products response =======================>', res.data)
-        const update = res.data?.map(product => ({
-          ...product,
-          favorite: wishlist?.some(
-            item => item.product_id == product.product_id.toString(),
-          ),
-        }));
-        setProducts(update);
+        console.log('products response =======================>', res.data);
+        if (wishlist?.message) {
+          setProducts(res.data);
+        } else {
+          const update = res.data?.map(product => ({
+            ...product,
+            favorite: wishlist?.some(
+              item => item.product_id == product.product_id,
+            ),
+          }));
+          setProducts(update);
+        }
+        // console.log('updated favourite products ======>', update)
         dispatch({
           type: constant.RENDER_PRODUCT_DONE,
         });
@@ -91,7 +97,7 @@ export const addToWishlist = (user_id, product_id) => {
         }
       })
       .catch(error => {
-        console.log('error adding favourite',error);
+        console.log('error adding favourite', error);
         return ShowToast('Some problem occured');
       });
   };

@@ -104,7 +104,8 @@ export const settings = [
     id: 1,
     text: 'Payment',
     icon: icons.payment,
-    nav: 'Payments'
+    message: 'Coming soon'
+    // nav: 'Payments'
   },
   {
     id: 2,
@@ -128,13 +129,15 @@ export const settings = [
     id: 5,
     text: 'Language',
     icon: icons.language,
-    nav: 'Language'
+    message: 'Coming soon'
+    // nav: 'Language'
   },
   {
     id: 6,
     text: 'Rate This App',
     icon: icons.rate,
-    nav: 'Rating'
+    message: 'Coming soon'
+    // nav: 'Rating'
   },
   {
     id: 7,
@@ -580,24 +583,26 @@ export const Screens = [
     id: 3,
     text: 'Players You Follow',
   },
-  {
-    id: 4,
-    text: 'My Profile',
-  },
 ];
 
 export const MainSettings = [
   {
     id: 1,
     text: 'Add New Groups',
+    options: 'Add New Groups'
+
   },
   {
     id: 2,
     text: 'Add New Listings',
+    options: 'Add New Listings'
+
   },
   {
     id: 3,
     text: 'Player You Follow',
+    options: 'Players You Follow'
+
   },
 ];
 

@@ -21,7 +21,8 @@ import {getListings, ListingsByAreaCodes} from '../../redux/actions/homeAction';
 import colors from '../../assets/colors';
 import images from '../../assets/images';
 import FastImage from 'react-native-fast-image';
-import { timeFormatting } from '../../utils/HelperFunctions';
+import {timeFormatting} from '../../utils/HelperFunctions';
+import {ShowToast} from '../../Custom';
 
 const Listing = () => {
   const [selectedCode, setSelectedCode] = useState(null);
@@ -33,7 +34,7 @@ const Listing = () => {
   // console.log('lets see', navigation.getState().routes[1].name);
   const routeName = navigation.getState().routes[1].name;
 
-  const {loader,listings_filter, listings_filter_loader} = useSelector(
+  const {loader, listings_filter, listings_filter_loader} = useSelector(
     state => state.HomeReducer,
   );
 
@@ -128,7 +129,7 @@ const Listing = () => {
   const renderFilterListings = () => {
     return listings_filter_loader ? (
       renderLoader()
-    ) : listings_filter?.message  ? (
+    ) : listings_filter?.message ? (
       renderMessage()
     ) : (
       <FlatList
@@ -169,9 +170,15 @@ const Listing = () => {
 
   const handleRefresh = () => {
     setRefreshing(true);
-    setTimeout(() => {
-      dispatch(getListings(setListings));
-      setRefreshing(false);
+    setTimeout(async () => {
+      try {
+        await dispatch(getListings(setListings));
+      } catch (error) {
+        console.log('refreshing data error =====>', error);
+        return ShowToast('Some problem occured');
+      } finally {
+        setRefreshing(false);
+      }
     }, 3000);
   };
 

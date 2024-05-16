@@ -155,8 +155,13 @@ const Notifications = () => {
   const handleRefresh = () => {
     setRefreshing(true);
     setTimeout(() => {
-      dispatch(getNotifications(user.user_id, setNotifications));
-      setRefreshing(false);
+      try {
+        dispatch(getNotifications(user.user_id, setNotifications));
+      } catch (error) {
+        console.log('error refreshing data =======>', error);
+      } finally {
+        setRefreshing(false);
+      }
     }, 3000);
   };
 

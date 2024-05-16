@@ -137,7 +137,7 @@ const Home = () => {
   const renderFilterListings = () => {
     return listings_filter_loader
       ? renderFilterLoader()
-      : listings_filter?.message 
+      : listings_filter?.message
       ? renderFilterMessage()
       : listings_filter?.map((item, index) => (
           <View
@@ -204,9 +204,15 @@ const Home = () => {
   const handleRefresh = () => {
     setRefreshing(true);
     setTimeout(() => {
-      dispatch(getListings(setListings));
-      dispatch(getAllAreaCodes());
-      setRefreshing(false);
+      try {
+        dispatch(getListings(setListings));
+        dispatch(getAllAreaCodes());
+      } catch (error) {
+        console.log('refreshing data error =====>', error);
+        return ShowToast('Some problem occured');
+      } finally {
+        setRefreshing(false);
+      }
     }, 3000);
   };
 

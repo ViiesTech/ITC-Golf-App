@@ -21,7 +21,8 @@ import SearchFilter from '../../components/SearchFilter';
 import Sponsors from '../../components/Sponsors';
 import images from '../../assets/images';
 import FastImage from 'react-native-fast-image';
-import { timeFormatting } from '../../utils/HelperFunctions';
+import {timeFormatting} from '../../utils/HelperFunctions';
+import {ShowToast} from '../../Custom';
 
 const Groups = () => {
   const navigation = useNavigation();
@@ -192,9 +193,15 @@ const Groups = () => {
 
   const handleRefresh = () => {
     setRefreshing(true);
-    setTimeout(() => {
-      dispatch(getGroups(setGroups));
-      setRefreshing(false);
+    setTimeout(async () => {
+      try {
+        await dispatch(getGroups(setGroups));
+      } catch (error) {
+        console.log('refreshing error ===>', error);
+        return ShowToast('Some problem occured');
+      } finally {
+        setRefreshing(false);
+      }
     }, 3000);
   };
 

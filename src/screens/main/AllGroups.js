@@ -55,14 +55,14 @@ const AllGroups = ({route}) => {
 
   const {listing_id} = useSelector(state => state.ListingReducer);
 
-  // console.log('listing id =======>', listing_id)
+  console.log('updated user response =======>', user)
 
   const [state, setState] = useState({
     first_name: user.firstname,
     last_name: user.lastname,
     address: user?.address ? user.address : '',
     pickers: {
-      area_code: user?.areacode ? user?.areacode : '',
+      area_code: user?.area_code ? user?.area_code : '',
       exp_level: user?.experience_level ? user?.experience_level : '',
       desired_tee: user?.desired_tee_box ? user?.desired_tee_box : '',
     },

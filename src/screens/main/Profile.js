@@ -29,8 +29,6 @@ const Profile = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [accountModal, setAccountModal] = useState(false);
 
-  const url = 'https://inthecup.golf';
-
   const navigation = useNavigation();
 
   const dispatch = useDispatch();
@@ -38,32 +36,16 @@ const Profile = () => {
   const {user} = useSelector(state => state.AuthReducer);
 
   const onSettingsPress = async (item, index) => {
-    console.log('navv', item)
-    if (index == 6) {
+    // console.log('navv', item);
+    if (index == 0 || index == 4 || index == 5){
+      return ShowToast(item.message)
+    }
+    else if (index == 6) {
       await Linking.openURL(item.url);
     } else if (index == 8) {
       setAccountModal(true);
     } else {
-      navigation.navigate('SecondaryStack',{screen: item.nav});
-    }
-  };
-
-  const onMainSettingsPress = index => {
-    if (index == 0) {
-      navigation.navigate('SecondaryStack', {
-        screen: 'AllGroups',
-        params: {options: 'Add New Groups'},
-      });
-    } else if (index == 1) {
-      navigation.navigate('SecondaryStack', {
-        screen: 'AllGroups',
-        params: {options: 'Add New Listings'},
-      });
-    } else {
-      navigation.navigate('SecondaryStack', {
-        screen: 'AllGroups',
-        params: {options: 'Players You Follow'},
-      });
+      navigation.navigate('SecondaryStack', {screen: item.nav});
     }
   };
 
@@ -142,7 +124,12 @@ const Profile = () => {
           {MainSettings.map((item, i) => (
             <TouchableOpacity
               activeOpacity={0.9}
-              onPress={() => onMainSettingsPress(i)}
+              onPress={() => {
+                navigation.navigate('SecondaryStack', {
+                  screen: 'AllGroups',
+                  params: {options: item.options},
+                });
+              }}
               style={styles.mainWrapper}>
               <Text key={i} style={styles.settingsText}>
                 {item.text}

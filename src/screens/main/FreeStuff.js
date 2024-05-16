@@ -20,10 +20,11 @@ import {
   removeFromWishlist,
 } from '../../redux/actions/productAction';
 import colors from '../../assets/colors';
-import constant from '../../redux/constant';
 import Sponsors from '../../components/Sponsors';
 import images from '../../assets/images';
 import FastImage from 'react-native-fast-image';
+import {getWishlistById} from '../../redux/actions/authAction';
+import {ShowToast} from '../../Custom';
 
 const FreeStuff = () => {
   const [products, setProducts] = useState([]);
@@ -34,7 +35,7 @@ const FreeStuff = () => {
   const dispatch = useDispatch();
 
   const {products_loading} = useSelector(state => state.ProductReducer);
-  const {user, wishlist_items} = useSelector(state => state.AuthReducer);
+  const {user} = useSelector(state => state.AuthReducer);
   // console.log('from screen ======================>', products[0].isFav)
 
   useEffect(() => {
@@ -79,14 +80,20 @@ const FreeStuff = () => {
 
   const handleRefresh = () => {
     setRefreshing(true);
-    setTimeout(() => {
-      dispatch(getProducts(setProducts));
-      setRefreshing(false);
+    setTimeout(async () => {
+      try {
+        await dispatch(getWishlistById(user.user_id));
+        await dispatch(getProducts(setProducts));
+      } catch (error) {
+        console.log('refreshing error', error)
+        return ShowToast('Some problem occured');
+      } finally {
+        setRefreshing(false)
+      }
     }, 3000);
   };
 
-
-  console.log('productsss', products);
+  // console.log('productsss', products);
 
   return (
     <Container>
