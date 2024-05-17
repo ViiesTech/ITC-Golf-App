@@ -49,7 +49,7 @@ export default MerchandiseCard
 
 const styles = StyleSheet.create({
     component: {
-        marginBottom: hp('10%'),
+        marginBottom: hp('5%'),
     },
     cardStyle: {
         borderWidth: 2,
@@ -74,8 +74,9 @@ const styles = StyleSheet.create({
     },
     desc: {
         color: colors.lightgray,
-        position: 'absolute',
-        top: hp('29.5%'),
+        // position: 'absolute',
+        // top: hp('29.5%'),
+        width: hp(20),
         marginTop: hp('1%'),
     },
     // wrapper: {

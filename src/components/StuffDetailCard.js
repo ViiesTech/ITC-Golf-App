@@ -28,7 +28,6 @@ const StuffDetailCard = ({ rating, image, title, desc, favourite }) => {
             </View>
             <View style={styles.textWrapper}>
                 <Text style={[styles.text, {  }]}>{title}</Text>
-
                 {/* <StarRating
                     starSize={15}
                     style={{ marginTop: hp('1.7%') }}
@@ -47,7 +46,6 @@ const StuffDetailCard = ({ rating, image, title, desc, favourite }) => {
                     ))}
                 </View>
             </View>
-
         </View>
     )
 }
@@ -62,6 +60,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.gray,
         borderRadius: 10,
         width: '46%',
+        height: hp(27),
         padding: hp('1%')
     },
     image: {
@@ -84,7 +83,7 @@ const styles = StyleSheet.create({
     },
     textWrapper: {
         marginLeft: hp('1%'),
-        flex: 2,
+        flex: 3,
         marginTop: hp('1%')
     },
     text: {
