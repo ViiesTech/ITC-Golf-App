@@ -26,10 +26,22 @@ export const timeFormatting = time => {
   return formatedTime;
 };
 
+export const concatNotification_text = (user_name, noti_text) => {
+  if (
+    noti_text === 'add new group' ||
+    noti_text === 'add new listing' ||
+    noti_text === 'added new group'
+  ) {
+    return user_name + ' ' + noti_text;
+  } else {
+    return noti_text;
+  }
+};
+
 // export const FilterExpiredListings = (listing, type) => {
 //   const currentDate = new Date();
 //   const filteredListings = listing.filter(data => {
-//    const listingDate = new Date(type === 'group' ? data.suggested_day : data.course_date) 
+//    const listingDate = new Date(type === 'group' ? data.suggested_day : data.course_date)
 //       listingDate.setHours(
 //         currentDate.getHours(),
 //         currentDate.getMinutes(),

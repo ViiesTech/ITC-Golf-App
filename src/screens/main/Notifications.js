@@ -24,6 +24,7 @@ import {AcceptListing, RejectListing} from '../../redux/actions/listingAction';
 import {ShowToast} from '../../Custom';
 import constant from '../../redux/constant';
 import {AcceptGroup, RejectGroup} from '../../redux/actions/groupAction';
+import { concatNotification_text } from '../../utils/HelperFunctions';
 
 const Notifications = () => {
   const [isIndex, setIsIndex] = useState(0);
@@ -215,7 +216,7 @@ const Notifications = () => {
                   status={item.listing_status}
                   hidebuttons={item.listing_status === 'pending' ? false : true}
                   onRejectPress={() => onRejectRequest(item, index)}
-                  text={item.notification_text}
+                  text={concatNotification_text(item.listing_requester_name,item.notification_text)}
                   desc={item.listing_name}
                   date={moment(item.create_date).format('DD MMMM YYYY')}
                 />

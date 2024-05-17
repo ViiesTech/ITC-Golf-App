@@ -20,13 +20,15 @@ const SecondaryHeader = ({icon, text, style, link, onLinkPress, linkButton, head
           style={{alignSelf: 'center'}}
           onPress={() => navigation.goBack()}
         />
+        {/* <View style={{backgroundColor: 'red',  marginLeft: hp(3)}}> */}
         <Text style={[styles.headerText,headerStyle]}>{text}</Text>
+        {/* </View> */}
+      </View>
         {link && (
           <TouchableOpacity style={[styles.linkStyle,linkButton]} activeOpacity={0.9} onPress={onLinkPress}>
             <Text style={styles.textStyle}>View Link</Text>
           </TouchableOpacity>
         )}
-      </View>
       {icon && <SVGImage image={icons.sort} style={{alignSelf: 'center'}} />}
     </View>
   );
@@ -46,16 +48,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontWeight: 'bold',
     fontSize: hp('2.5%'),
-    marginLeft: hp('3.5%'),
+    marginLeft: hp('2%'),
   },
   linkStyle: {
     borderRadius: 100,
     padding: hp('0.9%'),
-    // width: hp('14%'),
     backgroundColor: colors.primary,
     alignSelf: 'center',
     marginTop: hp('0.4%'),
-    marginHorizontal: hp('2.5%'),
+    // marginHorizontal: hp('2.5%'),
     alignItems: 'center',
   },
   textStyle: {
