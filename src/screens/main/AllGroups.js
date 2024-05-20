@@ -37,6 +37,7 @@ import {useNavigation} from '@react-navigation/native';
 import {
   androidPermissionHandler,
   iosPermissionHandler,
+  requestPermission,
 } from '../../utils/HelperFunctions';
 import FastImage from 'react-native-fast-image';
 
@@ -55,7 +56,7 @@ const AllGroups = ({route}) => {
 
   const {listing_id} = useSelector(state => state.ListingReducer);
 
-  console.log('updated user response =======>', user)
+  console.log('updated user response =======>', user);
 
   const [state, setState] = useState({
     first_name: user.firstname,
@@ -104,44 +105,49 @@ const AllGroups = ({route}) => {
   };
 
   const onChangePhoto = async () => {
-    const options = {
-      title: 'Select Image',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-        quality: 0.5,
-      },
-    };
-
-    await launchImageLibrary(options, async response => {
-      if (response.didCancel) {
-        console.log('cancelled', response.didCancel);
-      } else {
-        setState(prevState => ({
-          ...prevState,
-          photoURL: response.assets[0].uri,
-        }));
-      }
-    });
-  };
-
-  const iosPermission = async () => {
-    const status = await iosPermissionHandler();
+    const status = await requestPermission('media');
     if (status === 'granted') {
-      onChangePhoto();
+      const options = {
+        title: 'Select Image',
+        storageOptions: {
+          skipBackup: true,
+          path: 'images',
+          quality: 0.5,
+        },
+      };
+
+      await launchImageLibrary(options, async response => {
+        if (response.didCancel) {
+          console.log('cancelled', response.didCancel);
+        } else {
+          setState(prevState => ({
+            ...prevState,
+            photoURL: response.assets[0].uri,
+          }));
+        }
+      });
     } else {
       return ShowToast('Permission denied');
     }
   };
 
-  const androidPermission = async () => {
-    const status = await androidPermissionHandler();
-    if (status === 'granted') {
-      onChangePhoto();
-    } else {
-      return ShowToast('Permission denied');
-    }
-  };
+  // const iosPermission = async () => {
+  //   const status = await iosPermissionHandler();
+  //   if (status === 'granted') {
+  //     onChangePhoto();
+  //   } else {
+  //     return ShowToast('Permission denied');
+  //   }
+  // };
+
+  // const androidPermission = async () => {
+  //   const status = await androidPermissionHandler();
+  //   if (status === 'granted') {
+  //     onChangePhoto();
+  //   } else {
+  //     return ShowToast('Permission denied');
+  //   }
+  // };
   const onGroupSearch = async () => {
     if (groupsCode) {
       await dispatch(GroupsByAreaCodes(groupsCode));
@@ -285,13 +291,7 @@ const AllGroups = ({route}) => {
                 <TouchableOpacity
                   style={styles.editView}
                   activeOpacity={0.9}
-                  onPress={() => {
-                    if (Platform.OS === 'ios') {
-                      iosPermission();
-                    } else {
-                      androidPermission();
-                    }
-                  }}>
+                  onPress={() => onChangePhoto()}>
                   <Edit name={'edit'} color={colors.primary} size={16} />
                 </TouchableOpacity>
               </View>

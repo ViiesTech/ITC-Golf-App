@@ -37,6 +37,8 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location required</string>
+	<key>NSUserNotificationsUsageDescription</key>
+<string>ITC GOLF Would like to send you notifications.</string>
 	  <key>NSCameraUsageDescription</key>
   <string>App needs to access your camera</string>
     <key>NSPhotoLibraryUsageDescription</key>
