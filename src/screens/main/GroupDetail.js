@@ -226,7 +226,7 @@ const GroupDetail = ({route}) => {
                   <Text style={styles.heading}>IS THIS A PRIVATE GROUP:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {item.private_group == 'on' ? 'Yes' : 'No' || ''}
+                    {item.private_group === 'true' ? 'Yes' : 'No' || ''}
                   </Text>
                 </View>
                 {/* </View> */}

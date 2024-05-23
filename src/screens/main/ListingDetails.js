@@ -183,9 +183,9 @@ const ListingDetails = ({route}) => {
                     <Text style={styles.heading}>PRIVATE GROUP:</Text>
                     <View style={styles.line} />
                     <Text style={styles.text}>
-                      {item.private_group
-                        ? 'on'
-                        : (item.private_group && 'off') || ''}
+                      {item.private_group === 'true'
+                        ? 'Yes'
+                        : 'No' || ''}
                     </Text>
                   </View>
                   <View style={styles.detailContainer}>
@@ -227,18 +227,18 @@ const ListingDetails = ({route}) => {
                     <Text style={styles.heading}>SMOKING FRIENDLY:</Text>
                     <View style={styles.line} />
                     <Text style={styles.text}>
-                      {item.smoking_friendly
-                        ? 'on'
-                        : (item.smoking_friendly && 'off') || ''}
+                      {item.smoking_friendly === 'true'
+                        ? 'Yes'
+                        :  'No' || ''}
                     </Text>
                   </View>
                   <View style={styles.detailContainer}>
                     <Text style={styles.heading}>DRINKING FRIENDLY:</Text>
                     <View style={styles.line} />
                     <Text style={styles.text}>
-                      {item.drinking_friendly
-                        ? 'on'
-                        : (item.drinking_friendly && 'off') || ''}
+                      {item.drinking_friendly === 'true'
+                        ? 'Yes'
+                        : 'No' || ''}
                     </Text>
                   </View>
                 </View>
