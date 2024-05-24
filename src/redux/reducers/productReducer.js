@@ -1,7 +1,7 @@
 import constant from "../constant"
 
 const initialState = {
-    // products: [],
+    products: [],
     products_loading: false,
     // product_detail: {},
     product_detail_loading: false,

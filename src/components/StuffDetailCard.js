@@ -18,13 +18,13 @@ const StuffDetailCard = ({ rating, image, title, desc, favourite }) => {
                     resizeMode={FastImage.resizeMode.cover}
                     style={styles.image}
                 />
-                <View style={styles.heartView}>
+                {/* <View style={styles.heartView}>
                     <Heart
                         name={favourite ? 'heart' : 'hearto'}
                         size={17}
                         color={colors.secondary}
                     />
-                </View>
+                </View> */}
             </View>
             <View style={styles.textWrapper}>
                 <Text style={[styles.text, {  }]}>{title}</Text>
@@ -36,7 +36,7 @@ const StuffDetailCard = ({ rating, image, title, desc, favourite }) => {
                 /> */}
                 <Text style={styles.desc}>{desc !== '' ? desc : 'Lorem Ipsum Dolor Sit Amet, Consetetur'}</Text>
                 <View style={[styles.border, {  }]} />
-                <View style={{ paddingTop: hp('2%'), flexDirection: 'row' }}>
+                {/* <View style={{ paddingTop: hp('2%'), flexDirection: 'row' }}>
                     {Colors.map((item, i) => (
                         <ColorOptions
                             style={chooseOptions == i ? { backgroundColor: colors.gray, borderWidth: 0 } : { backgroundColor: 'transparent',  }}
@@ -44,7 +44,7 @@ const StuffDetailCard = ({ rating, image, title, desc, favourite }) => {
                             image={item.image}
                         />
                     ))}
-                </View>
+                </View> */}
             </View>
         </View>
     )

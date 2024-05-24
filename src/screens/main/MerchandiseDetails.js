@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  FlatList,
   ScrollView,
   StyleSheet,
   Text,
@@ -22,24 +23,20 @@ import {ShowToast} from '../../Custom';
 import FastImage from 'react-native-fast-image';
 
 const MerchandiseDetails = ({route}) => {
-  const [product_detail, setProduct_detail] = useState({})
+  const [product_detail, setProduct_detail] = useState({});
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
-
-  const {id, wishlist} = route.params;
-  console.log('product idd params ==========>', id);
+  const {id} = route.params;
+  console.log('product idd params ==========>', relatedProducts);
 
   const dispatch = useDispatch();
 
-  const {product_detail_loading} = useSelector(
-    state => state.ProductReducer,
-  );
-  // console.log('product details from screen =========> ==========>', product_detail[id])
+  const {product_detail_loading} = useSelector(state => state.ProductReducer);
 
   useEffect(() => {
-    // if (!product_detail[id]) {
-    dispatch(getProductDetails(id, setProduct_detail));
-    // }
+    dispatch(getProductDetails(id, setProduct_detail, setRelatedProducts));
   }, []);
+
 
   if (product_detail_loading) {
     return (
@@ -54,6 +51,24 @@ const MerchandiseDetails = ({route}) => {
       </View>
     );
   }
+
+  const renderItem = ({item}) => {
+    return (
+      <MerchandiseCard
+              image={{uri: item.image}}
+              desc={item.description}
+              text={item.title}
+              hideFav={true}
+              onPress={() => onProductPress(item.product_id)}
+            />
+    )
+  }
+
+  const onProductPress = (id) => {
+    dispatch(getProductDetails(id, setProduct_detail, setRelatedProducts))
+  }
+
+
 
   return (
     <Container>
@@ -72,7 +87,6 @@ const MerchandiseDetails = ({route}) => {
                 }
               : images.dummy
           }
-          favourite={wishlist}
           desc={product_detail.description}
         />
         <View style={styles.wrapper}>
@@ -85,14 +99,14 @@ const MerchandiseDetails = ({route}) => {
                 return ShowToast('Coming soon');
               }}
             />
-            <Button
+            {/* <Button
               buttonText={'Book Now'}
               textStyle={styles.button2Text}
               buttonStyle={styles.button2}
               onPress={() => {
                 return ShowToast('Coming soon');
               }}
-            />
+            /> */}
           </View>
           <View style={{marginLeft: hp('2%')}}>
             <Text style={styles.price}>$99.00</Text>
@@ -103,22 +117,20 @@ const MerchandiseDetails = ({route}) => {
         </View>
         <View style={styles.border} />
         <Text style={styles.heading}>Related Products</Text>
-        <View
+        {/* <View
           style={{
             paddingTop: hp('4%'),
             flexDirection: 'row',
             justifyContent: 'space-between',
-          }}>
-          <MerchandiseCard
-            image={images.stuff3}
-            desc={'Lorem Ipsum Dolor Sit Amet, Consetetur'}
-            text={'Golf Gloves'}
-            onPress={() => {
-              return ShowToast('Coming Soon');
-            }}
-            descStyle={{top: hp('27.5%')}}
-          />
-          <MerchandiseCard
+          }}> */}
+            <FlatList 
+              data={relatedProducts}
+              contentContainerStyle={{paddingTop: hp('1%')}}
+              numColumns={2}
+              columnWrapperStyle={{justifyContent: 'space-between'}}
+              renderItem={renderItem}
+            />
+          {/* <MerchandiseCard
             image={images.stuff4}
             imageStyle={{height: hp('18%'), width: '54%'}}
             style={{}}
@@ -128,8 +140,8 @@ const MerchandiseDetails = ({route}) => {
             desc={'Lorem Ipsum Dolor Sit Amet, Consetetur'}
             descStyle={{top: hp('27.5%')}}
             text={'Golf Tees'}
-          />
-        </View>
+          /> */}
+        {/* </View> */}
       </ScrollView>
     </Container>
   );
@@ -149,7 +161,7 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 100,
-    width: hp('15%'),
+    // width: hp('25%'),
   },
   button2: {
     borderWidth: 2,

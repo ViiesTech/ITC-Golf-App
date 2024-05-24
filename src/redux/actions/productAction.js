@@ -3,7 +3,7 @@ import constant, {URL} from '../constant';
 import {ShowToast} from '../../Custom';
 import FormData from 'form-data';
 
-export const getProducts = setProducts => {
+export const getProducts = () => {
   return async (dispatch, getState) => {
     const wishlist = getState().AuthReducer.wishlist_items;
     // console.log('wishlistttt', wishlist)
@@ -21,7 +21,10 @@ export const getProducts = setProducts => {
       .then(res => {
         console.log('products response =======================>', res.data);
         if (wishlist?.message) {
-          setProducts(res.data);
+          dispatch({
+            type: constant.RENDER_PRODUCT_DONE,
+            payload: res.data,
+          });
         } else {
           const update = res.data?.map(product => ({
             ...product,
@@ -29,12 +32,12 @@ export const getProducts = setProducts => {
               item => item.product_id == product.product_id,
             ),
           }));
-          setProducts(update);
+          dispatch({
+            type: constant.RENDER_PRODUCT_DONE,
+            payload: update,
+          });
         }
         // console.log('updated favourite products ======>', update)
-        dispatch({
-          type: constant.RENDER_PRODUCT_DONE,
-        });
       })
       .catch(error => {
         dispatch({
@@ -45,8 +48,14 @@ export const getProducts = setProducts => {
   };
 };
 
-export const getProductDetails = (product_id, setProduct_detail) => {
-  return async dispatch => {
+export const getProductDetails = (
+  product_id,
+  setProduct_detail,
+  setRelatedProducts,
+) => {
+  return async (dispatch, getState) => {
+    const all_products = getState().ProductReducer.products;
+
     dispatch({
       type: constant.RENDER_DETAILS,
     });
@@ -59,6 +68,10 @@ export const getProductDetails = (product_id, setProduct_detail) => {
       })
       .then(res => {
         setProduct_detail(res.data);
+        const related = all_products?.filter(
+          p => p.product_id !== res.data.product_id,
+        );
+        setRelatedProducts(related.slice(0,2));
         dispatch({
           type: constant.RENDER_DETAILS_DONE,
         });
@@ -67,7 +80,7 @@ export const getProductDetails = (product_id, setProduct_detail) => {
         dispatch({
           type: constant.RENDER_DETAILS_DONE,
         });
-        return ShowToast('Check your network, Try Again!' || error.code);
+        return ShowToast('Some problem occured');
       });
   };
 };

@@ -5,7 +5,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-nati
 import Heart from 'react-native-vector-icons/AntDesign'
 import FastImage from 'react-native-fast-image'
 
-const MerchandiseCard = ({ text, image, onPress, style, desc, rating, imageStyle, favourite, heartPress, descStyle }) => {
+const MerchandiseCard = ({ text, image, onPress, style, desc, imageStyle, favourite, heartPress, descStyle, hideFav }) => {
 
     return (
         <View style={[styles.component, style]}>
@@ -18,6 +18,7 @@ const MerchandiseCard = ({ text, image, onPress, style, desc, rating, imageStyle
             </TouchableOpacity>
             <View style={{  flexDirection: 'row' }}> 
                 <Text style={styles.productName}>{text}</Text>
+               {!hideFav &&
                 <TouchableOpacity style={styles.heartView} activeOpacity={0.9} onPress={heartPress}>
                     <Heart
                         name={favourite ? 'heart' : 'hearto'}
@@ -25,6 +26,7 @@ const MerchandiseCard = ({ text, image, onPress, style, desc, rating, imageStyle
                         color={colors.secondary}
                     />
                 </TouchableOpacity>
+                }
             </View>
             <Text style={[styles.desc, { paddingTop: text?.length > 45 && hp('1.6%') },descStyle]}>{desc == '' ? 'Lorem Ipsum Dolor Sit Amet, Consetetur' : desc}</Text>
             {/* <View style={styles.wrapper}>

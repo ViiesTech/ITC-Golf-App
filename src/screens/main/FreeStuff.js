@@ -27,20 +27,19 @@ import {getWishlistById} from '../../redux/actions/authAction';
 import {ShowToast} from '../../Custom';
 
 const FreeStuff = () => {
-  const [products, setProducts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
   const navigation = useNavigation();
 
   const dispatch = useDispatch();
 
-  const {products_loading} = useSelector(state => state.ProductReducer);
+  const {products_loading, products} = useSelector(state => state.ProductReducer);
   const {user} = useSelector(state => state.AuthReducer);
   // console.log('from screen ======================>', products[0].isFav)
 
   useEffect(() => {
     // if (products.length < 1) {
-    dispatch(getProducts(setProducts));
+    dispatch(getProducts());
     // }
   }, []);
 
@@ -83,7 +82,7 @@ const FreeStuff = () => {
     setTimeout(async () => {
       try {
         await dispatch(getWishlistById(user.user_id));
-        await dispatch(getProducts(setProducts));
+        await dispatch(getProducts());
       } catch (error) {
         console.log('refreshing error', error)
         return ShowToast('Some problem occured');
@@ -130,7 +129,7 @@ const FreeStuff = () => {
               onPress={() =>
                 navigation.navigate('MerchandiseStack', {
                   screen: 'MerchandiseDetails',
-                  params: {id: item.product_id, wishlist: item.favorite},
+                  params: {id: item.product_id},
                 })
               }
             />
