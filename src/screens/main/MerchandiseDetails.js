@@ -99,14 +99,6 @@ const MerchandiseDetails = ({route}) => {
                 return ShowToast('Coming soon');
               }}
             />
-            {/* <Button
-              buttonText={'Book Now'}
-              textStyle={styles.button2Text}
-              buttonStyle={styles.button2}
-              onPress={() => {
-                return ShowToast('Coming soon');
-              }}
-            /> */}
           </View>
           <View style={{marginLeft: hp('2%')}}>
             <Text style={styles.price}>$99.00</Text>
@@ -117,12 +109,6 @@ const MerchandiseDetails = ({route}) => {
         </View>
         <View style={styles.border} />
         <Text style={styles.heading}>Related Products</Text>
-        {/* <View
-          style={{
-            paddingTop: hp('4%'),
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}> */}
             <FlatList 
               data={relatedProducts}
               contentContainerStyle={{paddingTop: hp('1%')}}
@@ -130,18 +116,6 @@ const MerchandiseDetails = ({route}) => {
               columnWrapperStyle={{justifyContent: 'space-between'}}
               renderItem={renderItem}
             />
-          {/* <MerchandiseCard
-            image={images.stuff4}
-            imageStyle={{height: hp('18%'), width: '54%'}}
-            style={{}}
-            onPress={() => {
-              return ShowToast('Coming Soon');
-            }}
-            desc={'Lorem Ipsum Dolor Sit Amet, Consetetur'}
-            descStyle={{top: hp('27.5%')}}
-            text={'Golf Tees'}
-          /> */}
-        {/* </View> */}
       </ScrollView>
     </Container>
   );
