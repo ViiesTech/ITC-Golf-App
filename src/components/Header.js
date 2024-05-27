@@ -61,10 +61,11 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: colors.white,
+    width: hp(32),
     alignSelf: 'center',
     fontWeight: 'bold',
     fontSize: hp('2.5%'),
-    marginLeft: hp('2.7%'),
+    marginLeft: hp('2%'),
   },
   icon: {
     alignSelf: 'center',
