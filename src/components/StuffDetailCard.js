@@ -44,11 +44,11 @@ const StuffDetailCard = ({image, title, desc}) => {
     const rotate = `${rotateValue.value * -14}deg`;
     const scale = 1 + rotateValue.value * 0.1;
     const height = initialHeight - rotateValue.value * (initialHeight * 0.1); // Decrease height by 20px during animation
-    const width = initialWidth - rotateValue.value * (initialHeight * 0.1);
+    // const width = initialWidth - rotateValue.value * (initialHeight * 0.1);
     return {
       transform: [{scale}, {rotate}],
       height,
-      width,
+      // width,
     };
   });
 

@@ -22,6 +22,8 @@ import Groups from '../screens/main/Groups';
 import ListingDetails from '../screens/main/ListingDetails';
 import GroupDetail from '../screens/main/GroupDetail';
 import GroupChat from '../screens/main/GroupChat';
+import AddToCart from '../screens/main/AddToCart';
+import Checkout from '../screens/main/Checkout';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -50,7 +52,7 @@ const BottomStack = () => {
             ) : (
               <SVGImage image={icons.home_inactive} />
             ),
-        }}
+          }}
       />
       <Tab.Screen
         name="Listing"
@@ -64,7 +66,7 @@ const BottomStack = () => {
             ) : (
               <SVGImage image={icons.listing_inactive} />
             ),
-        }}
+          }}
       />
       <Tab.Screen
         name="MerchandiseStack"
@@ -92,7 +94,7 @@ const BottomStack = () => {
             ) : (
               <SVGImage image={icons.groups_inactive} />
             ),
-        }}
+          }}
       />
       <Tab.Screen
         name="Profile"
@@ -106,7 +108,7 @@ const BottomStack = () => {
             ) : (
               <SVGImage image={icons.settings_inactive} />
             ),
-        }}
+          }}
       />
     </Tab.Navigator>
   );
@@ -115,7 +117,7 @@ const BottomStack = () => {
 const MerchandiseStack = () => {
   return (
     <Stack.Navigator
-      screenOptions={{
+    screenOptions={{
         headerShown: false,
       }}>
       <Tab.Screen name="FreeStuff" component={FreeStuff} />
@@ -140,9 +142,9 @@ const MerchandiseStack = () => {
 const SecondaryStack = () => {
   return (
     <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}>
+    screenOptions={{
+      headerShown: false,
+    }}>
       <Tab.Screen name="Payments" component={Payments} />
       <Tab.Screen name="Notifications" component={Notifications} />
       <Tab.Screen name="Wishlist" component={Wishlist} />
@@ -150,7 +152,9 @@ const SecondaryStack = () => {
       <Tab.Screen name="Language" component={Language} />
       <Tab.Screen name="Rating" component={Rating} />
       <Tab.Screen name="About" component={About} />
-      <Tab.Screen name="FreeStuff" component={FreeStuff} />
+      {/* <Tab.Screen name="FreeStuff" component={FreeStuff} /> */}
+      <Tab.Screen name="AddToCart" component={AddToCart} />
+      <Tab.Screen name="Checkout" component={Checkout} />
       <Tab.Screen name="ListingDetails" component={ListingDetails} />
       <Tab.Screen name="AllGroups" component={AllGroups} />
       <Tab.Screen name="GroupDetail" component={GroupDetail} />

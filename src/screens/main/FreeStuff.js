@@ -25,6 +25,7 @@ import images from '../../assets/images';
 import FastImage from 'react-native-fast-image';
 import {getWishlistById} from '../../redux/actions/authAction';
 import {ShowToast} from '../../Custom';
+import constant from '../../redux/constant';
 
 const FreeStuff = () => {
   const [refreshing, setRefreshing] = useState(false);
@@ -64,7 +65,10 @@ const FreeStuff = () => {
       );
       const updatedProducts = [...products];
       updatedProducts[index] = {...item, favorite: false};
-      setProducts(updatedProducts);
+      dispatch({
+        type: constant.RENDER_PRODUCT_DONE,
+        payload: updatedProducts
+      })
       return ShowToast(remove.message);
       //  return alert('add to favourite');
     } else {
@@ -72,7 +76,10 @@ const FreeStuff = () => {
       const add = await dispatch(addToWishlist(user.user_id, item.product_id));
       const updatedProducts = [...products];
       updatedProducts[index] = {...item, favorite: true};
-      setProducts(updatedProducts);
+      dispatch({
+        type: constant.RENDER_PRODUCT_DONE,
+        payload: updatedProducts
+      })
       return ShowToast(add.message);
     }
   };

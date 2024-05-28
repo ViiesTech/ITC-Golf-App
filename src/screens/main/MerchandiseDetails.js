@@ -21,8 +21,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getProductDetails} from '../../redux/actions/productAction';
 import {ShowToast} from '../../Custom';
 import FastImage from 'react-native-fast-image';
+import { useNavigation } from '@react-navigation/native';
 
 const MerchandiseDetails = ({route}) => {
+  const navigation = useNavigation();
   const [product_detail, setProduct_detail] = useState({});
   const [relatedProducts, setRelatedProducts] = useState([]);
 
@@ -95,9 +97,10 @@ const MerchandiseDetails = ({route}) => {
               buttonText={'Add To Cart'}
               textStyle={styles.buttonText}
               buttonStyle={styles.button}
-              onPress={() => {
-                return ShowToast('Coming soon');
-              }}
+              // onPress={() => {
+              //   return ShowToast('Coming soon');
+              // }}
+              onPress={()=>navigation.navigate('SecondaryStack',{screen: 'AddToCart'})}
             />
           </View>
           <View style={{marginLeft: hp('2%')}}>
