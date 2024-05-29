@@ -1,16 +1,27 @@
-import { Platform, StyleSheet, TextInput } from 'react-native'
-import React from 'react'
-import LinearGradient from 'react-native-linear-gradient'
-import colors from '../assets/colors'
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
+import {Platform, StyleSheet, TextInput} from 'react-native';
+import React from 'react';
+import LinearGradient from 'react-native-linear-gradient';
+import colors from '../assets/colors';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/Feather';
 
-const InputField = ({ style, placeholder, value, onChangeText, secureTextEntry, keyboardType, icon }) => {
+const InputField = ({
+  multiline,
+  style,
+  placeholder,
+  value,
+  onChangeText,
+  secureTextEntry,
+  keyboardType,
+  icon,
+  textAlignVertical,
+}) => {
   return (
-    <LinearGradient style={[styles.inputView, style]}
+    <LinearGradient
+      style={[styles.inputView, style]}
       colors={[colors.gray, 'transparent']}
-      start={{ x: 0, y: 0 }} end={{ x: 1.5, y: 0 }}
-    >
+      start={{x: 0, y: 0}}
+      end={{x: 1.5, y: 0}}>
       <TextInput
         placeholder={placeholder}
         keyboardType={keyboardType}
@@ -19,6 +30,8 @@ const InputField = ({ style, placeholder, value, onChangeText, secureTextEntry, 
         value={value}
         style={styles.input}
         placeholderTextColor={colors.font_color}
+        multiline={multiline}
+        textAlignVertical={textAlignVertical}
       />
       <Icon
         name={icon}
@@ -27,8 +40,8 @@ const InputField = ({ style, placeholder, value, onChangeText, secureTextEntry, 
         style={styles.icon}
       />
     </LinearGradient>
-  )
-}
+  );
+};
 
 export default InputField;
 
@@ -41,7 +54,7 @@ const styles = StyleSheet.create({
     // padding: hp('0.7%'),
     padding: Platform.OS === 'android' ? hp('0.7%') : hp('2%'),
     alignSelf: 'center',
-    width: hp('40%')
+    width: hp('40%'),
   },
   input: {
     color: colors.white,
@@ -52,5 +65,5 @@ const styles = StyleSheet.create({
   icon: {
     alignSelf: 'center',
     marginRight: hp('1%'),
-  }
-})
+  },
+});

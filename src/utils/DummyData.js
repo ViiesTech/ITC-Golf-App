@@ -182,11 +182,11 @@ export const CalculateTotal = [
     text: 'Sub Total:',
     price: '$550',
   },
-  {
-    id: 2,
-    text: 'Delivery:',
-    price: '$20',
-  },
+  // {
+  //   id: 2,
+  //   text: 'Delivery:',
+  //   price: '$20',
+  // },
   {
     id: 3,
     text: 'Total:',
