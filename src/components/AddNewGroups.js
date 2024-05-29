@@ -84,7 +84,7 @@ const Discover = ({searchPressed}) => {
             count={index + 1}
             group={true}
             players={item.group_desired_teebox}
-            date={timeFormatting(item.suggested_day)}
+            time={timeFormatting(item.suggested_day)}
             area_code={item.area_code}
             desc={
               item.group_desired_teebox.length == 0
@@ -154,7 +154,7 @@ const Discover = ({searchPressed}) => {
             count={index + 1}
             group={true}
             players={item.group_desired_teebox}
-            date={timeFormatting(item.suggested_day)}
+            time={timeFormatting(item.suggested_day)}
             area_code={item.area_code}
             desc={
               item.group_desired_teebox.length == 0

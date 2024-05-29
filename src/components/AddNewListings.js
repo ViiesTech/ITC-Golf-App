@@ -102,7 +102,7 @@ const Discover = ({searchPressed}) => {
             //     : 'test'
             // }
             players={item.how_many_players}
-            date={item.course_date}
+            area_code={item.area_code_match}
             time={timeFormatting(item.course_time)}
           />
         )}
@@ -141,13 +141,13 @@ const Discover = ({searchPressed}) => {
             //     : item.experience_level
             // }
             itc={item.the_itc_handshake}
+            area_code={item.area_code_match}
             // desc={
             //   Object.keys(item.match_description).length == 4
             //     ? item.match_description
             //     : 'test'
             // }
             players={item.how_many_players}
-            date={item.course_date}
             time={timeFormatting(item.course_time)}
           />
         )}

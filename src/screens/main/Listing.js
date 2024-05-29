@@ -88,7 +88,8 @@ const Listing = () => {
             total={index + 1}
             title={item.listing_title}
             desc={item.match_description}
-            date={item.course_date}
+            // date={item.course_date}
+            name={item.author_name}
             time={timeFormatting(item.course_time)}
             exp={
               item.experience_level == ''
@@ -149,7 +150,8 @@ const Listing = () => {
             total={index + 1}
             title={item.listing_title}
             desc={item.match_description}
-            date={item.course_date}
+            // date={item.course_date}
+            name={item.author_name}
             time={timeFormatting(item.course_time)}
             exp={
               item.experience_level == ''

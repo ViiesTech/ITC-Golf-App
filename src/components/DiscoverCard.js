@@ -10,7 +10,7 @@ const DiscoverCard = ({
   image,
   title,
   players,
-  date,
+  // date,
   area_code,
   itc,
   titleStyle,
@@ -59,18 +59,18 @@ const DiscoverCard = ({
             width: '95%',
           }}>
           <View>
-            <Text style={styles.heading}>DATE:</Text>
-            <Text style={styles.text2}>{date}</Text>
+            <Text style={styles.heading}>TIME:</Text>
+            <Text style={styles.text2}>{time}</Text>
           </View>
           <View style={styles.verticleLine} />
           <View>
-            <View style={{alignItems: 'flex-end'}}>
+            <View style={{ alignItems: 'flex-end'}}>
               <Text style={styles.heading}>
-                {time ? 'TIME:' : 'AREA CODE:'}
+                {'AREA CODE:'}
               </Text>
             </View>
-            <Text style={[styles.text2, {alignSelf: 'flex-end'}]}>
-              {time ? time : area_code}
+            <Text style={[styles.text2, {alignSelf: 'flex-end',width: area_code === 'Select a Area Code' ? '90%' : null}]}>
+              {area_code}
             </Text>
           </View>
         </View>

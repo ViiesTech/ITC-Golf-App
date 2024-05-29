@@ -11,7 +11,7 @@ const ListingDetailCard = ({
   title,
   desc,
   exp,
-  date,
+  name,
   time,
   area,
   route,
@@ -63,10 +63,10 @@ const ListingDetailCard = ({
 
         <View style={styles.textWrapper}>
           <View style={{paddingTop: hp('3%')}}>
-            <Text style={styles.textStyle}>DATE:</Text>
-            <Text style={styles.fontStyle}>{date}</Text>
+            <Text style={styles.textStyle}>LISTERS NAME:</Text>
+            <Text style={styles.fontStyle}>{name}</Text>
           </View>
-          <View style={{paddingTop: hp('3%')}}>
+          {/* <View style={{paddingTop: hp('3%')}}>
             <View style={{alignItems: 'flex-end'}}>
               <Text style={styles.textStyle}>
                 {time ? 'TIME:' : 'AREA-CODE'}
@@ -75,7 +75,7 @@ const ListingDetailCard = ({
             <Text style={[styles.fontStyle, {alignSelf: 'flex-end'}]}>
               {time ? time : area}
             </Text>
-          </View>
+          </View> */}
         </View>
       </View>
     </TouchableOpacity>

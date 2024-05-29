@@ -15,6 +15,7 @@ import InputField from '../../components/InputField';
 import colors from '../../assets/colors';
 import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
+import ContactInput from '../../components/ContactInput';
 
 const Checkout = () => {
   const navigation = useNavigation();
@@ -25,151 +26,96 @@ const Checkout = () => {
       <ScrollView
         contentContainerStyle={styles.screen}
         showsVerticalScrollIndicator={false}>
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>First Name</Text>
-          <Text style={styles.labelIcon}> *</Text>
-        </View>
-        <InputField
+        <ContactInput
           style={styles.input}
+          label={'First Name'}
           //   value={username}
           //   onChangeText={text => setUsername(text)}
           placeholder={'First Name'}
           //   icon={'user'}
         />
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Last Name</Text>
-          <Text style={styles.labelIcon}> *</Text>
-        </View>
-        <InputField
+        <ContactInput
           style={styles.input}
+          label={'Last Name'}
           //   value={username}
           //   onChangeText={text => setUsername(text)}
-          placeholder={'Last Name'}
+          // placeholder={'Last Name'}
           //   icon={'user'}
         />
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Company name (Optional)</Text>
-          {/* <Text style={styles.labelIcon}> *</Text> */}
-        </View>
-        <InputField
+        <ContactInput
           style={styles.input}
+          label={'Company name (Optional)'}
           //   value={username}
           //   onChangeText={text => setUsername(text)}
           placeholder={'Company name'}
           //   icon={'user'}
         />
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Country / Region</Text>
-          <Text style={styles.labelIcon}> *</Text>
-        </View>
-
-        <InputField
+        <ContactInput
           style={styles.input}
+          label={'Country / Region'}
           //   value={username}
           //   onChangeText={text => setUsername(text)}
-          placeholder={'Country / Region'}
           //   icon={'user'}
         />
-
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Street Address</Text>
-          <Text style={styles.labelIcon}> *</Text>
-        </View>
-        <InputField
+        <ContactInput
           style={styles.input}
+          label={'Street Address'}
           //   value={username}
           //   onChangeText={text => setUsername(text)}
-          placeholder={'House number and street address'}
           //   icon={'user'}
         />
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>
-            Apartment, suite, unit, etc. (optional)
-          </Text>
-          {/* <Text style={styles.labelIcon}> *</Text> */}
-        </View>
-        <InputField
+        
+        <ContactInput
           style={styles.input}
+          label={'Apartment, suite, unit, etc. (optional)'}
           //   value={username}
           //   onChangeText={text => setUsername(text)}
-          placeholder={'Apartment, suite, unit, etc. (optional)'}
           //   icon={'user'}
         />
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Town / City</Text>
-          <Text style={styles.labelIcon}> *</Text>
-        </View>
-        <InputField
+        
+        <ContactInput
           style={styles.input}
+          label={'Town / City'}
           //   value={username}
           //   onChangeText={text => setUsername(text)}
-          placeholder={'Town / City'}
           //   icon={'user'}
         />
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>First Name</Text>
-          <Text style={styles.labelIcon}> *</Text>
-        </View>
-        <InputField
+        <ContactInput
           style={styles.input}
+          label={'State'}
           //   value={username}
           //   onChangeText={text => setUsername(text)}
-          placeholder={'First Name'}
           //   icon={'user'}
         />
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>State</Text>
-          <Text style={styles.labelIcon}> *</Text>
-        </View>
-        <InputField
+        
+        <ContactInput
           style={styles.input}
+          label={'ZIP Code'}
           //   value={username}
           //   onChangeText={text => setUsername(text)}
-          placeholder={'State'}
           //   icon={'user'}
         />
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>ZIP Code</Text>
-          <Text style={styles.labelIcon}> *</Text>
-        </View>
-        <InputField
+        <ContactInput
           style={styles.input}
+          label={'Phone'}
           //   value={username}
           //   onChangeText={text => setUsername(text)}
-          placeholder={'ZIP Code'}
           //   icon={'user'}
         />
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Phone</Text>
-          <Text style={styles.labelIcon}> *</Text>
-        </View>
-        <InputField
+        <ContactInput
           style={styles.input}
+          label={'Email Address'}
           //   value={username}
           //   onChangeText={text => setUsername(text)}
-          placeholder={'Phone'}
           //   icon={'user'}
         />
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Email address</Text>
-          <Text style={styles.labelIcon}> *</Text>
-        </View>
-        <InputField
-          style={styles.input}
-          //   value={username}
-          //   onChangeText={text => setUsername(text)}
-          placeholder={'Email address'}
-          //   icon={'user'}
-        />
-        <Text style={styles.heading}>ADDITIONAL INFORMATION</Text>
-        <Text style={styles.headingLabel}>Order notes (optional)</Text>
-        <InputField
+        <ContactInput
           style={styles.inputA}
           multiline={true}
           textAlignVertical={'top'}
+          label={'ADDITIONAL INFORMATION'}
           //   value={username}
           //   onChangeText={text => setUsername(text)}
-          placeholder={'Note about your order, e.g. special notes for delivery'}
           //   icon={'user'}
         />
         <View style={styles.buttonContainer}>
@@ -197,22 +143,17 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     // backgroundColor:'red'
   },
-  labelContainer: {
-    flexDirection: 'row',
-  },
-  label: {
-    color: colors.white,
-    marginLeft: hp('1%'),
-  },
-  labelIcon: {
-    color: 'red',
-    fontSize: 20,
-  },
   input: {
-    marginBottom: hp('2%'),
+    // marginBottom: hp('2%'),
+    backgroundColor: 'transparent',
+    borderWidth: 1.5,
+    borderColor: colors.gray,
   },
   inputA: {
-    marginBottom: hp('2%'),
+    // marginBottom: hp('2%'),
+    backgroundColor: 'transparent',
+    borderWidth: 1.5,
+    borderColor: colors.gray,
     height: hp('15%'),
   },
   heading: {

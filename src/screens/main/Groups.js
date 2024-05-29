@@ -126,7 +126,8 @@ const Groups = () => {
                       ? 'Select'
                       : item.group_desired_teebox
                   }
-                  date={timeFormatting(item.suggested_day)}
+                  // date={timeFormatting(item.suggested_day)}
+                  name={item.author_name}
                   area={item.area_code}
                   onPress={() =>
                     navigation.navigate('SecondaryStack', {
@@ -167,7 +168,7 @@ const Groups = () => {
                 ? 'Select'
                 : item.group_desired_teebox
             }
-            date={item.suggested_day}
+            name={item.author_name}
             area={item.area_code}
             onPress={() =>
               navigation.navigate('SecondaryStack', {
