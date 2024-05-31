@@ -35,7 +35,7 @@ const ContactInput = ({ style,inputStyle, label, placeholder, value, onChangeTex
     )
 }
 
-export default ContactInput
+export default ContactInput;
 
 const styles = StyleSheet.create({
     wrapper: {

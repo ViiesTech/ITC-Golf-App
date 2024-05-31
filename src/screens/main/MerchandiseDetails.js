@@ -86,7 +86,7 @@ const MerchandiseDetails = ({route}) => {
             product_detail.title,
             product_detail.image,
             quantity,
-            '$99.00',
+            99.00,
           ),
         );
         navigation.navigate('SecondaryStack', {screen: 'AddToCart'});

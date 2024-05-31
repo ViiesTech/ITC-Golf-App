@@ -15,17 +15,22 @@ const AddToCart = () => {
   console.log('product', cart)
 
     const navigation = useNavigation();
-  //   const onIncreaseQuantity = (item) => {
-  //     return {
-  //       quantity: item.quantity + 1,
-  //     };
-  //   };
+    // const onIncreaseQuantity = (item) => {
+    //   return {
+    //     quantity: item.quantity + 1,
+    //   };
+    // };
 
-  //   const onDecreaseQuantity = (item) => {
-  //     return {
-  //       quantity: item.quantity + 1,
-  //     };
-  //   };
+    // const onDecreaseQuantity = (item) => {
+    //   return {
+    //     quantity: item.quantity - 1,
+    //   };
+    // };
+
+    const calculateTotal = () => {
+      return cart?.reduce((total, item) => total + item.price * item.quantity, 0)
+    }
+
   return (
     <Container>
       <Header />
@@ -39,18 +44,14 @@ const AddToCart = () => {
           keyExtractor={item => item.id}
           data={cart}
           renderItem={({item}) => {
-            //   <View style={{backgroundColor: 'green'}}>
-            //     <Text style={{color: 'red'}}>dcdc</Text>
-            //   </View>;
-            //   console.log('item=-=-=>', item.title);
             return (
               <AddToProductCard
                 image={{uri: item.image}}
                 name={item.title}
                 quantity={item.quantity}
                 price={item.price}
-                // increment={() => onIncreaseQuantity(item)}
-                // decrement={() => onDecreaseQuantity(item)}
+                // increment={() => onIncreaseQuantity(item.quantity)}
+                // decrement={() => onDecreaseQuantity(item.quantity)}
               />
             );
           }}
@@ -59,14 +60,9 @@ const AddToCart = () => {
         <View style={styles.paymentContainer}>
           <Text style={styles.paymentContainerText}>Payment Summary</Text>
           <View style={styles.summaryDetailsContainer}>
-            {/* <View style={styles.summaryItem}>
-              <Text style={styles.summaryItemTitleText}>Sub Total</Text>
-              <Text style={styles.summaryItemTitleText}>$250</Text>
-            </View> */}
-            {/* <View style={styles.line} /> */}
             <View style={styles.summaryItem}>
               <Text style={styles.summaryItemTitleText}>Total</Text>
-              <Text style={styles.summaryItemTitleText}>$250</Text>
+              <Text style={styles.summaryItemTitleText}>${calculateTotal()}</Text>
             </View>
           </View>
         </View>

@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Text, StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import images from '../assets/images';
 import colors from '../assets/colors';
 
 const AddToProductCard = ({
@@ -44,7 +43,7 @@ const AddToProductCard = ({
               fontSize: hp('1.5%'),
               marginTop: 2,
             }}>
-            {price}
+            ${price}
           </Text>
         </View>
       </View>

@@ -1,23 +1,30 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  PixelRatio,
-  Switch,
-} from 'react-native';
-import React from 'react';
+import {View, StyleSheet, ScrollView} from 'react-native';
+import React, {useState} from 'react';
 import Container from '../../components/Container';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Header from '../../components/Header';
-import InputField from '../../components/InputField';
 import colors from '../../assets/colors';
 import Button from '../../components/Button';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import ContactInput from '../../components/ContactInput';
 
 const Checkout = () => {
+  const [state, setState] = useState({
+    first_name: '',
+    last_name: '',
+    company_name: '',
+    country: '',
+    address: '',
+    apartment: '',
+    city: '',
+    state: '',
+    zip_code: '',
+    phone: '',
+    email: '',
+    note: '',
+  });
+
   const navigation = useNavigation();
   return (
     <Container>
@@ -29,94 +36,79 @@ const Checkout = () => {
         <ContactInput
           style={styles.input}
           label={'First Name'}
-          //   value={username}
-          //   onChangeText={text => setUsername(text)}
-          placeholder={'First Name'}
-          //   icon={'user'}
+          value={state.first_name}
+          onChangeText={text => onChangeText('first_name', text)}
         />
         <ContactInput
           style={styles.input}
           label={'Last Name'}
-          //   value={username}
-          //   onChangeText={text => setUsername(text)}
-          // placeholder={'Last Name'}
-          //   icon={'user'}
+          value={state.last_name}
+          onChangeText={text => onChangeText('last_name', text)}
         />
         <ContactInput
           style={styles.input}
           label={'Company name (Optional)'}
-          //   value={username}
-          //   onChangeText={text => setUsername(text)}
-          placeholder={'Company name'}
-          //   icon={'user'}
+          value={state.company_name}
+          onChangeText={text => onChangeText('company_name', text)}
         />
         <ContactInput
           style={styles.input}
           label={'Country / Region'}
-          //   value={username}
-          //   onChangeText={text => setUsername(text)}
-          //   icon={'user'}
+          value={state.country}
+          onChangeText={text => onChangeText('country', text)}
         />
         <ContactInput
           style={styles.input}
           label={'Street Address'}
-          //   value={username}
-          //   onChangeText={text => setUsername(text)}
-          //   icon={'user'}
+          value={state.address}
+          onChangeText={text => onChangeText('address', text)}
         />
-        
+
         <ContactInput
           style={styles.input}
           label={'Apartment, suite, unit, etc. (optional)'}
-          //   value={username}
-          //   onChangeText={text => setUsername(text)}
-          //   icon={'user'}
+          value={state.apartment}
+          onChangeText={text => onChangeText('apartment', text)}
         />
-        
+
         <ContactInput
           style={styles.input}
           label={'Town / City'}
-          //   value={username}
-          //   onChangeText={text => setUsername(text)}
-          //   icon={'user'}
+          value={state.city}
+          onChangeText={text => onChangeText('city', text)}
         />
         <ContactInput
           style={styles.input}
           label={'State'}
-          //   value={username}
-          //   onChangeText={text => setUsername(text)}
-          //   icon={'user'}
+          value={state.state}
+          onChangeText={text => onChangeText('state', text)}
         />
-        
+
         <ContactInput
           style={styles.input}
           label={'ZIP Code'}
-          //   value={username}
-          //   onChangeText={text => setUsername(text)}
-          //   icon={'user'}
+          value={state.zip_code}
+          onChangeText={text => onChangeText('zip_code', text)}
         />
         <ContactInput
           style={styles.input}
           label={'Phone'}
-          //   value={username}
-          //   onChangeText={text => setUsername(text)}
-          //   icon={'user'}
+          value={state.phone}
+          onChangeText={text => onChangeText('phone', text)}
         />
         <ContactInput
           style={styles.input}
           label={'Email Address'}
-          //   value={username}
-          //   onChangeText={text => setUsername(text)}
-          //   icon={'user'}
+          value={state.email}
+          onChangeText={text => onChangeText('email', text)}
         />
         <ContactInput
           style={styles.inputA}
           multiline={true}
           textAlignVertical={'top'}
           label={'ADDITIONAL INFORMATION'}
-          //   value={username}
-          //   onChangeText={text => setUsername(text)}
-          //   icon={'user'}
+          value={state.note}
+          onChangeText={text => onChangeText('note', text)}
         />
         <View style={styles.buttonContainer}>
           <Button
@@ -138,7 +130,7 @@ export default Checkout;
 const styles = StyleSheet.create({
   screen: {
     padding: hp('1%'),
-    paddingVertical: hp('5%'),
+    paddingVertical: hp('2%'),
     width: '90%',
     alignSelf: 'center',
     // backgroundColor:'red'
