@@ -18,27 +18,31 @@ import AddMinus from '../../components/AddMinus';
 import MerchandiseCard from '../../components/MerchandiseCard';
 import images from '../../assets/images';
 import {useDispatch, useSelector} from 'react-redux';
-import {getProductDetails} from '../../redux/actions/productAction';
-import {ShowToast} from '../../Custom';
+import {addtoCart, getProductDetails} from '../../redux/actions/productAction';
 import FastImage from 'react-native-fast-image';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import {ShowToast} from '../../Custom';
 
 const MerchandiseDetails = ({route}) => {
   const navigation = useNavigation();
   const [product_detail, setProduct_detail] = useState({});
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const [quantity, setQuantity] = useState(1);
 
   const {id} = route.params;
-  console.log('product idd params ==========>', relatedProducts);
+  console.log('product idd params ==========>', product_detail);
 
   const dispatch = useDispatch();
 
-  const {product_detail_loading} = useSelector(state => state.ProductReducer);
+  const {product_detail_loading, cart, cart_message} = useSelector(
+    state => state.ProductReducer,
+  );
+
+  console.log('cartproduct ===>', cart);
 
   useEffect(() => {
     dispatch(getProductDetails(id, setProduct_detail, setRelatedProducts));
   }, []);
-
 
   if (product_detail_loading) {
     return (
@@ -57,20 +61,40 @@ const MerchandiseDetails = ({route}) => {
   const renderItem = ({item}) => {
     return (
       <MerchandiseCard
-              image={{uri: item.image}}
-              desc={item.description}
-              text={item.title}
-              hideFav={true}
-              onPress={() => onProductPress(item.product_id)}
-            />
-    )
-  }
+        image={{uri: item.image}}
+        desc={item.description}
+        text={item.title}
+        hideFav={true}
+        onPress={() => onProductPress(item.product_id)}
+      />
+    );
+  };
 
-  const onProductPress = (id) => {
-    dispatch(getProductDetails(id, setProduct_detail, setRelatedProducts))
-  }
+  const onProductPress = id => {
+    dispatch(getProductDetails(id, setProduct_detail, setRelatedProducts));
+  };
 
-
+  const onAddtoCartPress = () => {
+    try {
+      const cart_index = cart?.findIndex(item => item.id == id);
+      if (cart[cart_index]?.id == product_detail.product_id) {
+        return ShowToast('hello world');
+      } else {
+        dispatch(
+          addtoCart(
+            product_detail.product_id,
+            product_detail.title,
+            product_detail.image,
+            quantity,
+            '$99.00',
+          ),
+        );
+        navigation.navigate('SecondaryStack', {screen: 'AddToCart'});
+      }
+    } catch (error) {
+      console.log('error adding product in your cart');
+    }
+  };
 
   return (
     <Container>
@@ -100,25 +124,33 @@ const MerchandiseDetails = ({route}) => {
               // onPress={() => {
               //   return ShowToast('Coming soon');
               // }}
-              onPress={()=>navigation.navigate('SecondaryStack',{screen: 'AddToCart'})}
+              onPress={() => onAddtoCartPress()}
             />
           </View>
           <View style={{marginLeft: hp('2%')}}>
             <Text style={styles.price}>$99.00</Text>
             <View style={{paddingTop: hp('1%')}}>
-              <AddMinus />
+              <AddMinus
+                number={quantity}
+                onIncrementPress={() => setQuantity(quantity + 1)}
+                onDecrementPress={() => {
+                  if (quantity > 1) {
+                    setQuantity(quantity - 1);
+                  }
+                }}
+              />
             </View>
           </View>
         </View>
         <View style={styles.border} />
         <Text style={styles.heading}>Related Products</Text>
-            <FlatList 
-              data={relatedProducts}
-              contentContainerStyle={{paddingTop: hp('1%')}}
-              numColumns={2}
-              columnWrapperStyle={{justifyContent: 'space-between'}}
-              renderItem={renderItem}
-            />
+        <FlatList
+          data={relatedProducts}
+          contentContainerStyle={{paddingTop: hp('1%')}}
+          numColumns={2}
+          columnWrapperStyle={{justifyContent: 'space-between'}}
+          renderItem={renderItem}
+        />
       </ScrollView>
     </Container>
   );

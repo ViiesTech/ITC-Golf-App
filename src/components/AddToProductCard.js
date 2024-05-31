@@ -44,7 +44,7 @@ const AddToProductCard = ({
               fontSize: hp('1.5%'),
               marginTop: 2,
             }}>
-            ${price}
+            {price}
           </Text>
         </View>
       </View>
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: colors.white,
     borderRadius: 15,
-    paddingVertical: 5,
+    paddingVertical: 10,
     paddingHorizontal: '7%',
     backgroundColor: '#020116',
     marginTop: hp('2%'),

@@ -1,33 +1,34 @@
-import constant from "../constant"
+import constant from '../constant';
 
 const initialState = {
-    products: [],
-    products_loading: false,
-    // product_detail: {},
-    product_detail_loading: false,
-}
+  products: [],
+  products_loading: false,
+  product_detail_loading: false,
+  cart: [],
+  cart_message: '',
+};
 
 export default (state = initialState, action) => {
-    switch (action.type) {
-        case constant.RENDER_PRODUCT:
-            return { ...state, products_loading: true }
+  switch (action.type) {
+    case constant.RENDER_PRODUCT:
+      return {...state, products_loading: true};
 
-        case constant.RENDER_PRODUCT_DONE:
-            return { ...state, products_loading: false, products: action.payload }
+    case constant.RENDER_PRODUCT_DONE:
+      return {...state, products_loading: false, products: action.payload};
 
-        case constant.RENDER_DETAILS:
-            return { ...state, product_detail_loading: true }
+    case constant.RENDER_DETAILS:
+      return {...state, product_detail_loading: true};
 
-        case constant.RENDER_DETAILS_DONE:
-            return {
-                ...state, product_detail_loading: false,
-                //  product_detail: {
-                //     ...state.product_detail,
-                //     [action.payload.product_id]: action.payload
-                // }
-            }
+    case constant.RENDER_DETAILS_DONE:
+      return {
+        ...state,
+        product_detail_loading: false,
+      };
 
-        default:
-            return state
-    }
-}
+    case constant.ADD_TO_CART:
+      return {...state, cart: action.payload, cart_message: action.message};
+
+    default:
+      return state;
+  }
+};

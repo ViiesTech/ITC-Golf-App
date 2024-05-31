@@ -6,27 +6,25 @@ import Decrement from 'react-native-vector-icons/AntDesign';
 import Add from 'react-native-vector-icons/Ionicons';
 import { ShowToast } from '../Custom';
 
-const AddMinus = () => {
+const AddMinus = ({number, onIncrementPress,onDecrementPress}) => {
     return (
-        <TouchableOpacity style={styles.cardStyle} activeOpacity={0.9} onPress={() => {
-            return ShowToast('Coming soon')
-        }}>
-            <View style={styles.DecrementView}>
+        <View style={styles.cardStyle}>
+            <TouchableOpacity style={styles.DecrementView} activeOpacity={0.9} onPress={onDecrementPress}>
                 <Decrement
                     name={'minus'}
                     color={colors.lightgray}
                 />
-            </View>
+            </TouchableOpacity>
             <View style={styles.numberView}>
-                <Text style={{ color: colors.gray }}>1</Text>
+                <Text style={{ color: colors.gray }}>{number}</Text>
             </View>
-            <View style={styles.numberView}>
+            <TouchableOpacity style={styles.numberView} activeOpacity={0.9} onPress={onIncrementPress}>
                 <Add
                     name={'add'}
                     color={colors.gray}
                 />
-            </View>
-        </TouchableOpacity>
+            </TouchableOpacity>
+        </View>
     )
 }
 

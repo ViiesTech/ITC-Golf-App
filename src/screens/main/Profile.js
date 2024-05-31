@@ -37,7 +37,7 @@ const Profile = () => {
 
   const onSettingsPress = async (item, index) => {
     // console.log('navv', item);
-    if (index == 0 || index == 4 || index == 5){
+    if (index == 4 || index == 5){
       return ShowToast(item.message)
     }
     else if (index == 6) {

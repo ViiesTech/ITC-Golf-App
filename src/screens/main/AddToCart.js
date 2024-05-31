@@ -5,12 +5,15 @@ import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import AddToProductCard from '../../components/AddToProductCard';
-import {productData} from '../../components/AddToCardData';
 import colors from '../../assets/colors';
 import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 const AddToCart = () => {
+  const { cart } = useSelector(state => state.ProductReducer)
+  console.log('product', cart)
+
     const navigation = useNavigation();
   //   const onIncreaseQuantity = (item) => {
   //     return {
@@ -34,7 +37,7 @@ const AddToCart = () => {
           contentContainerStyle={{width: '90%', alignSelf: 'center'}}
           showsVerticalScrollIndicator={false}
           keyExtractor={item => item.id}
-          data={productData}
+          data={cart}
           renderItem={({item}) => {
             //   <View style={{backgroundColor: 'green'}}>
             //     <Text style={{color: 'red'}}>dcdc</Text>
@@ -42,7 +45,7 @@ const AddToCart = () => {
             //   console.log('item=-=-=>', item.title);
             return (
               <AddToProductCard
-                image={item.image}
+                image={{uri: item.image}}
                 name={item.title}
                 quantity={item.quantity}
                 price={item.price}
@@ -56,11 +59,11 @@ const AddToCart = () => {
         <View style={styles.paymentContainer}>
           <Text style={styles.paymentContainerText}>Payment Summary</Text>
           <View style={styles.summaryDetailsContainer}>
-            <View style={styles.summaryItem}>
+            {/* <View style={styles.summaryItem}>
               <Text style={styles.summaryItemTitleText}>Sub Total</Text>
               <Text style={styles.summaryItemTitleText}>$250</Text>
-            </View>
-            <View style={styles.line} />
+            </View> */}
+            {/* <View style={styles.line} /> */}
             <View style={styles.summaryItem}>
               <Text style={styles.summaryItemTitleText}>Total</Text>
               <Text style={styles.summaryItemTitleText}>$250</Text>
@@ -87,7 +90,7 @@ export default AddToCart;
 const styles = StyleSheet.create({
   screen: {
     padding: hp('1%'),
-    paddingVertical: hp('5%'),
+    paddingVertical: hp('1%'),
     // backgroundColor:'red'
   },
   line: {

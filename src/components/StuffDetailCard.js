@@ -20,9 +20,8 @@ const StuffDetailCard = ({image, title, desc}) => {
   // const [chooseOptions, setChooseOptions] = useState(0)
   const rotateValue = useSharedValue(0);
 
-  const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
+  const {height: screenHeight} = Dimensions.get('window');
   const initialHeight = screenHeight * 0.245;
-  const initialWidth = screenWidth * 0.4;
 
   const startAnimation = () => {
     rotateValue.value = withTiming(
@@ -43,12 +42,10 @@ const StuffDetailCard = ({image, title, desc}) => {
   const animatedStyle = useAnimatedStyle(() => {
     const rotate = `${rotateValue.value * -14}deg`;
     const scale = 1 + rotateValue.value * 0.1;
-    const height = initialHeight - rotateValue.value * (initialHeight * 0.1); // Decrease height by 20px during animation
-    // const width = initialWidth - rotateValue.value * (initialHeight * 0.1);
+    const height = initialHeight - rotateValue.value * (initialHeight * 0.1); 
     return {
       transform: [{scale}, {rotate}],
       height,
-      // width,
     };
   });
 
