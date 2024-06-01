@@ -21,7 +21,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {addtoCart, getProductDetails} from '../../redux/actions/productAction';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
-import {ShowToast} from '../../Custom';
 
 const MerchandiseDetails = ({route}) => {
   const navigation = useNavigation();
@@ -34,7 +33,7 @@ const MerchandiseDetails = ({route}) => {
 
   const dispatch = useDispatch();
 
-  const {product_detail_loading, cart, cart_message} = useSelector(
+  const {product_detail_loading, cart} = useSelector(
     state => state.ProductReducer,
   );
 
@@ -78,7 +77,7 @@ const MerchandiseDetails = ({route}) => {
     try {
       const cart_index = cart?.findIndex(item => item.id == id);
       if (cart[cart_index]?.id == product_detail.product_id) {
-        return ShowToast('hello world');
+        console.log('product is already in your cart')
       } else {
         dispatch(
           addtoCart(
@@ -121,9 +120,6 @@ const MerchandiseDetails = ({route}) => {
               buttonText={'Add To Cart'}
               textStyle={styles.buttonText}
               buttonStyle={styles.button}
-              // onPress={() => {
-              //   return ShowToast('Coming soon');
-              // }}
               onPress={() => onAddtoCartPress()}
             />
           </View>

@@ -47,26 +47,20 @@ const Payments = () => {
               <PaymentMethods key={item.id} icon={item.icon} text={item.text} />
             ))}
           </View>
-          {CalculateTotal.map(item => {
-            return (
-              <>
-                <View style={styles.amountWrapper}>
-                  <Text style={styles.amountHeading}>{item.text}</Text>
-                  <Text style={styles.priceText}>{item.price}</Text>
-                </View>
-                <View
-                  style={[
-                    item.id !== 3 && styles.border,
-                    {
-                      borderBottomWidth: 1,
-                      marginTop: hp('3%'),
-                      marginBottom: hp('3%'),
-                    },
-                  ]}
-                />
-              </>
-            );
-          })}
+          {/* <View style={styles.amountWrapper}>
+            <Text style={styles.amountHeading}>Total</Text>
+            <Text style={styles.priceText}>${250}</Text>
+          </View> */}
+          {/* <View
+            style={[
+              item.id !== 3 && styles.border,
+              {
+                borderBottomWidth: 1,
+                marginTop: hp('3%'),
+                marginBottom: hp('3%'),
+              },
+            ]}
+          /> */}
           <Button
             textStyle={{color: colors.secondary}}
             buttonText={'Check Out'}

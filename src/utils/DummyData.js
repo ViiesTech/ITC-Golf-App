@@ -176,23 +176,23 @@ export const methods = [
   },
 ];
 
-export const CalculateTotal = [
-  {
-    id: 1,
-    text: 'Sub Total:',
-    price: '$550',
-  },
-  // {
-  //   id: 2,
-  //   text: 'Delivery:',
-  //   price: '$20',
-  // },
-  {
-    id: 3,
-    text: 'Total:',
-    price: '$570',
-  },
-];
+// export const CalculateTotal = [
+//   {
+//     id: 1,
+//     text: 'Sub Total:',
+//     price: '$550',
+//   },
+//   // {
+//   //   id: 2,
+//   //   text: 'Delivery:',
+//   //   price: '$20',
+//   // },
+//   {
+//     id: 3,
+//     text: 'Total:',
+//     price: '$570',
+//   },
+// ];
 
 // export const TodayNotifications = [
 //   {

@@ -26,6 +26,14 @@ const Checkout = () => {
   });
 
   const navigation = useNavigation();
+
+  const onChangeText = (value, text) => {
+    setState({
+      ...state,
+      [value]: text,
+    });
+  };
+
   return (
     <Container>
       <Header />
@@ -63,14 +71,12 @@ const Checkout = () => {
           value={state.address}
           onChangeText={text => onChangeText('address', text)}
         />
-
         <ContactInput
           style={styles.input}
           label={'Apartment, suite, unit, etc. (optional)'}
           value={state.apartment}
           onChangeText={text => onChangeText('apartment', text)}
         />
-
         <ContactInput
           style={styles.input}
           label={'Town / City'}
@@ -83,7 +89,6 @@ const Checkout = () => {
           value={state.state}
           onChangeText={text => onChangeText('state', text)}
         />
-
         <ContactInput
           style={styles.input}
           label={'ZIP Code'}
@@ -105,7 +110,6 @@ const Checkout = () => {
         <ContactInput
           style={styles.inputA}
           multiline={true}
-          textAlignVertical={'top'}
           label={'ADDITIONAL INFORMATION'}
           value={state.note}
           onChangeText={text => onChangeText('note', text)}
@@ -133,20 +137,16 @@ const styles = StyleSheet.create({
     paddingVertical: hp('2%'),
     width: '90%',
     alignSelf: 'center',
-    // backgroundColor:'red'
   },
   input: {
-    // marginBottom: hp('2%'),
     backgroundColor: 'transparent',
     borderWidth: 1.5,
     borderColor: colors.gray,
   },
   inputA: {
-    // marginBottom: hp('2%'),
     backgroundColor: 'transparent',
     borderWidth: 1.5,
     borderColor: colors.gray,
-    height: hp('15%'),
   },
   heading: {
     color: colors.white,
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     marginVertical: hp('2%'),
   },
   buttonContainer: {
-    marginTop: hp('5%'),
+    marginTop: hp('2%'),
     width: '90%',
     alignSelf: 'center',
   },
