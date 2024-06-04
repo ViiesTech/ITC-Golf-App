@@ -71,6 +71,8 @@ export default {
     group4: require('../images/group4.png'),
     profile: require('../images/userProfile.jpeg'),
     dummy: require('../images/dummy.png'),
-    splash: require('../images/splashimage.png')
+    splash: require('../images/splashimage.png'),
+    master_card:  require('../images/mastercard.png'),
+    visa_card: require('../images/visa.png')
 
 }

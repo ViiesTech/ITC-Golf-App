@@ -428,3 +428,14 @@ export const DeactivateAccount = user_id => {
       });
   };
 };
+
+export const createCard = (data) => {
+  return async dispatch => {
+
+    dispatch({
+      type: constant.ADD_CARD_TO_WALLET,
+      payload: data
+    })
+
+  }
+}

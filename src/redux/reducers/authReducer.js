@@ -15,6 +15,7 @@ const initialState = {
   wishlist_items: [],
   register_id: null,
   token: '',
+  card: []
 };
 
 export default (state = initialState, action) => {
@@ -73,7 +74,8 @@ export default (state = initialState, action) => {
     case constant.GET_WISHLIST_DONE:
       return {...state, wishlist_loader: false, wishlist_items: action.payload}; 
 
-    
+    case constant.ADD_CARD_TO_WALLET:
+      return {...state, card: action.payload}
 
     case constant.DEACTIVATE_ACCOUNT:
       return initialState;

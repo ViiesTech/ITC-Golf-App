@@ -8,14 +8,15 @@ const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   whitelist: [
-    'LanguageReducer',
     'AuthReducer',
     'HomeReducer',
     'ProductReducer',
     'GroupReducer',
     'ListingReducer',
   ],
-  blacklist: [],
+  blacklist: [
+    'LanguageReducer'
+  ],
 };
 
 const reducer = persistReducer(persistConfig, rootReducer);

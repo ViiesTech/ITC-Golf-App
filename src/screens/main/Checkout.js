@@ -54,13 +54,13 @@ const Checkout = () => {
   };
 
   const onContinueCheckout = () => {
-    if (!state.address) {
-      return ShowToast('Address is required');
-    } else if (!state.email) {
-      return ShowToast('Email is required');
-    } else if (!state.city) {
-      return ShowToast('City is required');
-    } else {
+    // if (!state.address) {
+    //   return ShowToast('Address is required');
+    // } else if (!state.email) {
+    //   return ShowToast('Email is required');
+    // } else if (!state.city) {
+    //   return ShowToast('City is required');
+    // } else {
       navigation.navigate('SecondaryStack', {
         screen: 'Payments',
         params: {
@@ -71,7 +71,7 @@ const Checkout = () => {
           city: state.city
         },
       });
-    }
+    // }
   };
 
   console.log('country name =====>', country);
