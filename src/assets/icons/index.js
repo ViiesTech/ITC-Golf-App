@@ -502,6 +502,9 @@ const groups_active = `
 
 `
 
+
+
+
 export default {
   home_active,
   home_inactive,
@@ -551,5 +554,5 @@ export default {
   merchandise_inactive,
   merchandise_active,
   groups_inactive,
-  groups_active
+  groups_active,
 }

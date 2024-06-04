@@ -26,7 +26,7 @@ const Payments = ({route}) => {
     cvc: '',
   });
 
-  const {country, desc, address, city, email} = route.params 
+  const {country, desc, address, city, email} = route.params;
 
   console.log('dataa from previous screen ======>', route.params);
   const {card} = useSelector(state => state.AuthReducer);
@@ -109,6 +109,19 @@ const Payments = ({route}) => {
               />
             )}
             {/* ))} */}
+          </View>
+          <View style={styles.border} />
+          <View style={[styles.methodWrapper, {padding: 0}]}>
+            <Text style={styles.heading}>Other Payment Method</Text>
+            <View style={{paddingTop: hp(5)}}>
+              {methods.map(item => (
+                <PaymentMethods
+                  key={item.id}
+                  text={item.text}
+                  icon={item.icon}
+                />
+              ))}
+            </View>
           </View>
           <RBSheet
             ref={sheetRef}
