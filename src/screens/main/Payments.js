@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -13,22 +13,47 @@ import {methods} from '../../utils/DummyData';
 import Button from '../../components/Button';
 import Add from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
+import UserCard from '../../components/UserCard';
+import {useSelector} from 'react-redux';
+import RBSheet from 'react-native-raw-bottom-sheet';
 
 const Payments = ({route}) => {
-  const {country, desc, address, city, email} = route.params;
+  const [state, setState] = useState({
+    card_holder: '',
+    card_number: '',
+    exp_year: '',
+    exp_month: '',
+    cvc: '',
+  });
+
+  const {country, desc, address, city, email} = route.params 
 
   console.log('dataa from previous screen ======>', route.params);
+  const {card} = useSelector(state => state.AuthReducer);
 
   const navigation = useNavigation();
+  const sheetRef = useRef();
 
   const onCheckout = () => {};
+
+  const onSelectCard = card => {
+    setState({
+      ...state,
+      card_holder: card.card_holder,
+      card_number: card.card_number,
+      exp_year: card.exp_year,
+      exp_month: card.exp_month,
+      cvc: card.cvc,
+    });
+    sheetRef.current.close();
+  };
 
   return (
     <Container>
       <Header />
       <SecondaryHeader text={'Payment'} icon={true} />
       <ScrollView contentContainerStyle={styles.screen}>
-        <Text style={styles.heading}>Payment Method</Text>
+        {/* <Text style={styles.heading}>Payment Method</Text> */}
         <View style={styles.locationWrapper}>
           <View style={{flexDirection: 'row'}}>
             <View style={styles.locationView}>
@@ -52,7 +77,7 @@ const Payments = ({route}) => {
         <View style={styles.border} />
         <View style={{paddingTop: hp('4%')}}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text style={styles.heading}>Payment Method</Text>
+            <Text style={styles.heading}>Select Card</Text>
             {/* <Text style={styles.walletText}>Use E-Wallet</Text> */}
             <Add
               name={'add'}
@@ -65,10 +90,55 @@ const Payments = ({route}) => {
             />
           </View>
           <View style={styles.methodWrapper}>
-            {methods.map(item => (
-              <PaymentMethods key={item.id} icon={item.icon} text={item.text} />
-            ))}
+            {/* {card..map(item => ( */}
+            {card?.length > 0 && (
+              <UserCard
+                cardholder_name={
+                  state.card_holder ? state.card_holder : card[0].card_holder
+                }
+                card_number={
+                  state.card_number ? state.card_number : card[0].card_number
+                }
+                date={
+                  state.exp_month && state.exp_year
+                    ? state.exp_month + '/' + state.exp_year
+                    : card[0].exp_month + '/' + card[0].exp_year
+                }
+                masterStyle={{width: '24%'}}
+                onCardPress={() => sheetRef.current.open()}
+              />
+            )}
+            {/* ))} */}
           </View>
+          <RBSheet
+            ref={sheetRef}
+            height={400}
+            draggable
+            closeOnPressBack
+            openDuration={250}
+            customStyles={{
+              container: {
+                backgroundColor: colors.secondary,
+                padding: hp(3),
+                paddingTop: hp(7),
+              },
+            }}>
+            <ScrollView
+              scrollEnabled={card.length > 1 && true}
+              showsVerticalScrollIndicator={false}>
+              {card.map(item => (
+                <View style={{marginBottom: hp('4%')}}>
+                  <UserCard
+                    cardholder_name={item.card_holder}
+                    card_number={item.card_number}
+                    date={item.exp_year + '/' + item.exp_month}
+                    masterStyle={{width: '22%'}}
+                    onCardPress={() => onSelectCard(item)}
+                  />
+                </View>
+              ))}
+            </ScrollView>
+          </RBSheet>
           <Button
             textStyle={{color: colors.secondary}}
             buttonText={'Check Out'}
@@ -130,6 +200,7 @@ const styles = StyleSheet.create({
   },
   methodWrapper: {
     padding: hp('2.3%'),
+    marginBottom: hp(2),
     paddingTop: hp('4.5%'),
   },
   walletText: {

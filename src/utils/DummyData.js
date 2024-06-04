@@ -100,27 +100,27 @@ export const Options = [
 ];
 
 export const settings = [
+  // {
+  //   id: 1,
+  //   text: 'Payment',
+  //   icon: icons.payment,
+  //   message: 'Coming soon'
+  //   // nav: 'Payments'
+  // },
   {
     id: 1,
-    text: 'Payment',
-    icon: icons.payment,
-    message: 'Coming soon'
-    // nav: 'Payments'
-  },
-  {
-    id: 2,
     text: 'Configure Notifications',
     icon: icons.bell,
     nav: 'Notifications'
   },
   {
-    id: 3,
+    id: 2,
     text: 'Wishlist',
     icon: icons.wishlist,
     nav: 'Wishlist'
   },
   {
-    id: 4,
+    id: 3,
     text: 'Contact Us',
     icon: icons.contact,
     nav: 'ContactUs'
@@ -133,38 +133,38 @@ export const settings = [
   //   // nav: 'Language'
   // },
   {
-    id: 5,
+    id: 4,
     text: 'License',
     icon: icons.license,
     url: 'https://inthecup.golf'
   },
   {
-    id: 6,
+    id: 5,
     text: 'About Us',
     icon: icons.about,
     nav: 'About'
   },
   {
-    id: 7,
+    id: 6,
     text: 'Delete Account',
     icon: icons.person,
   },
 ];
 
 export const methods = [
+  // {
+  //   id: 1,
+  //   text: 'Apple Pay',
+  //   icon: icons.apple,
+  // },
   {
     id: 1,
-    text: 'Apple Pay',
-    icon: icons.apple,
-  },
-  {
-    id: 2,
     text: 'Mastercard',
     icon: icons.mastercard,
   },
   {
     id: 3,
-    text: 'Paypal',
+    text: 'Visa',
     icon: icons.paypal,
   },
 ];

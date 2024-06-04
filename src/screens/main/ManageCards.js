@@ -1,10 +1,4 @@
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {useRef, useState} from 'react';
 import Container from '../../components/Container';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -18,8 +12,14 @@ import Add from 'react-native-vector-icons/MaterialIcons';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import ContactInput from '../../components/ContactInput';
 import uuid from 'react-native-uuid';
-import { createCard } from '../../redux/actions/authAction';
-import { ShowToast } from '../../Custom';
+import {createCard} from '../../redux/actions/authAction';
+import {ShowToast} from '../../Custom';
+import {
+  identifyCardType,
+  maxCardLength,
+  validateCVC,
+  validateExpiry,
+} from '../../utils/HelperFunctions';
 
 const ManageCards = () => {
   const [state, setState] = useState({
@@ -32,10 +32,10 @@ const ManageCards = () => {
   });
 
   const sheetRef = useRef();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const {card} = useSelector(state => state.AuthReducer);
-  console.log('card details ====>', card)
+  console.log('card details ====>', identifyCardType(state.card_number));
 
   const onOpenSheet = () => {
     sheetRef.current.open();
@@ -63,9 +63,17 @@ const ManageCards = () => {
 
   const onAddCard = () => {
     if (!state.card_holder) {
-      return ShowToast('Please give your card details');
-    } else if (state.card_number.length < 16) {
+      return ShowToast('Please provide your card details');
+    } else if (/\d/.test(state.card_holder)) {
+      return ShowToast('Please Enter Invalid Name');
+    } else if (identifyCardType(state.card_number) === 'Invalid') {
       return ShowToast('Please enter the valid card number');
+    } else if (validateExpiry(state.exp_month, true) === 'Invalid month') {
+      return ShowToast('Invalid Expiry Month');
+    } else if (validateExpiry(state.exp_year, false) === 'Expired card') {
+      return ShowToast('Card is expired');
+    } else if (validateCVC(state.cvc) === 'Invalid cvc') {
+      return ShowToast('Invalid CVC');
     } else {
       const cardExist = card?.find(item => item.card_id == state.card_id);
       if (cardExist) {
@@ -113,7 +121,6 @@ const ManageCards = () => {
                 cardholder_name={item.card_holder}
                 card_number={item.card_number}
                 date={item.exp_month + '/' + item.exp_year}
-                cardStyle={{width: '100%'}}
                 masterStyle={{width: '22%'}}
                 onCardPress={() => onOpenCardDetails(item)}
               />
@@ -123,7 +130,7 @@ const ManageCards = () => {
       <TouchableOpacity
         style={styles.addCardButton}
         onPress={() => onOpenSheet()}>
-        <Add name={'add'} color={colors.white} size={30} />
+        <Add name={'add'} color={colors.secondary} size={30} />
       </TouchableOpacity>
       <View style={styles.sheetWrapper}>
         <RBSheet
@@ -136,13 +143,19 @@ const ManageCards = () => {
             container: {
               backgroundColor: colors.secondary,
               padding: hp(2),
-              //   alignItems: 'center',
             },
           }}>
           <ScrollView contentContainerStyle={{paddingBottom: hp('10%')}}>
             <ContactInput
               label={'Card Holder'}
-              style={styles.input}
+              style={[
+                styles.input,
+                /\d/.test(state.card_holder) &&
+                  state.card_holder.length > 0 && {
+                    borderWidth: 1,
+                    borderColor: colors.red,
+                  },
+              ]}
               placeholder={'Card Holder Name'}
               textColor={colors.white}
               onChangeText={text => onTextChange('card_holder', text)}
@@ -151,8 +164,16 @@ const ManageCards = () => {
             <ContactInput
               label={'Card Number'}
               placeholder={'Card Number'}
-              length={16}
-              style={styles.input}
+              length={maxCardLength(identifyCardType(state.card_number))}
+              style={[
+                styles.input,
+                identifyCardType(state.card_number) === 'Invalid' &&
+                  state.card_number.length > 0 && {
+                    borderColor: colors.red,
+                    borderWidth: 1,
+                  },
+              ]}
+              keyboardType={'numeric'}
               textColor={colors.white}
               onChangeText={text => onTextChange('card_number', text)}
               value={state.card_number}
@@ -164,18 +185,34 @@ const ManageCards = () => {
                 gap: 30,
               }}>
               <ContactInput
-                style={styles.inputStyle}
+                style={[
+                  styles.inputStyle,
+                  validateExpiry(state.exp_year, false) === 'Expired card' &&
+                    state.exp_year.length > 0 && {
+                      borderWidth: 1,
+                      borderColor: colors.red,
+                    },
+                ]}
                 onChangeText={text => onTextChange('exp_year', text)}
                 value={state.exp_year}
                 textColor={colors.white}
                 length={2}
                 // innerStyle={styles.input}
+                keyboardType={'numeric'}
                 label={'Expiry Year'}
                 placeholder={'Year'}
               />
               <ContactInput
-                style={styles.inputStyle}
+                style={[
+                  styles.inputStyle,
+                  validateExpiry(state.exp_month, true) === 'Invalid month' &&
+                    state.exp_month.length > 0 && {
+                      borderWidth: 1,
+                      borderColor: colors.red,
+                    },
+                ]}
                 // innerStyle={styles.input}
+                keyboardType={'numeric'}
                 label={'Expiry Month'}
                 length={2}
                 onChangeText={text => onTextChange('exp_month', text)}
@@ -184,7 +221,15 @@ const ManageCards = () => {
                 placeholder={'Month'}
               />
               <ContactInput
-                style={styles.inputStyle}
+                keyboardType={'numeric'}
+                style={[
+                  styles.inputStyle,
+                  validateCVC(state.cvc) === 'Invalid cvc' &&
+                    state.cvc.length > 0 && {
+                      borderWidth: 1,
+                      borderColor: colors.red,
+                    },
+                ]}
                 textColor={colors.white}
                 label={'Cvc'}
                 onChangeText={text => onTextChange('cvc', text)}
@@ -218,7 +263,7 @@ const styles = StyleSheet.create({
   },
   addCardButton: {
     borderWidth: 1,
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.primary,
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',

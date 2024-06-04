@@ -73,6 +73,7 @@ export default {
     dummy: require('../images/dummy.png'),
     splash: require('../images/splashimage.png'),
     master_card:  require('../images/mastercard.png'),
-    visa_card: require('../images/visa.png')
+    visa_card: require('../images/visa.png'),
+    express: require('../images/express.webp')
 
 }
