@@ -24,6 +24,7 @@ import GroupDetail from '../screens/main/GroupDetail';
 import GroupChat from '../screens/main/GroupChat';
 import AddToCart from '../screens/main/AddToCart';
 import Checkout from '../screens/main/Checkout';
+import ManageCards from '../screens/main/ManageCards';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -159,6 +160,7 @@ const SecondaryStack = () => {
       <Tab.Screen name="AllGroups" component={AllGroups} />
       <Tab.Screen name="GroupDetail" component={GroupDetail} />
       <Tab.Screen name="GroupChat" component={GroupChat} />
+      <Tab.Screen name='ManageCards' component={ManageCards} />
     </Stack.Navigator>
   );
 };

@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -19,18 +19,15 @@ import MerchandiseCard from '../../components/MerchandiseCard';
 import {useNavigation} from '@react-navigation/native';
 
 const Wishlist = () => {
-  // const [wishlistItems, setWishlistItems] = useState([]);
   const {wishlist_items, wishlist_loader, user} = useSelector(state => state.AuthReducer);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  console.log('itemss ', wishlist_items);
+  // console.log('itemss ', wishlist_items);
 
   useEffect(() => {
-    // if (wishlist_items?.length < 1) {
     dispatch(getWishlistById(user.user_id));
-    // }
   }, []);
 
   return (

@@ -5,7 +5,6 @@ const initialState = {
   products_loading: false,
   product_detail_loading: false,
   cart: [],
-  cart_message: '',
 };
 
 export default (state = initialState, action) => {
@@ -26,7 +25,7 @@ export default (state = initialState, action) => {
       };
 
     case constant.ADD_TO_CART:
-      return {...state, cart: action.payload, cart_message: action.message};
+      return {...state, cart: action.payload,};
 
     default:
       return state;

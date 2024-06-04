@@ -142,23 +142,4 @@ export const removeFromWishlist = (user_id, product_id) => {
   };
 };
 
-export const addtoCart = (id, title,image, quantity, price) => {
-  return async (dispatch, getState) => {
-    const cartproduct = getState().ProductReducer.cart
-    // return console.log('cart reducer', cartproduct)
 
-    const productDetails = {
-      id: id,
-      title: title,
-      image: image,
-      quantity: quantity,
-      price: price
-  }
- let cartItem = [...cartproduct, productDetails] 
-    dispatch({
-      type: constant.ADD_TO_CART,
-      payload: cartItem,
-      message: 'Successfully added in your cart'
-    })
-  }
-}

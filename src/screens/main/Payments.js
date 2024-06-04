@@ -9,10 +9,20 @@ import SVGImage from '../../components/SVGImage';
 import icons from '../../assets/icons';
 import Arrow from 'react-native-vector-icons/SimpleLineIcons';
 import PaymentMethods from '../../components/PaymentMethods';
-import {CalculateTotal, methods} from '../../utils/DummyData';
+import {methods} from '../../utils/DummyData';
 import Button from '../../components/Button';
+import Add from 'react-native-vector-icons/MaterialIcons';
+import {useNavigation} from '@react-navigation/native';
 
-const Payments = () => {
+const Payments = ({route}) => {
+  const {country, desc, address, city, email} = route.params;
+
+  console.log('dataa from previous screen ======>', route.params);
+
+  const navigation = useNavigation();
+
+  const onCheckout = () => {};
+
   return (
     <Container>
       <Header />
@@ -25,8 +35,10 @@ const Payments = () => {
               <SVGImage image={icons.marker} />
             </View>
             <View style={styles.textWrapper}>
-              <Text style={styles.street}>No. 12 Seams Street</Text>
-              <Text style={styles.locationText}>Lagos, Nigeria</Text>
+              <Text style={styles.street}>{address}</Text>
+              <Text style={styles.locationText}>
+                {city}, {country}
+              </Text>
             </View>
           </View>
           <Arrow
@@ -34,38 +46,34 @@ const Payments = () => {
             color={colors.lightgray}
             size={20}
             style={{alignSelf: 'center'}}
+            onPress={() => navigation.goBack()}
           />
         </View>
         <View style={styles.border} />
         <View style={{paddingTop: hp('4%')}}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={styles.heading}>Payment Method</Text>
-            <Text style={styles.walletText}>Use E-Wallet</Text>
+            {/* <Text style={styles.walletText}>Use E-Wallet</Text> */}
+            <Add
+              name={'add'}
+              color={colors.white}
+              size={25}
+              style={{alignSelf: 'center'}}
+              onPress={() =>
+                navigation.navigate('SecondaryStack', {screen: 'ManageCards'})
+              }
+            />
           </View>
           <View style={styles.methodWrapper}>
             {methods.map(item => (
               <PaymentMethods key={item.id} icon={item.icon} text={item.text} />
             ))}
           </View>
-          {/* <View style={styles.amountWrapper}>
-            <Text style={styles.amountHeading}>Total</Text>
-            <Text style={styles.priceText}>${250}</Text>
-          </View> */}
-          {/* <View
-            style={[
-              item.id !== 3 && styles.border,
-              {
-                borderBottomWidth: 1,
-                marginTop: hp('3%'),
-                marginBottom: hp('3%'),
-              },
-            ]}
-          /> */}
           <Button
             textStyle={{color: colors.secondary}}
             buttonText={'Check Out'}
             buttonStyle={{borderRadius: 100}}
-            onPress={() => alert('working in progress')}
+            onPress={() => onCheckout()}
           />
         </View>
       </ScrollView>
@@ -101,12 +109,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   textWrapper: {
-    marginLeft: hp('2%'),
+    marginLeft: hp('1.5%'),
     marginTop: hp('0.8%'),
   },
   street: {
     color: colors.white,
-    alignSelf: 'center',
     fontSize: hp('1.9%'),
     fontWeight: 'bold',
   },

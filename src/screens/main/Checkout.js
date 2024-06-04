@@ -1,4 +1,10 @@
-import {View, StyleSheet, ScrollView} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import React, {useState} from 'react';
 import Container from '../../components/Container';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -8,13 +14,15 @@ import colors from '../../assets/colors';
 import Button from '../../components/Button';
 import {useNavigation} from '@react-navigation/native';
 import ContactInput from '../../components/ContactInput';
+import CountryPicker, {DARK_THEME} from 'react-native-country-picker-modal';
+import Arrow from 'react-native-vector-icons/MaterialIcons';
+import {ShowToast} from '../../Custom';
 
 const Checkout = () => {
   const [state, setState] = useState({
     first_name: '',
     last_name: '',
     company_name: '',
-    country: '',
     address: '',
     apartment: '',
     city: '',
@@ -25,6 +33,17 @@ const Checkout = () => {
     note: '',
   });
 
+  const [country, setCountry] = useState('United States');
+  const [countryCode, setCountryCode] = useState('US');
+  const [isPickerVisible, setIsPickerVisible] = useState(false);
+
+  const onSelect = selectedCountry => {
+    // setCountryCode(country.cca2)
+    // console.log('countryyy picker response', selectedCountry.name)
+    setCountry(selectedCountry.name);
+    setCountryCode(selectedCountry.cca2);
+  };
+
   const navigation = useNavigation();
 
   const onChangeText = (value, text) => {
@@ -33,6 +52,29 @@ const Checkout = () => {
       [value]: text,
     });
   };
+
+  const onContinueCheckout = () => {
+    if (!state.address) {
+      return ShowToast('Address is required');
+    } else if (!state.email) {
+      return ShowToast('Email is required');
+    } else if (!state.city) {
+      return ShowToast('City is required');
+    } else {
+      navigation.navigate('SecondaryStack', {
+        screen: 'Payments',
+        params: {
+          address: state.address,
+          email: state.email,
+          desc: state.note,
+          country: country,
+          city: state.city
+        },
+      });
+    }
+  };
+
+  console.log('country name =====>', country);
 
   return (
     <Container>
@@ -59,12 +101,24 @@ const Checkout = () => {
           value={state.company_name}
           onChangeText={text => onChangeText('company_name', text)}
         />
-        <ContactInput
-          style={styles.input}
-          label={'Country / Region'}
-          value={state.country}
-          onChangeText={text => onChangeText('country', text)}
-        />
+        <Text style={styles.heading}>Country / Region</Text>
+        <TouchableOpacity
+          onPress={() => setIsPickerVisible(true)}
+          activeOpacity={0.9}
+          style={styles.countryButton}>
+          <Text style={styles.countryText}>{country}</Text>
+          <Arrow name={'keyboard-arrow-down'} color={colors.white} size={25} />
+        </TouchableOpacity>
+        {isPickerVisible && (
+          <CountryPicker
+            theme={DARK_THEME}
+            onSelect={onSelect}
+            onClose={() => setIsPickerVisible(false)}
+            cca2={countryCode}
+            translation="eng"
+            visible={isPickerVisible}
+          />
+        )}
         <ContactInput
           style={styles.input}
           label={'Street Address'}
@@ -119,9 +173,7 @@ const Checkout = () => {
             buttonText={'Continue'}
             textStyle={styles.buttonText}
             buttonStyle={styles.button}
-            onPress={() =>
-              navigation.navigate('SecondaryStack', {screen: 'Payments'})
-            }
+            onPress={onContinueCheckout}
           />
         </View>
       </ScrollView>
@@ -150,8 +202,8 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: colors.white,
-    marginLeft: hp('1%'),
-    fontSize: 15,
+    marginBottom: hp(2.5),
+    fontSize: hp(2.2),
     fontWeight: 'bold',
   },
   headingLabel: {
@@ -170,5 +222,24 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 100,
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  countryButton: {
+    padding: hp(2.4),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: hp(4),
+    borderWidth: 1.2,
+    borderColor: colors.gray,
+    borderRadius: 8,
+  },
+  countryText: {
+    fontSize: hp(2.2),
+    fontWeight: 'bold',
+    color: colors.white,
   },
 });

@@ -125,34 +125,27 @@ export const settings = [
     icon: icons.contact,
     nav: 'ContactUs'
   },
+  // {
+  //   id: 5,
+  //   text: 'Language',
+  //   icon: icons.language,
+  //   message: 'Coming soon'
+  //   // nav: 'Language'
+  // },
   {
     id: 5,
-    text: 'Language',
-    icon: icons.language,
-    message: 'Coming soon'
-    // nav: 'Language'
-  },
-  {
-    id: 6,
-    text: 'Rate This App',
-    icon: icons.rate,
-    message: 'Coming soon'
-    // nav: 'Rating'
-  },
-  {
-    id: 7,
     text: 'License',
     icon: icons.license,
     url: 'https://inthecup.golf'
   },
   {
-    id: 8,
+    id: 6,
     text: 'About Us',
     icon: icons.about,
     nav: 'About'
   },
   {
-    id: 9,
+    id: 7,
     text: 'Delete Account',
     icon: icons.person,
   },

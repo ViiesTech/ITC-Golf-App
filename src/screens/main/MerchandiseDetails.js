@@ -18,9 +18,11 @@ import AddMinus from '../../components/AddMinus';
 import MerchandiseCard from '../../components/MerchandiseCard';
 import images from '../../assets/images';
 import {useDispatch, useSelector} from 'react-redux';
-import {addtoCart, getProductDetails} from '../../redux/actions/productAction';
+import {getProductDetails} from '../../redux/actions/productAction';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
+import constant from '../../redux/constant';
+import { ShowToast } from '../../Custom';
 
 const MerchandiseDetails = ({route}) => {
   const navigation = useNavigation();
@@ -75,23 +77,41 @@ const MerchandiseDetails = ({route}) => {
 
   const onAddtoCartPress = () => {
     try {
+      const productDetails = {
+        id: product_detail.product_id,
+        title: product_detail.title,
+        image: product_detail.image,
+        quantity: quantity,
+        price: product_detail.price,
+      };
+      let cartDetails = [...cart, productDetails];
       const cart_index = cart?.findIndex(item => item.id == id);
       if (cart[cart_index]?.id == product_detail.product_id) {
-        console.log('product is already in your cart')
+        const updatedCart = cart?.map((item, i) => {
+          if (i == cart_index) {
+            return {
+              ...item,
+              quantity: item.quantity + 1,
+            };
+          } else {
+            return item;
+          }
+        });
+        dispatch({
+          type: constant.ADD_TO_CART,
+          payload: updatedCart,
+        });
+        navigation.navigate('SecondaryStack', {screen: 'AddToCart'});
+        return ShowToast('Successfully added in your cart')
       } else {
-        dispatch(
-          addtoCart(
-            product_detail.product_id,
-            product_detail.title,
-            product_detail.image,
-            quantity,
-            99.00,
-          ),
-        );
+        dispatch({
+          type: constant.ADD_TO_CART,
+          payload: cartDetails,
+        });
         navigation.navigate('SecondaryStack', {screen: 'AddToCart'});
       }
     } catch (error) {
-      console.log('error adding product in your cart');
+      console.log('error adding product in your cart', error);
     }
   };
 
@@ -124,7 +144,7 @@ const MerchandiseDetails = ({route}) => {
             />
           </View>
           <View style={{marginLeft: hp('2%')}}>
-            <Text style={styles.price}>$99.00</Text>
+            <Text style={styles.price}>${product_detail.price}</Text>
             <View style={{paddingTop: hp('1%')}}>
               <AddMinus
                 number={quantity}

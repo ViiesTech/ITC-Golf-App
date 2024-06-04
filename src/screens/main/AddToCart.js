@@ -7,29 +7,52 @@ import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import AddToProductCard from '../../components/AddToProductCard';
 import colors from '../../assets/colors';
 import Button from '../../components/Button';
-import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import constant from '../../redux/constant';
 
 const AddToCart = () => {
-  const { cart } = useSelector(state => state.ProductReducer)
-  console.log('product', cart)
+  const {cart} = useSelector(state => state.ProductReducer);
+  console.log('product', cart);
 
-    const navigation = useNavigation();
-    // const onIncreaseQuantity = (item) => {
-    //   return {
-    //     quantity: item.quantity + 1,
-    //   };
-    // };
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
 
-    // const onDecreaseQuantity = (item) => {
-    //   return {
-    //     quantity: item.quantity - 1,
-    //   };
-    // };
+  const onIncreaseQuantity = index => {
+    const updatedCart = cart.map(item => {
+      if (item.id == cart[index].id) {
+        return {
+          ...item,
+          quantity: item.quantity + 1,
+        };
+      }
+      return item;
+    });
+    dispatch({
+      type: constant.ADD_TO_CART,
+      payload: updatedCart,
+    });
+  };
 
-    const calculateTotal = () => {
-      return cart?.reduce((total, item) => total + item.price * item.quantity, 0)
-    }
+  const onDecreaseQuantity = index => {
+    const updatedCart = cart.map(item => {
+      if (item.id == cart[index].id) {
+        return {
+          ...item,
+          quantity: item.quantity > 1 ? item.quantity - 1 : item.quantity,
+        };
+      }
+      return item;
+    });
+    dispatch({
+      type: constant.ADD_TO_CART,
+      payload: updatedCart,
+    });
+  };
+
+  const calculateTotal = () => {
+    return cart?.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
 
   return (
     <Container>
@@ -43,15 +66,15 @@ const AddToCart = () => {
           showsVerticalScrollIndicator={false}
           keyExtractor={item => item.id}
           data={cart}
-          renderItem={({item}) => {
+          renderItem={({item, index}) => {
             return (
               <AddToProductCard
                 image={{uri: item.image}}
                 name={item.title}
                 quantity={item.quantity}
                 price={item.price}
-                // increment={() => onIncreaseQuantity(item.quantity)}
-                // decrement={() => onDecreaseQuantity(item.quantity)}
+                increment={() => onIncreaseQuantity(index)}
+                decrement={() => onDecreaseQuantity(index)}
               />
             );
           }}
@@ -62,7 +85,9 @@ const AddToCart = () => {
           <View style={styles.summaryDetailsContainer}>
             <View style={styles.summaryItem}>
               <Text style={styles.summaryItemTitleText}>Total</Text>
-              <Text style={styles.summaryItemTitleText}>${calculateTotal()}</Text>
+              <Text style={styles.summaryItemTitleText}>
+                ${calculateTotal()}
+              </Text>
             </View>
           </View>
         </View>
@@ -117,7 +142,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 15,
     marginTop: hp('3%'),
-    backgroundColor: '#020116',
+    backgroundColor: colors.secondary,
   },
   summaryItem: {
     flexDirection: 'row',

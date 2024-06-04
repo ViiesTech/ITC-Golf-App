@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     paddingVertical: 10,
     paddingHorizontal: '7%',
-    backgroundColor: '#020116',
+    backgroundColor: colors.secondary,
     marginTop: hp('2%'),
     marginBottom: hp('2%'),
   },
