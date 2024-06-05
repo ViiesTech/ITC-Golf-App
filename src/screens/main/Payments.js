@@ -137,7 +137,7 @@ const Payments = ({route}) => {
               },
             }}>
             <ScrollView
-              scrollEnabled={card.length > 1 && true}
+              scrollEnabled={card?.length > 1 && true}
               showsVerticalScrollIndicator={false}>
               {card.map(item => (
                 <View style={{marginBottom: hp('4%')}}>

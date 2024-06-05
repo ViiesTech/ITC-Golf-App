@@ -287,6 +287,7 @@ const Home = () => {
                 onPress={() => onSearchAreaCode()}
               />
             </View>
+            <Sponsors />
             <Text style={styles.text}>Listing</Text>
             <View style={styles.cardWrapper}>
               {searchPressed ? renderFilterListings() : renderAllListings()}
@@ -299,8 +300,7 @@ const Home = () => {
             </TouchableOpacity>
             <View style={{paddingTop: hp('5%')}}>
               <Image source={images.home2} style={styles.golfImage} />
-              <Text style={styles.heading}>Listing</Text>
-              <Sponsors />
+              {/* <Text style={styles.heading}>Listing</Text> */}
             </View>
           </View>
         </ScrollView>

@@ -224,9 +224,9 @@ const Groups = () => {
           onValueChange={itemValue => setSelectedCode(itemValue)}
           onSearchPress={() => onAreaCodeSearch()}
         />
-        <SecondaryHeader text={'Groups'} style={{paddingTop: hp('5%')}} />
-        {searchPressed ? renderFilterGroups() : renderAllGroups()}
         <Sponsors />
+        <SecondaryHeader text={'Groups'}  />
+        {searchPressed ? renderFilterGroups() : renderAllGroups()}
       </ScrollView>
     </Container>
   );

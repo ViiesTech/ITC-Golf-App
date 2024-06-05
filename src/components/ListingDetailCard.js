@@ -58,7 +58,7 @@ const ListingDetailCard = ({
         <Text style={styles.winText}>{desc}</Text>
         {!hideTag && <Text style={styles.loseText}>{exp}</Text>}
         <View
-          style={[styles.line, {marginTop: hideTag ? hp('8%') : hp('4%')}]}
+          style={[styles.line, {marginTop: hideTag ? hp('3%') : hp('4%')}]}
         />
 
         <View style={styles.textWrapper}>

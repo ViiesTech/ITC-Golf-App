@@ -13,8 +13,6 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-ITCGOLF-ITCGOLFTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-ITCGOLF-ITCGOLFTests.a */; };
-		FA72CE572BA8F46B00513A65 /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = FA72CE562BA8F46B00513A65 /* splash.png */; };
-		FA72CE592BA8F49200513A65 /* Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = FA72CE582BA8F49200513A65 /* Logo.png */; };
 		FAB239E42BA3907700B479A1 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = FAB239E32BA3907700B479A1 /* Fonts */; };
 /* End PBXBuildFile section */
 
@@ -45,8 +43,6 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-ITCGOLF.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ITCGOLF.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-ITCGOLF-ITCGOLFTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ITCGOLF-ITCGOLFTests.release.xcconfig"; path = "Target Support Files/Pods-ITCGOLF-ITCGOLFTests/Pods-ITCGOLF-ITCGOLFTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		FA72CE562BA8F46B00513A65 /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash.png; sourceTree = "<group>"; };
-		FA72CE582BA8F49200513A65 /* Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Logo.png; sourceTree = "<group>"; };
 		FAB239E32BA3907700B479A1 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = "../node_modules/react-native-vector-icons/Fonts"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -90,8 +86,6 @@
 		13B07FAE1A68108700A75B9A /* ITCGOLF */ = {
 			isa = PBXGroup;
 			children = (
-				FA72CE582BA8F49200513A65 /* Logo.png */,
-				FA72CE562BA8F46B00513A65 /* splash.png */,
 				FAB239E32BA3907700B479A1 /* Fonts */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -249,8 +243,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA72CE572BA8F46B00513A65 /* splash.png in Resources */,
-				FA72CE592BA8F49200513A65 /* Logo.png in Resources */,
 				FAB239E42BA3907700B479A1 /* Fonts in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);

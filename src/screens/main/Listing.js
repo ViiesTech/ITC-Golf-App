@@ -202,9 +202,9 @@ const Listing = () => {
           onValueChange={value => setSelectedCode(value)}
           onSearchPress={() => onSearchButton()}
         />
-        <SecondaryHeader text={'Listing'} style={{paddingTop: hp('5%')}} />
-        {searchPressed ? renderFilterListings() : renderAllListings()}
         <Sponsors />
+        <SecondaryHeader text={'Listing'}  />
+        {searchPressed ? renderFilterListings() : renderAllListings()}
       </ScrollView>
     </Container>
   );

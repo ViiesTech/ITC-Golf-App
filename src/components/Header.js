@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: colors.white,
-    width: hp(32),
+    width: 'auto',
     alignSelf: 'center',
     fontWeight: 'bold',
     fontSize: hp('2.5%'),

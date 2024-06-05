@@ -66,7 +66,7 @@ const ListingDetails = ({route}) => {
     } else {
       const supported = await Linking.canOpenURL(link);
       if (supported) {
-        alert('haha')
+        alert('haha');
         await Linking.openURL(link);
       } else {
         return ShowToast('Invalid url');
@@ -183,9 +183,7 @@ const ListingDetails = ({route}) => {
                     <Text style={styles.heading}>PRIVATE GROUP:</Text>
                     <View style={styles.line} />
                     <Text style={styles.text}>
-                      {item.private_group === 'true'
-                        ? 'Yes'
-                        : 'No' || ''}
+                      {item.private_group === 'true' ? 'Yes' : 'No' || ''}
                     </Text>
                   </View>
                   <View style={styles.detailContainer}>
@@ -227,18 +225,14 @@ const ListingDetails = ({route}) => {
                     <Text style={styles.heading}>SMOKING FRIENDLY:</Text>
                     <View style={styles.line} />
                     <Text style={styles.text}>
-                      {item.smoking_friendly === 'true'
-                        ? 'Yes'
-                        :  'No' || ''}
+                      {item.smoking_friendly === 'true' ? 'Yes' : 'No' || ''}
                     </Text>
                   </View>
                   <View style={styles.detailContainer}>
                     <Text style={styles.heading}>DRINKING FRIENDLY:</Text>
                     <View style={styles.line} />
                     <Text style={styles.text}>
-                      {item.drinking_friendly === 'true'
-                        ? 'Yes'
-                        : 'No' || ''}
+                      {item.drinking_friendly === 'true' ? 'Yes' : 'No' || ''}
                     </Text>
                   </View>
                 </View>
@@ -377,7 +371,8 @@ const styles = StyleSheet.create({
     color: colors.white,
     alignSelf: 'flex-end',
     marginRight: hp('1%'),
-    width: hp('18%'),
+    width: hp('23%'),
+    // width: 'auto',
     // flex: 1,
     fontWeight: 'bold',
     fontSize: hp('2%'),

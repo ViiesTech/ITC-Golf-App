@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import colors from '../assets/colors';
@@ -31,17 +31,13 @@ const ListingCard = ({
             <Text style={styles.number}>{number}</Text>
           </View>
           <View style={[descStyle]}>
-            <Text
-              style={[styles.textStyle]}
-              numberOfLines={5}
-              ellipsizeMode="tail">
-              {desc}
-            </Text>
+            <Text style={[styles.textStyle]}>{desc}</Text>
           </View>
         </View>
         <Text style={styles.text}>{title}</Text>
       </View>
-      <View style={{marginRight: hp('1%'), paddingTop: hp('1%')}}>
+      <View
+        style={{marginRight: hp('1%'), paddingTop: hp('1%'), width: hp('11%')}}>
         <Text style={styles.eventsText}>NO OF PLAYERS:</Text>
         <Text style={styles.location}>{count}</Text>
         <Text style={styles.recordHeading}>{exp}</Text>
@@ -58,6 +54,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: hp('7%'),
+    padding: hp('0%'),
     paddingTop: hp('2%'),
   },
   image: {
@@ -87,8 +84,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: hp('14%'),
     top: hp('0.1%'),
-    // flex: 1,
-    width: hp('20%'),
+    width: hp('18.5%'),
     fontWeight: 'bold',
   },
   eventsText: {
@@ -100,22 +96,22 @@ const styles = StyleSheet.create({
   location: {
     color: colors.white,
     // alignSelf: 'flex-end',
-    marginBottom: hp('0.5%'),
+    // marginBottom: hp('0.5%'),
     fontSize: hp('1.4%'),
-    marginTop: hp('2%'),
+    marginTop: hp('1%'),
   },
   textStyle: {
     color: colors.white,
     marginTop: hp('3%'),
+    backgroundColor: 'black',
     width: hp('20%'),
-    // flex: 1,
     fontSize: hp('1.4%'),
     // position: 'absolute',
   },
   recordHeading: {
     color: colors.white,
     // alignSelf: 'flex-end',
-    width: hp('15%'),
+    width: hp('9.5%'),
     fontSize: hp('1.4%'),
     marginTop: hp('2%'),
   },

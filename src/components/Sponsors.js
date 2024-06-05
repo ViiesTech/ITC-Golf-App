@@ -22,10 +22,10 @@ const Sponsors = () => {
                     />
                 </TouchableOpacity>
             ))}
-            <SVGImage
+            {/* <SVGImage
                 image={icons.pageEnd}
                 style={styles.endIcon}
-            />
+            /> */}
         </View>
     )
 }
