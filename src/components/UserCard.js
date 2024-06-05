@@ -20,8 +20,9 @@ const UserCard = ({
   //   console.log('format', identifyCardType(card_number))
 
   return (
-    <TouchableOpacity activeOpacity={0.9} onPress={onCardPress}>
-      <View
+      <TouchableOpacity
+        onPress={onCardPress}
+        activeOpacity={0.9}
         style={[
           {
             flexDirection: 'row',
@@ -60,8 +61,7 @@ const UserCard = ({
           }
           style={[styles.image, masterStyle]}
         />
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
   );
 };
 

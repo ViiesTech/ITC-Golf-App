@@ -15,7 +15,8 @@ const initialState = {
   wishlist_items: [],
   register_id: null,
   token: '',
-  card: []
+  card: [],
+  payment_loading: false,
 };
 
 export default (state = initialState, action) => {
@@ -30,7 +31,12 @@ export default (state = initialState, action) => {
       return {...state, signin_loading: true};
 
     case constant.LOGIN_DONE:
-      return {...state, signin_loading: false, user: action.payload, token: action.token};
+      return {
+        ...state,
+        signin_loading: false,
+        user: action.payload,
+        token: action.token,
+      };
 
     case constant.EDIT_PROFILE:
       return {...state, edit_loading: true};
@@ -72,10 +78,16 @@ export default (state = initialState, action) => {
       return {...state, wishlist_loader: true};
 
     case constant.GET_WISHLIST_DONE:
-      return {...state, wishlist_loader: false, wishlist_items: action.payload}; 
+      return {...state, wishlist_loader: false, wishlist_items: action.payload};
 
     case constant.ADD_CARD_TO_WALLET:
-      return {...state, card: action.payload}
+      return {...state, card: action.payload};
+
+    case constant.PAYMENT:
+      return {...state, payment_loading: true};
+
+    case constant.PAYMENT_DONE:
+      return {...state, payment_loading: false};
 
     case constant.DEACTIVATE_ACCOUNT:
       return initialState;

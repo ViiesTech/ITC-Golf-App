@@ -152,20 +152,20 @@ export const settings = [
 ];
 
 export const methods = [
-  // {
-  //   id: 1,
-  //   text: 'Apple Pay',
-  //   icon: icons.apple,
-  // },
   {
     id: 1,
     text: 'Mastercard',
-    icon: icons.mastercard,
+    icon: images.master_card,
+  },
+  {
+    id: 2,
+    text: 'Visa',
+    icon: images.visa_card,
   },
   {
     id: 3,
-    text: 'Visa',
-    icon: icons.paypal,
+    text: 'American Express',
+    icon: images.express,
   },
 ];
 

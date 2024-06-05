@@ -4,6 +4,9 @@ import {ErrorToast} from 'react-native-toast-message';
 import {ShowToast} from '../../Custom';
 import axios from 'axios';
 
+export const STRIPE_KEY =
+  'pk_test_51KQb3pC6mJiJ0AUpeAjoS786h11qy1jW92S6gWsGD4NpK4JGOuKplhC2I0vHFgEWwRy7T9NwHDZPiILuzQPynCdK007sgX6ox6';
+
 export const signup = (
   username,
   firstname,
@@ -356,7 +359,7 @@ export const PlayersFollow = (user_id, listing_id, setPlayers) => {
         },
       )
       .then(res => {
-        setPlayers(res.data)
+        setPlayers(res.data);
         dispatch({
           type: constant.PLAYERS_FOLLOW_DONE,
         });
@@ -371,7 +374,7 @@ export const PlayersFollow = (user_id, listing_id, setPlayers) => {
   };
 };
 
-export const getWishlistById = (user_id) => {
+export const getWishlistById = user_id => {
   return async dispatch => {
     dispatch({
       type: constant.GET_WISHLIST,
@@ -390,7 +393,7 @@ export const getWishlistById = (user_id) => {
         // setWishlistItems(res.data)
         dispatch({
           type: constant.GET_WISHLIST_DONE,
-          payload: res.data
+          payload: res.data,
         });
       })
       .catch(error => {
@@ -429,13 +432,55 @@ export const DeactivateAccount = user_id => {
   };
 };
 
-export const createCard = (data) => {
+export const createCard = data => {
   return async dispatch => {
-
     dispatch({
       type: constant.ADD_CARD_TO_WALLET,
-      payload: data
-    })
+      payload: data,
+    });
+  };
+};
 
-  }
-}
+export const payment = (user_id, user_email, desc, token, product) => {
+  return async dispatch => {
+    dispatch({
+      type: constant.PAYMENT,
+    });
+
+    let data = {
+      customer_id: user_id,
+      customer_email: user_email,
+      currency: 'usd',
+      description: desc,
+      stripeToken: token,
+      items: product,
+    };
+
+     console.log('dataaa', data)
+
+   return await axios.post(`${URL}/payment`,data,{
+      headers:{
+        'Content-Type': 'application/json',
+      }
+    }).then((res) => {
+      console.log('payment response ======>',res)
+        if(res.success) {
+          dispatch({
+            type: constant.PAYMENT_DONE
+          })
+          return res.success
+        } else {
+          dispatch({
+            type: constant.PAYMENT_DONE
+          })
+          return false
+        }
+    }).catch((error) => {
+      console.log('payment error ======>',error)
+      dispatch({
+        type: constant.PAYMENT_DONE
+      })
+      return ShowToast('Some problem occured')
+    })
+  };
+};

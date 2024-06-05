@@ -14,27 +14,69 @@ import Button from '../../components/Button';
 import Add from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import UserCard from '../../components/UserCard';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import {payment, STRIPE_KEY} from '../../redux/actions/authAction';
+import {ShowToast} from '../../Custom';
+var stripe = require('stripe-client')(STRIPE_KEY);
 
 const Payments = ({route}) => {
+  const {card, payment_loading, user} = useSelector(state => state.AuthReducer);
+
   const [state, setState] = useState({
-    card_holder: '',
-    card_number: '',
-    exp_year: '',
-    exp_month: '',
-    cvc: '',
+    card_holder: card[0].card_holder,
+    card_number: card[0].card_number,
+    exp_year: card[0].exp_year,
+    exp_month: card[0].exp_month,
+    cvc: card[0].cvc,
   });
 
-  const {country, desc, address, city, email} = route.params;
+  const {country, desc, address, city} = route.params;
 
-  console.log('dataa from previous screen ======>', route.params);
-  const {card} = useSelector(state => state.AuthReducer);
+  // console.log('dataa from previous screen ======>', route.params);
+  const {cart} = useSelector(state => state.ProductReducer);
 
+  // console.log('dataaaa', user);
+
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const sheetRef = useRef();
 
-  const onCheckout = () => {};
+  const onCheckout = async () => {
+    if (card?.length < 1 || !state) {
+      return ShowToast('Please Select your card');
+    } else {
+      const product = cart.map(item => ({
+        product_id: item.id,
+        quantity: item.quantity,
+        price: Math.round(item.price * 100) / 100,
+      }));
+
+      var information = {
+        card: {
+          number: state.card_number,
+          exp_month: state.exp_month,
+          exp_year: state.exp_year,
+          cvc: state.cvc,
+          name: state.card_holder,
+        },
+      };
+
+      var card = await stripe.createToken(information);
+      var token = card.id;
+
+      console.log('stripe tokennnnn =======>', token);
+      const res = await dispatch(
+        payment(user.user_id, user.user_email, desc, token, product),
+      );
+      if (res) {
+        navigation.navigate('Home');
+        return ShowToast('Payment Successful');
+      } else {
+        return ShowToast('An error occurred while processing your payment!');
+      }
+    }
+  };
 
   const onSelectCard = card => {
     setState({
@@ -91,22 +133,24 @@ const Payments = ({route}) => {
           </View>
           <View style={styles.methodWrapper}>
             {/* {card..map(item => ( */}
-            {card?.length > 0 && (
+            {card?.length > 0 ? (
               <UserCard
-                cardholder_name={
-                  state.card_holder ? state.card_holder : card[0].card_holder
-                }
-                card_number={
-                  state.card_number ? state.card_number : card[0].card_number
-                }
-                date={
-                  state.exp_month && state.exp_year
-                    ? state.exp_month + '/' + state.exp_year
-                    : card[0].exp_month + '/' + card[0].exp_year
-                }
+                cardholder_name={state.card_holder}
+                card_number={state.card_number}
+                date={state.exp_month + '/' + state.exp_year}
                 masterStyle={{width: '24%'}}
+                cardStyle={{alignSelf: 'center'}}
                 onCardPress={() => sheetRef.current.open()}
               />
+            ) : (
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  color: colors.white,
+                  fontSize: hp('2.4'),
+                }}>
+                No Cards in your wallet
+              </Text>
             )}
             {/* ))} */}
           </View>
@@ -139,7 +183,7 @@ const Payments = ({route}) => {
             <ScrollView
               scrollEnabled={card?.length > 1 && true}
               showsVerticalScrollIndicator={false}>
-              {card.map(item => (
+              {card?.map(item => (
                 <View style={{marginBottom: hp('4%')}}>
                   <UserCard
                     cardholder_name={item.card_holder}
@@ -156,6 +200,7 @@ const Payments = ({route}) => {
             textStyle={{color: colors.secondary}}
             buttonText={'Check Out'}
             buttonStyle={{borderRadius: 100}}
+            indicator={payment_loading}
             onPress={() => onCheckout()}
           />
         </View>
@@ -208,7 +253,7 @@ const styles = StyleSheet.create({
   },
   border: {
     borderBottomColor: colors.lightgray,
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 0.6,
     marginTop: hp('2%'),
   },
   methodWrapper: {

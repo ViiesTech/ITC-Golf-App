@@ -17,6 +17,7 @@ import ContactInput from '../../components/ContactInput';
 import CountryPicker, {DARK_THEME} from 'react-native-country-picker-modal';
 import Arrow from 'react-native-vector-icons/MaterialIcons';
 import {ShowToast} from '../../Custom';
+import { useSelector } from 'react-redux';
 
 const Checkout = () => {
   const [state, setState] = useState({
@@ -36,6 +37,9 @@ const Checkout = () => {
   const [country, setCountry] = useState('United States');
   const [countryCode, setCountryCode] = useState('US');
   const [isPickerVisible, setIsPickerVisible] = useState(false);
+
+  const { user } = useSelector(state => state.AuthReducer)
+  console.log('user details =====>', user)
 
   const onSelect = selectedCountry => {
     // setCountryCode(country.cca2)
@@ -60,12 +64,14 @@ const Checkout = () => {
       return ShowToast('Email is required');
     } else if (!state.city) {
       return ShowToast('City is required');
-    } else {
+    } else if (state.email !== user.user_email) {
+      return ShowToast('Email address is not valid')
+    } 
+    else {
       navigation.navigate('SecondaryStack', {
         screen: 'Payments',
         params: {
           address: state.address,
-          email: state.email,
           desc: state.note,
           country: country,
           city: state.city

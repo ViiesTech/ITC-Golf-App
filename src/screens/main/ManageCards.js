@@ -182,7 +182,7 @@ const ManageCards = () => {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                gap: 30,
+                gap: hp(3),
               }}>
               <ContactInput
                 style={[
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
     width: hp('7%'),
   },
   inputStyle: {
-    width: hp('12%'),
+    width:  hp(10),
     borderColor: colors.gray,
     backgroundColor: 'transparent',
     borderWidth: 2,
@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
   input: {
     alignSelf: 'center',
     backgroundColor: 'transparent',
-    width: hp(45),
+    width: '100%',
     borderWidth: 2,
     borderColor: colors.gray,
   },

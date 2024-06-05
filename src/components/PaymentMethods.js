@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Image } from 'react-native'
 import React, { useState } from 'react'
 import colors from '../assets/colors'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
@@ -12,8 +12,9 @@ const PaymentMethods = ({ icon, text }) => {
         <View style={styles.wrapper}>
             <View style={{ flexDirection: 'row' }}>
                 <View style={styles.payView}>
-                    <SVGImage
-                        image={icon}
+                    <Image
+                        source={icon}
+                        style={{height: hp(3), width: hp(5)}}
                     />
                 </View>
                 <View style={styles.textWrapper}>
