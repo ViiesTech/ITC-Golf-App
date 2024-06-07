@@ -24,11 +24,11 @@ const Payments = ({route}) => {
   const {card, payment_loading, user} = useSelector(state => state.AuthReducer);
 
   const [state, setState] = useState({
-    card_holder: card[0].card_holder,
-    card_number: card[0].card_number,
-    exp_year: card[0].exp_year,
-    exp_month: card[0].exp_month,
-    cvc: card[0].cvc,
+    card_holder: card[0]?.card_holder,
+    card_number: card[0]?.card_number,
+    exp_month: card[0]?.exp_month,
+    exp_year: card[0]?.exp_year,
+    cvc: card[0]?.cvc,
   });
 
   const {country, desc, address, city} = route.params;
@@ -42,8 +42,51 @@ const Payments = ({route}) => {
   const navigation = useNavigation();
   const sheetRef = useRef();
 
+  // const onCheckout = async () => {
+  //   if (card?.length < 1 || !state) {
+  //     return ShowToast('Please Select your card');
+  //   } else {
+  //     const product = cart.map(item => ({
+  //       product_id: item.id,
+  //       quantity: item.quantity,
+  //       price: Math.round(item.price * 100) / 100,
+  //     }));
+
+  //     var information = {
+  //       card: {
+  //         number: state.card_number,
+  //         exp_month: state.exp_month,
+  //         exp_year: state.exp_year,
+  //         cvc: state.cvc,
+  //         name: state.card_holder,
+  //       },
+  //     };
+
+  //     var card = await stripe.createToken(information);
+  //     var token = card.id;
+
+  //     console.log('stripe tokennnnn =======>', token);
+  //     const res = await dispatch(
+  //       payment(user.user_id, user.user_email, desc, token, product),
+  //     );
+  //     if (res) {
+  //       navigation.navigate('Home');
+  //       return ShowToast('Payment Successful');
+  //     } else {
+  //       return ShowToast('An error occurred while processing your payment!');
+  //     }
+  //   }
+  // };
+
   const onCheckout = async () => {
-    if (card?.length < 1 || !state) {
+    if (
+      !state.card_number ||
+      !state.exp_month ||
+      !state.exp_year ||
+      !state.cvc ||
+      !state.card_holder ||
+      card?.length < 1
+    ) {
       return ShowToast('Please Select your card');
     } else {
       const product = cart.map(item => ({
@@ -90,6 +133,8 @@ const Payments = ({route}) => {
     sheetRef.current.close();
   };
 
+  console.log('carddd', state);
+
   return (
     <Container>
       <Header />
@@ -135,9 +180,17 @@ const Payments = ({route}) => {
             {/* {card..map(item => ( */}
             {card?.length > 0 ? (
               <UserCard
-                cardholder_name={state.card_holder}
-                card_number={state.card_number}
-                date={state.exp_month + '/' + state.exp_year}
+                cardholder_name={
+                  state.card_holder ? state.card_holder : card[0].card_holder
+                }
+                card_number={
+                  state.card_number ? state.card_number : card[0].card_number
+                }
+                date={
+                  state.exp_month && state.exp_year
+                    ? state.exp_month + '/' + state.exp_year
+                    : card[0].exp_year + '/' + card[0].exp_month
+                }
                 masterStyle={{width: '24%'}}
                 cardStyle={{alignSelf: 'center'}}
                 onCardPress={() => sheetRef.current.open()}

@@ -456,31 +456,34 @@ export const payment = (user_id, user_email, desc, token, product) => {
       items: product,
     };
 
-     console.log('dataaa', data)
+    console.log('dataaa', data);
 
-   return await axios.post(`${URL}/payment`,data,{
-      headers:{
-        'Content-Type': 'application/json',
-      }
-    }).then((res) => {
-      console.log('payment response ======>',res)
-        if(res.success) {
+    return await axios
+      .post(`${URL}/payment`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(res => {
+        console.log('payment response ======>', res.data);
+        if (res.data.success) {
           dispatch({
-            type: constant.PAYMENT_DONE
-          })
-          return res.success
+            type: constant.PAYMENT_DONE,
+          });
+          return res.data.success;
         } else {
           dispatch({
-            type: constant.PAYMENT_DONE
-          })
-          return false
+            type: constant.PAYMENT_DONE,
+          });
+          return false;
         }
-    }).catch((error) => {
-      console.log('payment error ======>',error)
-      dispatch({
-        type: constant.PAYMENT_DONE
       })
-      return ShowToast('Some problem occured')
-    })
+      .catch(error => {
+        console.log('payment error ======>', error);
+        dispatch({
+          type: constant.PAYMENT_DONE,
+        });
+        return ShowToast('Some problem occured');
+      });
   };
 };
