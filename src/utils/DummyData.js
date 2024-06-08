@@ -156,16 +156,19 @@ export const methods = [
     id: 1,
     text: 'Mastercard',
     icon: images.master_card,
+    type: 'Mastercard'
   },
   {
     id: 2,
     text: 'Visa',
     icon: images.visa_card,
+    type: 'Visa'
   },
   {
     id: 3,
     text: 'American Express',
     icon: images.express,
+    type: 'AmericanExpress'
   },
 ];
 

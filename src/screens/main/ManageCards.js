@@ -24,6 +24,7 @@ import {
 const ManageCards = () => {
   const [state, setState] = useState({
     card_id: '',
+    card_type: '',
     card_holder: '',
     card_number: '',
     exp_year: '',
@@ -35,7 +36,7 @@ const ManageCards = () => {
   const dispatch = useDispatch();
 
   const {card} = useSelector(state => state.AuthReducer);
-  console.log('card details ====>', identifyCardType(state.card_number));
+  console.log('card details ====>', card);
 
   const onOpenSheet = () => {
     sheetRef.current.open();
@@ -65,7 +66,7 @@ const ManageCards = () => {
     if (!state.card_holder) {
       return ShowToast('Please provide your card details');
     } else if (/\d/.test(state.card_holder)) {
-      return ShowToast('Please Enter Invalid Name');
+      return ShowToast('Please enter valid name');
     } else if (identifyCardType(state.card_number) === 'Invalid') {
       return ShowToast('Please enter the valid card number');
     } else if (validateExpiry(state.exp_month, true) === 'Invalid month') {
@@ -86,6 +87,12 @@ const ManageCards = () => {
         return ShowToast('Card has been updated successfully');
       } else {
         state.card_id = uuid.v4();
+        state.card_type =
+          identifyCardType(state.card_number) === 'AmericanExpress'
+            ? 'AmericanExpress'
+            : identifyCardType(state.card_number) === 'Mastercard'
+            ? 'Mastercard'
+            : 'Visa';
         const newCard = [...card, state];
         dispatch(createCard(newCard));
         sheetRef.current.close();
@@ -274,7 +281,7 @@ const styles = StyleSheet.create({
     width: hp('7%'),
   },
   inputStyle: {
-    width:  hp(10),
+    width: hp(10),
     borderColor: colors.gray,
     backgroundColor: 'transparent',
     borderWidth: 2,

@@ -29,6 +29,12 @@ const Payments = ({route}) => {
     exp_month: card[0]?.exp_month,
     exp_year: card[0]?.exp_year,
     cvc: card[0]?.cvc,
+    card_type: card[0]?.card_type,
+  });
+
+  const [checkMethod, setCheckMethod] = useState({
+    type: '',
+    value: false,
   });
 
   const {country, desc, address, city} = route.params;
@@ -36,47 +42,11 @@ const Payments = ({route}) => {
   // console.log('dataa from previous screen ======>', route.params);
   const {cart} = useSelector(state => state.ProductReducer);
 
-  // console.log('dataaaa', user);
+  console.log('dataaaa', checkMethod.type !== state.card_type);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const sheetRef = useRef();
-
-  // const onCheckout = async () => {
-  //   if (card?.length < 1 || !state) {
-  //     return ShowToast('Please Select your card');
-  //   } else {
-  //     const product = cart.map(item => ({
-  //       product_id: item.id,
-  //       quantity: item.quantity,
-  //       price: Math.round(item.price * 100) / 100,
-  //     }));
-
-  //     var information = {
-  //       card: {
-  //         number: state.card_number,
-  //         exp_month: state.exp_month,
-  //         exp_year: state.exp_year,
-  //         cvc: state.cvc,
-  //         name: state.card_holder,
-  //       },
-  //     };
-
-  //     var card = await stripe.createToken(information);
-  //     var token = card.id;
-
-  //     console.log('stripe tokennnnn =======>', token);
-  //     const res = await dispatch(
-  //       payment(user.user_id, user.user_email, desc, token, product),
-  //     );
-  //     if (res) {
-  //       navigation.navigate('Home');
-  //       return ShowToast('Payment Successful');
-  //     } else {
-  //       return ShowToast('An error occurred while processing your payment!');
-  //     }
-  //   }
-  // };
 
   const onCheckout = async () => {
     if (
@@ -88,6 +58,12 @@ const Payments = ({route}) => {
       card?.length < 1
     ) {
       return ShowToast('Please Select your card');
+    } else if (checkMethod.type == '') {
+      return ShowToast('Please select the payment method');
+    } else if (checkMethod.type !== state.card_type) {
+      return ShowToast(
+        'The selected card does not match the chosen payment method',
+      );
     } else {
       const product = cart.map(item => ({
         product_id: item.id,
@@ -129,8 +105,17 @@ const Payments = ({route}) => {
       exp_year: card.exp_year,
       exp_month: card.exp_month,
       cvc: card.cvc,
+      card_type: card.card_type,
     });
     sheetRef.current.close();
+  };
+
+  const onBoxCheckPress = item => {
+    setCheckMethod({
+      ...checkMethod,
+      value: !checkMethod.value,
+      type: item.type,
+    });
   };
 
   console.log('carddd', state);
@@ -209,13 +194,15 @@ const Payments = ({route}) => {
           </View>
           <View style={styles.border} />
           <View style={[styles.methodWrapper, {padding: 0}]}>
-            <Text style={styles.heading}>Other Payment Method</Text>
+            <Text style={styles.heading}>Payment Method</Text>
             <View style={{paddingTop: hp(5)}}>
               {methods.map(item => (
                 <PaymentMethods
                   key={item.id}
                   text={item.text}
                   icon={item.icon}
+                  isChecked={item.type == checkMethod.type && checkMethod.value}
+                  onChecked={() => onBoxCheckPress(item)}
                 />
               ))}
             </View>
