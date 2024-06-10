@@ -42,7 +42,7 @@ const Payments = ({route}) => {
   // console.log('dataa from previous screen ======>', route.params);
   const {cart} = useSelector(state => state.ProductReducer);
 
-  console.log('dataaaa', checkMethod.type !== state.card_type);
+  // console.log('dataaaa', checkMethod.type !== state.card_type);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -118,7 +118,7 @@ const Payments = ({route}) => {
     });
   };
 
-  console.log('carddd', state);
+  // console.log('carddd', state);
 
   return (
     <Container>

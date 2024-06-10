@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     justifyContent: 'flex-end',
-    paddingBottom: hp('8%'),
     alignItems: 'center',
   },
   heading: {

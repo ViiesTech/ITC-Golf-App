@@ -64,12 +64,12 @@ const Signup = () => {
 
   return (
     <AuthContainer>
-      <ScrollView contentContainerStyle={styles.screen} showsVerticalScrollIndicator={false}>
+      <View style={styles.screen}>
         <Image
           source={images.logo}
           style={styles.image}
         />
-        <View style={{ paddingTop: hp('7%') }}>
+        <View style={{ paddingTop: hp('4%') }}>
           <Text style={styles.heading}>Create Account</Text>
           <Text style={styles.message}>Please enter the details below to continue</Text>
           <View style={{ paddingTop: hp('3%') }}>
@@ -137,7 +137,7 @@ const Signup = () => {
             </TouchableOpacity>
           </View>
         </View>
-      </ScrollView>
+      </View>
     </AuthContainer>
   )
 }
@@ -148,8 +148,8 @@ const styles = StyleSheet.create({
   screen: {
     alignItems: 'center',
     flexGrow: 1,
-    paddingTop: hp('7%'),
-    // paddingBottom: hp(2)
+    flex: 1,
+    paddingTop: hp('4%'),
   },
   image: {
     height: hp('16%'),

@@ -51,8 +51,9 @@ const Login = () => {
   return (
     <AuthContainer>
       <Image source={images.logo} style={styles.image} />
-      <ScrollView contentContainerStyle={{flexGrow: 1}}>
-        <View style={styles.screen}>
+      {/* <ScrollView contentContainerStyle={{backgroundColor: 'red'}}> */}
+        <View style={styles.container}>
+          <View style={styles.screen}>
           <Text style={styles.heading}>Login Account</Text>
           <Text style={styles.text}>
             Please enter the details below to continue.
@@ -95,8 +96,9 @@ const Login = () => {
               </TouchableOpacity>
             </View>
           </View>
+          </View>
         </View>
-      </ScrollView>
+      {/* </ScrollView> */}
     </AuthContainer>
   );
 };
@@ -104,19 +106,20 @@ const Login = () => {
 export default Login;
 
 const styles = StyleSheet.create({
-  screen: {
+  container: {
     flex: 1,
-    flexGrow: 1,
     justifyContent: 'flex-end',
-    // backgroundColor: 'blue',
-    paddingBottom: hp(8),
+    alignItems: 'center',
+  },
+  screen: {
+    width: '100%',
     alignItems: 'center',
   },
   image: {
     height: hp('16%'),
     width: hp('16%'),
-    marginTop: hp('5%'),
     alignSelf: 'center',
+    marginTop: hp('5%'),
   },
   heading: {
     color: colors.white,
