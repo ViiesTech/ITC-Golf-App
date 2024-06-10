@@ -121,3 +121,5 @@ export default {
 };
 
 export const URL = 'https://inthecup.golf/wp-json/app/v1';
+export const STRIPE_KEY =
+  'pk_test_51KQb3pC6mJiJ0AUpeAjoS786h11qy1jW92S6gWsGD4NpK4JGOuKplhC2I0vHFgEWwRy7T9NwHDZPiILuzQPynCdK007sgX6ox6';

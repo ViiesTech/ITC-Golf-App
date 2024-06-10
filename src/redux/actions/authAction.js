@@ -1,11 +1,8 @@
 import constant, {URL} from '../constant';
 import FormData from 'form-data';
-import {ErrorToast} from 'react-native-toast-message';
 import {ShowToast} from '../../Custom';
 import axios from 'axios';
-
-export const STRIPE_KEY =
-  'pk_test_51KQb3pC6mJiJ0AUpeAjoS786h11qy1jW92S6gWsGD4NpK4JGOuKplhC2I0vHFgEWwRy7T9NwHDZPiILuzQPynCdK007sgX6ox6';
+import api from '../services/api';
 
 export const signup = (
   username,
@@ -16,33 +13,29 @@ export const signup = (
   cpassword,
 ) => {
   return async dispatch => {
-    // var data = new FormData();
-
     dispatch({
       type: constant.SIGNUP,
     });
 
-    // data.append('custom_user_login', username);
-    // data.append('custom_user_email', email);
-    // data.append('custom_user_pass', password);
-    // data.append('custom_user_pass_confirm', cpassword);
-    // data.append('custom_user_first', firstname);
-    // data.append('custom_user_last', lastname);
+    const params = {
+      custom_user_login: username,
+      custom_user_email: email,
+      custom_user_pass: password,
+      custom_user_pass_confirm: cpassword,
+      custom_user_first: firstname,
+      custom_user_last: lastname,
+    };
 
-    return await fetch(
-      `${URL}/signup?custom_user_login=${username}&custom_user_email=${email}&custom_user_pass=${password}&custom_user_pass_confirm=${cpassword}&custom_user_first=${firstname}&custom_user_last=${lastname}`,
-      {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-        },
-        body: {},
-      },
-    )
-      .then(async res => {
-        const response = await res.json();
-        console.log('signup response', response);
-        if (response) {
+    return api
+      .post('/signup', {params})
+      .then(res => {
+        console.log('signup response ======>', res.data);
+        if (res.data.message == 'User already exists') {
+          dispatch({
+            type: constant.SIGNUP_DONE,
+          });
+          return false;
+        } else {
           dispatch({
             type: constant.SIGNUP_DONE,
           });
@@ -50,7 +43,7 @@ export const signup = (
         }
       })
       .catch(error => {
-        console.log('signup', error);
+        console.log('signup error =======>', error);
         dispatch({
           type: constant.SIGNUP_DONE,
         });

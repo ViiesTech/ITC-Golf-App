@@ -1,16 +1,14 @@
 import axios from 'axios';
 import {ShowToast} from '../../Custom';
 import constant, {URL} from '../constant';
+import api from '../services/api';
 
 export const getAllAreaCodes = () => {
   return async dispatch => {
-    await axios
-      .get(`${URL}/area-codes`, {
-        headers: {
-          Accept: 'application/json',
-        },
-      })
+    api
+      .get('/area-codes')
       .then(res => {
+        // console.log('area codes response ======>', res.data);
         dispatch({
           type: constant.GET_AREA_CODES,
           payload: res.data,
@@ -30,29 +28,21 @@ export const getListings = setListings => {
       type: constant.GET_LISTING,
     });
 
-    await fetch(`${URL}/matches`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
-    })
-      .then(async res => {
-        const data = await res.json();
-        setListings(data);
+    api
+      .get('matches')
+      .then(res => {
+        console.log('listing response ======>', res.data);
+        setListings(res.data);
         dispatch({
           type: constant.GET_LISTING_DONE,
         });
       })
       .catch(error => {
-        console.log('listing errrorr =================>', error);
-        console.log(
-          'listing errrorr =================>',
-          error.response.data.message,
-        );
         dispatch({
           type: constant.GET_LISTING_DONE,
         });
-        return ShowToast('Some problem occured' || error.code);
+        console.log('listing error =======>', error);
+        return ShowToast('Some problem occured');
       });
   };
 };
@@ -86,33 +76,33 @@ export const getGroups = setGroups => {
   };
 };
 
-export const getReviews = () => {
-  return async dispatch => {
-    dispatch({
-      type: constant.GET_REVIEWS,
-    });
+// export const getReviews = () => {
+//   return async dispatch => {
+//     dispatch({
+//       type: constant.GET_REVIEWS,
+//     });
 
-    await axios
-      .get(`${URL}/reviews`, {
-        headers: {
-          Accept: 'application/json',
-        },
-      })
-      .then(res => {
-        // console.log('reviews response ================>', res.data)
-        dispatch({
-          type: constant.GET_REVIEWS_DONE,
-          payload: res.data,
-        });
-      })
-      .catch(error => {
-        dispatch({
-          type: constant.GET_REVIEWS_DONE,
-        });
-        return ShowToast('Check your network, Try Again!' || error.code);
-      });
-  };
-};
+//     await axios
+//       .get(`${URL}/reviews`, {
+//         headers: {
+//           Accept: 'application/json',
+//         },
+//       })
+//       .then(res => {
+//         // console.log('reviews response ================>', res.data)
+//         dispatch({
+//           type: constant.GET_REVIEWS_DONE,
+//           payload: res.data,
+//         });
+//       })
+//       .catch(error => {
+//         dispatch({
+//           type: constant.GET_REVIEWS_DONE,
+//         });
+//         return ShowToast('Check your network, Try Again!' || error.code);
+//       });
+//   };
+// };
 
 export const getNotifications = (user_id, setNotifications) => {
   return async dispatch => {
@@ -185,10 +175,10 @@ export const ListingsByAreaCodes = area_code => {
       })
       .then(res => {
         console.log('listing filter response =======>', res.data);
-          dispatch({
-            type: constant.LISTINGS_BY_AREACODE_DONE,
-            payload: res.data,
-          });
+        dispatch({
+          type: constant.LISTINGS_BY_AREACODE_DONE,
+          payload: res.data,
+        });
       })
       .catch(error => {
         console.log('listings filter error =========>', error);
@@ -206,14 +196,10 @@ export const AboutSection = () => {
       type: constant.GET_ABOUT,
     });
 
-    return await axios
-      .get(`${URL}/about-us`, {
-        headers: {
-          Accept: 'application/json',
-        },
-      })
+    api
+      .get('/about-us')
       .then(res => {
-        console.log('about response ======>', res.data);
+        console.log('about response ========>', res.data);
         dispatch({
           type: constant.GET_ABOUT_DONE,
           payload: res.data.content,

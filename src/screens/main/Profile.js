@@ -39,7 +39,7 @@ const Profile = () => {
     // console.log('navv', item);
     if (index == 3) {
       await Linking.openURL(item.url);
-    } else if (index == 5) {
+    } else if (index == 6) {
       setAccountModal(true);
     } else {
       navigation.navigate('SecondaryStack', {screen: item.nav});

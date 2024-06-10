@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import AuthContainer from '../../components/AuthContainer';
 import colors from '../../assets/colors';
@@ -10,7 +10,6 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {signin} from '../../redux/actions/authAction';
 import {ShowToast} from '../../Custom';
-import {requestPermission} from '../../utils/HelperFunctions';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -18,18 +17,22 @@ const Login = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const status = requestPermission('notifications');
-    if (status === 'granted') {
-      return ShowToast('Permission granted');
-    } else {
-      return ShowToast('Permission denied');
-    }
-  }, []);
+  // useEffect(() => {
+  //   askNotificationPermission()
+  // }, []);
 
   const {signin_loading} = useSelector(state => state.AuthReducer);
 
   const navigation = useNavigation();
+
+  // const askNotificationPermission = () => {
+  //   const status = requestPermission('notifications');
+  //   if (status === 'granted') {
+  //     return ShowToast('Permission granted');
+  //   } else {
+  //     return ShowToast('Permission denied');
+  //   }
+  // };
 
   const onLoginPress = async () => {
     if (!username || !password) {

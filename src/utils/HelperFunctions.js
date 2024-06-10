@@ -12,12 +12,6 @@ export const requestPermission = async permissionType => {
         });
         break;
 
-      //  case 'notifications':
-      //  permissionSet = Platform.select({
-      //   ios: PERMISSIONS.IOS.N
-      //  })
-      //  break;
-
       default:
         console.log('unknown permission type');
     }
@@ -29,11 +23,11 @@ export const requestPermission = async permissionType => {
         });
         break;
 
-      case 'notifications':
-        permissionSet = Platform.select({
-          android: PERMISSIONS.ANDROID.POST_NOTIFICATIONS,
-        });
-        break;
+      // case 'notifications':
+      //   permissionSet = Platform.select({
+      //     android: PERMISSIONS.ANDROID.POST_NOTIFICATIONS,
+      //   });
+      //   break;
 
       default:
         console.log('unknown permission type');

@@ -16,8 +16,9 @@ import {useNavigation} from '@react-navigation/native';
 import UserCard from '../../components/UserCard';
 import {useDispatch, useSelector} from 'react-redux';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {payment, STRIPE_KEY} from '../../redux/actions/authAction';
+import {payment} from '../../redux/actions/authAction';
 import {ShowToast} from '../../Custom';
+import { STRIPE_KEY } from '../../redux/constant';
 var stripe = require('stripe-client')(STRIPE_KEY);
 
 const Payments = ({route}) => {
