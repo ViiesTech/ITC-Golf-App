@@ -37,12 +37,9 @@ const Profile = () => {
 
   const onSettingsPress = async (item, index) => {
     // console.log('navv', item);
-    if (index == 4 || index == 5){
-      return ShowToast(item.message)
-    }
-    else if (index == 6) {
+    if (index == 3) {
       await Linking.openURL(item.url);
-    } else if (index == 8) {
+    } else if (index == 5) {
       setAccountModal(true);
     } else {
       navigation.navigate('SecondaryStack', {screen: item.nav});

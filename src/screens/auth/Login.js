@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import AuthContainer from '../../components/AuthContainer';
 import colors from '../../assets/colors';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -26,34 +19,32 @@ const Login = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-
-    const status = requestPermission('notifications')
-    if(status === 'granted'){
-      return ShowToast('Permission granted')
+    const status = requestPermission('notifications');
+    if (status === 'granted') {
+      return ShowToast('Permission granted');
     } else {
-      return ShowToast('Permission denied')
+      return ShowToast('Permission denied');
     }
-    
-  },[])
+  }, []);
 
   const {signin_loading} = useSelector(state => state.AuthReducer);
 
   const navigation = useNavigation();
 
   const onLoginPress = async () => {
-      if (!username || !password) {
-        return ShowToast('Please type your information');
-      } else {
-        await dispatch(signin(username, password));
-      }
+    if (!username || !password) {
+      return ShowToast('Please type your information');
+    } else {
+      await dispatch(signin(username, password));
+    }
   };
 
   return (
     <AuthContainer>
       <Image source={images.logo} style={styles.image} />
       {/* <ScrollView contentContainerStyle={{backgroundColor: 'red'}}> */}
-        <View style={styles.container}>
-          <View style={styles.screen}>
+      <View style={styles.container}>
+        <View style={styles.screen}>
           <Text style={styles.heading}>Login Account</Text>
           <Text style={styles.text}>
             Please enter the details below to continue.
@@ -96,8 +87,8 @@ const Login = () => {
               </TouchableOpacity>
             </View>
           </View>
-          </View>
         </View>
+      </View>
       {/* </ScrollView> */}
     </AuthContainer>
   );
