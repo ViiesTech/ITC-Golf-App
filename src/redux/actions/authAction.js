@@ -342,28 +342,23 @@ export const PlayersFollow = (user_id, listing_id, setPlayers) => {
       type: constant.PLAYERS_FOLLOW,
     });
 
-    await axios
-      .get(
-        `${URL}/followed-players/?user_id=${user_id}&listing_id=${listing_id}`,
-        {
-          headers: {
-            Accept: 'application/json',
-          },
-        },
-      )
-      .then(res => {
-        setPlayers(res.data);
-        dispatch({
-          type: constant.PLAYERS_FOLLOW_DONE,
-        });
-      })
-      .catch(error => {
-        dispatch({
-          type: constant.PLAYERS_FOLLOW_DONE,
-        });
-        console.log('players you follow error =======>', error);
-        return ShowToast('Some problem occured');
+    try {
+      const res = await api.get('/followed-players', {
+        user_id: user_id,
+        listing_id: listing_id,
       });
+      console.log('players follow response', res.data);
+      setPlayers(res.data);
+      dispatch({
+        type: constant.PLAYERS_FOLLOW_DONE,
+      });
+    } catch (error) {
+      dispatch({
+        type: constant.PLAYERS_FOLLOW_DONE,
+      });
+      console.log('players follow error =======>', error);
+      return ShowToast('Some problem occured');
+    }
   };
 };
 
@@ -373,53 +368,37 @@ export const getWishlistById = user_id => {
       type: constant.GET_WISHLIST,
     });
 
-    console.log('from action', user_id);
-
-    await axios
-      .get(`${URL}/wishlist-items/${user_id}`, {
-        headers: {
-          Accept: 'application/json',
-        },
-      })
-      .then(res => {
-        console.log('response of wishlist =========>', res.data);
-        // setWishlistItems(res.data)
-        dispatch({
-          type: constant.GET_WISHLIST_DONE,
-          payload: res.data,
-        });
-      })
-      .catch(error => {
-        console.log('failed to get wishlisttt =========>', error);
-        dispatch({
-          type: constant.GET_WISHLIST_DONE,
-        });
-        return ShowToast('Some problem occured');
+    try {
+      const response = await api.get(`/wishlist-items/${user_id}`);
+      console.log('response of wishlist ========>', response.data);
+      dispatch({
+        type: constant.GET_WISHLIST_DONE,
+        payload: response.data,
       });
+    } catch (error) {
+      console.log('wishlist error ========>', error);
+      dispatch({
+        type: constant.GET_WISHLIST_DONE,
+      });
+      return ShowToast('Some problem occured');
+    }
   };
 };
 
 export const DeactivateAccount = user_id => {
   return async dispatch => {
-    return await axios
-      .post(
-        `${URL}/account/deactivate?user_id=${user_id}`,
-        {},
-        {
-          headers: {
-            Accept: 'application/json',
-          },
-        },
-      )
+    return await api
+      .post('/account/deactivate', {user_id: user_id})
       .then(res => {
-        console.log('deactivate response =======>', res.data);
+        console.log('response of deactivate account ======>', res.data);
         dispatch({
           type: constant.DEACTIVATE_ACCOUNT,
         });
         return res.data;
       })
       .catch(error => {
-        console.log('deactivate error ========>', error);
+        console.log('deactivate account error =======>', error);
+        ShowToast('Some problem occured');
         return false;
       });
   };
