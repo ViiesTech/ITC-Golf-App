@@ -398,7 +398,6 @@ export const groupMessages = (group_id, setMessages) => {
       })
       .catch(error => {
         console.log('error fetching group messages ======>', error);
-        return ShowToast('Some problem occured');
       });
   };
 };

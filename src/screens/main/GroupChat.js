@@ -43,7 +43,7 @@ const GroupChat = ({route}) => {
   useEffect(() => {
     const interval = setInterval(() => {
       renderChatHistory();
-    }, 5000);
+    }, 4000);
     return () => clearInterval(interval);
   }, []);
 
