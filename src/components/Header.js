@@ -14,20 +14,24 @@ const Header = ({iconStyle, headerStyle}) => {
 
   const navigation = useNavigation();
 
-  const {user} = useSelector(state => state.AuthReducer);
+  const {user} = useSelector(state => state?.AuthReducer);
+  const {noti_count} = useSelector(state => state?.HomeReducer);
 
   return (
     <View style={[styles.headerView, headerStyle]}>
       <View style={{flexDirection: 'row'}}>
-      <FastImage
-            source={
-              user?.featured_image_url
-                ? {uri: user?.featured_image_url, priority: FastImage.priority.high}
-                : user?.feature_image_url
-                ? {uri: user.feature_image_url, priority: FastImage.priority.high}
-                : images.profile
-            }
-            resizeMode={FastImage.resizeMode.cover}
+        <FastImage
+          source={
+            user?.featured_image_url
+              ? {
+                  uri: user?.featured_image_url,
+                  priority: FastImage.priority.high,
+                }
+              : user?.feature_image_url
+              ? {uri: user.feature_image_url, priority: FastImage.priority.high}
+              : images.profile
+          }
+          resizeMode={FastImage.resizeMode.cover}
           style={styles.image}
         />
         <Text style={styles.headerText}>Hello {user.username}!</Text>
@@ -39,7 +43,11 @@ const Header = ({iconStyle, headerStyle}) => {
         }
         style={{paddingTop: hp('1.9%')}}>
         <SVGImage image={icons.notification} style={[styles.icon, iconStyle]} />
-        {/* <View style={styles.bellStyle} /> */}
+        {!noti_count == 0 && (
+          <View style={styles.bellStyle}>
+            <Text style={styles.count}>{noti_count}</Text>
+          </View>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -73,12 +81,20 @@ const styles = StyleSheet.create({
   bellStyle: {
     backgroundColor: colors.red,
     position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
     bottom: hp(3.7),
-    right: 2,
+    // right: 0,
+    left: 11,
     borderWidth: 1,
     borderColor: colors.white,
-    height: hp(1),
-    width: hp(1),
+    height: hp(2),
+    width: hp(2),
     borderRadius: 100,
+  },
+  count: {
+    color: colors.white,
+    fontSize: hp(1.2),
+    fontWeight: 'bold',
   },
 });

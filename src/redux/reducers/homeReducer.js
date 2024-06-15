@@ -16,6 +16,7 @@ const initialState = {
   reject_loader: false,
   about_description: '',
   about_loader: false,
+  noti_count: 0
 };
 
 export default (state = initialState, action) => {
@@ -75,6 +76,12 @@ export default (state = initialState, action) => {
 
     case constant.GET_ABOUT_DONE:
       return {...state, about_loader: false, about_description: action.payload};
+
+    case constant.BELL_COUNTER:
+      return {...state, noti_count: action.payload}
+
+    // case constant.MARK_NOTIFICATION_AS_READ:
+
 
     default:
       return state;

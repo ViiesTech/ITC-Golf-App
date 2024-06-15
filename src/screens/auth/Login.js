@@ -36,7 +36,7 @@ const Login = () => {
 
   const onLoginPress = async () => {
     if (!username || !password) {
-      return ShowToast('Please type your information');
+      return ShowToast('Please provide your credentials');
     } else {
       await dispatch(signin(username, password));
     }

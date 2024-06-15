@@ -214,3 +214,21 @@ export const AboutSection = () => {
       });
   };
 };
+
+export const getNotificationCount = user_id => {
+  return async dispatch => {
+
+    await api
+      .get(`/notification-count?user_id=${user_id}`)
+      .then(res => {
+        console.log('notification count ====>', res.data);
+        dispatch({
+          type: constant.BELL_COUNTER,
+          payload: res.data.count_num,
+        });
+      })
+      .catch(error => {
+        console.log('counter error ======>', error);
+      });
+  };
+};

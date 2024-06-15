@@ -29,6 +29,7 @@ import {
 const GroupChat = ({route}) => {
   const [messages, setMessages] = useState([]);
   const [chatLoader, setChatLoader] = useState(false);
+  const [pendingMessages, setPendingMessages] = useState([]);
 
   const {title, type, listing_id} = route?.params;
 
@@ -129,13 +130,13 @@ const GroupChat = ({route}) => {
   };
 
   const renderChatMembers = async () => {
-    setChatLoader(true)
+    setChatLoader(true);
     if (type == 'group') {
       await dispatch(fetchGroupMembers(listing_id));
     } else {
       await dispatch(renderListingMembers(listing_id));
     }
-    setChatLoader(false)
+    setChatLoader(false);
   };
 
   const renderChatHistory = async () => {

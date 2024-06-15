@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image,  TouchableOpacity } from 'react-native'
 import AuthContainer from '../../components/AuthContainer';
 import images from '../../assets/images';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -147,7 +147,6 @@ export default Signup;
 const styles = StyleSheet.create({
   screen: {
     alignItems: 'center',
-    flexGrow: 1,
     flex: 1,
     paddingTop: hp('4%'),
   },

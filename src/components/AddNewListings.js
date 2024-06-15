@@ -460,7 +460,7 @@ const AddNew = ({listingData}) => {
         initialState();
         return ShowToast(res);
       } else {
-        return ShowToast(res);
+        return ShowToast('Some problem occured');
       }
     } else {
       if (state.location == '') {

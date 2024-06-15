@@ -12,9 +12,10 @@ const AuthContainer = ({children, paddingBottom}) => {
   return (
     <ImageBackground source={images.auth_background} style={styles.imageStyle}>
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        style={{flex: 1,}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}>
+        // keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
+        >
         <ScrollView
           contentContainerStyle={[
             styles.contentStyle,
