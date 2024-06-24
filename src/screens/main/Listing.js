@@ -17,7 +17,12 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import Sponsors from '../../components/Sponsors';
 import SearchFilter from '../../components/SearchFilter';
-import {getListings, ListingsByAreaCodes} from '../../redux/actions/homeAction';
+import {
+  FilterAdsByAreaCode,
+  GetAds,
+  getListings,
+  ListingsByAreaCodes,
+} from '../../redux/actions/homeAction';
 import colors from '../../assets/colors';
 import images from '../../assets/images';
 import FastImage from 'react-native-fast-image';
@@ -29,6 +34,7 @@ const Listing = () => {
   const [searchPressed, setSearchPressed] = useState(false);
   const [listings, setListings] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [ads, setAds] = useState([]);
 
   const navigation = useNavigation();
   // console.log('lets see', navigation.getState().routes[1].name);
@@ -40,10 +46,11 @@ const Listing = () => {
 
   const dispatch = useDispatch();
 
-  // console.log('filtered resultsss ======>', typeof moment(new Date()).format('MM/DD/YY'))
+  // console.log('filtered resultsss ======>', searchPressed, selectedCode);
 
   useEffect(() => {
     dispatch(getListings(setListings));
+    dispatch(GetAds(setAds));
   }, []);
 
   if (loader) {
@@ -60,9 +67,10 @@ const Listing = () => {
     );
   }
 
-  const onSearchButton = () => {
+  const onSearchButton = async () => {
     if (selectedCode) {
-      dispatch(ListingsByAreaCodes(selectedCode));
+      await dispatch(FilterAdsByAreaCode(selectedCode, setAds));
+      await dispatch(ListingsByAreaCodes(selectedCode));
       setSearchPressed(true);
     } else {
       setSearchPressed(false);
@@ -174,6 +182,7 @@ const Listing = () => {
     setRefreshing(true);
     setTimeout(async () => {
       try {
+        await dispatch(GetAds(setAds));
         await dispatch(getListings(setListings));
       } catch (error) {
         console.log('refreshing data error =====>', error);
@@ -202,8 +211,18 @@ const Listing = () => {
           onValueChange={value => setSelectedCode(value)}
           onSearchPress={() => onSearchButton()}
         />
-        <Sponsors />
-        <SecondaryHeader text={'Listing'}  />
+        {listings_filter_loader
+          ? renderLoader()
+          : ads?.data?.map((item, ind) => {
+              return (
+                <Sponsors
+                  key={ind}
+                  image={{uri: item.image}}
+                  title={item.title}
+                />
+              );
+            })}
+        <SecondaryHeader text={'Listing'} />
         {searchPressed ? renderFilterListings() : renderAllListings()}
       </ScrollView>
     </Container>

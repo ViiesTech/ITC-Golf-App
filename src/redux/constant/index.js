@@ -117,6 +117,9 @@ export default {
 
   MARK_NOTIFICATION_AS_READ: 'MARK_NOTIFICATION_AS_READ',
   BELL_COUNTER: 'BELL_COUNTER',
+
+  GET_ALL_ADS: 'GET_ALL_ADS',
+  GET_ADS_BY_FILTER: 'GET_ADS_BY_FILTER'
 };
 
 export const URL = 'https://inthecup.golf/wp-json/app/v1';

@@ -5,7 +5,6 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
-  Platform,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
@@ -35,8 +34,6 @@ import {
 import {ShowToast} from '../../Custom';
 import {useNavigation} from '@react-navigation/native';
 import {
-  androidPermissionHandler,
-  iosPermissionHandler,
   requestPermission,
 } from '../../utils/HelperFunctions';
 import FastImage from 'react-native-fast-image';

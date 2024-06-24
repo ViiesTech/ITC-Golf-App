@@ -583,7 +583,7 @@ const AddNew = ({groupData}) => {
       ))}
       <Text style={styles.text}>Additional Details</Text>
       <Switch
-        text={'Is This A Private Group ?'}
+        text={'Chat On/Off'}
         onToggle={isOn =>
           setState({
             ...state,

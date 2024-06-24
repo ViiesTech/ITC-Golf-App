@@ -18,7 +18,7 @@ import colors from '../../assets/colors';
 import NotificationsCard from '../../components/NotificationsCard';
 import images from '../../assets/images';
 import {useDispatch, useSelector} from 'react-redux';
-import {getNotifications} from '../../redux/actions/homeAction';
+import {getNotifications, ReadNotifications} from '../../redux/actions/homeAction';
 import moment from 'moment';
 import {AcceptListing, RejectListing} from '../../redux/actions/listingAction';
 import {ShowToast} from '../../Custom';
@@ -45,6 +45,7 @@ const Notifications = () => {
   useEffect(() => {
     // setNotifications(TodayNotifications)
     dispatch(getNotifications(user.user_id, setNotifications));
+    dispatch(ReadNotifications(user.user_id))
   }, []);
 
   const renderLoader = () => {
@@ -202,7 +203,7 @@ const Notifications = () => {
           </View>
           <View style={styles.notificationWrapper}>
             {notifications?.map((item, index) => {
-              console.log('woww', item.listing_id);
+              // console.log('woww', item.listing_id);
               return (
                 <NotificationsCard
                   image={

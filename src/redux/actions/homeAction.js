@@ -145,7 +145,7 @@ export const GroupsByAreaCodes = area_code => {
         },
       })
       .then(res => {
-        console.log('groups filter response =========>', res.data);
+        // console.log('groups filter response =========>', res.data);
         dispatch({
           type: constant.GROUPS_BY_AREACODE_DONE,
           payload: res.data,
@@ -174,7 +174,7 @@ export const ListingsByAreaCodes = area_code => {
         },
       })
       .then(res => {
-        console.log('listing filter response =======>', res.data);
+        // console.log('listing filter response =======>', res.data);
         dispatch({
           type: constant.LISTINGS_BY_AREACODE_DONE,
           payload: res.data,
@@ -217,11 +217,10 @@ export const AboutSection = () => {
 
 export const getNotificationCount = user_id => {
   return async dispatch => {
-
     await api
       .get(`/notification-count?user_id=${user_id}`)
       .then(res => {
-        console.log('notification count ====>', res.data);
+        // console.log('notification count ====>', res.data);
         dispatch({
           type: constant.BELL_COUNTER,
           payload: res.data.count_num,
@@ -232,3 +231,53 @@ export const getNotificationCount = user_id => {
       });
   };
 };
+
+export const ReadNotifications = user_id => {
+  return async dispatch => {
+    try {
+      const res = await axios.post(
+        `${URL}/seen-notification?user_id=${user_id}`,
+        {},
+      );
+      console.log('response of notifications seen =====>', res.data);
+      dispatch({
+        type: constant.MARK_NOTIFICATION_AS_READ,
+      });
+    } catch (error) {
+      console.log('error of notification seen =====>', error);
+      // return ShowToast('Some problem occured');
+    }
+  };
+};
+
+export const GetAds = (setAds) => {
+  return async dispatch => {
+    try {
+      const res = await api.get('/ads');
+      // console.log('all ads response ======>', res.data);
+      setAds(res.data)
+      dispatch({
+        type: constant.GET_ALL_ADS,
+      });
+    } catch (error) {
+      console.log('get all ads error ======>', error);
+    }
+  };
+};
+ 
+export const FilterAdsByAreaCode = (area_code, setAds) => {
+  return async dispatch => {
+
+    try {
+      const res = await api.get(`/ads?area_code=${area_code}`)
+      console.log('response of filteration ads ======>',res.data)
+      setAds(res.data)
+      dispatch({
+        type: constant.GET_ADS_BY_FILTER
+      })
+    } catch (error) {
+      console.log('filteration ads error =======>',error)
+    }
+  }
+}
+

@@ -25,6 +25,8 @@ import AppStatusBar from '../../components/AppStatusBar';
 import {Picker} from '@react-native-picker/picker';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  FilterAdsByAreaCode,
+  GetAds,
   ListingsByAreaCodes,
   getAllAreaCodes,
   getListings,
@@ -37,12 +39,13 @@ const Home = () => {
   const [searchPressed, setSearchPressed] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [listings, setListings] = useState([]);
+  const [ads, setAds] = useState([]);
 
   const width = Dimensions.get('screen').width;
 
   const {loader, area_codes, listings_filter, listings_filter_loader} =
     useSelector(state => state.HomeReducer);
-  // console.log('listinggg filtered =====>', listings_filter?.length < 1);
+  // console.log('listinggg filtered =====>', ads);
 
   const dispatch = useDispatch();
 
@@ -52,6 +55,7 @@ const Home = () => {
     // if (listing.length < 1 && area_codes.length < 1) {
     dispatch(getListings(setListings));
     dispatch(getAllAreaCodes());
+    dispatch(GetAds(setAds));
     // }
   }, []);
 
@@ -71,6 +75,7 @@ const Home = () => {
 
   const onSearchAreaCode = async () => {
     if (selectedOption) {
+      await dispatch(FilterAdsByAreaCode(selectedOption, setAds));
       await dispatch(ListingsByAreaCodes(selectedOption));
       setSearchPressed(true);
     } else {
@@ -207,6 +212,7 @@ const Home = () => {
       try {
         dispatch(getListings(setListings));
         dispatch(getAllAreaCodes());
+        dispatch(GetAds(setAds));
       } catch (error) {
         console.log('refreshing data error =====>', error);
         return ShowToast('Some problem occured');
@@ -287,7 +293,17 @@ const Home = () => {
                 onPress={() => onSearchAreaCode()}
               />
             </View>
-            <Sponsors />
+            {listings_filter_loader
+              ? renderFilterLoader()
+              : ads?.data?.map((item, ind) => {
+                  return (
+                    <Sponsors
+                      key={ind}
+                      image={{uri: item.image}}
+                      title={item.title}
+                    />
+                  );
+                })}
             <Text style={styles.text}>Listing</Text>
             <View style={styles.cardWrapper}>
               {searchPressed ? renderFilterListings() : renderAllListings()}

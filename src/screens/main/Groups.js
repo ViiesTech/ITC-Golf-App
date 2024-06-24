@@ -14,14 +14,18 @@ import SecondaryHeader from '../../components/SecondaryHeader';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import ListingDetailCard from '../../components/ListingDetailCard';
 import {useDispatch, useSelector} from 'react-redux';
-import {GroupsByAreaCodes, getGroups} from '../../redux/actions/homeAction';
+import {
+  FilterAdsByAreaCode,
+  GetAds,
+  GroupsByAreaCodes,
+  getGroups,
+} from '../../redux/actions/homeAction';
 import colors from '../../assets/colors';
 import {useNavigation} from '@react-navigation/native';
 import SearchFilter from '../../components/SearchFilter';
 import Sponsors from '../../components/Sponsors';
 import images from '../../assets/images';
 import FastImage from 'react-native-fast-image';
-import {timeFormatting} from '../../utils/HelperFunctions';
 import {ShowToast} from '../../Custom';
 
 const Groups = () => {
@@ -30,6 +34,7 @@ const Groups = () => {
   const [searchPressed, setSearchPressed] = useState(false);
   const [groups, setGroups] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [ads, setAds] = useState([]);
 
   const {group_loader, groups_filter, filter_loading} = useSelector(
     state => state.HomeReducer,
@@ -43,6 +48,7 @@ const Groups = () => {
   useEffect(() => {
     // if (groups.length < 1) {
     dispatch(getGroups(setGroups));
+    dispatch(GetAds(setAds));
     // }
   }, []);
 
@@ -186,6 +192,7 @@ const Groups = () => {
     if (selectedCode != null) {
       // alert('wah');
       dispatch(GroupsByAreaCodes(selectedCode));
+      dispatch(FilterAdsByAreaCode(selectedCode, setAds));
       setSearchPressed(true);
     } else {
       setSearchPressed(false);
@@ -196,6 +203,7 @@ const Groups = () => {
     setRefreshing(true);
     setTimeout(async () => {
       try {
+        dispatch(GetAds(setAds));
         await dispatch(getGroups(setGroups));
       } catch (error) {
         console.log('refreshing error ===>', error);
@@ -224,8 +232,20 @@ const Groups = () => {
           onValueChange={itemValue => setSelectedCode(itemValue)}
           onSearchPress={() => onAreaCodeSearch()}
         />
-        <Sponsors />
-        <SecondaryHeader text={'Groups'}  />
+        <View style={{paddingTop: hp(3)}}>
+          {filter_loading
+            ? renderFilterLoader()
+            : ads?.data?.map((item, ind) => {
+                return (
+                  <Sponsors
+                    image={{uri: item.image}}
+                    title={item.title}
+                    key={ind}
+                  />
+                );
+              })}
+        </View>
+        <SecondaryHeader text={'Groups'} />
         {searchPressed ? renderFilterGroups() : renderAllGroups()}
       </ScrollView>
     </Container>
