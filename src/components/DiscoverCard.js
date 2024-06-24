@@ -56,22 +56,16 @@ const DiscoverCard = ({
             paddingTop: hp('2%'),
             justifyContent: 'space-between',
             flexDirection: 'row',
-            width: '95%',
+            // width: '95%',
           }}>
           <View>
             <Text style={styles.heading}>TIME:</Text>
             <Text style={styles.text2}>{time}</Text>
           </View>
           <View style={styles.verticleLine} />
-          <View>
-            <View style={{ alignItems: 'flex-end'}}>
-              <Text style={styles.heading}>
-                {'AREA CODE:'}
-              </Text>
-            </View>
-            <Text style={[styles.text2, {alignSelf: 'flex-end',width: area_code === 'Select a Area Code' ? '90%' : null}]}>
-              {area_code}
-            </Text>
+          <View style={{flex: 1, alignItems: 'flex-end'}}>
+            <Text style={styles.heading}>{'AREA CODE:'}</Text>
+            <Text style={[styles.text2]}>{area_code}</Text>
           </View>
         </View>
       </View>
