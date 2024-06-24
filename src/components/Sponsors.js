@@ -14,7 +14,7 @@ const Sponsors = ({image, title}) => {
         source={image}
         style={styles.listingImage}
         borderRadius={10}
-        resizeMode="cover"
+        resizeMode="stretch"
       />
       <View style={styles.textCont}>
         <Text style={styles.title}>{title}</Text>
@@ -27,7 +27,7 @@ export default Sponsors;
 
 const styles = StyleSheet.create({
   listingImage: {
-    height: hp('32%'),
+    height: hp('30%'),
     marginBottom: hp('4%'),
     alignSelf: 'center',
     width: hp('30%'),
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: 'bold',
-    fontSize: hp(4),
+    fontSize: hp(3.7),
     color: colors.white,
   },
   textCont: {
