@@ -1,6 +1,7 @@
 import moment from 'moment';
 import {Platform} from 'react-native';
 import {PERMISSIONS, request} from 'react-native-permissions';
+import messaging from '@react-native-firebase/messaging';
 
 export const requestPermission = async permissionType => {
   let permissionSet;
@@ -10,6 +11,13 @@ export const requestPermission = async permissionType => {
         permissionSet = Platform.select({
           ios: PERMISSIONS.IOS.PHOTO_LIBRARY,
         });
+        break;
+
+      case 'notifications':
+        await messaging().requestPermission();
+        // const enabled =
+        //   authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        //   authStatus === messaging.AuthorizationStatus.PROVISIONAL;
         break;
 
       default:
@@ -23,11 +31,11 @@ export const requestPermission = async permissionType => {
         });
         break;
 
-      // case 'notifications':
-      //   permissionSet = Platform.select({
-      //     android: PERMISSIONS.ANDROID.POST_NOTIFICATIONS,
-      //   });
-      //   break;
+      case 'notifications':
+        permissionSet = Platform.select({
+          android: PERMISSIONS.ANDROID.POST_NOTIFICATIONS,
+        });
+        break;
 
       default:
         console.log('unknown permission type');
