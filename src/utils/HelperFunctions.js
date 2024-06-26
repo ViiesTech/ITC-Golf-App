@@ -14,10 +14,18 @@ export const requestPermission = async permissionType => {
         break;
 
       case 'notifications':
-        await messaging().requestPermission();
-        // const enabled =
-        //   authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-        //   authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+        try {
+          await messaging().registerDeviceForRemoteMessages();
+          permissionSet = await messaging().requestPermission();
+          const enabled =
+            permissionSet === messaging.AuthorizationStatus.AUTHORIZED ||
+            permissionSet === messaging.AuthorizationStatus.PROVISIONAL;
+          return enabled ? 'granted' : 'denied';
+        } catch (error) {
+          console.log(
+            'failed to register device for remote messages on ios =>',
+          );
+        }
         break;
 
       default:
@@ -41,8 +49,17 @@ export const requestPermission = async permissionType => {
         console.log('unknown permission type');
     }
   }
-  const status = await request(permissionSet);
-  return status;
+  // if (permissionType === 'notifications' && Platform.OS == 'ios') {
+  //   const enabled =
+  //     permissionSet === messaging.AuthorizationStatus.AUTHORIZED ||
+  //     permissionSet === messaging.AuthorizationStatus.PROVISIONAL;
+  //   if (enabled) {
+  //     return permissionSet;
+  //   }
+  // } else {
+    const status = await request(permissionSet);
+    return status;
+  // }
 };
 
 export const timeFormatting = time => {

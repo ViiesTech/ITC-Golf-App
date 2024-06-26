@@ -10,14 +10,14 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {signin} from '../../redux/actions/authAction';
 import {ShowToast} from '../../Custom';
-import messaging from '@react-native-firebase/messaging';
+import messaging, {firebase} from '@react-native-firebase/messaging';
 import {requestPermission} from '../../utils/HelperFunctions';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [device_token, setDevice_Token] = useState('');
-  // console.log('local state', device_token)
+  // console.log('local state', device_token);
 
   const dispatch = useDispatch();
 
@@ -31,7 +31,11 @@ const Login = () => {
 
   const askNotificationPermission = async () => {
     const status = await requestPermission('notifications');
-    if (status === 'granted') {
+    // return console.log(status)
+    if (
+      status === 'granted' ||
+      status === messaging.AuthorizationStatus.AUTHORIZED
+    ) {
       const token = await messaging().getToken();
       console.log('tokenn', token);
       setDevice_Token(token);
