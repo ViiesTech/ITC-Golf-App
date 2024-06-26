@@ -74,7 +74,8 @@ export const concatNotification_text = (user_name, noti_text) => {
   if (
     noti_text === 'add new group' ||
     noti_text === 'add new listing' ||
-    noti_text === 'added new group'
+    noti_text === 'added new group' ||
+    noti_text === 'want to join your group'
   ) {
     return user_name + ' ' + noti_text;
   } else {

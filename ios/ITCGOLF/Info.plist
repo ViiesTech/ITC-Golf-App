@@ -22,6 +22,11 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>http</string>
+		<string>https</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -35,16 +40,16 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>App needs to access your camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location required</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Phone library is required</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>App would like to access your gallery to upload a picture</string>
 	<key>NSUserNotificationsUsageDescription</key>
-<string>ITC GOLF Would like to send you notifications.</string>
-	  <key>NSCameraUsageDescription</key>
-  <string>App needs to access your camera</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-  <string>App would like to access your gallery to upload a picture</string>
-   <key>NSPhotoLibraryAddUsageDescription</key>
-  <string>Phone library is required</string>
+	<string>ITC GOLF Would like to send you notifications.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Zocial.ttf</string>
@@ -67,12 +72,11 @@
 		<string>Entypo.ttf</string>
 		<string>AntDesign.ttf</string>
 	</array>
-	<key>LSApplicationQueriesSchemes</key>
-<array>
-    <string>http</string>
-    <string>https</string>
-</array>
-
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>Launch Screen.storyboar</string>
 	<key>UIRequiredDeviceCapabilities</key>
