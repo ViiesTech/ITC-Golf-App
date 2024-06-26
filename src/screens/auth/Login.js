@@ -12,6 +12,7 @@ import {signin} from '../../redux/actions/authAction';
 import {ShowToast} from '../../Custom';
 import messaging from '@react-native-firebase/messaging';
 import {requestPermission} from '../../utils/HelperFunctions';
+import { configureNotification } from '../../notifications';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -23,6 +24,7 @@ const Login = () => {
 
   useEffect(() => {
     askNotificationPermission();
+    configureNotification()
   }, []);
 
   const {signin_loading} = useSelector(state => state.AuthReducer);
