@@ -405,7 +405,7 @@ export const sendListingMessage = (user_id, listing_id, message) => {
         {
           headers: {
             Accept: 'application/json',
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': 'multipart/form-data; charset=utf-8'
           },
         },
       )
@@ -425,7 +425,7 @@ export const ListingMessages = (match_id, setMessages) => {
     await axios
       .get(`${URL}/listing-chat-history?match_id=${match_id}`, {
         headers: {
-          Accept: 'application/json',
+          "Content-Type": 'application/json; charset=utf-8'
         },
       })
       .then(res => {

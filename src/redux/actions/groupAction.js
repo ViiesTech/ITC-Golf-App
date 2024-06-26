@@ -367,7 +367,7 @@ export const sendGroupMessage = (user_id, group_id, message) => {
         {
           headers: {
             Accept: 'application/json',
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': 'multipart/form-data; charset=utf-8'
           },
         },
       )
@@ -386,7 +386,7 @@ export const groupMessages = (group_id, setMessages) => {
     await axios
       .get(`${URL}/group-chat-history?group_id=${group_id}`, {
         headers: {
-          Accept: 'application/json',
+          "Content-Type": 'application/json; charset=utf-8'
         },
       })
       .then(res => {
