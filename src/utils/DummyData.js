@@ -560,7 +560,7 @@ export const switchOptions = [
   },
   {
     id: 3,
-    text: 'Chat On/Off',
+    text: 'Chat Off/On',
     props: 'private_listing',
   },
 ];

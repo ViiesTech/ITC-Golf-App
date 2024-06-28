@@ -95,7 +95,7 @@ export const signin = (username, password) => {
       })
       .catch(error => {
         console.log('login error', error);
-        ErrorToast(error.message);
+        ShowToast('some problem occured');
         dispatch({
           type: constant.LOGIN_DONE,
         });

@@ -5,6 +5,8 @@ import messaging from '@react-native-firebase/messaging';
 
 export const requestPermission = async permissionType => {
   let permissionSet;
+  const apiLevel = Platform.constants.Release;
+  console.log('hello world', apiLevel);
   if (Platform.OS === 'ios') {
     switch (permissionType) {
       case 'media':
@@ -35,31 +37,28 @@ export const requestPermission = async permissionType => {
     switch (permissionType) {
       case 'media':
         permissionSet = Platform.select({
-          android: PERMISSIONS.ANDROID.READ_MEDIA_IMAGES,
+          android: PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
         });
         break;
 
       case 'notifications':
-        permissionSet = Platform.select({
-          android: PERMISSIONS.ANDROID.POST_NOTIFICATIONS,
-        });
+        if (apiLevel > 12) {
+          permissionSet = Platform.select({
+            android: PERMISSIONS.ANDROID.POST_NOTIFICATIONS,
+          });
+        } else {
+          return 'granted';
+        }
         break;
 
       default:
         console.log('unknown permission type');
     }
   }
-  // if (permissionType === 'notifications' && Platform.OS == 'ios') {
-  //   const enabled =
-  //     permissionSet === messaging.AuthorizationStatus.AUTHORIZED ||
-  //     permissionSet === messaging.AuthorizationStatus.PROVISIONAL;
-  //   if (enabled) {
-  //     return permissionSet;
-  //   }
-  // } else {
+  if (permissionSet) {
     const status = await request(permissionSet);
     return status;
-  // }
+  }
 };
 
 export const timeFormatting = time => {
@@ -142,4 +141,3 @@ export const validateCVC = cvc => {
   }
   return '';
 };
-

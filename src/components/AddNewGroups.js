@@ -583,7 +583,7 @@ const AddNew = ({groupData}) => {
       ))}
       <Text style={styles.text}>Additional Details</Text>
       <Switch
-        text={'Chat On/Off'}
+        text={'Chat Off/On'}
         onToggle={isOn =>
           setState({
             ...state,

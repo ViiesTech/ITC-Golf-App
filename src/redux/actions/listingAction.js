@@ -3,6 +3,7 @@ import constant, {URL} from '../constant';
 import {ShowToast} from '../../Custom';
 import FormData from 'form-data';
 import {Platform} from 'react-native';
+import moment from 'moment';
 
 export const createListing = (
   location,
@@ -429,8 +430,8 @@ export const ListingMessages = (match_id, setMessages) => {
         },
       })
       .then(res => {
-        // console.log('resss', res.data)
-
+        console.log('resss', res.data)
+    
         const sortedMessages = res.data.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
         );

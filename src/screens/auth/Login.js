@@ -24,7 +24,7 @@ const Login = () => {
 
   useEffect(() => {
     askNotificationPermission();
-    configureNotification()
+    // configureNotification()
   }, []);
 
   const {signin_loading} = useSelector(state => state.AuthReducer);
@@ -33,7 +33,7 @@ const Login = () => {
 
   const askNotificationPermission = async () => {
     const status = await requestPermission('notifications');
-    // return console.log(status)
+     console.log('permission status of android =====>',status)
     if (
       status === 'granted' ||
       status === messaging.AuthorizationStatus.AUTHORIZED
