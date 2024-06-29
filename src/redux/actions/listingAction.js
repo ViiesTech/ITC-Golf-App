@@ -3,7 +3,6 @@ import constant, {URL} from '../constant';
 import {ShowToast} from '../../Custom';
 import FormData from 'form-data';
 import {Platform} from 'react-native';
-import moment from 'moment';
 
 export const createListing = (
   location,
@@ -102,7 +101,7 @@ export const ListingsByUserID = (user_id, setMy_listings) => {
       })
       .then(res => {
         console.log('my listing response ===========>', res.data);
-        setMy_listings(res.data)
+        setMy_listings(res.data);
         dispatch({
           type: constant.GET_MY_LISTINGS_DONE,
         });
@@ -391,22 +390,21 @@ export const getListingStatus = (user_id, match_id, setListingStatus) => {
   };
 };
 
-export const sendListingMessage = (user_id, listing_id, message) => {
+export const sendListingMessage = (user_id, listing_id, message, timestamp) => {
   return async dispatch => {
-    var data = new FormData();
+    // var data = new FormData();
 
-    data.append('from_user_id', user_id);
-    data.append('listing_id', listing_id);
-    data.append('message', message);
+    // data.append('from_user_id', user_id);
+    // data.append('listing_id', listing_id);
+    // data.append('message', message);
 
     await axios
       .post(
-        `${URL}/listing-chat?from_user_id=${user_id}&listing_id=${listing_id}&message=${message}`,
-        data,
+        `${URL}/listing-chat?from_user_id=${user_id}&listing_id=${listing_id}&message=${message}&timestamp=${timestamp}`,
+        {},
         {
           headers: {
-            Accept: 'application/json',
-            'Content-Type': 'multipart/form-data; charset=utf-8'
+            'Content-Type': 'application/json; charset=utf-8',
           },
         },
       )
@@ -422,19 +420,23 @@ export const sendListingMessage = (user_id, listing_id, message) => {
 
 export const ListingMessages = (match_id, setMessages) => {
   return async dispatch => {
-
     await axios
       .get(`${URL}/listing-chat-history?match_id=${match_id}`, {
         headers: {
-          "Content-Type": 'application/json; charset=utf-8'
+          'Content-Type': 'application/json; charset=utf-8',
         },
       })
       .then(res => {
-        console.log('resss', res.data)
-    
-        const sortedMessages = res.data.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-        );
+        // console.log('resss', res.data);
+  
+       
+        const sortedMessages = res.data
+        .map(message => ({
+          ...message,
+          createdAt: new Date(message.createdAt).toISOString() 
+        }))
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      
         setMessages(sortedMessages);
       })
       .catch(error => {

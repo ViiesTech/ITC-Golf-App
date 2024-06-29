@@ -52,17 +52,28 @@ const GroupChat = ({route}) => {
   }, []);
 
   const onSend = useCallback(async (newMessage = []) => {
-    console.log('new messagess', newMessage);
+    const updatedMessage = {
+      ...newMessage[0],
+      createdAt: new Date(newMessage[0].createdAt).toISOString()
+    };
+  
+    console.log('Sending message with timestamp:', updatedMessage.createdAt);
+    // console.log('new messagess', newMessage[0].createdAt);
     setMessages(previousMessages =>
-      GiftedChat.append(previousMessages, newMessage),
+      GiftedChat.append(previousMessages, updatedMessage),
     );
     if (type === 'listing') {
       await dispatch(
-        sendListingMessage(user.user_id, listing_id, newMessage[0].text),
+        sendListingMessage(
+          user.user_id,
+          listing_id,
+          updatedMessage.text,
+          updatedMessage.createdAt,
+        ),
       );
     } else {
       await dispatch(
-        sendGroupMessage(user.user_id, listing_id, newMessage[0].text),
+        sendGroupMessage(user.user_id, listing_id, updatedMessage.text, updatedMessage.createdAt),
       );
     }
   }, []);
