@@ -36,9 +36,13 @@ export const requestPermission = async permissionType => {
   } else if (Platform.OS === 'android') {
     switch (permissionType) {
       case 'media':
-        permissionSet = Platform.select({
-          android: PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
-        });
+        if (apiLevel < 10) {
+          permissionSet = Platform.select({
+            android: PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+          });
+        } else {
+          return 'granted';
+        }
         break;
 
       case 'notifications':
