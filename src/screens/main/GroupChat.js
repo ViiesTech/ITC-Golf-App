@@ -37,8 +37,8 @@ const GroupChat = ({route}) => {
   const {group_members} = useSelector(state => state.GroupReducer);
   const {listing_members} = useSelector(state => state.ListingReducer);
   const {user} = useSelector(state => state.AuthReducer);
-  // console.log('group members =======>', group_members);
-  // console.log('listing members ======>', listing_members);
+
+  console.log('user response', user)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -58,7 +58,6 @@ const GroupChat = ({route}) => {
     };
 
     console.log('Sending message with timestamp:', updatedMessage.createdAt);
-    // console.log('new messagess', newMessage[0].createdAt);
     setMessages(previousMessages =>
       GiftedChat.append(previousMessages, updatedMessage),
     );
@@ -188,7 +187,6 @@ const GroupChat = ({route}) => {
           </View>
           <View style={{padding: hp('1%')}}>
             <View style={styles.memberContainer}>
-              {/* <Text style={styles.memberText}>Members</Text> */}
               <FlatList
                 data={type == 'group' ? group_members : listing_members}
                 horizontal
@@ -197,7 +195,7 @@ const GroupChat = ({route}) => {
                   marginRight: hp('6%'),
                   padding: hp('2%'),
                 }}
-                renderItem={({item, ind}) => (
+                renderItem={({item}) => (
                   <ChatMembers
                     key={item.ID}
                     image={
@@ -212,17 +210,14 @@ const GroupChat = ({route}) => {
             </View>
           </View>
           <GiftedChat
-            // messages={messages.filter(message => message.user._id !== user.user_id)}
             messages={messages}
-            // key={user.user_id}
             isLoadingEarlier={true}
             onSend={messages => onSend(messages)}
             user={{
               _id: user.user_id.toString(),
               name: user.username,
-              avatar: user.feature_image_url
-                ? user.feature_image_url
-                : user.featured_image_url,
+              avatar: 
+                 user.featured_image_url,
             }}
             showAvatarForEveryMessage
             renderUsernameOnMessage={true}
@@ -245,11 +240,7 @@ export default GroupChat;
 
 const styles = StyleSheet.create({
   sendButtonStyle: {
-    // backgroundColor: colors.primary,
     justifyContent: 'center',
-    // flexDirection: 'row',
-    // position: 'absolute',
-    // right: ,
   },
   sendText: {
     color: colors.white,

@@ -14,7 +14,6 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import PersonalInfoTab from '../../components/PersonalInfoTab';
-import {Tabs} from '../../utils/DummyData';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import images from '../../assets/images';
@@ -26,27 +25,20 @@ import {getGroupStatus, JoinGroup} from '../../redux/actions/groupAction';
 import constant from '../../redux/constant';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
-import { timeFormatting } from '../../utils/HelperFunctions';
 
 const GroupDetail = ({route}) => {
   const [changeTab, setChangeTab] = useState(1);
   const [groupStatus, setGroupStatus] = useState(null);
-  const {reviews, reviews_loading} = useSelector(state => state.HomeReducer);
   const {user} = useSelector(state => state.AuthReducer);
   const {join_group_loading} = useSelector(state => state.ListingReducer);
   const {status_loader} = useSelector(state => state.GroupReducer);
   const dispatch = useDispatch();
 
   const {item, type} = route?.params;
-  console.log('detail ======>', item.group_id);
 
   useEffect(() => {
     dispatch(getGroupStatus(user.user_id, item.group_id, setGroupStatus));
   }, []);
-
-  // const itemStatus = useSelector(
-  //   state => state.ListingReducer[item.group_id] || 'Unknown',
-  // );
 
   const navigation = useNavigation();
 
@@ -103,40 +95,14 @@ const GroupDetail = ({route}) => {
         <>
           <Header />
           <SecondaryHeader
-            headerStyle={{
-              width:
-                Object.keys(item.listing_title)?.length > 19 ? wp('45%') : null,
-            }}
             text={item.listing_title}
             link={true}
-            linkButton={{
-              width:
-                Object.keys(item.listing_title)?.length > 13 ? wp('24%') : null,
-              // : hp('14%'),
-            }}
             onLinkPress={() => onHyperLink(item.hyper_link)}
           />
           <ScrollView contentContainerStyle={styles.screen}>
             <View style={styles.tabView}>
-              {Tabs.map(item => (
-                <PersonalInfoTab
-                  text={item.text}
-                  // style={
-                  //   changeTab == item.id
-                  //     ? [
-                  //         styles.active,
-                  //         {
-                  //           width: item.id == 2 ? '40%' : '44%',
-                  //         },
-                  //       ]
-                  //     : [styles.inactive, {width: item.id == 1 ? '44%' : '40%'}]
-                  // }
-                  onPress={() => setChangeTab(item.id)}
-                  // textStyle={changeTab == item.id && {marginTop: hp('0.3%')}}
-                />
-              ))}
+              <PersonalInfoTab text={'Personal Information'} />
             </View>
-            {/* {changeTab == 1 ? ( */}
             <>
               <View style={styles.detailView}>
                 <View style={styles.imageContainer}>
@@ -163,10 +129,6 @@ const GroupDetail = ({route}) => {
                 </View>
               </View>
               <View style={styles.formWrapper}>
-                {/* <View style={styles.leftSection}> */}
-                {/* </View> */}
-
-                {/* <View> */}
                 <View style={styles.dataRow}>
                   <Text style={styles.heading}>DESCRIPTION:</Text>
                   <View style={styles.line} />
@@ -229,7 +191,6 @@ const GroupDetail = ({route}) => {
                     {item.private_group === 'true' ? 'Yes' : 'No' || ''}
                   </Text>
                 </View>
-                {/* </View> */}
               </View>
               {groupStatus?.data?.accept_or_not === '1' ||
               type === 'my groups' ||
@@ -268,51 +229,9 @@ const GroupDetail = ({route}) => {
                   textStyle={{color: colors.secondary}}
                   indicator={join_group_loading}
                   onPress={() => onJoinGroup()}
-                  // onPress={() =>  ShowToast('Coming soon')}
                 />
               )}
             </>
-            {/* ) : (
-          // : changeTab == 2 ? (
-          //   <View style={styles.reviewStyle}>
-          //     <Text style={styles.reviewHeading}>POST A REVIEW</Text>
-          //     <View style={{paddingTop: hp('3%')}}>
-          //       {postReviewText.map(item => (
-          //         <PostReview text={item.text} />
-          //       ))}
-          //     </View>
-          //     <View style={{paddingTop: hp('1%')}}>
-          //       <Button
-          //         buttonText={'Post a review'}
-          //         onPress={() => alert('working in progress')}
-          //         buttonStyle={styles.buttonStyle}
-          //       />
-          //     </View>
-          //   </View>
-          // )
-          // <>
-          //   <View style={{paddingTop: hp('3%')}}>
-          //     {changeTab == 3 && reviews_loading ? (
-          //       <View style={{alignItems: 'center', marginVertical: hp('6%')}}>
-          //         <ActivityIndicator size={'large'} color={colors.primary} />
-          //       </View>
-          //     ) : (
-          //       <FlatList
-          //         data={reviews}
-          //         numColumns={2}
-          //         columnWrapperStyle={{justifyContent: 'space-between'}}
-          //         renderItem={({item, index}) => (
-          //           <ReviewCard
-          //             image={images.review1}
-          //             name={item.reviews_title}
-          //             ratings={item}
-          //           />
-          //         )}
-          //       />
-          //     )}
-          //   </View>
-          // </>
-        )} */}
           </ScrollView>
         </>
       )}

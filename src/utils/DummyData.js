@@ -365,20 +365,20 @@ export const Colors = [
   },
 ];
 
-export const Tabs = [
-  {
-    id: 1,
-    text: 'Personal Information',
-  },
-  // {
-  //   id: 2,
-  //   text: 'Add Reviews',
-  // },
-  // {
-  //   id: 2,
-  //   text: 'Match Reviews',
-  // },
-];
+// export const Tabs = [
+//   {
+//     id: 1,
+//     text: 'Personal Information',
+//   },
+//   // {
+//   //   id: 2,
+//   //   text: 'Add Reviews',
+//   // },
+//   // {
+//   //   id: 2,
+//   //   text: 'Match Reviews',
+//   // },
+// ];
 
 // export const reviews = [
 //   {

@@ -12,7 +12,7 @@ const SecondaryHeader = ({icon, text, style, link, onLinkPress, linkButton, head
 
   return (
     <View style={[styles.headerView, style]}>
-      <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: 'row',  width: hp(33)}}>
         <Back
           name={'keyboard-backspace'}
           color={colors.white}
@@ -20,9 +20,7 @@ const SecondaryHeader = ({icon, text, style, link, onLinkPress, linkButton, head
           style={{alignSelf: 'center'}}
           onPress={() => navigation.goBack()}
         />
-        {/* <View style={{backgroundColor: 'red',  marginLeft: hp(3)}}> */}
         <Text style={[styles.headerText,headerStyle]}>{text}</Text>
-        {/* </View> */}
       </View>
         {link && (
           <TouchableOpacity style={[styles.linkStyle,linkButton]} activeOpacity={0.9} onPress={onLinkPress}>
@@ -48,6 +46,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontWeight: 'bold',
     fontSize: hp('2.5%'),
+    width: hp(28),
     marginLeft: hp('2%'),
   },
   linkStyle: {
@@ -56,7 +55,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     alignSelf: 'center',
     marginTop: hp('0.4%'),
-    // marginHorizontal: hp('2.5%'),
     alignItems: 'center',
   },
   textStyle: {
