@@ -58,7 +58,7 @@ export const signup = (
   };
 };
 
-export const signin = (username, password) => {
+export const signin = (username, password, device_token) => {
   return async dispatch => {
     var data = new FormData();
 
@@ -68,6 +68,7 @@ export const signin = (username, password) => {
 
     data.append('username', username);
     data.append('password', password);
+    data.append('notification_token',device_token)
 
     return await fetch(`${URL}/login`, {
       method: 'POST',
@@ -79,6 +80,7 @@ export const signin = (username, password) => {
     })
       .then(async res => {
         const response = await res.json();
+        // console.log('login response =====>',response)
         if (response.token) {
           ShowToast('login successfully');
           dispatch({

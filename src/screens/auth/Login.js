@@ -12,7 +12,7 @@ import {signin} from '../../redux/actions/authAction';
 import {ShowToast} from '../../Custom';
 import messaging from '@react-native-firebase/messaging';
 import {requestPermission} from '../../utils/HelperFunctions';
-import { configureNotification } from '../../notifications';
+import {configureNotification} from '../../notifications';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -33,7 +33,7 @@ const Login = () => {
 
   const askNotificationPermission = async () => {
     const status = await requestPermission('notifications');
-     console.log('permission status of android =====>',status)
+    console.log('permission status of android =====>', status);
     if (
       status === 'granted' ||
       status === messaging.AuthorizationStatus.AUTHORIZED
@@ -48,10 +48,10 @@ const Login = () => {
   };
 
   const onLoginPress = async () => {
-    if (!username || !password) {
+    if (!username || !password || !device_token) {
       return ShowToast('Please provide your credentials');
     } else {
-      await dispatch(signin(username, password));
+      await dispatch(signin(username, password, device_token));
     }
   };
 

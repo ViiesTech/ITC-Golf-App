@@ -8,6 +8,7 @@ import ToastMessage from './components/ToastMessage';
 import images from './assets/images';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {getNotificationCount} from './redux/actions/homeAction';
+import {onNotificationListeners} from './notifications';
 
 const SplashScreen = () => (
   <ImageBackground
@@ -25,6 +26,8 @@ const MainApp = () => {
   const [isLoading, setIsLoading] = useState(true);
   const {user} = useSelector(state => state?.AuthReducer);
   const dispatch = useDispatch();
+
+  onNotificationListeners();
 
   useEffect(() => {
     LogBox.ignoreAllLogs();

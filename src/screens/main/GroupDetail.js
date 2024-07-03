@@ -11,7 +11,6 @@ import Container from '../../components/Container';
 import colors from '../../assets/colors';
 import {
   heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import PersonalInfoTab from '../../components/PersonalInfoTab';
 import Header from '../../components/Header';
@@ -19,7 +18,6 @@ import SecondaryHeader from '../../components/SecondaryHeader';
 import images from '../../assets/images';
 import Button from '../../components/Button';
 import {useSelector, useDispatch} from 'react-redux';
-import {getReviews} from '../../redux/actions/homeAction';
 import {ShowToast} from '../../Custom';
 import {getGroupDetailById, getGroupStatus, JoinGroup} from '../../redux/actions/groupAction';
 import constant from '../../redux/constant';
@@ -44,13 +42,6 @@ const GroupDetail = ({route}) => {
 
   const navigation = useNavigation();
 
-  // console.log('status');
-
-  // useEffect(() => {
-  //   if (changeTab == 3 && reviews.length < 1) {
-  //     dispatch(getReviews());
-  //   }
-  // }, [changeTab]);
 
   const onHyperLink = async link => {
     if (link == '') {
