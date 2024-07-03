@@ -3,6 +3,7 @@ import constant, {URL} from '../constant';
 import {ShowToast} from '../../Custom';
 import {Platform} from 'react-native';
 import FormData from 'form-data';
+import api from '../services/api';
 
 export const createGroup = (
   group_title,
@@ -438,3 +439,22 @@ export const getGroupStatus = (user_id, group_id, setGroupStatus) => {
       });
   };
 };
+
+export const getGroupDetailById = (group_id, setGroupDetail) => {
+  return async dispatch => {
+
+    dispatch({
+      type: constant.GET_GROUP_DETAIL_BY_ID
+    })
+
+   try {
+    const res = await api.get(`/get-group/${group_id}`)
+    setGroupDetail(res.data)
+    dispatch({
+      type: constant.GET_GROUP_DETAIL_BY_ID_DONE
+    })
+   } catch (error) {
+      console.log('error fetching group detail =======>',error)
+   }
+  }
+}

@@ -21,34 +21,36 @@ import Button from '../../components/Button';
 import {useSelector, useDispatch} from 'react-redux';
 import {getReviews} from '../../redux/actions/homeAction';
 import {ShowToast} from '../../Custom';
-import {getGroupStatus, JoinGroup} from '../../redux/actions/groupAction';
+import {getGroupDetailById, getGroupStatus, JoinGroup} from '../../redux/actions/groupAction';
 import constant from '../../redux/constant';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 
 const GroupDetail = ({route}) => {
-  const [changeTab, setChangeTab] = useState(1);
+  // const [changeTab, setChangeTab] = useState(1);
   const [groupStatus, setGroupStatus] = useState(null);
+  const [groupDetail, setGroupDetail] = useState({})
   const {user} = useSelector(state => state.AuthReducer);
   const {join_group_loading} = useSelector(state => state.ListingReducer);
-  const {status_loader} = useSelector(state => state.GroupReducer);
+  const {group_detail_loader} = useSelector(state => state.GroupReducer);
   const dispatch = useDispatch();
 
-  const {item, type} = route?.params;
+  const {id, type} = route?.params;
 
   useEffect(() => {
-    dispatch(getGroupStatus(user.user_id, item.group_id, setGroupStatus));
+    dispatch(getGroupStatus(user.user_id, id, setGroupStatus));
+    dispatch(getGroupDetailById(id,setGroupDetail))
   }, []);
 
   const navigation = useNavigation();
 
-  console.log('status');
+  // console.log('status');
 
-  useEffect(() => {
-    if (changeTab == 3 && reviews.length < 1) {
-      dispatch(getReviews());
-    }
-  }, [changeTab]);
+  // useEffect(() => {
+  //   if (changeTab == 3 && reviews.length < 1) {
+  //     dispatch(getReviews());
+  //   }
+  // }, [changeTab]);
 
   const onHyperLink = async link => {
     if (link == '') {
@@ -87,7 +89,7 @@ const GroupDetail = ({route}) => {
 
   return (
     <Container>
-      {status_loader ? (
+      {group_detail_loader ? (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <ActivityIndicator size={'large'} color={colors.primary} />
         </View>
@@ -95,7 +97,7 @@ const GroupDetail = ({route}) => {
         <>
           <Header />
           <SecondaryHeader
-            text={item.listing_title}
+            text={groupDetail.listing_title}
             link={true}
             onLinkPress={() => onHyperLink(item.hyper_link)}
           />
@@ -111,14 +113,14 @@ const GroupDetail = ({route}) => {
                       style={styles.name}
                       numberOfLines={1}
                       ellipsizeMode="tail">
-                      {item.listing_title}
+                      {groupDetail.listing_title}
                     </Text>
                   </View>
                   <FastImage
                     source={
-                      item.feature_image
+                      groupDetail.feature_image
                         ? {
-                            uri: item.feature_image,
+                            uri: groupDetail.feature_image,
                             priority: FastImage.priority.high,
                           }
                         : images.dummy
@@ -133,35 +135,35 @@ const GroupDetail = ({route}) => {
                   <Text style={styles.heading}>DESCRIPTION:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {item.listing_content ? item.listing_content : ''}
+                    {groupDetail.listing_content ? groupDetail.listing_content : ''}
                   </Text>
                 </View>
                 <View style={styles.dataRow}>
                   <Text style={styles.heading}>GROUPER'S NAME:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {item.author_name ? item.author_name : ''}
+                    {groupDetail.author_name ? groupDetail.author_name : ''}
                   </Text>
                 </View>
                 <View style={styles.dataRow}>
                   <Text style={styles.heading}>AREA CODE:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {item.area_code ? item.area_code : ''}
+                    {groupDetail.area_code ? groupDetail.area_code : ''}
                   </Text>
                 </View>
                 <View style={styles.dataRow}>
                   <Text style={styles.heading}>ITC GROUP HANDSHAKE:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {item.itc_group_handshake ? item.itc_group_handshake : ''}
+                    {groupDetail.itc_group_handshake ? groupDetail.itc_group_handshake : ''}
                   </Text>
                 </View>
                 <View style={styles.dataRow}>
                   <Text style={styles.heading}>DESIRED TEE BOX:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {item.group_desired_teebox ? item.group_desired_teebox : ''}
+                    {groupDetail.group_desired_teebox ? groupDetail.group_desired_teebox : ''}
                   </Text>
                 </View>
                 <View style={styles.dataRow}>
@@ -170,8 +172,8 @@ const GroupDetail = ({route}) => {
                   </Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {item.what_kind_of_match_is_this
-                      ? item.what_kind_of_match_is_this
+                    {groupDetail.what_kind_of_match_is_this
+                      ? groupDetail.what_kind_of_match_is_this
                       : ''}
                   </Text>
                 </View>
@@ -181,21 +183,21 @@ const GroupDetail = ({route}) => {
 
                   <Text style={styles.text}>
                     {/* {timeFormatting(item.suggested_day)} */}
-                    {item.suggested_day}
+                    {groupDetail.suggested_day}
                   </Text>
                 </View>
                 <View style={styles.dataRow}>
                   <Text style={styles.heading}>IS THIS A PRIVATE GROUP:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {item.private_group === 'true' ? 'Yes' : 'No' || ''}
+                    {groupDetail.private_group === 'true' ? 'Yes' : 'No' || ''}
                   </Text>
                 </View>
               </View>
               {groupStatus?.data?.accept_or_not === '1' ||
               type === 'my groups' ||
-              item.author_id == user.user_id ||
-              item.private_group === 'off' ? (
+              groupDetail.author_id == user.user_id ||
+              groupDetail.private_group === 'off' ? (
                 <Button
                   buttonText={'Go to chat'}
                   buttonStyle={styles.button}
@@ -204,9 +206,9 @@ const GroupDetail = ({route}) => {
                     navigation.navigate('SecondaryStack', {
                       screen: 'GroupChat',
                       params: {
-                        title: item.listing_title,
+                        title: groupDetail.listing_title,
                         type: 'group',
-                        listing_id: item.group_id,
+                        listing_id:id,
                       },
                     });
                   }}

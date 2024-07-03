@@ -76,7 +76,7 @@ const Discover = ({searchPressed}) => {
             onPress={() =>
               navigation.navigate('SecondaryStack', {
                 screen: 'GroupDetail',
-                params: {item},
+                params: {id: item.group_id},
               })
             }
             title={item.listing_title}
@@ -146,7 +146,7 @@ const Discover = ({searchPressed}) => {
             onPress={() =>
               navigation.navigate('SecondaryStack', {
                 screen: 'GroupDetail',
-                params: {item},
+                params: {id: item.group_id},
               })
             }
             title={item.listing_title}
@@ -228,7 +228,7 @@ const MyGroups = ({setIndex, setGroupData}) => {
     const res = await dispatch(DeleteGroup(group_id, user.user_id));
     if (res) {
       // navigation.navigate('Home');
-      dispatch(getGroupsById(user.user_id, setMy_groups))
+      dispatch(getGroupsById(user.user_id, setMy_groups));
       return ShowToast(res);
     }
   };
@@ -264,7 +264,7 @@ const MyGroups = ({setIndex, setGroupData}) => {
               onPress={() =>
                 navigation.navigate('SecondaryStack', {
                   screen: 'GroupDetail',
-                  params: {item, type: 'my groups'},
+                  params: {id: item.group_id, type: 'my groups'},
                 })
               }
             />

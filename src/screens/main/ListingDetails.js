@@ -19,7 +19,11 @@ import icons from '../../assets/icons';
 import Button from '../../components/Button';
 import {useDispatch, useSelector} from 'react-redux';
 import {ShowToast} from '../../Custom';
-import {getListingStatus, JoinListing} from '../../redux/actions/listingAction';
+import {
+  getListingDetailById,
+  getListingStatus,
+  JoinListing,
+} from '../../redux/actions/listingAction';
 import constant from '../../redux/constant';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
@@ -27,23 +31,26 @@ import {timeFormatting} from '../../utils/HelperFunctions';
 
 const ListingDetails = ({route}) => {
   const [listingStatus, setListingStatus] = useState(null);
+  const [listingDetail, setListingDetail] = useState({});
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const {user} = useSelector(state => state.AuthReducer);
+  const {listing_detail_loader} = useSelector(state => state.ListingReducer);
   console.log('android user', user.user_id);
-  const {join_loading, status_loader} = useSelector(
-    state => state.ListingReducer,
-  );
+  const {join_loading} = useSelector(state => state.ListingReducer);
 
-  const {item, type} = route?.params;
+  const {id,type} = route?.params;
+  // console.log('id',id) 
 
   useEffect(() => {
-    dispatch(getListingStatus(user.user_id, item.listing_id, setListingStatus));
+    dispatch(getListingStatus(user.user_id, id, setListingStatus));
+    dispatch(getListingDetailById(id, setListingDetail));
   }, []);
 
-  console.log('listing join status =======>', listingStatus);
+  console.log('listing detail =======>', listingDetail);
+  console.log('listing status =======>', listingStatus);
 
   const onHyperLink = async link => {
     if (link == '') {
@@ -83,7 +90,7 @@ const ListingDetails = ({route}) => {
 
   return (
     <Container>
-      {status_loader ? (
+      {listing_detail_loader ? (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <ActivityIndicator size={'large'} color={colors.primary} />
         </View>
@@ -91,9 +98,9 @@ const ListingDetails = ({route}) => {
         <>
           <Header />
           <SecondaryHeader
-            text={item.listing_title}
+            text={listingDetail.listing_title}
             link={true}
-            onLinkPress={() => onHyperLink(item.hyper_link)}
+            onLinkPress={() => onHyperLink(listingDetail.hyper_link)}
           />
           <ScrollView contentContainerStyle={styles.screen}>
             <View style={styles.tabView}>
@@ -108,9 +115,9 @@ const ListingDetails = ({route}) => {
                   <View style={{flexDirection: 'row'}}>
                     <FastImage
                       source={
-                        item.feature_image
+                        listingDetail.feature_image
                           ? {
-                              uri: item.feature_image,
+                              uri: listingDetail.feature_image,
                               priority: FastImage.priority.high,
                             }
                           : images.dummy
@@ -122,7 +129,7 @@ const ListingDetails = ({route}) => {
                       style={styles.name}
                       numberOfLines={1}
                       ellipsizeMode="tail">
-                      {item.listing_title}
+                      {listingDetail.listing_title}
                     </Text>
                   </View>
                 </View>
@@ -132,75 +139,75 @@ const ListingDetails = ({route}) => {
                   <Text style={styles.heading}>MATCH DESCRIPTION:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {item.match_description || ''}
+                    {listingDetail.match_description || ''}
                   </Text>
                 </View>
                 <View style={styles.detailContainer}>
                   <Text style={styles.heading}>AREA CODE:</Text>
                   <View style={styles.line} />
-                  <Text style={styles.text}>{item.area_code_match || ''}</Text>
+                  <Text style={styles.text}>{listingDetail.area_code_match || ''}</Text>
                 </View>
                 <View style={styles.detailContainer}>
                   <Text style={styles.heading}>PRIVATE GROUP:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {item.private_group === 'true' ? 'Yes' : 'No' || ''}
+                    {listingDetail.private_group === 'true' ? 'Yes' : 'No' || ''}
                   </Text>
                 </View>
                 <View style={styles.detailContainer}>
                   <Text style={styles.heading}>EXPERIENCE LEVEL:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {item.experience_level ? item.experience_level : ''}
+                    {listingDetail.experience_level ? listingDetail.experience_level : ''}
                   </Text>
                 </View>
                 <View style={styles.detailContainer}>
                   <Text style={styles.heading}>SUGGESTED DAY:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {item.course_date ? item.course_date : ''}
+                    {listingDetail.course_date ? listingDetail.course_date : ''}
                   </Text>
                 </View>
                 <View style={styles.detailContainer}>
                   <Text style={styles.heading}>SUGGESTED TIME:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {timeFormatting(item.course_time)}
+                    {timeFormatting(listingDetail.course_time)}
                   </Text>
                 </View>
                 <View style={styles.detailContainer}>
                   <Text style={styles.heading}>HOW MANY PLAYERS:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {item.how_many_players ? item.how_many_players : ''}
+                    {listingDetail.how_many_players ? listingDetail.how_many_players : ''}
                   </Text>
                 </View>
                 <View style={styles.detailContainer}>
                   <Text style={styles.heading}>THE ITC HANDSHAKE:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {item.the_itc_handshake ? item.the_itc_handshake : ''}
+                    {listingDetail.the_itc_handshake ? listingDetail.the_itc_handshake : ''}
                   </Text>
                 </View>
                 <View style={styles.detailContainer}>
                   <Text style={styles.heading}>SMOKING FRIENDLY:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {item.smoking_friendly === 'true' ? 'Yes' : 'No' || ''}
+                    {listingDetail.smoking_friendly === 'true' ? 'Yes' : 'No' || ''}
                   </Text>
                 </View>
                 <View style={styles.detailContainer}>
                   <Text style={styles.heading}>DRINKING FRIENDLY:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {item.drinking_friendly === 'true' ? 'Yes' : 'No' || ''}
+                    {listingDetail.drinking_friendly === 'true' ? 'Yes' : 'No' || ''}
                   </Text>
                 </View>
               </View>
               {listingStatus?.data?.accept_or_not === '1' ||
               type === 'my listings' ||
-              item.author_id == user.user_id ||
-              item.private_group === 'off' ? (
+              listingDetail.author_id == user.user_id ||
+              listingDetail.private_group === 'off' ? (
                 <Button
                   buttonText={'Go to chat'}
                   buttonStyle={styles.button}
@@ -209,9 +216,9 @@ const ListingDetails = ({route}) => {
                     navigation.navigate('SecondaryStack', {
                       screen: 'GroupChat',
                       params: {
-                        title: item.listing_title,
+                        title: listingDetail.listing_title,
                         type: 'listing',
-                        listing_id: item.listing_id,
+                        listing_id: listing_id,
                       },
                     });
                   }}

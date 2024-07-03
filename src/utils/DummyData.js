@@ -561,7 +561,7 @@ export const switchOptions = [
   {
     id: 3,
     text: 'Chat Off/On',
-    props: 'private_listing',
+    props: 'private_match',
   },
 ];
 

@@ -8,7 +8,8 @@ const initialState = {
   join_loading: false,
   delete_loader: false,
   edit_loader: false,
-  status_loader: false,
+  // status_loader: false,
+  group_detail_loader: false,
   group_members: [],
 };
 
@@ -55,11 +56,17 @@ export default (state = initialState, action) => {
     case constant.FETCH_GROUP_MEMBERS:
       return {...state, group_members: action.payload};
 
-    case constant.GROUP_STATUS:
-      return {...state, status_loader: true};
+    case constant.GET_GROUP_DETAIL_BY_ID:
+      return {...state, group_detail_loader: true};
 
-    case constant.GROUP_STATUS_DONE:
-      return {...state, status_loader: false};
+    case constant.GET_GROUP_DETAIL_BY_ID_DONE:
+      return {...state, group_detail_loader: false};
+
+    // case constant.GROUP_STATUS:
+    //   return {...state, status_loader: true};
+
+    // case constant.GROUP_STATUS_DONE:
+    //   return {...state, status_loader: false};
 
     default:
       return state;

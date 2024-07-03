@@ -11,7 +11,8 @@ const initialState = {
   reject_loader: false,
   delete_loader: false,
   edit_loader: false,
-  status_loader: false,
+  // status_loader: false,
+  listing_detail_loader: false,
   listing_members: []
 };
 
@@ -75,12 +76,18 @@ export default (state = initialState, action) => {
     case constant.FETCH_LISTING_MEMBERS:
       return {...state, listing_members: action.payload}  
 
-
-    case constant.LISTING_STATUS:
-      return {...state, status_loader: true}
+    case constant.GET_LISTING_DETAIL_BY_ID:
+      return {...state, listing_detail_loader: true}
       
-    case constant.LISTING_STATUS_DONE:
-      return {...state, status_loader: false}  
+    case constant.GET_LISTING_DETAIL_BY_ID_DONE:
+      return {...state, listing_detail_loader: false}  
+
+
+    // case constant.LISTING_STATUS:
+    //   return {...state, status_loader: true}
+      
+    // case constant.LISTING_STATUS_DONE:
+    //   return {...state, status_loader: false}  
 
 
     default:

@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import images from '../assets/images';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import colors from '../assets/colors';
@@ -10,7 +10,6 @@ import {useSelector} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 
 const Header = ({iconStyle, headerStyle}) => {
-  const [isNewNotification, setIsNewNotification] = useState(false);
 
   const navigation = useNavigation();
 

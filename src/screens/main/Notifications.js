@@ -18,13 +18,16 @@ import colors from '../../assets/colors';
 import NotificationsCard from '../../components/NotificationsCard';
 import images from '../../assets/images';
 import {useDispatch, useSelector} from 'react-redux';
-import {getNotifications, ReadNotifications} from '../../redux/actions/homeAction';
+import {
+  getNotifications,
+  ReadNotifications,
+} from '../../redux/actions/homeAction';
 import moment from 'moment';
 import {AcceptListing, RejectListing} from '../../redux/actions/listingAction';
 import {ShowToast} from '../../Custom';
 import constant from '../../redux/constant';
 import {AcceptGroup, RejectGroup} from '../../redux/actions/groupAction';
-import { concatNotification_text } from '../../utils/HelperFunctions';
+import {concatNotification_text} from '../../utils/HelperFunctions';
 
 const Notifications = () => {
   const [isIndex, setIsIndex] = useState(0);
@@ -45,7 +48,7 @@ const Notifications = () => {
   useEffect(() => {
     // setNotifications(TodayNotifications)
     dispatch(getNotifications(user.user_id, setNotifications));
-    dispatch(ReadNotifications(user.user_id))
+    dispatch(ReadNotifications(user.user_id));
   }, []);
 
   const renderLoader = () => {
@@ -170,7 +173,7 @@ const Notifications = () => {
   return (
     <Container>
       <Header />
-      <SecondaryHeader text={'Notifications'} icon={true} />
+      <SecondaryHeader text={'Notifications'} />
       {notification_loader ? (
         renderLoader()
       ) : notifications?.length < 1 ? (
@@ -217,9 +220,14 @@ const Notifications = () => {
                   status={item.listing_status}
                   hidebuttons={item.listing_status === 'pending' ? false : true}
                   onRejectPress={() => onRejectRequest(item, index)}
-                  text={concatNotification_text(item.listing_requester_name,item.notification_text)}
+                  text={concatNotification_text(
+                    item.listing_requester_name,
+                    item.notification_text,
+                  )}
                   desc={item.listing_name}
                   date={moment(item.create_date).format('DD MMMM YYYY')}
+                  nav={item.listing_id}
+                  type={item.listing_type}
                 />
               );
             })}

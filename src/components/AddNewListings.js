@@ -85,7 +85,7 @@ const Discover = ({searchPressed}) => {
             onPress={() =>
               navigation.navigate('SecondaryStack', {
                 screen: 'ListingDetails',
-                params: {item},
+                params: {id: item.listing_id},
               })
             }
             count={index + 1}
@@ -130,7 +130,7 @@ const Discover = ({searchPressed}) => {
             onPress={() =>
               navigation.navigate('SecondaryStack', {
                 screen: 'ListingDetails',
-                params: {item},
+                params: {id: item.id},
               })
             }
             count={index + 1}
@@ -259,7 +259,7 @@ const MyListings = ({setIndex, setListingData}) => {
               onPress={() =>
                 navigation.navigate('SecondaryStack', {
                   screen: 'ListingDetails',
-                  params: {item, type: 'my listings'},
+                  params: {id: item.listing_id, type: 'my listings'},
                 })
               }
               count={index + 1}
@@ -305,7 +305,7 @@ const AddNew = ({listingData}) => {
     // ],
     smoking_friendly: false,
     drinking_friendly: false,
-    private_listing: false,
+    private_match: false,
   });
 
   const dispatch = useDispatch();
@@ -428,7 +428,7 @@ const AddNew = ({listingData}) => {
       },
       smoking_friendly: listingData.smoking_friendly === 'true' && true,
       drinking_friendly: listingData.drinking_friendly === 'true' && true,
-      private_listing: listingData.group === 'true' && true,
+      private_match: listingData.private_group === 'false' ? false : true
     });
   };
 
@@ -449,7 +449,7 @@ const AddNew = ({listingData}) => {
           state.smoking_friendly,
           state.drinking_friendly,
           state.pickers.exp_level,
-          state.private_listing,
+          state.private_match,
           state.hyperlink,
           state.image_details,
         ),
@@ -479,7 +479,7 @@ const AddNew = ({listingData}) => {
             state.drinking_friendly,
             state.smoking_friendly,
             state.pickers.exp_level,
-            state.private_listing,
+            state.private_group,
             state.hyperlink,
             user.user_id,
             state.image_details,

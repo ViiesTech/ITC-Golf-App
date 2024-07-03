@@ -138,7 +138,7 @@ const Groups = () => {
                   onPress={() =>
                     navigation.navigate('SecondaryStack', {
                       screen: 'GroupDetail',
-                      params: {item},
+                      params: {id: item.group_id}
                     })
                   }
                 />
@@ -179,7 +179,7 @@ const Groups = () => {
             onPress={() =>
               navigation.navigate('SecondaryStack', {
                 screen: 'GroupDetail',
-                params: {item},
+                params: {id: item.group_id},
               })
             }
           />

@@ -9,21 +9,32 @@ import {
 import React from 'react';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import colors from '../assets/colors';
+import {useNavigation} from '@react-navigation/native';
 
 const NotificationsCard = ({
   image,
   text,
-  date,
   desc,
   onAcceptPress,
   onRejectPress,
   accept_loader,
   reject_loader,
   hidebuttons,
-  status
+  status,
+  nav,
+  type,
 }) => {
+  const navigation = useNavigation();
   return (
-    <View style={styles.wrapper}>
+    <TouchableOpacity
+      style={styles.wrapper}
+      activeOpacity={0.9}
+      onPress={() => {
+        navigation.navigate('SecondaryStack', {
+          screen: type === 'group' ? 'GroupDetail' :  'ListingDetails',
+          params: {id: nav},
+        });
+      }}>
       <View style={{flexDirection: 'row'}}>
         <Image source={image} style={styles.image} borderRadius={5} />
         <View style={styles.Textwrapper}>
@@ -85,7 +96,7 @@ const NotificationsCard = ({
         color={colors.lightgray}
         size={22}
       /> */}
-    </View>
+    </TouchableOpacity>
   );
 };
 

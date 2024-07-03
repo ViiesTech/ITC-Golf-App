@@ -107,7 +107,7 @@ const Listing = () => {
             onPress={() =>
               navigation.navigate('SecondaryStack', {
                 screen: 'ListingDetails',
-                params: {item},
+                params: {id: item.listing_id},
               })
             }
           />
@@ -169,7 +169,7 @@ const Listing = () => {
             onPress={() =>
               navigation.navigate('SecondaryStack', {
                 screen: 'ListingDetails',
-                params: {item},
+                params: {id: item.id},
               })
             }
           />

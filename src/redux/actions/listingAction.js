@@ -3,6 +3,7 @@ import constant, {URL} from '../constant';
 import {ShowToast} from '../../Custom';
 import FormData from 'form-data';
 import {Platform} from 'react-native';
+import api from '../services/api';
 
 export const createListing = (
   location,
@@ -428,20 +429,38 @@ export const ListingMessages = (match_id, setMessages) => {
       })
       .then(res => {
         // console.log('resss', res.data);
-  
-       
+
         const sortedMessages = res.data
-        .map(message => ({
-          ...message,
-          createdAt: new Date(message.createdAt).toISOString() 
-        }))
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      
+          .map(message => ({
+            ...message,
+            createdAt: new Date(message.createdAt).toISOString(),
+          }))
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
         setMessages(sortedMessages);
       })
       .catch(error => {
         console.log('listing fetch messages error ===========>', error);
         // return ShowToast('Some problem occured');
       });
+  };
+};
+
+export const getListingDetailById = (listing_id, setListingDetail) => {
+  return async dispatch => {
+    dispatch({
+      type: constant.GET_LISTING_DETAIL_BY_ID,
+    });
+
+    try {
+      const res = await api.get(`/get-listing/${listing_id}`);
+      setListingDetail(res.data);
+      dispatch({
+        type: constant.GET_LISTING_DETAIL_BY_ID_DONE,
+      });
+    } catch (error) {
+      console.log('error fetching listing detail =======>', error);
+      return ShowToast('Some problem occured');
+    }
   };
 };

@@ -7,12 +7,19 @@ import {useNavigation} from '@react-navigation/native';
 import SVGImage from './SVGImage';
 import icons from '../assets/icons';
 
-const SecondaryHeader = ({icon, text, style, link, onLinkPress, linkButton, headerStyle}) => {
+const SecondaryHeader = ({
+  text,
+  style,
+  link,
+  onLinkPress,
+  linkButton,
+  headerStyle,
+}) => {
   const navigation = useNavigation();
 
   return (
     <View style={[styles.headerView, style]}>
-      <View style={{flexDirection: 'row',  width: hp(33)}}>
+      <View style={{flexDirection: 'row', width: hp(33)}}>
         <Back
           name={'keyboard-backspace'}
           color={colors.white}
@@ -20,14 +27,19 @@ const SecondaryHeader = ({icon, text, style, link, onLinkPress, linkButton, head
           style={{alignSelf: 'center'}}
           onPress={() => navigation.goBack()}
         />
-        <Text style={[styles.headerText,headerStyle]}>{text}</Text>
+        <Text style={[styles.headerText, headerStyle]} numberOfLines={3}>
+          {text}
+        </Text>
       </View>
-        {link && (
-          <TouchableOpacity style={[styles.linkStyle,linkButton]} activeOpacity={0.9} onPress={onLinkPress}>
-            <Text style={styles.textStyle}>View Link</Text>
-          </TouchableOpacity>
-        )}
-      {icon && <SVGImage image={icons.sort} style={{alignSelf: 'center'}} />}
+      {link && (
+        <TouchableOpacity
+          style={[styles.linkStyle, linkButton]}
+          activeOpacity={0.9}
+          onPress={onLinkPress}>
+          <Text style={styles.textStyle}>View Link</Text>
+        </TouchableOpacity>
+      )}
+      {/* {icon && <SVGImage image={icons.sort} style={{alignSelf: 'center'}} />} */}
     </View>
   );
 };
