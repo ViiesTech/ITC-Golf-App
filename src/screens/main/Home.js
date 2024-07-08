@@ -53,6 +53,7 @@ const Home = () => {
 
   useEffect(() => {
     // if (listing.length < 1 && area_codes.length < 1) {
+
     dispatch(getListings(setListings));
     dispatch(getAllAreaCodes());
     dispatch(GetAds(setAds));

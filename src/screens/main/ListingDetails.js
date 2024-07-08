@@ -70,10 +70,10 @@ const ListingDetails = ({route}) => {
     const res = await dispatch(
       JoinListing(
         user.user_id,
-        item.author_id,
-        item.listing_id,
-        item.author_email,
-        `${user.username} wants to join your listing`,
+        listingDetail.author_id,
+        listingDetail.listing_id,
+        listingDetail.author_email,
+        `${user?.username} wants to join your listing`,
       ),
     );
 

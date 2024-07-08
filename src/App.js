@@ -27,7 +27,7 @@ const MainApp = () => {
   const {user} = useSelector(state => state?.AuthReducer);
   const dispatch = useDispatch();
 
-  onNotificationListeners();
+  onNotificationListeners()
 
   useEffect(() => {
     LogBox.ignoreAllLogs();

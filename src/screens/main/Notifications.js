@@ -162,6 +162,7 @@ const Notifications = () => {
     setTimeout(() => {
       try {
         dispatch(getNotifications(user.user_id, setNotifications));
+        dispatch(ReadNotifications(user.user_id));
       } catch (error) {
         console.log('error refreshing data =======>', error);
       } finally {

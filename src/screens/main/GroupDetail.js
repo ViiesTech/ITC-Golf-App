@@ -60,11 +60,11 @@ const GroupDetail = ({route}) => {
     const res = await dispatch(
       JoinGroup(
         user.user_id,
-        item.group_id,
-        item.author_id,
-        item.private_group,
-        item.author_email,
-        `${user.username} wants to join your group`,
+        groupDetail.group_id,
+        groupDetail.author_id,
+        groupDetail.private_group,
+        groupDetail.author_email,
+        `${user?.username} wants to join your group`,
       ),
     );
     if (res.success) {
