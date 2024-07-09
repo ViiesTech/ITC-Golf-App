@@ -6,6 +6,7 @@ import {
   ScrollView,
   Text,
   RefreshControl,
+  Linking,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
@@ -138,7 +139,7 @@ const Groups = () => {
                   onPress={() =>
                     navigation.navigate('SecondaryStack', {
                       screen: 'GroupDetail',
-                      params: {id: item.group_id}
+                      params: {id: item.group_id},
                     })
                   }
                 />
@@ -214,6 +215,15 @@ const Groups = () => {
     }, 3000);
   };
 
+  const onAddPress = async hyperlink => {
+    console.log('link', hyperlink);
+    if (hyperlink) {
+      await Linking.openURL(hyperlink);
+    } else {
+      return ShowToast('Url not found');
+    }
+  };
+
   return (
     <Container>
       <Header />
@@ -241,6 +251,7 @@ const Groups = () => {
                     image={{uri: item.image}}
                     title={item.title}
                     key={ind}
+                    onPress={() => onAddPress(item.url)}
                   />
                 );
               })}

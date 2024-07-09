@@ -9,6 +9,7 @@ import {Platform} from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
+
 const Routes = () => {
   const {token} = useSelector(state => state.AuthReducer);
   console.log(token);

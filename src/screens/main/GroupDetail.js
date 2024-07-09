@@ -47,12 +47,12 @@ const GroupDetail = ({route}) => {
     if (link == '') {
       return ShowToast('link not found');
     } else {
-      const supported = await Linking.canOpenURL(link);
-      if (supported) {
+      // const supported = await Linking.canOpenURL(link);
+      // if (supported) {
         await Linking.openURL(link);
-      } else {
-        return ShowToast('Invalid url');
-      }
+      // } else {
+        // return ShowToast('Invalid url');
+      // }
     }
   };
 
@@ -90,7 +90,7 @@ const GroupDetail = ({route}) => {
           <SecondaryHeader
             text={groupDetail.listing_title}
             link={true}
-            onLinkPress={() => onHyperLink(item.hyper_link)}
+            onLinkPress={() => onHyperLink(groupDetail.hyper_link)}
           />
           <ScrollView contentContainerStyle={styles.screen}>
             <View style={styles.tabView}>

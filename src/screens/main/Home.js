@@ -9,6 +9,7 @@ import {
   Dimensions,
   ActivityIndicator,
   FlatList,
+  Linking,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
@@ -33,6 +34,7 @@ import {
 } from '../../redux/actions/homeAction';
 import Sponsors from '../../components/Sponsors';
 import FastImage from 'react-native-fast-image';
+import { ShowToast } from '../../Custom';
 
 const Home = () => {
   const [selectedOption, setSelectedOption] = useState('');
@@ -223,6 +225,15 @@ const Home = () => {
     }, 3000);
   };
 
+  const onAddPress = async (hyperlink) => {
+    console.log('link', hyperlink)
+   if(hyperlink) { 
+      await Linking.openURL(hyperlink);
+  } else {
+    return ShowToast('Url not found')
+  }
+  }
+
   return (
     <>
       <AppStatusBar />
@@ -302,6 +313,7 @@ const Home = () => {
                       key={ind}
                       image={{uri: item.image}}
                       title={item.title}
+                      onPress={() => onAddPress(item.url)}
                     />
                   );
                 })}

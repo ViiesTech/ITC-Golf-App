@@ -127,18 +127,7 @@ const MerchandiseStack = () => {
   );
 };
 
-// const GiveawayStack = () => {
-//   return (
-//     <Stack.Navigator
-//       screenOptions={{
-//         headerShown: false
-//       }}
-//     >
-//       <Tab.Screen name='Giveaways' component={Giveaways} />
-//       <Tab.Screen name='RaffleGiveaways' component={RaffleGiveaways} />
-//     </Stack.Navigator>
-//   )
-// }
+
 
 const SecondaryStack = () => {
   return (

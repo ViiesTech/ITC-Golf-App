@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Text,
   RefreshControl,
+  Linking,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Container from '../../components/Container';
@@ -193,6 +194,15 @@ const Listing = () => {
     }, 3000);
   };
 
+  const onAddPress = async (hyperlink) => {
+    console.log('link', hyperlink)
+   if(hyperlink) { 
+      await Linking.openURL(hyperlink);
+  } else {
+    return ShowToast('Url not found')
+  }
+  }
+
   return (
     <Container>
       <Header />
@@ -219,6 +229,7 @@ const Listing = () => {
                   key={ind}
                   image={{uri: item.image}}
                   title={item.title}
+                  onPress={() => onAddPress(item.url)}
                 />
               );
             })}

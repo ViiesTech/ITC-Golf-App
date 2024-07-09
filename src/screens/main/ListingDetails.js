@@ -56,13 +56,13 @@ const ListingDetails = ({route}) => {
     if (link == '') {
       return ShowToast('link not found');
     } else {
-      const supported = await Linking.canOpenURL(link);
-      if (supported) {
-        alert('haha');
+      // const supported = await Linking.canOpenURL(link);
+      // if (supported) {
+        // alert('haha');
         await Linking.openURL(link);
-      } else {
-        return ShowToast('Invalid url');
-      }
+      // } else {
+        // return ShowToast('Invalid url');
+      // }
     }
   };
 
