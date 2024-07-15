@@ -1,0 +1,47 @@
+<svg id="Group_1137" data-name="Group 1137" xmlns="http://www.w3.org/2000/svg" width="19" height="18.999" viewBox="0 0 19 18.999">
+  <g id="Group_1117" data-name="Group 1117">
+    <g id="Group_1106" data-name="Group 1106">
+      <path id="Path_17135" data-name="Path 17135" d="M86.047,172.534a9.5,9.5,0,1,1-9.5-9.5A9.511,9.511,0,0,1,86.047,172.534Z" transform="translate(-67.047 -163.036)" fill="#fff"/>
+    </g>
+    <g id="Group_1107" data-name="Group 1107" transform="translate(6.212 6.208)">
+      <path id="Path_17136" data-name="Path 17136" d="M71.853,164.774a3.291,3.291,0,0,0-2.98,1.895h0c-.007.345.025,1.4.683,1.816a1.653,1.653,0,0,0,2.3-.421,1.755,1.755,0,0,1,2.139-.575c.417.2.974.679.838,1.974h0a3.295,3.295,0,0,0-2.977-4.688Z" transform="translate(-68.563 -164.774)" fill="#c60c30"/>
+      <path id="Path_17137" data-name="Path 17137" d="M75.053,168.094c.137-1.294-.421-1.776-.838-1.974a1.755,1.755,0,0,0-2.139.575,1.653,1.653,0,0,1-2.3.421c-.658-.417-.69-1.47-.683-1.816h0a3.29,3.29,0,0,0,5.957,2.793Z" transform="translate(-68.786 -163.406)" fill="#003478"/>
+    </g>
+    <g id="Group_1112" data-name="Group 1112" transform="translate(2.7 10.86)">
+      <g id="Group_1110" data-name="Group 1110" transform="translate(0 0)">
+        <g id="Group_1108" data-name="Group 1108">
+          <rect id="Rectangle_2388" data-name="Rectangle 2388" width="0.541" height="3.29" transform="translate(1.364 0.3) rotate(-33.69)"/>
+          <rect id="Rectangle_2389" data-name="Rectangle 2389" width="0.541" height="3.29" transform="translate(0 1.209) rotate(-33.69)"/>
+        </g>
+        <g id="Group_1109" data-name="Group 1109" transform="translate(0.682 0.455)">
+          <rect id="Rectangle_2390" data-name="Rectangle 2390" width="0.54" height="1.505" transform="translate(0 0.3) rotate(-33.69)"/>
+          <rect id="Rectangle_2391" data-name="Rectangle 2391" width="0.54" height="1.505" transform="translate(0.99 1.785) rotate(-33.682)"/>
+        </g>
+      </g>
+      <g id="Group_1111" data-name="Group 1111" transform="translate(9.965 0)">
+        <rect id="Rectangle_2392" data-name="Rectangle 2392" width="1.505" height="0.541" transform="translate(2.352 2.16) rotate(-56.447)"/>
+        <rect id="Rectangle_2393" data-name="Rectangle 2393" width="1.505" height="0.541" transform="translate(1.366 3.648) rotate(-56.449)"/>
+        <rect id="Rectangle_2394" data-name="Rectangle 2394" width="1.505" height="0.541" transform="translate(1.669 1.707) rotate(-56.447)"/>
+        <rect id="Rectangle_2395" data-name="Rectangle 2395" width="1.505" height="0.541" transform="translate(0.683 3.195) rotate(-56.449)"/>
+        <rect id="Rectangle_2396" data-name="Rectangle 2396" width="1.505" height="0.541" transform="translate(0 2.742) rotate(-56.449)"/>
+        <rect id="Rectangle_2397" data-name="Rectangle 2397" width="1.505" height="0.54" transform="translate(0.986 1.254) rotate(-56.426)"/>
+      </g>
+    </g>
+    <g id="Group_1116" data-name="Group 1116" transform="translate(2.7 4.183)">
+      <g id="Group_1114" data-name="Group 1114" transform="translate(9.967 0)">
+        <rect id="Rectangle_2398" data-name="Rectangle 2398" width="0.541" height="3.29" transform="matrix(0.834, -0.551, 0.551, 0.834, 0.684, 0.75)"/>
+        <g id="Group_1113" data-name="Group 1113" transform="translate(0)">
+          <rect id="Rectangle_2399" data-name="Rectangle 2399" width="0.54" height="1.505" transform="matrix(0.834, -0.551, 0.551, 0.834, 2.352, 1.786)"/>
+          <rect id="Rectangle_2400" data-name="Rectangle 2400" width="0.541" height="1.505" transform="matrix(0.834, -0.551, 0.551, 0.834, 1.367, 0.298)"/>
+          <rect id="Rectangle_2401" data-name="Rectangle 2401" width="0.54" height="1.505" transform="matrix(0.834, -0.551, 0.551, 0.834, 0.984, 2.691)"/>
+          <rect id="Rectangle_2402" data-name="Rectangle 2402" width="0.54" height="1.505" transform="matrix(0.834, -0.551, 0.551, 0.834, 0, 1.202)"/>
+        </g>
+      </g>
+      <g id="Group_1115" data-name="Group 1115" transform="translate(0 0)">
+        <rect id="Rectangle_2403" data-name="Rectangle 2403" width="0.54" height="3.29" transform="matrix(0.831, 0.556, -0.556, 0.831, 3.192, 0.912)"/>
+        <rect id="Rectangle_2404" data-name="Rectangle 2404" width="0.54" height="3.29" transform="matrix(0.831, 0.556, -0.556, 0.831, 2.511, 0.456)"/>
+        <rect id="Rectangle_2405" data-name="Rectangle 2405" width="0.54" height="3.29" transform="matrix(0.831, 0.556, -0.556, 0.831, 1.83, 0)"/>
+      </g>
+    </g>
+  </g>
+</svg>

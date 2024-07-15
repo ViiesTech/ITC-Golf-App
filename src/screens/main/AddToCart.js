@@ -1,0 +1,187 @@
+import {View, Text, ScrollView, StyleSheet, FlatList} from 'react-native';
+import React from 'react';
+import Container from '../../components/Container';
+import Header from '../../components/Header';
+import SecondaryHeader from '../../components/SecondaryHeader';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import AddToProductCard from '../../components/AddToProductCard';
+import colors from '../../assets/colors';
+import Button from '../../components/Button';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import constant from '../../redux/constant';
+
+const AddToCart = () => {
+  const {cart} = useSelector(state => state.ProductReducer);
+  console.log('product', cart);
+
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  const onIncreaseQuantity = index => {
+    const updatedCart = cart.map(item => {
+      if (item.id == cart[index].id) {
+        return {
+          ...item,
+          quantity: item.quantity + 1,
+        };
+      }
+      return item;
+    });
+    dispatch({
+      type: constant.ADD_TO_CART,
+      payload: updatedCart,
+    });
+  };
+
+  const onDecreaseQuantity = index => {
+    const updatedCart = cart.map(item => {
+      if (item.id == cart[index].id) {
+        return {
+          ...item,
+          quantity: item.quantity > 1 ? item.quantity - 1 : item.quantity,
+        };
+      }
+      return item;
+    });
+    dispatch({
+      type: constant.ADD_TO_CART,
+      payload: updatedCart,
+    });
+  };
+
+  const calculateTotal = () => {
+    return cart?.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
+
+  return (
+    <Container>
+      <Header />
+      <SecondaryHeader text={'Add To Cart'} />
+      <ScrollView
+        contentContainerStyle={styles.screen}
+        showsVerticalScrollIndicator={false}>
+        <FlatList
+          contentContainerStyle={{width: '90%', alignSelf: 'center'}}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={item => item.id}
+          data={cart}
+          renderItem={({item, index}) => {
+            return (
+              <AddToProductCard
+                image={{uri: item.image}}
+                name={item.title}
+                quantity={item.quantity}
+                price={item.price}
+                increment={() => onIncreaseQuantity(index)}
+                decrement={() => onDecreaseQuantity(index)}
+              />
+            );
+          }}
+        />
+        <View style={styles.lineA} />
+        <View style={styles.paymentContainer}>
+          <Text style={styles.paymentContainerText}>Payment Summary</Text>
+          <View style={styles.summaryDetailsContainer}>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryItemTitleText}>Total</Text>
+              <Text style={styles.summaryItemTitleText}>
+                ${calculateTotal()}
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            buttonText={'Proceed To Checkout'}
+            textStyle={styles.buttonText}
+            buttonStyle={styles.button}
+            onPress={() =>
+              navigation.navigate('SecondaryStack', {screen: 'Checkout'})
+            }
+          />
+        </View>
+      </ScrollView>
+    </Container>
+  );
+};
+
+export default AddToCart;
+
+const styles = StyleSheet.create({
+  screen: {
+    padding: hp('1%'),
+    paddingVertical: hp('1%'),
+    // backgroundColor:'red'
+  },
+  line: {
+    borderColor: colors.white,
+    borderWidth: 0.8,
+  },
+  lineA: {
+    borderColor: colors.white,
+    borderWidth: 0.8,
+    width: '90%',
+    alignSelf: 'center',
+    marginVertical: hp('2%'),
+  },
+  paymentContainer: {
+    width: '90%',
+    alignSelf: 'center',
+    marginTop: hp('1%'),
+  },
+  paymentContainerText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: hp('2.5%'),
+  },
+  summaryDetailsContainer: {
+    width: '100%',
+    borderWidth: 0.5,
+    borderColor: colors.white,
+    padding: 10,
+    borderRadius: 15,
+    marginTop: hp('3%'),
+    backgroundColor: colors.secondary,
+  },
+  summaryItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    // borderBottomWidth: 0.5,
+    // borderColor: '#D49621',
+    padding: 10,
+  },
+  summaryItemLast: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+  },
+  summaryItemTitleText: {
+    color: '#efefef',
+    fontSize: hp('1.8%'),
+  },
+  summaryItemTotalTitle: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: hp('1.8%'),
+  },
+  summaryItemTotalPrice: {
+    color: '#D49621',
+    fontWeight: 'bold',
+    fontSize: hp('1.8%'),
+  },
+  buttonContainer: {
+    marginTop: hp('5%'),
+    width: '90%',
+    alignSelf: 'center',
+  },
+  buttonText: {
+    fontSize: hp('2%'),
+    color: colors.secondary,
+  },
+  button: {
+    borderRadius: 100,
+  },
+});

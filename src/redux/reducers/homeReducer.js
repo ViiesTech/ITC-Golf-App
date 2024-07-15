@@ -1,0 +1,89 @@
+import constant from '../constant';
+
+const initialState = {
+  group_loader: false,
+  // reviews: [],
+  // reviews_loading: false,
+  loader: false,
+  notification_loader: false,
+  notifications: [],
+  area_codes: [],
+  groups_filter: [],
+  filter_loading: false,
+  listings_filter: [],
+  listings_filter_loader: false,
+  accept_loader: false,
+  reject_loader: false,
+  about_description: '',
+  about_loader: false,
+  noti_count: 0
+};
+
+export default (state = initialState, action) => {
+  switch (action.type) {
+    case constant.GET_AREA_CODES:
+      return {...state, area_codes: action.payload};
+
+    case constant.GET_LISTING:
+      return {...state, loader: true};
+
+    case constant.GET_LISTING_DONE:
+      return {...state, loader: false};
+
+    case constant.GET_GROUPS:
+      return {...state, group_loader: true};
+
+    case constant.GET_GROUPS_DONE:
+      return {...state, group_loader: false,};
+
+    // case constant.GET_REVIEWS:
+    //   return {...state, reviews_loading: true};
+
+    // case constant.GET_REVIEWS_DONE:
+    //   return {...state, reviews_loading: false, reviews: action.payload};
+
+    case constant.GET_NOTIFICATIONS:
+      return {...state, notification_loader: true};
+
+    case constant.GET_NOTIFICATIONS_DONE:
+      return {
+        ...state,
+        notification_loader: false,
+      };
+
+    case constant.GROUPS_BY_AREACODE:
+      return {...state, filter_loading: true};
+
+    case constant.GROUPS_BY_AREACODE_DONE:
+      return {
+        ...state,
+        filter_loading: false,
+        groups_filter: action.payload,
+      };
+
+    case constant.LISTINGS_BY_AREACODE:
+      return {...state, listings_filter_loader: true};
+
+    case constant.LISTINGS_BY_AREACODE_DONE:
+      return {
+        ...state,
+        listings_filter: action.payload,
+        listings_filter_loader: false,
+      };
+
+    case constant.GET_ABOUT:
+      return {...state, about_loader: true};
+
+    case constant.GET_ABOUT_DONE:
+      return {...state, about_loader: false, about_description: action.payload};
+
+    case constant.BELL_COUNTER:
+      return {...state, noti_count: action.payload}
+
+    // case constant.MARK_NOTIFICATION_AS_READ:
+
+
+    default:
+      return state;
+  }
+};

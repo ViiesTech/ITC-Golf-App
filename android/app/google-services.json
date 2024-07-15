@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "1070776133141",
+    "firebase_url": "https://itc-golf-7134c-default-rtdb.firebaseio.com",
+    "project_id": "itc-golf-7134c",
+    "storage_bucket": "itc-golf-7134c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070776133141:android:efb65e5f89089c9844101c",
+        "android_client_info": {
+          "package_name": "com.inthecupgolf"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkemhoCAL1VXNUFwuB6JVavaelpaSFkys"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070776133141:android:cc6c22a7ed5aaa1544101c",
+        "android_client_info": {
+          "package_name": "com.itcgolf"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkemhoCAL1VXNUFwuB6JVavaelpaSFkys"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
