@@ -47,17 +47,17 @@ class Notifications {
     //   await this.displayNotification(remoteMessage);
     // });
     if (!this.messageListener) {
-    this.messageListener = messaging().onMessage(async remoteMessage => {
-      console.log('notification from backend ====>', remoteMessage);
+      this.messageListener = messaging().onMessage(async remoteMessage => {
+        console.log('notification from backend ====>', remoteMessage);
         await this.displayNotification(remoteMessage);
-    });
+      });
+    }
   }
-}
 
   unsubscribeFCM() {
     if (this.messageListener) {
       this.messageListener();
-      this.messageListener = null
+      this.messageListener = null;
     }
   }
 }
