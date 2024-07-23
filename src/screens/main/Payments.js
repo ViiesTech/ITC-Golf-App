@@ -40,10 +40,11 @@ const Payments = ({route}) => {
 
   const {country, desc, address, city} = route.params;
 
-  // console.log('dataa from previous screen ======>', route.params);
   const {cart} = useSelector(state => state.ProductReducer);
 
-  // console.log('dataaaa', checkMethod.type !== state.card_type);
+  console.log('dataaaa', checkMethod.type !== state.card_type);
+  console.log('dataa state ======>', state);
+
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -85,7 +86,7 @@ const Payments = ({route}) => {
       var card = await stripe.createToken(information);
       var token = card.id;
 
-      console.log('stripe tokennnnn =======>', token);
+    // return  console.log('stripe tokennnnn =======>', information);
       const res = await dispatch(
         payment(user.user_id, user.user_email, desc, token, product),
       );

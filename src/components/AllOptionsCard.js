@@ -1,5 +1,5 @@
-import {StyleSheet, Text, View, TouchableOpacity, Platform} from 'react-native';
 import React from 'react';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import colors from '../assets/colors';
 import {
   heightPercentageToDP as hp,
@@ -14,31 +14,42 @@ const AllOptionsCard = ({active, onChangeTab}) => {
 
   return (
     <View style={styles.card}>
-      {Screens.slice(0, 3).map(item => (
-        <>
-          <View style={item.id !== 1 && item.id !== 4 && styles.line} />
-          <TouchableOpacity
-            activeOpacity={0.9}
-            onPress={() => onTextPress(item.text)}>
-            <Text
-              style={[
-                styles.text,
-                {color: active === item.text ? colors.secondary : colors.white},
-              ]}>
-              {item.text}
-            </Text>
-          </TouchableOpacity>
-        </>
-      ))}
-      <TouchableOpacity onPress={() =>onTextPress('My Profile')} activeOpacity={0.9}>
-        <Text
-          style={[
-            styles.text,
-            {color: active === 'My Profile' ? colors.secondary : colors.white},
-          ]}>
-          {'My Profile'}
-        </Text>
-      </TouchableOpacity>
+      <View style={styles.topRow}>
+        {Screens.map((item, index) => (
+          <>
+            {index !== 0 && <View style={styles.line} />}
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={() => onTextPress(item.text)}
+              style={styles.touchable}>
+              <Text
+                style={[
+                  styles.text,
+                  {
+                    color:
+                      active === item.text ? colors.secondary : colors.white,
+                  },
+                ]}>
+                {item.text}
+              </Text>
+            </TouchableOpacity>
+          </>
+        ))}
+      </View>
+        <TouchableOpacity
+          activeOpacity={0.9}
+          onPress={() => onTextPress('My Profile')}>
+          <Text
+            style={[
+              styles.text,
+              {
+                color:
+                  active === 'My Profile' ? colors.secondary : colors.white,
+              },
+            ]}>
+            My Profile
+          </Text>
+        </TouchableOpacity>
     </View>
   );
 };
@@ -48,22 +59,28 @@ export default AllOptionsCard;
 const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.primary,
-    borderRadius: 8,
-    padding: hp('1.6%'),
+    borderRadius: 10,
+    padding: hp('2%'),
+    alignItems: 'center',
+  },
+  topRow: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    // gap: 0.1,
-    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: hp('1.6%'),
+  },
+  touchable: {
+    paddingHorizontal: wp('2%'),
   },
   text: {
-    alignSelf: 'center',
-    fontSize: Platform.OS === 'ios' ? hp('1.1%') : hp('1.4%'),
+    fontSize: hp('1.3%'),
     fontWeight: 'bold',
   },
   line: {
-    height: hp('2.5%'),
-    marginHorizontal: hp('1.5%'),
+    height: '100%',
     width: 1,
     backgroundColor: colors.white,
+    // marginHorizontal: wp('1%'),
   },
 });

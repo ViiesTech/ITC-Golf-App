@@ -80,7 +80,17 @@ const ManageCards = () => {
       if (cardExist) {
         // alert('or kesa hai');
         const updatedCard = card.map(item =>
-          item.card_id === state.card_id ? {...state} : item,
+          item.card_id === state.card_id
+            ? {
+                ...state,
+                card_type:
+                  identifyCardType(state.card_number) === 'AmericanExpress'
+                    ? 'AmericanExpress'
+                    : identifyCardType(state.card_number) === 'Mastercard'
+                    ? 'Mastercard'
+                    : 'Visa',
+              }
+            : item,
         );
         dispatch(createCard(updatedCard));
         sheetRef.current.close();

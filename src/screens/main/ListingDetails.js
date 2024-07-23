@@ -218,7 +218,7 @@ const ListingDetails = ({route}) => {
                       params: {
                         title: listingDetail.listing_title,
                         type: 'listing',
-                        listing_id: listing_id,
+                        listing_id: listingDetail.listing_id,
                       },
                     });
                   }}

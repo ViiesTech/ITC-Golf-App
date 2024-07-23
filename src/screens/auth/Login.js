@@ -48,8 +48,10 @@ const Login = () => {
   };
 
   const onLoginPress = async () => {
-    if (!username || !password || !device_token) {
-      return ShowToast('Please provide your credentials');
+    if (!username) {
+      return ShowToast('Please enter your username');
+    } else if (!password) {
+      return ShowToast('Please enter your password');
     } else {
       await dispatch(signin(username, password, device_token));
     }

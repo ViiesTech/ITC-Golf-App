@@ -175,8 +175,8 @@ const Home = () => {
               date={item.course_date}
               desc={item.match_description}
               image={
-                item.feature_image
-                  ? {uri: item.feature_image, priority: FastImage.priority.high}
+                item.featured_image_url
+                  ? {uri: item.featured_image_url, priority: FastImage.priority.high}
                   : images.dummy
               }
               onPress={() =>

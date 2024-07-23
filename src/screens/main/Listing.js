@@ -47,7 +47,7 @@ const Listing = () => {
 
   const dispatch = useDispatch();
 
-  // console.log('filtered resultsss ======>', searchPressed, selectedCode);
+  console.log('filtered resultsss ======>', listings_filter);
 
   useEffect(() => {
     dispatch(getListings(setListings));
@@ -151,8 +151,8 @@ const Listing = () => {
         renderItem={({item, index}) => (
           <ListingDetailCard
             listingImage={
-              item.feature_image
-                ? {uri: item.feature_image, priority: FastImage.priority.high}
+              item.featured_image_url
+                ? {uri: item.featured_image_url, priority: FastImage.priority.high}
                 : images.dummy
             }
             route={routeName}

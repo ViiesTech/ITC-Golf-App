@@ -123,8 +123,8 @@ const Discover = ({searchPressed}) => {
         renderItem={({item, index}) => (
           <DiscoverCard
             image={
-              item.feature_image
-                ? {uri: item.feature_image, priority: FastImage.priority.high}
+              item.featured_image_url
+                ? {uri: item.featured_image_url, priority: FastImage.priority.high}
                 : images.dummy
             }
             onPress={() =>
