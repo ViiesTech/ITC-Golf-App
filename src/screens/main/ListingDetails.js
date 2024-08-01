@@ -106,7 +106,7 @@ const ListingDetails = ({route}) => {
             <View style={styles.tabView}>
               <PersonalInfoTab
                 text={'Personal Information'}
-                onPress={() => setChangeTab(item.id)}
+                // onPress={() => setChangeTab(item.id)}
               />
             </View>
             <>

@@ -5,7 +5,7 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 const PersonalInfoTab = ({ text, style, onPress, textStyle }) => {
     return (
-        <TouchableOpacity style={[styles.button, style]} activeOpacity={0.9} onPress={onPress}>
+        <TouchableOpacity style={[styles.button, style]} activeOpacity={0.9} onPress={onPress} disabled={true}>
             <Text style={[styles.buttonText, textStyle]}>{text}</Text>
         </TouchableOpacity>
     )

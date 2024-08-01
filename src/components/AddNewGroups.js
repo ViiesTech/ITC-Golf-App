@@ -624,7 +624,7 @@ const AddNew = ({groupData}) => {
 };
 
 export const AddNewGroups = ({buttonPressed}) => {
-  const [index, setIndex] = React.useState('first');
+  const [index, setIndex] = React.useState('third');
   const [routes] = React.useState([
     {key: 'first', title: 'Discover'},
     {key: 'second', title: 'My Groups'},

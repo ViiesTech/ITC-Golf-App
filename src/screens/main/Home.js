@@ -18,34 +18,31 @@ import images from '../../assets/images';
 import colors from '../../assets/colors';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import ListingCard from '../../components/ListingCard';
-import Button from '../../components/Button';
 import ArrowDown from 'react-native-vector-icons/SimpleLineIcons';
 import Video from 'react-native-video';
 import {useNavigation} from '@react-navigation/native';
 import AppStatusBar from '../../components/AppStatusBar';
-import {Picker} from '@react-native-picker/picker';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  FilterAdsByAreaCode,
   GetAds,
-  ListingsByAreaCodes,
   getAllAreaCodes,
   getListings,
 } from '../../redux/actions/homeAction';
 import Sponsors from '../../components/Sponsors';
 import FastImage from 'react-native-fast-image';
 import { ShowToast } from '../../Custom';
+import Add from 'react-native-vector-icons/MaterialIcons';
 
 const Home = () => {
-  const [selectedOption, setSelectedOption] = useState('');
-  const [searchPressed, setSearchPressed] = useState(false);
+  // const [selectedOption, setSelectedOption] = useState('');
+  // const [searchPressed, setSearchPressed] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [listings, setListings] = useState([]);
   const [ads, setAds] = useState([]);
 
   const width = Dimensions.get('screen').width;
 
-  const {loader, area_codes, listings_filter, listings_filter_loader} =
+  const {loader} =
     useSelector(state => state.HomeReducer);
   // console.log('listinggg filtered =====>', ads);
 
@@ -76,15 +73,15 @@ const Home = () => {
     );
   }
 
-  const onSearchAreaCode = async () => {
-    if (selectedOption) {
-      await dispatch(FilterAdsByAreaCode(selectedOption, setAds));
-      await dispatch(ListingsByAreaCodes(selectedOption));
-      setSearchPressed(true);
-    } else {
-      setSearchPressed(false);
-    }
-  };
+  // const onSearchAreaCode = async () => {
+  //   if (selectedOption) {
+  //     await dispatch(FilterAdsByAreaCode(selectedOption, setAds));
+  //     await dispatch(ListingsByAreaCodes(selectedOption));
+  //     setSearchPressed(true);
+  //   } else {
+  //     setSearchPressed(false);
+  //   }
+  // };
 
   const renderAllListings = () => {
     return (
@@ -142,72 +139,72 @@ const Home = () => {
     );
   };
 
-  const renderFilterListings = () => {
-    return listings_filter_loader
-      ? renderFilterLoader()
-      : listings_filter?.message
-      ? renderFilterMessage()
-      : listings_filter?.map((item, index) => (
-          <View
-            key={index}
-            style={
-              index !== 7 && {
-                borderBottomWidth: 1,
-                borderBottomColor: colors.lightgray,
-                marginBottom: hp('2.5%'),
-              }
-            }>
-            <ListingCard
-              key={item.id}
-              number={index + 1}
-              title={item.listing_title}
-              // descStyle={{ width: index == 0 ? '20%' : index == 1 ? '40%' : '100%' }}
-              count={
-                item.how_many_players == 'Select a Value'
-                  ? '3'
-                  : item.how_many_players
-              }
-              exp={
-                item.experience_level == ''
-                  ? '5 to 10 par progress-level'
-                  : item.experience_level
-              }
-              date={item.course_date}
-              desc={item.match_description}
-              image={
-                item.featured_image_url
-                  ? {uri: item.featured_image_url, priority: FastImage.priority.high}
-                  : images.dummy
-              }
-              onPress={() =>
-                navigation.navigate('SecondaryStack', {
-                  screen: 'ListingDetails',
-                  params: {id: item.id}
-                })
-              }
-            />
-          </View>
-        ));
-  };
+  // const renderFilterListings = () => {
+  //   return listings_filter_loader
+  //     ? renderFilterLoader()
+  //     : listings_filter?.message
+  //     ? renderFilterMessage()
+  //     : listings_filter?.map((item, index) => (
+  //         <View
+  //           key={index}
+  //           style={
+  //             index !== 7 && {
+  //               borderBottomWidth: 1,
+  //               borderBottomColor: colors.lightgray,
+  //               marginBottom: hp('2.5%'),
+  //             }
+  //           }>
+  //           <ListingCard
+  //             key={item.id}
+  //             number={index + 1}
+  //             title={item.listing_title}
+  //             // descStyle={{ width: index == 0 ? '20%' : index == 1 ? '40%' : '100%' }}
+  //             count={
+  //               item.how_many_players == 'Select a Value'
+  //                 ? '3'
+  //                 : item.how_many_players
+  //             }
+  //             exp={
+  //               item.experience_level == ''
+  //                 ? '5 to 10 par progress-level'
+  //                 : item.experience_level
+  //             }
+  //             date={item.course_date}
+  //             desc={item.match_description}
+  //             image={
+  //               item.featured_image_url
+  //                 ? {uri: item.featured_image_url, priority: FastImage.priority.high}
+  //                 : images.dummy
+  //             }
+  //             onPress={() =>
+  //               navigation.navigate('SecondaryStack', {
+  //                 screen: 'ListingDetails',
+  //                 params: {id: item.id}
+  //               })
+  //             }
+  //           />
+  //         </View>
+  //       ));
+  // };
 
-  const renderFilterLoader = () => {
-    return (
-      <View style={{alignItems: 'center', marginVertical: hp('2%')}}>
-        <ActivityIndicator size={'large'} color={colors.primary} />
-      </View>
-    );
-  };
+  // const renderFilterLoader = () => {
+  //   return (
+  //     <View style={{alignItems: 'center', marginVertical: hp('2%')}}>
+  //       <ActivityIndicator size={'large'} color={colors.primary} />
+  //     </View>
+  //   );
+  // };
 
-  const renderFilterMessage = () => {
-    return (
-      <View style={{alignItems: 'center', marginVertical: hp('2%')}}>
-        <Text
-          style={{color: colors.white, fontWeight: 'bold', fontSize: hp('2%')}}>
-          {listings_filter?.message}
-        </Text>
-      </View>
-    );
-  };
+  // const renderFilterMessage = () => {
+  //   return (
+  //     <View style={{alignItems: 'center', marginVertical: hp('2%')}}>
+  //       <Text
+  //         style={{color: colors.white, fontWeight: 'bold', fontSize: hp('2%')}}>
+  //         {listings_filter?.message}
+  //       </Text>
+  //     </View>
+  //   );
+  // };
 
   const handleRefresh = () => {
     setRefreshing(true);
@@ -232,6 +229,13 @@ const Home = () => {
   } else {
     return ShowToast('Url not found')
   }
+  }
+
+  const onPressIcon = () => {
+    navigation.navigate('SecondaryStack', {
+      screen: 'AllGroups',
+      params: {options: 'Add New Listings',},
+    });
   }
 
   return (
@@ -272,7 +276,7 @@ const Home = () => {
             </Text>
           </View>
           <View style={{padding: hp('2%')}}>
-            <View style={styles.border}>
+            {/* <View style={styles.border}>
               <Text style={styles.textStyle}>Area Code</Text>
               <View style={styles.pickerStyle}>
                 <Picker
@@ -304,10 +308,11 @@ const Home = () => {
                 icon={true}
                 onPress={() => onSearchAreaCode()}
               />
-            </View>
-            {listings_filter_loader
-              ? renderFilterLoader()
-              : ads?.data?.map((item, ind) => {
+            </View> */}
+            {/* {listings_filter_loader
+              ? renderFilterLoader() */}
+              {/* : */}
+               {ads?.data?.map((item, ind) => {
                   return (
                     <Sponsors
                       key={ind}
@@ -319,7 +324,7 @@ const Home = () => {
                 })}
             <Text style={styles.text}>Listing</Text>
             <View style={styles.cardWrapper}>
-              {searchPressed ? renderFilterListings() : renderAllListings()}
+              {renderAllListings()}
             </View>
             <TouchableOpacity
               style={styles.button}
@@ -333,6 +338,9 @@ const Home = () => {
             </View>
           </View>
         </ScrollView>
+        <TouchableOpacity style={styles.addView} activeOpacity={0.9} onPress={() => onPressIcon()}>
+        <Add name={'add'} color={colors.secondary} size={30} />
+        </TouchableOpacity>
       </Container>
     </>
   );
@@ -421,4 +429,18 @@ const styles = StyleSheet.create({
     fontSize: hp('1.8%'),
     fontWeight: 'bold',
   },
+  addView: {
+    borderRadius: 100,
+    backgroundColor: colors.primary,
+    height: hp(7),
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    bottom: hp(3),
+    borderWidth: 2,
+    borderColor: colors.secondary,
+    right: hp(4),
+    width: hp(7)
+  }
 });

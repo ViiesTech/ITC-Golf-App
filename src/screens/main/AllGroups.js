@@ -53,7 +53,7 @@ const AllGroups = ({route}) => {
 
   const {listing_id} = useSelector(state => state.ListingReducer);
 
-  console.log('updated user response =======>', user);
+  // console.log('updated user response =======>', user);
 
   const [state, setState] = useState({
     first_name: user.firstname,
@@ -73,6 +73,7 @@ const AllGroups = ({route}) => {
   });
 
   const {options} = route.params;
+
 
   const navigation = useNavigation();
 
