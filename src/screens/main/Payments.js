@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, Animated} from 'react-native';
 import React, {useRef, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
@@ -18,11 +18,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {payment} from '../../redux/actions/authAction';
 import {ShowToast} from '../../Custom';
-import { STRIPE_KEY } from '../../redux/constant';
+import {STRIPE_KEY} from '../../redux/constant';
+import ScrollGuide from '../../components/ScrollGuide';
 var stripe = require('stripe-client')(STRIPE_KEY);
 
 const Payments = ({route}) => {
+  const [showArrow, setShowArrow] = useState(true);
   const {card, payment_loading, user} = useSelector(state => state.AuthReducer);
+
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const [state, setState] = useState({
     card_holder: card[0]?.card_holder,
@@ -44,7 +48,6 @@ const Payments = ({route}) => {
 
   console.log('dataaaa', checkMethod.type !== state.card_type);
   console.log('dataa state ======>', state);
-
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -86,7 +89,7 @@ const Payments = ({route}) => {
       var card = await stripe.createToken(information);
       var token = card.id;
 
-    // return  console.log('stripe tokennnnn =======>', information);
+      // return  console.log('stripe tokennnnn =======>', information);
       const res = await dispatch(
         payment(user.user_id, user.user_email, desc, token, product),
       );
@@ -120,13 +123,27 @@ const Payments = ({route}) => {
     });
   };
 
+  const handleScroll = Animated.event(
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
+    {
+      useNativeDriver: false,
+      listener: event => {
+        const currentOffsetY = event.nativeEvent.contentOffset.y;
+        setShowArrow(currentOffsetY < 100);
+      },
+    },
+  );
+
   // console.log('carddd', state);
 
   return (
     <Container>
       <Header />
       <SecondaryHeader text={'Payment'} icon={true} />
-      <ScrollView contentContainerStyle={styles.screen}>
+      <ScrollView
+        contentContainerStyle={styles.screen}
+        scrollEventThrottle={16}
+        onScroll={handleScroll}>
         {/* <Text style={styles.heading}>Payment Method</Text> */}
         <View style={styles.locationWrapper}>
           <View style={{flexDirection: 'row'}}>
@@ -247,6 +264,7 @@ const Payments = ({route}) => {
           />
         </View>
       </ScrollView>
+      {showArrow && <ScrollGuide />}
     </Container>
   );
 };

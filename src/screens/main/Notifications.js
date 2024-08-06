@@ -6,8 +6,9 @@ import {
   Image,
   ActivityIndicator,
   RefreshControl,
+  Animated,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -28,11 +29,15 @@ import {ShowToast} from '../../Custom';
 import constant from '../../redux/constant';
 import {AcceptGroup, RejectGroup} from '../../redux/actions/groupAction';
 import {concatNotification_text} from '../../utils/HelperFunctions';
+import ScrollGuide from '../../components/ScrollGuide';
 
 const Notifications = () => {
   const [isIndex, setIsIndex] = useState(0);
   const [notifications, setNotifications] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [showArrow, setShowArrow] = useState(true);
+
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const {notification_loader} = useSelector(state => state.HomeReducer);
 
@@ -171,6 +176,17 @@ const Notifications = () => {
     }, 3000);
   };
 
+  const handleScroll = Animated.event(
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
+    {
+      useNativeDriver: false,
+      listener: event => {
+        const currentOffsetY = event.nativeEvent.contentOffset.y;
+        setShowArrow(currentOffsetY < 100);
+      },
+    },
+  );
+
   return (
     <Container>
       <Header />
@@ -190,57 +206,65 @@ const Notifications = () => {
           </View>
         </>
       ) : (
-        <ScrollView
-          contentContainerStyle={styles.screen}
-          refreshControl={
-            <RefreshControl
-              onRefresh={() => handleRefresh()}
-              refreshing={refreshing}
-              colors={[colors.primary]}
-              tintColor={colors.primary}
-            />
-          }
-          showsVerticalScrollIndicator={false}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            {/* <Text style={styles.heading}>Today</Text> */}
-            {/* <Text style={styles.read}>Mark As All Read</Text> */}
-          </View>
-          <View style={styles.notificationWrapper}>
-            {notifications?.map((item, index) => {
-              // console.log('woww', item.listing_id);
-              return (
-                <NotificationsCard
-                  image={
-                    item.listing_image === 'image not found'
-                      ? images.dummy
-                      : {uri: item.listing_image}
-                  }
-                  onAcceptPress={() => onAcceptRequest(item, index)}
-                  accept_loader={index == isIndex && accept_loader}
-                  reject_loader={index == isIndex && reject_loader}
-                  status={item.listing_status}
-                  hidebuttons={item.listing_status === 'pending' ? false : true}
-                  onRejectPress={() => onRejectRequest(item, index)}
-                  text={concatNotification_text(
-                    item.listing_requester_name,
-                    item.notification_text,
-                  )}
-                  desc={item.listing_name}
-                  date={moment(item.create_date).format('DD MMMM YYYY')}
-                  nav={item.listing_id}
-                  type={item.listing_type}
-                />
-              );
-            })}
-          </View>
-          {/* <Text style={styles.heading}>Yesterday</Text> */}
-          {/* <View style={styles.notificationWrapper}>
+        <>
+          <ScrollView
+            contentContainerStyle={styles.screen}
+            scrollEventThrottle={16}
+            onScroll={handleScroll}
+            refreshControl={
+              <RefreshControl
+                onRefresh={() => handleRefresh()}
+                refreshing={refreshing}
+                colors={[colors.primary]}
+                tintColor={colors.primary}
+              />
+            }
+            showsVerticalScrollIndicator={false}>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              {/* <Text style={styles.heading}>Today</Text> */}
+              {/* <Text style={styles.read}>Mark As All Read</Text> */}
+            </View>
+            <View style={styles.notificationWrapper}>
+              {notifications?.map((item, index) => {
+                // console.log('woww', item.listing_id);
+                return (
+                  <NotificationsCard
+                    image={
+                      item.listing_image === 'image not found'
+                        ? images.dummy
+                        : {uri: item.listing_image}
+                    }
+                    onAcceptPress={() => onAcceptRequest(item, index)}
+                    accept_loader={index == isIndex && accept_loader}
+                    reject_loader={index == isIndex && reject_loader}
+                    status={item.listing_status}
+                    hidebuttons={
+                      item.listing_status === 'pending' ? false : true
+                    }
+                    onRejectPress={() => onRejectRequest(item, index)}
+                    text={concatNotification_text(
+                      item.listing_requester_name,
+                      item.notification_text,
+                    )}
+                    desc={item.listing_name}
+                    date={moment(item.create_date).format('DD MMMM YYYY')}
+                    nav={item.listing_id}
+                    type={item.listing_type}
+                  />
+                );
+              })}
+            </View>
+            {/* <Text style={styles.heading}>Yesterday</Text> */}
+            {/* <View style={styles.notificationWrapper}>
               {YesterdayNotifications?.map(item => (
                 <NotificationsCard image={item.image} />
               ))}
             </View> */}
-          <SVGImage image={icons.pageEnd} style={{alignSelf: 'center'}} />
-        </ScrollView>
+            <SVGImage image={icons.pageEnd} style={{alignSelf: 'center'}} />
+          </ScrollView>
+          {showArrow && <ScrollGuide />}
+        </>
       )}
     </Container>
   );

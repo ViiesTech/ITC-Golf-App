@@ -7,8 +7,9 @@ import {
   Text,
   RefreshControl,
   Linking,
+  Animated,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -29,6 +30,7 @@ import images from '../../assets/images';
 import FastImage from 'react-native-fast-image';
 import {timeFormatting} from '../../utils/HelperFunctions';
 import {ShowToast} from '../../Custom';
+import ScrollGuide from '../../components/ScrollGuide';
 
 const Listing = () => {
   const [selectedCode, setSelectedCode] = useState(null);
@@ -36,6 +38,8 @@ const Listing = () => {
   const [listings, setListings] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [ads, setAds] = useState([]);
+  const [showArrow, setShowArrow] = useState(true)
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const navigation = useNavigation();
   // console.log('lets see', navigation.getState().routes[1].name);
@@ -203,11 +207,25 @@ const Listing = () => {
   }
   }
 
+
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    {
+      useNativeDriver: false,
+      listener: (event) => {
+        const currentOffsetY = event.nativeEvent.contentOffset.y;
+        setShowArrow(currentOffsetY < 100);
+      },
+    }
+  );
+
   return (
     <Container>
       <Header />
       <ScrollView
         contentContainerStyle={styles.screen}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -236,6 +254,9 @@ const Listing = () => {
         <SecondaryHeader text={'Listing'} />
         {searchPressed ? renderFilterListings() : renderAllListings()}
       </ScrollView>
+      {showArrow && ( 
+        <ScrollGuide />
+        )} 
     </Container>
   );
 };

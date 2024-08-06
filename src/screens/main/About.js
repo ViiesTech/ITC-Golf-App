@@ -5,8 +5,9 @@ import {
   View,
   ScrollView,
   ActivityIndicator,
+  Animated,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -15,13 +16,17 @@ import images from '../../assets/images';
 import colors from '../../assets/colors';
 import {useDispatch, useSelector} from 'react-redux';
 import {AboutSection} from '../../redux/actions/homeAction';
+import ScrollGuide from '../../components/ScrollGuide';
 
 const About = () => {
-  const dispatch = useDispatch();
+  const [showArrow, setShowArrow] = useState(true);
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const {about_description, about_loader} = useSelector(
     state => state.HomeReducer,
   );
+
+  const dispatch = useDispatch();
 
   // console.log(about_description)
 
@@ -35,6 +40,17 @@ const About = () => {
     await dispatch(AboutSection());
   };
 
+  const handleScroll = Animated.event(
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
+    {
+      useNativeDriver: false,
+      listener: event => {
+        const currentOffsetY = event.nativeEvent.contentOffset.y;
+        setShowArrow(currentOffsetY < 100);
+      },
+    },
+  );
+
   return (
     <Container>
       <Header />
@@ -46,37 +62,42 @@ const About = () => {
           style={{marginVertical: hp('5%')}}
         />
       ) : (
-        <ScrollView
-          contentContainerStyle={styles.screen}
-          showsVerticalScrollIndicator={false}>
-          <Image
-            source={images.about1}
-            style={styles.image}
-            borderRadius={10}
-          />
-          <View style={{paddingTop: hp('3%')}}>
-            <Text style={styles.aboutText}>{about_description}</Text>
-            <View style={styles.imageWrapper}>
-              <Image
-                source={images.about2}
-                style={styles.image2}
-                borderRadius={10}
-              />
-              <View>
+        <>
+          <ScrollView
+            contentContainerStyle={styles.screen}
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+            showsVerticalScrollIndicator={false}>
+            <Image
+              source={images.about1}
+              style={styles.image}
+              borderRadius={10}
+            />
+            <View style={{paddingTop: hp('3%')}}>
+              <Text style={styles.aboutText}>{about_description}</Text>
+              <View style={styles.imageWrapper}>
                 <Image
-                  source={images.about3}
-                  style={styles.image3}
+                  source={images.about2}
+                  style={styles.image2}
                   borderRadius={10}
                 />
-                <Image
-                  source={images.about4}
-                  style={[styles.image3, {marginTop: hp('1%')}]}
-                  borderRadius={10}
-                />
+                <View>
+                  <Image
+                    source={images.about3}
+                    style={styles.image3}
+                    borderRadius={10}
+                  />
+                  <Image
+                    source={images.about4}
+                    style={[styles.image3, {marginTop: hp('1%')}]}
+                    borderRadius={10}
+                  />
+                </View>
               </View>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
+          {showArrow && <ScrollGuide />}
+        </>
       )}
     </Container>
   );

@@ -1,5 +1,5 @@
-import {View, Text, ScrollView, StyleSheet, FlatList} from 'react-native';
-import React from 'react';
+import {View, Text, ScrollView, StyleSheet, FlatList, Animated} from 'react-native';
+import React, { useRef, useState } from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -10,10 +10,14 @@ import Button from '../../components/Button';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import constant from '../../redux/constant';
+import ScrollGuide from '../../components/ScrollGuide';
 
 const AddToCart = () => {
+  const [showArrow, setShowArrow] = useState(true)
   const {cart} = useSelector(state => state.ProductReducer);
   console.log('product', cart);
+
+  const scrollY = useRef(new Animated.Value(0)).current
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -54,12 +58,25 @@ const AddToCart = () => {
     return cart?.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
+  const handleScroll = Animated.event(
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
+    {
+      useNativeDriver: false,
+      listener: event => {
+        const currentOffsetY = event.nativeEvent.contentOffset.y;
+        setShowArrow(currentOffsetY < 100);
+      },
+    },
+  );
+
   return (
     <Container>
       <Header />
       <SecondaryHeader text={'Add To Cart'} />
       <ScrollView
         contentContainerStyle={styles.screen}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
         <FlatList
           contentContainerStyle={{width: '90%', alignSelf: 'center'}}
@@ -102,6 +119,9 @@ const AddToCart = () => {
           />
         </View>
       </ScrollView>
+      {showArrow &&
+        <ScrollGuide />
+      }
     </Container>
   );
 };

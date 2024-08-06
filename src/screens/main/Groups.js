@@ -7,8 +7,9 @@ import {
   Text,
   RefreshControl,
   Linking,
+  Animated,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -28,6 +29,7 @@ import Sponsors from '../../components/Sponsors';
 import images from '../../assets/images';
 import FastImage from 'react-native-fast-image';
 import {ShowToast} from '../../Custom';
+import ScrollGuide from '../../components/ScrollGuide';
 
 const Groups = () => {
   const navigation = useNavigation();
@@ -36,6 +38,7 @@ const Groups = () => {
   const [groups, setGroups] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [ads, setAds] = useState([]);
+  const [showArrow, setShowArrow] = useState(true);
 
   const {group_loader, groups_filter, filter_loading} = useSelector(
     state => state.HomeReducer,
@@ -43,6 +46,7 @@ const Groups = () => {
   // console.log('from group screen =============>', groups_filter);
 
   const routeName = navigation.getState().routes[3].name;
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const dispatch = useDispatch();
 
@@ -224,11 +228,24 @@ const Groups = () => {
     }
   };
 
+  const handleScroll = Animated.event(
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
+    {
+      useNativeDriver: false,
+      listener: event => {
+        const currentOffsetY = event.nativeEvent.contentOffset.y;
+        setShowArrow(currentOffsetY < 100);
+      },
+    },
+  );
+
   return (
     <Container>
       <Header />
       <ScrollView
         contentContainerStyle={styles.screen}
+        scrollEventThrottle={16}
+        onScroll={handleScroll}
         refreshControl={
           <RefreshControl
             onRefresh={() => handleRefresh()}
@@ -259,6 +276,7 @@ const Groups = () => {
         <SecondaryHeader text={'Groups'} />
         {searchPressed ? renderFilterGroups() : renderAllGroups()}
       </ScrollView>
+      {showArrow && <ScrollGuide />}
     </Container>
   );
 };

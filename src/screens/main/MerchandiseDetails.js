@@ -1,12 +1,13 @@
 import {
   ActivityIndicator,
+  Animated,
   FlatList,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -23,12 +24,16 @@ import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import constant from '../../redux/constant';
 import { ShowToast } from '../../Custom';
+import ScrollGuide from '../../components/ScrollGuide';
 
 const MerchandiseDetails = ({route}) => {
   const navigation = useNavigation();
   const [product_detail, setProduct_detail] = useState({});
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [quantity, setQuantity] = useState(1);
+  const [showArrow, setShowArrow] = useState(true)
+
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const {id} = route.params;
   console.log('product idd params ==========>', product_detail);
@@ -115,12 +120,25 @@ const MerchandiseDetails = ({route}) => {
     }
   };
 
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    {
+      useNativeDriver: false,
+      listener: (event) => {
+        const currentOffsetY = event.nativeEvent.contentOffset.y;
+        setShowArrow(currentOffsetY < 100);
+      },
+    }
+  );
+
   return (
     <Container>
       <Header />
       <SecondaryHeader text={'Free Stuff Merchandise'} />
       <ScrollView
         contentContainerStyle={styles.screen}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
         <StuffDetailCard
           title={product_detail.title}
@@ -168,6 +186,9 @@ const MerchandiseDetails = ({route}) => {
           renderItem={renderItem}
         />
       </ScrollView>
+      {showArrow &&
+        <ScrollGuide />
+      }
     </Container>
   );
 };

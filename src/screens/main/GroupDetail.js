@@ -1,12 +1,13 @@
 import {
   ActivityIndicator,
+  Animated,
   Linking,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import Container from '../../components/Container';
 import colors from '../../assets/colors';
 import {
@@ -23,15 +24,19 @@ import {getGroupDetailById, getGroupStatus, JoinGroup} from '../../redux/actions
 import constant from '../../redux/constant';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
+import ScrollGuide from '../../components/ScrollGuide';
 
 const GroupDetail = ({route}) => {
   // const [changeTab, setChangeTab] = useState(1);
   const [groupStatus, setGroupStatus] = useState(null);
   const [groupDetail, setGroupDetail] = useState({})
+  const [showArrow, setShowArrow] = useState(true)
   const {user} = useSelector(state => state.AuthReducer);
   const {join_group_loading} = useSelector(state => state.ListingReducer);
   const {group_detail_loader} = useSelector(state => state.GroupReducer);
   const dispatch = useDispatch();
+
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const {id, type} = route?.params;
 
@@ -78,6 +83,17 @@ const GroupDetail = ({route}) => {
     }
   };
 
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    {
+      useNativeDriver: false,
+      listener: (event) => {
+        const currentOffsetY = event.nativeEvent.contentOffset.y;
+        setShowArrow(currentOffsetY < 100);
+      },
+    }
+  );
+
   return (
     <Container>
       {group_detail_loader ? (
@@ -92,7 +108,7 @@ const GroupDetail = ({route}) => {
             link={true}
             onLinkPress={() => onHyperLink(groupDetail.hyper_link)}
           />
-          <ScrollView contentContainerStyle={styles.screen}>
+          <ScrollView contentContainerStyle={styles.screen} onScroll={handleScroll} scrollEventThrottle={16}>
             <View style={styles.tabView}>
               <PersonalInfoTab text={'Personal Information'} />
             </View>
@@ -226,6 +242,9 @@ const GroupDetail = ({route}) => {
               )}
             </>
           </ScrollView>
+          {showArrow &&
+            <ScrollGuide />
+          }
         </>
       )}
     </Container>

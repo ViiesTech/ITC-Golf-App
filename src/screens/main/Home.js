@@ -10,8 +10,9 @@ import {
   ActivityIndicator,
   FlatList,
   Linking,
+  Animated
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import images from '../../assets/images';
@@ -31,7 +32,9 @@ import {
 import Sponsors from '../../components/Sponsors';
 import FastImage from 'react-native-fast-image';
 import { ShowToast } from '../../Custom';
-import Add from 'react-native-vector-icons/MaterialIcons';
+import ScrollGuide from '../../components/ScrollGuide';
+
+
 
 const Home = () => {
   // const [selectedOption, setSelectedOption] = useState('');
@@ -39,6 +42,8 @@ const Home = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [listings, setListings] = useState([]);
   const [ads, setAds] = useState([]);
+  const [showArrow, setShowArrow] = useState(true);
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const width = Dimensions.get('screen').width;
 
@@ -82,6 +87,18 @@ const Home = () => {
   //     setSearchPressed(false);
   //   }
   // };
+
+
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    {
+      useNativeDriver: false,
+      listener: (event) => {
+        const currentOffsetY = event.nativeEvent.contentOffset.y;
+        setShowArrow(currentOffsetY < 100);
+      },
+    }
+  );
 
   const renderAllListings = () => {
     return (
@@ -231,19 +248,15 @@ const Home = () => {
   }
   }
 
-  const onPressIcon = () => {
-    navigation.navigate('SecondaryStack', {
-      screen: 'AllGroups',
-      params: {options: 'Add New Listings',},
-    });
-  }
-
+ 
   return (
     <>
       <AppStatusBar />
       <Container>
         <ScrollView
           showsVerticalScrollIndicator={false}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
           refreshControl={
             <RefreshControl
               onRefresh={() => handleRefresh()}
@@ -338,9 +351,9 @@ const Home = () => {
             </View>
           </View>
         </ScrollView>
-        <TouchableOpacity style={styles.addView} activeOpacity={0.9} onPress={() => onPressIcon()}>
-        <Add name={'add'} color={colors.secondary} size={30} />
-        </TouchableOpacity>
+        {showArrow && ( 
+          <ScrollGuide />
+        )} 
       </Container>
     </>
   );
@@ -429,18 +442,4 @@ const styles = StyleSheet.create({
     fontSize: hp('1.8%'),
     fontWeight: 'bold',
   },
-  addView: {
-    borderRadius: 100,
-    backgroundColor: colors.primary,
-    height: hp(7),
-    alignSelf: 'flex-end',
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
-    bottom: hp(3),
-    borderWidth: 2,
-    borderColor: colors.secondary,
-    right: hp(4),
-    width: hp(7)
-  }
 });

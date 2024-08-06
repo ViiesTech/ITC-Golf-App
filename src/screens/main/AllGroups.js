@@ -5,8 +5,9 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
+  Animated,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -37,6 +38,7 @@ import {
   requestPermission,
 } from '../../utils/HelperFunctions';
 import FastImage from 'react-native-fast-image';
+import ScrollGuide from '../../components/ScrollGuide';
 
 const AllGroups = ({route}) => {
   const [listingsCode, setListingsCode] = useState(null);
@@ -44,6 +46,9 @@ const AllGroups = ({route}) => {
   const [listingSearch, setListingSearch] = useState(false);
   const [groupSearch, setGroupSearch] = useState(false);
   const [players, setPlayers] = useState([]);
+  const [showArrow, setShowArrow] = useState(true)
+
+  const scrollY = useRef(new Animated.Value(0)).current
 
   const {user, follow_loader, edit_loading} = useSelector(
     state => state.AuthReducer,
@@ -129,23 +134,7 @@ const AllGroups = ({route}) => {
     }
   };
 
-  // const iosPermission = async () => {
-  //   const status = await iosPermissionHandler();
-  //   if (status === 'granted') {
-  //     onChangePhoto();
-  //   } else {
-  //     return ShowToast('Permission denied');
-  //   }
-  // };
 
-  // const androidPermission = async () => {
-  //   const status = await androidPermissionHandler();
-  //   if (status === 'granted') {
-  //     onChangePhoto();
-  //   } else {
-  //     return ShowToast('Permission denied');
-  //   }
-  // };
   const onGroupSearch = async () => {
     if (groupsCode) {
       await dispatch(GroupsByAreaCodes(groupsCode));
@@ -192,11 +181,24 @@ const AllGroups = ({route}) => {
     }
   };
 
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    {
+      useNativeDriver: false,
+      listener: (event) => {
+        const currentOffsetY = event.nativeEvent.contentOffset.y;
+        setShowArrow(currentOffsetY < 100);
+      },
+    }
+  );
+
   return (
     <Container>
       <Header />
       <ScrollView
         contentContainerStyle={[styles.wrapper]}
+        scrollEventThrottle={16}
+        onScroll={handleScroll}
         showsVerticalScrollIndicator={false}>
         <SecondaryHeader
           text={
@@ -448,6 +450,9 @@ const AllGroups = ({route}) => {
           />
         </View>
       </ScrollView>
+      {showArrow &&
+        <ScrollGuide />
+      }
     </Container>
   );
 };

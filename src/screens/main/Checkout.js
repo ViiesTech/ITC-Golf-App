@@ -4,8 +4,9 @@ import {
   ScrollView,
   TouchableOpacity,
   Text,
+  Animated,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import Container from '../../components/Container';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -18,6 +19,7 @@ import CountryPicker, {DARK_THEME} from 'react-native-country-picker-modal';
 import Arrow from 'react-native-vector-icons/MaterialIcons';
 import {ShowToast} from '../../Custom';
 import { useSelector } from 'react-redux';
+import ScrollGuide from '../../components/ScrollGuide';
 
 const Checkout = () => {
   const [state, setState] = useState({
@@ -37,6 +39,9 @@ const Checkout = () => {
   const [country, setCountry] = useState('United States');
   const [countryCode, setCountryCode] = useState('US');
   const [isPickerVisible, setIsPickerVisible] = useState(false);
+  const [showArrow, setShowArrow] = useState(true)
+
+  const scrollY = useRef(new Animated.Value(0)).current
 
   const { user } = useSelector(state => state.AuthReducer)
   console.log('user details =====>', user)
@@ -80,6 +85,17 @@ const Checkout = () => {
     }
   };
 
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    {
+      useNativeDriver: false,
+      listener: (event) => {
+        const currentOffsetY = event.nativeEvent.contentOffset.y;
+        setShowArrow(currentOffsetY < 100);
+      },
+    }
+  );
+
   console.log('country name =====>', country);
 
   return (
@@ -88,6 +104,8 @@ const Checkout = () => {
       <SecondaryHeader text={'Checkout'} />
       <ScrollView
         contentContainerStyle={styles.screen}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
         <ContactInput
           style={styles.input}
@@ -152,6 +170,7 @@ const Checkout = () => {
         <ContactInput
           style={styles.input}
           label={'ZIP Code'}
+          keyboardType={'numeric'}
           value={state.zip_code}
           onChangeText={text => onChangeText('zip_code', text)}
         />
@@ -159,11 +178,13 @@ const Checkout = () => {
           style={styles.input}
           label={'Phone'}
           value={state.phone}
+          keyboardType={'numeric'}
           onChangeText={text => onChangeText('phone', text)}
         />
         <ContactInput
           style={styles.input}
           label={'Email Address'}
+          keyboardType={'email-address'}
           value={state.email}
           onChangeText={text => onChangeText('email', text)}
         />
@@ -183,6 +204,9 @@ const Checkout = () => {
           />
         </View>
       </ScrollView>
+      {showArrow &&
+        <ScrollGuide />
+      }
     </Container>
   );
 };

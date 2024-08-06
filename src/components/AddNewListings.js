@@ -775,7 +775,7 @@ const AddNew = ({listingData}) => {
 };
 
 export const AddNewListings = ({buttonPress}) => {
-  const [index, setIndex] = React.useState('third');
+  const [index, setIndex] = React.useState('first');
   const [routes] = React.useState([
     {key: 'first', title: 'Discover'},
     {key: 'second', title: 'My Listing'},

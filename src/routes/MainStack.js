@@ -12,7 +12,6 @@ import Payments from '../screens/main/Payments';
 import Notifications from '../screens/main/Notifications';
 import Wishlist from '../screens/main/Wishlist';
 import ContactUs from '../screens/main/ContactUs';
-import Language from '../screens/main/Language';
 import Rating from '../screens/main/Rating';
 import About from '../screens/main/About';
 import FreeStuff from '../screens/main/FreeStuff';
@@ -25,6 +24,8 @@ import GroupChat from '../screens/main/GroupChat';
 import AddToCart from '../screens/main/AddToCart';
 import Checkout from '../screens/main/Checkout';
 import ManageCards from '../screens/main/ManageCards';
+import Add from 'react-native-vector-icons/MaterialIcons';
+import colors from '../assets/colors';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -104,10 +105,12 @@ const BottomStack = () => {
           tabBarIcon: ({focused}) =>
             focused ? (
               <View style={styles.iconView}>
-                <SVGImage image={icons.settings_active} />
+                {/* <SVGImage image={icons} /> */}
+                <Add name={'add'} color={colors.primary} size={33} />
               </View>
             ) : (
-              <SVGImage image={icons.settings_inactive} />
+              // <SVGImage image={icons.settings_inactive} />
+              <Add name={'add'} color={colors.white} size={33} />
             ),
           }}
       />
@@ -139,7 +142,6 @@ const SecondaryStack = () => {
       <Tab.Screen name="Notifications" component={Notifications} />
       <Tab.Screen name="Wishlist" component={Wishlist} />
       <Tab.Screen name="ContactUs" component={ContactUs} />
-      <Tab.Screen name="Language" component={Language} />
       <Tab.Screen name="Rating" component={Rating} />
       <Tab.Screen name="About" component={About} />
       {/* <Tab.Screen name="FreeStuff" component={FreeStuff} /> */}

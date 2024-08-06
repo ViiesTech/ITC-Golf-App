@@ -124,13 +124,6 @@ export const settings = [
     icon: icons.contact,
     nav: 'ContactUs'
   },
-  // {
-  //   id: 5,
-  //   text: 'Language',
-  //   icon: icons.language,
-  //   message: 'Coming soon'
-  //   // nav: 'Language'
-  // },
   {
     id: 5,
     text: 'License',
@@ -144,7 +137,7 @@ export const settings = [
     nav: 'About'
   },
   {
-    id: 6,
+    id: 7,
     text: 'Delete Account',
     icon: icons.person,
   },

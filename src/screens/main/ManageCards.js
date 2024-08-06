@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Animated, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {useRef, useState} from 'react';
 import Container from '../../components/Container';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -20,6 +20,7 @@ import {
   validateCVC,
   validateExpiry,
 } from '../../utils/HelperFunctions';
+import ScrollGuide from '../../components/ScrollGuide';
 
 const ManageCards = () => {
   const [state, setState] = useState({
@@ -31,8 +32,10 @@ const ManageCards = () => {
     exp_month: '',
     cvc: '',
   });
+  const [showArrow, setShowArrow] = useState(true)
 
   const sheetRef = useRef();
+  const scrollY = useRef(new Animated.Value(0)).current
   const dispatch = useDispatch();
 
   const {card} = useSelector(state => state.AuthReducer);
@@ -124,12 +127,26 @@ const ManageCards = () => {
     sheetRef.current.open();
   };
 
+  
+  const handleScroll = Animated.event(
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
+    {
+      useNativeDriver: false,
+      listener: event => {
+        const currentOffsetY = event.nativeEvent.contentOffset.y;
+        setShowArrow(currentOffsetY < 100);
+      },
+    },
+  );
+
   return (
     <Container>
       <Header />
       <SecondaryHeader text={'Manage Cards'} />
       <ScrollView
         contentContainerStyle={styles.screen}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
         {card?.length > 0 &&
           card.map((item, i) => (
@@ -144,6 +161,7 @@ const ManageCards = () => {
             </View>
           ))}
       </ScrollView>
+      {showArrow && <ScrollGuide />}
       <TouchableOpacity
         style={styles.addCardButton}
         onPress={() => onOpenSheet()}>

@@ -5,8 +5,9 @@ import {
   ScrollView,
   TouchableOpacity,
   Linking,
+  Animated,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -24,10 +25,14 @@ import {ShowToast} from '../../Custom';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import {DeactivateAccount} from '../../redux/actions/authAction';
 import FastImage from 'react-native-fast-image';
+import ScrollGuide from '../../components/ScrollGuide';
 
 const Profile = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [accountModal, setAccountModal] = useState(false);
+  const [showArrow, setShowArrow] = useState(true)
+
+  const scrollY = useRef(new Animated.Value(0)).current
 
   const navigation = useNavigation();
 
@@ -37,7 +42,7 @@ const Profile = () => {
 
   const onSettingsPress = async (item, index) => {
     // console.log('navv', item);
-    if (index == 3) {
+    if (index == 4) {
       await Linking.openURL(item.url);
     } else if (index == 6) {
       setAccountModal(true);
@@ -73,11 +78,25 @@ const Profile = () => {
     }
   };
 
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    {
+      useNativeDriver: false,
+      listener: (event) => {
+        const currentOffsetY = event.nativeEvent.contentOffset.y;
+        setShowArrow(currentOffsetY < 100);
+      },
+    }
+  );
+
   return (
     <Container>
       <Header />
       <SecondaryHeader text={'Profile'} />
-      <ScrollView contentContainerStyle={styles.screen}>
+      <ScrollView contentContainerStyle={styles.screen}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+      >
         <View style={{flexDirection: 'row'}}>
           <FastImage
             source={
@@ -154,6 +173,9 @@ const Profile = () => {
           </View>
         </View>
       </ScrollView>
+      {showArrow &&
+        <ScrollGuide />
+      }
       <ConfirmationModal
         visible={modalVisible}
         modalText={'Are you sure you want to logout?'}

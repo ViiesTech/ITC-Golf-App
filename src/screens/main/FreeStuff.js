@@ -1,12 +1,13 @@
 import {
   ActivityIndicator,
+  Animated,
   FlatList,
   RefreshControl,
   ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -26,15 +27,21 @@ import FastImage from 'react-native-fast-image';
 import {getWishlistById} from '../../redux/actions/authAction';
 import {ShowToast} from '../../Custom';
 import constant from '../../redux/constant';
+import ScrollGuide from '../../components/ScrollGuide';
 
 const FreeStuff = () => {
   const [refreshing, setRefreshing] = useState(false);
+  const [showArrow, setShowArrow] = useState(true);
+
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const navigation = useNavigation();
 
   const dispatch = useDispatch();
 
-  const {products_loading, products} = useSelector(state => state.ProductReducer);
+  const {products_loading, products} = useSelector(
+    state => state.ProductReducer,
+  );
   const {user} = useSelector(state => state.AuthReducer);
   // console.log('from screen ======================>', products[0].isFav)
 
@@ -57,6 +64,16 @@ const FreeStuff = () => {
       </View>
     );
   }
+  const handleScroll = Animated.event(
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
+    {
+      useNativeDriver: false,
+      listener: event => {
+        const currentOffsetY = event.nativeEvent.contentOffset.y;
+        setShowArrow(currentOffsetY < 100);
+      },
+    },
+  );
 
   const onToggleWishlist = async (item, index) => {
     if (products[index].favorite) {
@@ -67,8 +84,8 @@ const FreeStuff = () => {
       updatedProducts[index] = {...item, favorite: false};
       dispatch({
         type: constant.RENDER_PRODUCT_DONE,
-        payload: updatedProducts
-      })
+        payload: updatedProducts,
+      });
       return ShowToast(remove.message);
       //  return alert('add to favourite');
     } else {
@@ -78,8 +95,8 @@ const FreeStuff = () => {
       updatedProducts[index] = {...item, favorite: true};
       dispatch({
         type: constant.RENDER_PRODUCT_DONE,
-        payload: updatedProducts
-      })
+        payload: updatedProducts,
+      });
       return ShowToast(add.message);
     }
   };
@@ -91,10 +108,10 @@ const FreeStuff = () => {
         await dispatch(getWishlistById(user.user_id));
         await dispatch(getProducts());
       } catch (error) {
-        console.log('refreshing error', error)
+        console.log('refreshing error', error);
         return ShowToast('Some problem occured');
       } finally {
-        setRefreshing(false)
+        setRefreshing(false);
       }
     }, 3000);
   };
@@ -107,6 +124,8 @@ const FreeStuff = () => {
       <SecondaryHeader text={'Free Stuff Merchandise'} />
       <ScrollView
         contentContainerStyle={styles.screen}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
         refreshControl={
           <RefreshControl
             onRefresh={() => handleRefresh()}
@@ -144,6 +163,9 @@ const FreeStuff = () => {
         />
         <Sponsors />
       </ScrollView>
+      {showArrow &&
+        <ScrollGuide />
+      }
     </Container>
   );
 };

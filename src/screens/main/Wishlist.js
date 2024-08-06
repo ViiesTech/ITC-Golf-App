@@ -1,12 +1,13 @@
 import {
   ActivityIndicator,
+  Animated,
   FlatList,
   Image,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -17,9 +18,13 @@ import {useSelector, useDispatch} from 'react-redux';
 import {getWishlistById} from '../../redux/actions/authAction';
 import MerchandiseCard from '../../components/MerchandiseCard';
 import {useNavigation} from '@react-navigation/native';
+import ScrollGuide from '../../components/ScrollGuide';
 
 const Wishlist = () => {
+  const [showArrow, setShowArrow] = useState(true)
   const {wishlist_items, wishlist_loader, user} = useSelector(state => state.AuthReducer);
+
+  const scrollY = useRef(new Animated.Value(0)).current
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -29,6 +34,18 @@ const Wishlist = () => {
   useEffect(() => {
     dispatch(getWishlistById(user.user_id));
   }, []);
+
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    {
+      useNativeDriver: false,
+      listener: (event) => {
+        const currentOffsetY = event.nativeEvent.contentOffset.y;
+        setShowArrow(currentOffsetY < 100);
+      },
+    }
+  );
+
 
   return (
     <Container>
@@ -57,9 +74,12 @@ const Wishlist = () => {
             </View>
           </>
         ) : (
+          <>
           <FlatList
             data={wishlist_items}
             numColumns={2}
+            scrollEventThrottle={16}
+            onScroll={handleScroll}
             columnWrapperStyle={{justifyContent: 'space-between'}}
             showsVerticalScrollIndicator={false}
             renderItem={({item, index}) => {
@@ -82,6 +102,10 @@ const Wishlist = () => {
               );
             }}
           />
+          {showArrow &&
+            <ScrollGuide />
+          }
+          </>
         )}
         {/* <Button
           buttonStyle={styles.button}

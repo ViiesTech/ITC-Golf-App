@@ -5,8 +5,9 @@ import {
   ScrollView,
   ActivityIndicator,
   Linking,
+  Animated,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -28,10 +29,14 @@ import constant from '../../redux/constant';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import {timeFormatting} from '../../utils/HelperFunctions';
+import ScrollGuide from '../../components/ScrollGuide';
 
 const ListingDetails = ({route}) => {
   const [listingStatus, setListingStatus] = useState(null);
   const [listingDetail, setListingDetail] = useState({});
+  const [showArrow, setShowArrow] = useState(true)
+
+  const scrollY = useRef(new Animated.Value(0)).current
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -88,6 +93,17 @@ const ListingDetails = ({route}) => {
     }
   };
 
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    {
+      useNativeDriver: false,
+      listener: (event) => {
+        const currentOffsetY = event.nativeEvent.contentOffset.y;
+        setShowArrow(currentOffsetY < 100);
+      },
+    }
+  );
+
   return (
     <Container>
       {listing_detail_loader ? (
@@ -102,7 +118,7 @@ const ListingDetails = ({route}) => {
             link={true}
             onLinkPress={() => onHyperLink(listingDetail.hyper_link)}
           />
-          <ScrollView contentContainerStyle={styles.screen}>
+          <ScrollView contentContainerStyle={styles.screen} onScroll={handleScroll} scrollEventThrottle={16}>
             <View style={styles.tabView}>
               <PersonalInfoTab
                 text={'Personal Information'}
@@ -248,6 +264,9 @@ const ListingDetails = ({route}) => {
               <SVGImage image={icons.pageEnd} style={{alignSelf: 'center'}} />
             </>
           </ScrollView>
+          {showArrow &&
+            <ScrollGuide />
+          }
         </>
       )}
     </Container>
