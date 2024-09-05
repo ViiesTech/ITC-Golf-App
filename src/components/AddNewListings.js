@@ -44,6 +44,7 @@ import {Picker} from '@react-native-picker/picker';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import {timeFormatting} from '../utils/HelperFunctions';
+import ConfirmationModal from './ConfirmationModal';
 
 const Discover = ({searchPressed}) => {
   const [listings, setListings] = React.useState([]);
@@ -124,7 +125,10 @@ const Discover = ({searchPressed}) => {
           <DiscoverCard
             image={
               item.featured_image_url
-                ? {uri: item.featured_image_url, priority: FastImage.priority.high}
+                ? {
+                    uri: item.featured_image_url,
+                    priority: FastImage.priority.high,
+                  }
                 : images.dummy
             }
             onPress={() =>
@@ -229,7 +233,7 @@ const MyListings = ({setIndex, setListingData}) => {
     const res = await dispatch(DeleteListing(listing_id, user.user_id));
     if (res) {
       // navigation.navigate('Home');
-      dispatch(ListingsByUserID(user.user_id, setMy_listings))
+      dispatch(ListingsByUserID(user.user_id, setMy_listings));
       return ShowToast(res);
     }
   };
@@ -269,9 +273,7 @@ const MyListings = ({setIndex, setListingData}) => {
               area_code={item.area_code_match}
               date={item.course_date}
               handshake={
-                item.the_itc_handshake == ''
-                  ? 'Select'
-                  : item.the_itc_handshake
+                item.the_itc_handshake == '' ? 'Select' : item.the_itc_handshake
               }
             />
           ))}
@@ -307,6 +309,7 @@ const AddNew = ({listingData}) => {
     drinking_friendly: false,
     private_match: false,
   });
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -428,7 +431,7 @@ const AddNew = ({listingData}) => {
       },
       smoking_friendly: listingData.smoking_friendly === 'true' && true,
       drinking_friendly: listingData.drinking_friendly === 'true' && true,
-      private_match: listingData.private_group === 'false' ? false : true
+      private_match: listingData.private_group === 'false' ? false : true,
     });
   };
 
@@ -504,7 +507,9 @@ const AddNew = ({listingData}) => {
   return (
     <View style={styles.addnewWrapper}>
       <ContactInput
-        label={'Location/Golf Course/Clubs For Sale.'}
+        label={'Listing Title'}
+        instruction={true}
+        onInstructionPress={() => setModalVisible(!modalVisible)}
         value={state.location}
         onChangeText={text =>
           setState({
@@ -770,6 +775,13 @@ const AddNew = ({listingData}) => {
           }}
         />
       </View>
+      <ConfirmationModal
+        visible={modalVisible}
+        instruction={true}
+        onConfirm={() => setModalVisible(!modalVisible)}
+        onPressOut={() => setModalVisible(!modalVisible)}
+        onRequestClose={() => setModalVisible(!modalVisible)}
+      />
     </View>
   );
 };
@@ -783,7 +795,6 @@ export const AddNewListings = ({buttonPress}) => {
   ]);
 
   const [listingData, setListingData] = React.useState(null);
-
 
   return (
     <>
