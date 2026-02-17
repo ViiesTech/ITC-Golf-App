@@ -359,8 +359,10 @@ const AddNew = ({groupData}) => {
       if (res) {
         navigation.navigate('Home');
         initialState();
+        console.log('response message',res)
         return ShowToast(res);
       } else {
+        console.log('response message',res)
         return ShowToast(res);
       }
     } else {

@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   name: {
     color: colors.white,
     // flex: 0.8,
-    // backgroundColor: 'blue',
+    width: hp('20%'),
     fontWeight: 'bold',
     fontSize: hp('1.9%'),
   },
