@@ -1,10 +1,19 @@
-import {StyleSheet, View, Text, Platform} from 'react-native';
-import React from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Platform,
+  PermissionsAndroid,
+} from 'react-native';
+import React, {useState} from 'react';
 import colors from '../assets/colors';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Button from './Button';
 import {Picker} from '@react-native-picker/picker';
 import {useSelector} from 'react-redux';
+import Geolocation from 'react-native-geolocation-service';
+import {ShowToast} from '../Custom';
+import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 
 const SearchFilter = ({
   searchStyle,
@@ -13,12 +22,110 @@ const SearchFilter = ({
   selectedValue,
   onSearchPress,
 }) => {
-  // const [selectedOption, setSelectedOption] = useState('');
-
+  const [loading, setLoading] = useState(false);
   const {area_codes} = useSelector(state => state.HomeReducer);
 
-  // console.log('area codessss =======>', selectedValue)
-  // console.log('area codessss =======>', JSON.stringify(area_codes, null, 2));
+  const requestLocationPermission = async () => {
+    const permission = Platform.select({
+      ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+      android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+    });
+
+    if (!permission) return false;
+
+    // 1. Check Permission Status
+    const status = await check(permission);
+    console.log('Location Permission Status:', status);
+
+    if (status === RESULTS.GRANTED) {
+      return true;
+    }
+
+    // 2. If Denied Then first Ask Permission
+    if (status === RESULTS.DENIED) {
+      const result = await request(permission);
+      return result === RESULTS.GRANTED;
+    }
+
+    if (status === RESULTS.BLOCKED) {
+      ShowToast(
+        'Location permission is blocked. Please enable it in settings.',
+      );
+      return false;
+    }
+
+    return false;
+  };
+
+  const getDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Radius of the earth in km
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) *
+        Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance in km
+    return d;
+  };
+
+  const deg2rad = deg => {
+    return deg * (Math.PI / 180);
+  };
+
+  const handleMyLocation = async () => {
+    const hasPermission = await requestLocationPermission();
+
+    if (!hasPermission) {
+      return ShowToast('Location permission denied');
+    }
+
+    setLoading(true);
+
+    Geolocation.getCurrentPosition(
+      position => {
+        const {latitude, longitude} = position.coords;
+        console.log('Current Location:', latitude, longitude);
+
+        if (area_codes && area_codes.length > 0) {
+          let closestAreaCode = null;
+          let minDistance = Infinity;
+
+          area_codes.forEach(item => {
+            if (item.latitude && item.longitude) {
+              const dist = getDistance(
+                latitude,
+                longitude,
+                parseFloat(item.latitude),
+                parseFloat(item.longitude),
+              );
+              if (dist < minDistance) {
+                minDistance = dist;
+                closestAreaCode = item.area_code;
+              }
+            }
+          });
+
+          if (closestAreaCode) {
+            onValueChange(closestAreaCode);
+            ShowToast(`Location matched to area code: ${closestAreaCode}`);
+          } else {
+            ShowToast('Could not find a matching area code for your location');
+          }
+        }
+        setLoading(false);
+      },
+      error => {
+        console.log('Location Error:', error);
+        ShowToast('Failed to get your current location');
+        setLoading(false);
+      },
+      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+    );
+  };
 
   return (
     <View style={[styles.card, style]}>
@@ -59,9 +166,11 @@ const SearchFilter = ({
           searchStyle,
         ]}
       />
-      {/* <Button
+      <Button
         buttonText={'My Location'}
-        // onPress={onSearchPress}
+        onPress={handleMyLocation}
+        indicator={loading}
+        disable={loading}
         textStyle={{color: colors.secondary, fontSize: hp('2%')}}
         buttonStyle={[
           {
@@ -72,7 +181,7 @@ const SearchFilter = ({
           },
           searchStyle,
         ]}
-      /> */}
+      />
     </View>
   );
 };

@@ -123,7 +123,7 @@ const Listing = () => {
 
   const renderLoader = () => {
     return (
-      <View style={{alignItems: 'center', marginVertical: hp('3%')}}>
+      <View style={{flex: 1, alignItems: 'center', marginVertical: hp('3%')}}>
         <ActivityIndicator size={'large'} color={colors.primary} />
       </View>
     );
@@ -241,6 +241,7 @@ const Listing = () => {
           onValueChange={value => setSelectedCode(value)}
           onSearchPress={() => onSearchButton()}
         />
+
         <View style={{flexDirection: 'row', gap: hp('2%')}}>
           {listings_filter_loader
             ? renderLoader()

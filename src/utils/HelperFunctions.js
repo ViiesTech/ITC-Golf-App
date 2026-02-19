@@ -15,6 +15,12 @@ export const requestPermission = async permissionType => {
         });
         break;
 
+      case 'location':
+        permissionSet = Platform.select({
+          ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+        });
+        break;
+
       case 'notifications':
         try {
           await messaging().registerDeviceForRemoteMessages();
@@ -53,6 +59,12 @@ export const requestPermission = async permissionType => {
         } else {
           return 'granted';
         }
+        break;
+
+      case 'location':
+        permissionSet = Platform.select({
+          android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+        });
         break;
 
       default:
