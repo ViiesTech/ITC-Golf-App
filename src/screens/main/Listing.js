@@ -38,7 +38,7 @@ const Listing = () => {
   const [listings, setListings] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [ads, setAds] = useState([]);
-  const [showArrow, setShowArrow] = useState(true)
+  const [showArrow, setShowArrow] = useState(true);
   const scrollY = useRef(new Animated.Value(0)).current;
 
   const navigation = useNavigation();
@@ -51,7 +51,7 @@ const Listing = () => {
 
   const dispatch = useDispatch();
 
-  console.log('filtered resultsss ======>', listings_filter);
+  // console.log('filtered resultsss ======>', listings_filter);
 
   useEffect(() => {
     dispatch(getListings(setListings));
@@ -156,7 +156,10 @@ const Listing = () => {
           <ListingDetailCard
             listingImage={
               item.featured_image_url
-                ? {uri: item.featured_image_url, priority: FastImage.priority.high}
+                ? {
+                    uri: item.featured_image_url,
+                    priority: FastImage.priority.high,
+                  }
                 : images.dummy
             }
             route={routeName}
@@ -198,25 +201,24 @@ const Listing = () => {
     }, 3000);
   };
 
-  const onAddPress = async (hyperlink) => {
-    console.log('link', hyperlink)
-   if(hyperlink) { 
+  const onAddPress = async hyperlink => {
+    console.log('link', hyperlink);
+    if (hyperlink) {
       await Linking.openURL(hyperlink);
-  } else {
-    return ShowToast('Url not found')
-  }
-  }
-
+    } else {
+      return ShowToast('Url not found');
+    }
+  };
 
   const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
     {
       useNativeDriver: false,
-      listener: (event) => {
+      listener: event => {
         const currentOffsetY = event.nativeEvent.contentOffset.y;
         setShowArrow(currentOffsetY < 100);
       },
-    }
+    },
   );
 
   return (
@@ -239,24 +241,25 @@ const Listing = () => {
           onValueChange={value => setSelectedCode(value)}
           onSearchPress={() => onSearchButton()}
         />
-        {listings_filter_loader
-          ? renderLoader()
-          : ads?.data?.map((item, ind) => {
-              return (
-                <Sponsors
-                  key={ind}
-                  image={{uri: item.image}}
-                  title={item.title}
-                  onPress={() => onAddPress(item.url)}
-                />
-              );
-            })}
+        <View style={{flexDirection: 'row', gap: hp('2%')}}>
+          {listings_filter_loader
+            ? renderLoader()
+            : ads?.data?.map((item, ind) => {
+                return (
+                  <Sponsors
+                    key={ind}
+                    image={{uri: item.image}}
+                    title={item.title}
+                    onPress={() => onAddPress(item.url)}
+                  />
+                );
+              })}
+        </View>
+
         <SecondaryHeader text={'Listing'} />
         {searchPressed ? renderFilterListings() : renderAllListings()}
       </ScrollView>
-      {showArrow && ( 
-        <ScrollGuide />
-        )} 
+      {showArrow && <ScrollGuide />}
     </Container>
   );
 };

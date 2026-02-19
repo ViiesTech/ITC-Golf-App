@@ -1,7 +1,6 @@
 import icons from '../assets/icons';
 import images from '../assets/images';
 
-
 export const listingImages = [
   {
     id: 1,
@@ -104,37 +103,37 @@ export const settings = [
     id: 1,
     text: 'Payment Wallet',
     icon: icons.payment,
-    nav: 'ManageCards'
+    nav: 'ManageCards',
   },
   {
     id: 2,
     text: 'Configure Notifications',
     icon: icons.bell,
-    nav: 'Notifications'
+    nav: 'Notifications',
   },
   {
     id: 3,
     text: 'Wishlist',
     icon: icons.wishlist,
-    nav: 'Wishlist'
+    nav: 'Wishlist',
   },
   {
     id: 4,
     text: 'Contact Us',
     icon: icons.contact,
-    nav: 'ContactUs'
+    nav: 'ContactUs',
   },
   {
     id: 5,
     text: 'License',
     icon: icons.license,
-    url: 'https://inthecup.golf'
+    url: 'https://inthecupgolf.com',
   },
   {
     id: 6,
     text: 'About Us',
     icon: icons.about,
-    nav: 'About'
+    nav: 'About',
   },
   {
     id: 7,
@@ -148,19 +147,19 @@ export const methods = [
     id: 1,
     text: 'Mastercard',
     icon: images.master_card,
-    type: 'Mastercard'
+    type: 'Mastercard',
   },
   {
     id: 2,
     text: 'Visa',
     icon: images.visa_card,
-    type: 'Visa'
+    type: 'Visa',
   },
   {
     id: 3,
     text: 'American Express',
     icon: images.express,
-    type: 'AmericanExpress'
+    type: 'AmericanExpress',
   },
 ];
 
@@ -574,23 +573,20 @@ export const Screens = [
 ];
 
 export const MainSettings = [
-  {
-    id: 1,
-    text: 'Add New Groups',
-    options: 'Add New Groups'
-
-  },
-  {
-    id: 2,
-    text: 'Add New Listings',
-    options: 'Add New Listings'
-
-  },
+  // {
+  //   id: 1,
+  //   text: 'Add New Groups',
+  //   options: 'Add New Groups',
+  // },
+  // {
+  //   id: 2,
+  //   text: 'Add New Listings',
+  //   options: 'Add New Listings',
+  // },
   {
     id: 3,
     text: 'Player You Follow',
-    options: 'Players You Follow'
-
+    options: 'Players You Follow',
   },
 ];
 

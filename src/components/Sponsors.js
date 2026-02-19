@@ -8,14 +8,20 @@ const Sponsors = ({image, title, onPress}) => {
   //     await Linking.openURL('https://inthecup.golf')
   // }
 
+  // console.log('title:-', title);
+
   return (
-    <TouchableOpacity style={{padding: hp('2.5%')}} activeOpacity={0.9} onPress={onPress}>
+    <TouchableOpacity
+      style={{padding: hp('2.5%')}}
+      activeOpacity={0.9}
+      onPress={onPress}>
       <Image
         source={image}
         style={styles.listingImage}
         borderRadius={10}
-        resizeMode="stretch"
+        resizeMode="contain"
       />
+
       <View style={styles.textCont}>
         <Text style={styles.title}>{title}</Text>
       </View>
@@ -27,10 +33,10 @@ export default Sponsors;
 
 const styles = StyleSheet.create({
   listingImage: {
-    height: hp('30%'),
-    marginBottom: hp('4%'),
-    alignSelf: 'center',
-    width: hp('30%'),
+    height: hp('15%'),
+    width: hp('15%'),
+    // alignSelf: 'center',
+    // backgroundColor: '#fff',
   },
   endIcon: {
     alignSelf: 'center',

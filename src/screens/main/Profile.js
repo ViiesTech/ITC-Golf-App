@@ -30,9 +30,9 @@ import ScrollGuide from '../../components/ScrollGuide';
 const Profile = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [accountModal, setAccountModal] = useState(false);
-  const [showArrow, setShowArrow] = useState(true)
+  const [showArrow, setShowArrow] = useState(true);
 
-  const scrollY = useRef(new Animated.Value(0)).current
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const navigation = useNavigation();
 
@@ -79,24 +79,24 @@ const Profile = () => {
   };
 
   const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
     {
       useNativeDriver: false,
-      listener: (event) => {
+      listener: event => {
         const currentOffsetY = event.nativeEvent.contentOffset.y;
         setShowArrow(currentOffsetY < 100);
       },
-    }
+    },
   );
 
   return (
     <Container>
       <Header />
       <SecondaryHeader text={'Profile'} />
-      <ScrollView contentContainerStyle={styles.screen}
+      <ScrollView
+        contentContainerStyle={styles.screen}
         onScroll={handleScroll}
-        scrollEventThrottle={16}
-      >
+        scrollEventThrottle={16}>
         <View style={{flexDirection: 'row'}}>
           <FastImage
             source={
@@ -173,9 +173,7 @@ const Profile = () => {
           </View>
         </View>
       </ScrollView>
-      {showArrow &&
-        <ScrollGuide />
-      }
+      {showArrow && <ScrollGuide />}
       <ConfirmationModal
         visible={modalVisible}
         modalText={'Are you sure you want to logout?'}

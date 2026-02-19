@@ -10,9 +10,7 @@ import {
 import React, {useState, useEffect, useRef} from 'react';
 import Container from '../../components/Container';
 import colors from '../../assets/colors';
-import {
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import PersonalInfoTab from '../../components/PersonalInfoTab';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -20,7 +18,11 @@ import images from '../../assets/images';
 import Button from '../../components/Button';
 import {useSelector, useDispatch} from 'react-redux';
 import {ShowToast} from '../../Custom';
-import {getGroupDetailById, getGroupStatus, JoinGroup} from '../../redux/actions/groupAction';
+import {
+  getGroupDetailById,
+  getGroupStatus,
+  JoinGroup,
+} from '../../redux/actions/groupAction';
 import constant from '../../redux/constant';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
@@ -29,8 +31,8 @@ import ScrollGuide from '../../components/ScrollGuide';
 const GroupDetail = ({route}) => {
   // const [changeTab, setChangeTab] = useState(1);
   const [groupStatus, setGroupStatus] = useState(null);
-  const [groupDetail, setGroupDetail] = useState({})
-  const [showArrow, setShowArrow] = useState(true)
+  const [groupDetail, setGroupDetail] = useState({});
+  const [showArrow, setShowArrow] = useState(true);
   const {user} = useSelector(state => state.AuthReducer);
   const {join_group_loading} = useSelector(state => state.ListingReducer);
   const {group_detail_loader} = useSelector(state => state.GroupReducer);
@@ -42,11 +44,10 @@ const GroupDetail = ({route}) => {
 
   useEffect(() => {
     dispatch(getGroupStatus(user.user_id, id, setGroupStatus));
-    dispatch(getGroupDetailById(id,setGroupDetail))
+    dispatch(getGroupDetailById(id, setGroupDetail));
   }, []);
 
   const navigation = useNavigation();
-
 
   const onHyperLink = async link => {
     if (link == '') {
@@ -54,9 +55,9 @@ const GroupDetail = ({route}) => {
     } else {
       // const supported = await Linking.canOpenURL(link);
       // if (supported) {
-        await Linking.openURL(link);
+      await Linking.openURL(link);
       // } else {
-        // return ShowToast('Invalid url');
+      // return ShowToast('Invalid url');
       // }
     }
   };
@@ -84,14 +85,14 @@ const GroupDetail = ({route}) => {
   };
 
   const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
     {
       useNativeDriver: false,
-      listener: (event) => {
+      listener: event => {
         const currentOffsetY = event.nativeEvent.contentOffset.y;
         setShowArrow(currentOffsetY < 100);
       },
-    }
+    },
   );
 
   return (
@@ -108,10 +109,52 @@ const GroupDetail = ({route}) => {
             link={true}
             onLinkPress={() => onHyperLink(groupDetail.hyper_link)}
           />
-          <ScrollView contentContainerStyle={styles.screen} onScroll={handleScroll} scrollEventThrottle={16}>
-            <View style={styles.tabView}>
+          <ScrollView
+            contentContainerStyle={styles.screen}
+            onScroll={handleScroll}
+            scrollEventThrottle={16}>
+            {/* <View style={styles.tabView}>
               <PersonalInfoTab text={'Personal Information'} />
-            </View>
+            </View> */}
+            {groupStatus?.data?.accept_or_not === '1' ||
+            type === 'my groups' ||
+            groupDetail.author_id == user.user_id ||
+            groupDetail.private_group === 'off' ? (
+              <Button
+                buttonText={'Go to chat'}
+                buttonStyle={styles.button}
+                textStyle={{color: colors.secondary}}
+                onPress={() => {
+                  navigation.navigate('SecondaryStack', {
+                    screen: 'GroupChat',
+                    params: {
+                      title: groupDetail.listing_title,
+                      type: 'group',
+                      listing_id: id,
+                    },
+                  });
+                }}
+              />
+            ) : (
+              <Button
+                buttonText={
+                  groupStatus === 'pending' ||
+                  groupStatus?.data?.accept_or_not === '0'
+                    ? 'Pending'
+                    : 'Join Group'
+                }
+                buttonStyle={styles.button}
+                disable={
+                  groupStatus === 'pending' ||
+                  groupStatus?.data?.accept_or_not === '0'
+                    ? true
+                    : false
+                }
+                textStyle={{color: colors.secondary}}
+                indicator={join_group_loading}
+                onPress={() => onJoinGroup()}
+              />
+            )}
             <>
               <View style={styles.detailView}>
                 <View style={styles.imageContainer}>
@@ -142,7 +185,9 @@ const GroupDetail = ({route}) => {
                   <Text style={styles.heading}>DESCRIPTION:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {groupDetail.listing_content ? groupDetail.listing_content : ''}
+                    {groupDetail.listing_content
+                      ? groupDetail.listing_content
+                      : ''}
                   </Text>
                 </View>
                 <View style={styles.dataRow}>
@@ -163,16 +208,18 @@ const GroupDetail = ({route}) => {
                   <Text style={styles.heading}>ITC GROUP HANDSHAKE:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {groupDetail.itc_group_handshake ? groupDetail.itc_group_handshake : ''}
+                    {groupDetail.itc_group_handshake
+                      ? groupDetail.itc_group_handshake
+                      : ''}
                   </Text>
                 </View>
-                <View style={styles.dataRow}>
+                {/* <View style={styles.dataRow}>
                   <Text style={styles.heading}>DESIRED TEE BOX:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
                     {groupDetail.group_desired_teebox ? groupDetail.group_desired_teebox : ''}
                   </Text>
-                </View>
+                </View> */}
                 <View style={styles.dataRow}>
                   <Text style={styles.heading}>
                     WHAT KIND OF MATCH IS THIS:
@@ -201,50 +248,9 @@ const GroupDetail = ({route}) => {
                   </Text>
                 </View>
               </View>
-              {groupStatus?.data?.accept_or_not === '1' ||
-              type === 'my groups' ||
-              groupDetail.author_id == user.user_id ||
-              groupDetail.private_group === 'off' ? (
-                <Button
-                  buttonText={'Go to chat'}
-                  buttonStyle={styles.button}
-                  textStyle={{color: colors.secondary}}
-                  onPress={() => {
-                    navigation.navigate('SecondaryStack', {
-                      screen: 'GroupChat',
-                      params: {
-                        title: groupDetail.listing_title,
-                        type: 'group',
-                        listing_id:id,
-                      },
-                    });
-                  }}
-                />
-              ) : (
-                <Button
-                  buttonText={
-                    groupStatus === 'pending' ||
-                    groupStatus?.data?.accept_or_not === '0'
-                      ? 'Pending'
-                      : 'Join Group'
-                  }
-                  buttonStyle={styles.button}
-                  disable={
-                    groupStatus === 'pending' ||
-                    groupStatus?.data?.accept_or_not === '0'
-                      ? true
-                      : false
-                  }
-                  textStyle={{color: colors.secondary}}
-                  indicator={join_group_loading}
-                  onPress={() => onJoinGroup()}
-                />
-              )}
             </>
           </ScrollView>
-          {showArrow &&
-            <ScrollGuide />
-          }
+          {showArrow && <ScrollGuide />}
         </>
       )}
     </Container>
@@ -307,9 +313,10 @@ const styles = StyleSheet.create({
   },
   button: {
     // marginTop: hp('4%'),
-    width: hp('20%'),
+    width: hp('42%'),
     // marginLeft: hp('1%'),
-    borderRadius: 50,
+    borderRadius: 10,
+    alignSelf: 'center',
   },
   line: {
     width: 1.1,

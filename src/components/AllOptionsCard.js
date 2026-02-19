@@ -36,20 +36,19 @@ const AllOptionsCard = ({active, onChangeTab}) => {
           </>
         ))}
       </View>
-        <TouchableOpacity
-          activeOpacity={0.9}
-          onPress={() => onTextPress('My Profile')}>
-          <Text
-            style={[
-              styles.text,
-              {
-                color:
-                  active === 'My Profile' ? colors.secondary : colors.white,
-              },
-            ]}>
-            My Profile
-          </Text>
-        </TouchableOpacity>
+      <TouchableOpacity
+        activeOpacity={0.9}
+        onPress={() => onTextPress('My Profile')}>
+        <Text
+          style={[
+            styles.text,
+            {
+              color: active === 'My Profile' ? colors.secondary : colors.white,
+            },
+          ]}>
+          My Profile
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };

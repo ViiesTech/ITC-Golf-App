@@ -186,7 +186,7 @@ const MyGroups = ({setIndex, setGroupData}) => {
     state => state.GroupReducer,
   );
 
-  console.log('my groups from screen =============>', my_groups);
+  // console.log('my groups from screen =============>', my_groups);
   const {user} = useSelector(state => state.AuthReducer);
 
   const navigation = useNavigation();
@@ -217,7 +217,7 @@ const MyGroups = ({setIndex, setGroupData}) => {
             fontSize: hp('2%'),
             fontWeight: 'bold',
           }}>
-          {my_groups.message || 'No Groups Found'}
+          {my_groups.message || 'No matches found for the user.'}
         </Text>
       </View>
     );
@@ -359,10 +359,10 @@ const AddNew = ({groupData}) => {
       if (res) {
         navigation.navigate('Home');
         initialState();
-        console.log('response message',res)
+        console.log('response message', res);
         return ShowToast(res);
       } else {
-        console.log('response message',res)
+        console.log('response message', res);
         return ShowToast(res);
       }
     } else {
@@ -445,20 +445,23 @@ const AddNew = ({groupData}) => {
       <ContactInput
         label={'Group Name'}
         value={state.group_title}
+        placeholder={'Add Title'}
+        textColor={colors.lightgray}
+        style={styles.input}
         onChangeText={text =>
           setState({
             ...state,
             group_title: text,
           })
         }
-        placeholder={'Add Title'}
-        textColor={colors.lightgray}
-        style={styles.input}
       />
       <ContactInput
         label={'Description'}
         value={state.description}
         placeholder={'Description...'}
+        textColor={colors.lightgray}
+        multiline={true}
+        style={styles.input}
         onChangeText={text =>
           setState({
             ...state,
@@ -466,8 +469,6 @@ const AddNew = ({groupData}) => {
           })
         }
         // textAlignVertical={'top'}
-        multiline={true}
-        style={styles.input}
       />
 
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -629,8 +630,8 @@ export const AddNewGroups = ({buttonPressed}) => {
   const [index, setIndex] = React.useState('first');
   const [routes] = React.useState([
     {key: 'first', title: 'Discover'},
-    {key: 'second', title: 'My Groups'},
-    {key: 'third', title: 'Add New Groups'},
+    {key: 'second', title: 'My Listings'},
+    {key: 'third', title: 'Add New Listing'},
   ]);
 
   const [groupData, setGroupData] = React.useState(null);

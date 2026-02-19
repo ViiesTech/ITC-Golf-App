@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   FlatList,
   Linking,
-  Animated
+  Animated,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import Container from '../../components/Container';
@@ -31,10 +31,8 @@ import {
 } from '../../redux/actions/homeAction';
 import Sponsors from '../../components/Sponsors';
 import FastImage from 'react-native-fast-image';
-import { ShowToast } from '../../Custom';
+import {ShowToast} from '../../Custom';
 import ScrollGuide from '../../components/ScrollGuide';
-
-
 
 const Home = () => {
   // const [selectedOption, setSelectedOption] = useState('');
@@ -47,8 +45,7 @@ const Home = () => {
 
   const width = Dimensions.get('screen').width;
 
-  const {loader} =
-    useSelector(state => state.HomeReducer);
+  const {loader} = useSelector(state => state.HomeReducer);
   // console.log('listinggg filtered =====>', ads);
 
   const dispatch = useDispatch();
@@ -88,16 +85,15 @@ const Home = () => {
   //   }
   // };
 
-
   const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
     {
       useNativeDriver: false,
-      listener: (event) => {
+      listener: event => {
         const currentOffsetY = event.nativeEvent.contentOffset.y;
         setShowArrow(currentOffsetY < 100);
       },
-    }
+    },
   );
 
   const renderAllListings = () => {
@@ -145,7 +141,7 @@ const Home = () => {
                 onPress={() =>
                   navigation.navigate('SecondaryStack', {
                     screen: 'ListingDetails',
-                    params: {id: item.listing_id}
+                    params: {id: item.listing_id},
                   })
                 }
               />
@@ -239,16 +235,15 @@ const Home = () => {
     }, 3000);
   };
 
-  const onAddPress = async (hyperlink) => {
-    console.log('link', hyperlink)
-   if(hyperlink) { 
+  const onAddPress = async hyperlink => {
+    console.log('link', hyperlink);
+    if (hyperlink) {
       await Linking.openURL(hyperlink);
-  } else {
-    return ShowToast('Url not found')
-  }
-  }
+    } else {
+      return ShowToast('Url not found');
+    }
+  };
 
- 
   return (
     <>
       <AppStatusBar />
@@ -289,71 +284,34 @@ const Home = () => {
             </Text>
           </View>
           <View style={{padding: hp('2%')}}>
-            {/* <View style={styles.border}>
-              <Text style={styles.textStyle}>Area Code</Text>
-              <View style={styles.pickerStyle}>
-                <Picker
-                  selectedValue={selectedOption}
-                  dropdownIconColor={colors.white}
-                  style={{color: colors.white, borderColor: 'red'}}
-                  itemStyle={{color: 'white', fontWeight: 'bold'}}
-                  numberOfLines={1}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setSelectedOption(itemValue)
-                  }>
-                  <Picker.Item
-                    label="Select"
-                    value={null}
-                    style={{color: colors.secondary}}
+            <View style={{flexDirection: 'row', gap: hp('2%')}}>
+              {ads?.data?.map((item, ind) => {
+                return (
+                  <Sponsors
+                    key={ind}
+                    image={{uri: item.image}}
+                    title={item.title}
+                    onPress={() => onAddPress(item.url)}
                   />
-                  {area_codes?.map((item, ind) => (
-                    <Picker.Item
-                      key={ind}
-                      label={item}
-                      value={item}
-                      style={{color: colors.secondary}}
-                    />
-                  ))}
-                </Picker>
-              </View>
-              <Button
-                buttonText={'Search'}
-                icon={true}
-                onPress={() => onSearchAreaCode()}
-              />
-            </View> */}
-            {/* {listings_filter_loader
-              ? renderFilterLoader() */}
-              {/* : */}
-               {ads?.data?.map((item, ind) => {
-                  return (
-                    <Sponsors
-                      key={ind}
-                      image={{uri: item.image}}
-                      title={item.title}
-                      onPress={() => onAddPress(item.url)}
-                    />
-                  );
-                })}
-            <Text style={styles.text}>Listing</Text>
-            <View style={styles.cardWrapper}>
-              {renderAllListings()}
+                );
+              })}
             </View>
+
+            <Text style={styles.text}>Listing</Text>
+            <View style={styles.cardWrapper}>{renderAllListings()}</View>
+
             <TouchableOpacity
               style={styles.button}
-              activeOpacity={0.9}
+              activeOpacity={0.7}
               onPress={() => navigation.navigate('Listing')}>
               <ArrowDown name={'arrow-down'} color={colors.white} size={24} />
             </TouchableOpacity>
             <View style={{paddingTop: hp('5%')}}>
               <Image source={images.home2} style={styles.golfImage} />
-              {/* <Text style={styles.heading}>Listing</Text> */}
             </View>
           </View>
         </ScrollView>
-        {showArrow && ( 
-          <ScrollGuide />
-        )} 
+        {showArrow && <ScrollGuide />}
       </Container>
     </>
   );
@@ -386,7 +344,7 @@ const styles = StyleSheet.create({
   textWrapper: {
     left: hp('4%'),
     position: 'absolute',
-    top: hp('64%'),
+    top: hp('32%'),
   },
   border: {
     borderColor: colors.lightgray,
@@ -398,7 +356,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontWeight: 'bold',
     fontSize: hp('3.8%'),
-    marginTop: hp('7%'),
+    marginTop: hp('1%'),
   },
   wrapper: {
     paddingTop: hp('3%'),
@@ -420,7 +378,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   backgroundVideo: {
-    height: hp('100%'),
+    height: hp('50%'),
   },
   videoBackground: {
     position: 'absolute',

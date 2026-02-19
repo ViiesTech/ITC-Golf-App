@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   Animated,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {Fragment, useEffect, useRef, useState} from 'react';
 import Container from '../../components/Container';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -34,9 +34,7 @@ import {
 } from '../../redux/actions/homeAction';
 import {ShowToast} from '../../Custom';
 import {useNavigation} from '@react-navigation/native';
-import {
-  requestPermission,
-} from '../../utils/HelperFunctions';
+import {requestPermission} from '../../utils/HelperFunctions';
 import FastImage from 'react-native-fast-image';
 import ScrollGuide from '../../components/ScrollGuide';
 
@@ -46,9 +44,9 @@ const AllGroups = ({route}) => {
   const [listingSearch, setListingSearch] = useState(false);
   const [groupSearch, setGroupSearch] = useState(false);
   const [players, setPlayers] = useState([]);
-  const [showArrow, setShowArrow] = useState(true)
+  const [showArrow, setShowArrow] = useState(true);
 
-  const scrollY = useRef(new Animated.Value(0)).current
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const {user, follow_loader, edit_loading} = useSelector(
     state => state.AuthReducer,
@@ -78,7 +76,6 @@ const AllGroups = ({route}) => {
   });
 
   const {options} = route.params;
-
 
   const navigation = useNavigation();
 
@@ -134,7 +131,6 @@ const AllGroups = ({route}) => {
     }
   };
 
-
   const onGroupSearch = async () => {
     if (groupsCode) {
       await dispatch(GroupsByAreaCodes(groupsCode));
@@ -182,15 +178,18 @@ const AllGroups = ({route}) => {
   };
 
   const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
     {
       useNativeDriver: false,
-      listener: (event) => {
+      listener: event => {
         const currentOffsetY = event.nativeEvent.contentOffset.y;
         setShowArrow(currentOffsetY < 100);
       },
-    }
+    },
   );
+
+  // console.log('area_codes =======>', JSON.stringify(area_codes, null, 2));
+  console.log('changeTab =======>', changeTab);
 
   return (
     <Container>
@@ -218,29 +217,27 @@ const AllGroups = ({route}) => {
             onChangeTab={text => setChangeTab(text)}
           />
           {changeTab === 'Add New Groups' ? (
-            <>
+            <Fragment>
               <SearchFilter
                 style={{width: '100%'}}
                 selectedValue={groupsCode}
                 onSearchPress={() => onGroupSearch()}
                 onValueChange={value => setGroupsCode(value)}
               />
-              {/* <View style={{height: '400%'}}> */}
+
               <AddNewGroups buttonPressed={groupSearch} />
-              {/* </View> */}
-            </>
+            </Fragment>
           ) : changeTab === 'Add New Listings' ? (
-            <>
+            <Fragment>
               <SearchFilter
                 style={{width: '100%'}}
                 selectedValue={listingsCode}
                 onSearchPress={() => onListingSearch()}
                 onValueChange={value => setListingsCode(value)}
               />
-              {/* <View style={{height: '400%'}}> */}
+
               <AddNewListings buttonPress={listingSearch} />
-              {/* </View> */}
-            </>
+            </Fragment>
           ) : changeTab === 'Players You Follow' ? (
             follow_loader ? (
               <View style={{alignItems: 'center', marginVertical: hp('4%')}}>
@@ -335,8 +332,8 @@ const AllGroups = ({route}) => {
                   />
                   {area_codes?.map(item => (
                     <Picker.Item
-                      label={item}
-                      value={item}
+                      label={item?.area_code}
+                      value={item?.area_code}
                       style={{color: colors.secondary}}
                     />
                   ))}
@@ -420,7 +417,7 @@ const AllGroups = ({route}) => {
                 style={[styles.input, {width: '100%'}]}
                 value={state.description}
                 onChangeText={text => onInputChange('description', text)}
-                // placeholder={'37 Cardinal Lane Petersburg,'}
+                placeholder={'Description'}
                 textColor={colors.lightgray}
                 // textAlignVertical={'top'}
                 multiline={true}
@@ -450,9 +447,7 @@ const AllGroups = ({route}) => {
           />
         </View>
       </ScrollView>
-      {showArrow &&
-        <ScrollGuide />
-      }
+      {showArrow && <ScrollGuide />}
     </Container>
   );
 };

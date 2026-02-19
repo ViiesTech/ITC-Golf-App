@@ -259,7 +259,7 @@ const Groups = () => {
           onValueChange={itemValue => setSelectedCode(itemValue)}
           onSearchPress={() => onAreaCodeSearch()}
         />
-        <View style={{paddingTop: hp(3)}}>
+        <View style={{flexDirection: 'row', gap: hp(2)}}>
           {filter_loading
             ? renderFilterLoader()
             : ads?.data?.map((item, ind) => {

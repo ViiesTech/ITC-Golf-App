@@ -18,6 +18,7 @@ const SearchFilter = ({
   const {area_codes} = useSelector(state => state.HomeReducer);
 
   // console.log('area codessss =======>', selectedValue)
+  // console.log('area codessss =======>', JSON.stringify(area_codes, null, 2));
 
   return (
     <View style={[styles.card, style]}>
@@ -36,8 +37,8 @@ const SearchFilter = ({
             />
             {area_codes?.map(item => (
               <Picker.Item
-                label={item}
-                value={item}
+                label={item.area_code}
+                value={item.area_code}
                 style={styles.labelStyle}
               />
             ))}
@@ -58,6 +59,20 @@ const SearchFilter = ({
           searchStyle,
         ]}
       />
+      {/* <Button
+        buttonText={'My Location'}
+        // onPress={onSearchPress}
+        textStyle={{color: colors.secondary, fontSize: hp('2%')}}
+        buttonStyle={[
+          {
+            borderRadius: 100,
+            marginTop: hp('2%'),
+            width: hp('22%'),
+            alignSelf: 'center',
+          },
+          searchStyle,
+        ]}
+      /> */}
     </View>
   );
 };

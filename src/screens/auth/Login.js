@@ -95,14 +95,19 @@ const Login = () => {
                 onPress={() => onLoginPress()}
                 indicator={signin_loading}
               />
-              <TouchableOpacity
+              <Button
+                buttonText={'Sign Up'}
+                onPress={() => navigation.navigate('Signup')}
+                buttonStyle={{marginTop: hp('2%')}}
+              />
+              {/* <TouchableOpacity
                 activeOpacity={0.9}
                 onPress={() => navigation.navigate('Signup')}>
                 <Text style={styles.message}>
                   Dont have an account?{' '}
                   <Text style={{color: colors.primary}}>Sign Up</Text>
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
         </View>
@@ -116,7 +121,7 @@ export default Login;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 0.8,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },

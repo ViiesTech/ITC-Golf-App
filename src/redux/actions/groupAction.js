@@ -393,7 +393,7 @@ export const groupMessages = (group_id, setMessages) => {
         const sortedMessages = res.data
           .map(message => ({
             ...message,
-            createdAt: new Date(message.createdAt).toISOString(), 
+            createdAt: new Date(message.createdAt).toISOString(),
           }))
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
@@ -442,19 +442,18 @@ export const getGroupStatus = (user_id, group_id, setGroupStatus) => {
 
 export const getGroupDetailById = (group_id, setGroupDetail) => {
   return async dispatch => {
-
     dispatch({
-      type: constant.GET_GROUP_DETAIL_BY_ID
-    })
+      type: constant.GET_GROUP_DETAIL_BY_ID,
+    });
 
-   try {
-    const res = await api.get(`/get-group/${group_id}`)
-    setGroupDetail(res.data)
-    dispatch({
-      type: constant.GET_GROUP_DETAIL_BY_ID_DONE
-    })
-   } catch (error) {
-      console.log('error fetching group detail =======>',error)
-   }
-  }
-}
+    try {
+      const res = await api.get(`/get-group/${group_id}`);
+      setGroupDetail(res.data);
+      dispatch({
+        type: constant.GET_GROUP_DETAIL_BY_ID_DONE,
+      });
+    } catch (error) {
+      console.log('error fetching group detail =======>', error);
+    }
+  };
+};

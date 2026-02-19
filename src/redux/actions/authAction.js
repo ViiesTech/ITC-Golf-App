@@ -36,7 +36,7 @@ export const signup = (
     })
       .then(async res => {
         const response = await res.json();
-        console.log('signup response', response);
+        console.log('signup response:-', response);
         dispatch({
           type: constant.SIGNUP_DONE,
         });
@@ -48,7 +48,7 @@ export const signup = (
         }
       })
       .catch(error => {
-        console.log('signup error =======>', error);
+        console.log('signup error:-', error);
         ShowToast('Some problem occured');
         dispatch({
           type: constant.SIGNUP_DONE,

@@ -54,7 +54,7 @@ const BottomStack = () => {
             ) : (
               <SVGImage image={icons.home_inactive} />
             ),
-          }}
+        }}
       />
       <Tab.Screen
         name="Listing"
@@ -68,7 +68,7 @@ const BottomStack = () => {
             ) : (
               <SVGImage image={icons.listing_inactive} />
             ),
-          }}
+        }}
       />
       <Tab.Screen
         name="MerchandiseStack"
@@ -96,7 +96,7 @@ const BottomStack = () => {
             ) : (
               <SVGImage image={icons.groups_inactive} />
             ),
-          }}
+        }}
       />
       <Tab.Screen
         name="Profile"
@@ -112,7 +112,7 @@ const BottomStack = () => {
               // <SVGImage image={icons.settings_inactive} />
               <Add name={'add'} color={colors.white} size={33} />
             ),
-          }}
+        }}
       />
     </Tab.Navigator>
   );
@@ -121,7 +121,7 @@ const BottomStack = () => {
 const MerchandiseStack = () => {
   return (
     <Stack.Navigator
-    screenOptions={{
+      screenOptions={{
         headerShown: false,
       }}>
       <Tab.Screen name="FreeStuff" component={FreeStuff} />
@@ -130,14 +130,12 @@ const MerchandiseStack = () => {
   );
 };
 
-
-
 const SecondaryStack = () => {
   return (
     <Stack.Navigator
-    screenOptions={{
-      headerShown: false,
-    }}>
+      screenOptions={{
+        headerShown: false,
+      }}>
       <Tab.Screen name="Payments" component={Payments} />
       <Tab.Screen name="Notifications" component={Notifications} />
       <Tab.Screen name="Wishlist" component={Wishlist} />
@@ -151,7 +149,7 @@ const SecondaryStack = () => {
       <Tab.Screen name="AllGroups" component={AllGroups} />
       <Tab.Screen name="GroupDetail" component={GroupDetail} />
       <Tab.Screen name="GroupChat" component={GroupChat} />
-      <Tab.Screen name='ManageCards' component={ManageCards} />
+      <Tab.Screen name="ManageCards" component={ManageCards} />
     </Stack.Navigator>
   );
 };
@@ -173,7 +171,7 @@ export default MainStack;
 const styles = StyleSheet.create({
   iconView: {
     backgroundColor: '#373636',
-    height:  hp('6.5%'),
+    height: hp('6.5%'),
     alignItems: 'center',
     borderRadius: 100,
     justifyContent: 'center',
