@@ -6,7 +6,7 @@ import messaging from '@react-native-firebase/messaging';
 export const requestPermission = async permissionType => {
   let permissionSet;
   const apiLevel = Platform.constants.Release;
-  console.log('hello world', apiLevel);
+  // console.log('apiLevel:----->', apiLevel);
   if (Platform.OS === 'ios') {
     switch (permissionType) {
       case 'media':

@@ -68,7 +68,7 @@ export const signin = (username, password, device_token) => {
 
     data.append('username', username);
     data.append('password', password);
-    data.append('notification_token',device_token)
+    data.append('notification_token', device_token);
 
     return await fetch(`${URL}/login`, {
       method: 'POST',
@@ -80,7 +80,7 @@ export const signin = (username, password, device_token) => {
     })
       .then(async res => {
         const response = await res.json();
-        // console.log('login response =====>',response)
+        console.log('login response =====>', response);
         if (response.token) {
           ShowToast('login successfully');
           dispatch({
@@ -96,7 +96,7 @@ export const signin = (username, password, device_token) => {
         }
       })
       .catch(error => {
-        console.log('login error', error);
+        console.log('login error:--------->', error);
         ShowToast('some problem occured');
         dispatch({
           type: constant.LOGIN_DONE,
