@@ -786,9 +786,9 @@ const AddNew = ({listingData}) => {
   );
 };
 
-export const AddNewListings = ({buttonPress}) => {
+export const AddNewListings = ({buttonPress, defaultTab = 'first'}) => {
   console.log('buttonPress =======>', buttonPress);
-  const [index, setIndex] = React.useState('first');
+  const [index, setIndex] = React.useState(defaultTab);
   const [routes] = React.useState([
     {key: 'first', title: 'Discover'},
     {key: 'second', title: 'My Listing'},

@@ -24,8 +24,10 @@ import GroupChat from '../screens/main/GroupChat';
 import AddToCart from '../screens/main/AddToCart';
 import Checkout from '../screens/main/Checkout';
 import ManageCards from '../screens/main/ManageCards';
-import Add from 'react-native-vector-icons/MaterialIcons';
+import Add from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
 import colors from '../assets/colors';
+import CreateListingOrGroup from '../screens/main/CreateListingOrGroup';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -71,16 +73,16 @@ const BottomStack = () => {
         }}
       />
       <Tab.Screen
-        name="MerchandiseStack"
-        component={MerchandiseStack}
+        name="CreateListingOrGroup"
+        component={CreateListingOrGroup}
         options={{
           tabBarIcon: ({focused}) =>
             focused ? (
               <View style={styles.iconView}>
-                <SVGImage image={icons.merchandise_active} />
+                <Entypo name={'plus'} color={colors.primary} size={33} />
               </View>
             ) : (
-              <SVGImage image={icons.merchandise_inactive} />
+              <Entypo name={'plus'} color={colors.white} size={33} />
             ),
         }}
       />
@@ -106,11 +108,11 @@ const BottomStack = () => {
             focused ? (
               <View style={styles.iconView}>
                 {/* <SVGImage image={icons} /> */}
-                <Add name={'add'} color={colors.primary} size={33} />
+                <Add name={'user'} color={colors.primary} size={33} />
               </View>
             ) : (
               // <SVGImage image={icons.settings_inactive} />
-              <Add name={'add'} color={colors.white} size={33} />
+              <Add name={'user'} color={colors.white} size={33} /> // add
             ),
         }}
       />
@@ -150,6 +152,10 @@ const SecondaryStack = () => {
       <Tab.Screen name="GroupDetail" component={GroupDetail} />
       <Tab.Screen name="GroupChat" component={GroupChat} />
       <Tab.Screen name="ManageCards" component={ManageCards} />
+      <Tab.Screen
+        name="CreateListingOrGroup"
+        component={CreateListingOrGroup}
+      />
     </Stack.Navigator>
   );
 };

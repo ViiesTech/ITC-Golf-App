@@ -225,7 +225,10 @@ const AllGroups = ({route}) => {
                 onValueChange={value => setGroupsCode(value)}
               />
 
-              <AddNewGroups buttonPressed={groupSearch} />
+              <AddNewGroups
+                buttonPressed={groupSearch}
+                defaultTab={changeTab === 'Add New Groups' ? 'third' : 'first'}
+              />
             </Fragment>
           ) : changeTab === 'Add New Listings' ? (
             <Fragment>
@@ -236,7 +239,12 @@ const AllGroups = ({route}) => {
                 onValueChange={value => setListingsCode(value)}
               />
 
-              <AddNewListings buttonPress={listingSearch} />
+              <AddNewListings
+                buttonPress={listingSearch}
+                defaultTab={
+                  changeTab === 'Add New Listings' ? 'third' : 'first'
+                }
+              />
             </Fragment>
           ) : changeTab === 'Players You Follow' ? (
             follow_loader ? (

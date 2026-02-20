@@ -34,9 +34,9 @@ import ScrollGuide from '../../components/ScrollGuide';
 const ListingDetails = ({route}) => {
   const [listingStatus, setListingStatus] = useState(null);
   const [listingDetail, setListingDetail] = useState({});
-  const [showArrow, setShowArrow] = useState(true)
+  const [showArrow, setShowArrow] = useState(true);
 
-  const scrollY = useRef(new Animated.Value(0)).current
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -46,8 +46,8 @@ const ListingDetails = ({route}) => {
   console.log('android user', user.user_id);
   const {join_loading} = useSelector(state => state.ListingReducer);
 
-  const {id,type} = route?.params;
-  // console.log('id',id) 
+  const {id, type} = route?.params;
+  // console.log('id',id)
 
   useEffect(() => {
     dispatch(getListingStatus(user.user_id, id, setListingStatus));
@@ -63,10 +63,10 @@ const ListingDetails = ({route}) => {
     } else {
       // const supported = await Linking.canOpenURL(link);
       // if (supported) {
-        // alert('haha');
-        await Linking.openURL(link);
+      // alert('haha');
+      await Linking.openURL(link);
       // } else {
-        // return ShowToast('Invalid url');
+      // return ShowToast('Invalid url');
       // }
     }
   };
@@ -94,14 +94,14 @@ const ListingDetails = ({route}) => {
   };
 
   const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
     {
       useNativeDriver: false,
-      listener: (event) => {
+      listener: event => {
         const currentOffsetY = event.nativeEvent.contentOffset.y;
         setShowArrow(currentOffsetY < 100);
       },
-    }
+    },
   );
 
   return (
@@ -118,13 +118,56 @@ const ListingDetails = ({route}) => {
             link={true}
             onLinkPress={() => onHyperLink(listingDetail.hyper_link)}
           />
-          <ScrollView contentContainerStyle={styles.screen} onScroll={handleScroll} scrollEventThrottle={16}>
-            <View style={styles.tabView}>
+          <ScrollView
+            contentContainerStyle={styles.screen}
+            onScroll={handleScroll}
+            scrollEventThrottle={16}>
+            {/* <View style={styles.tabView}>
               <PersonalInfoTab
                 text={'Personal Information'}
                 // onPress={() => setChangeTab(item.id)}
               />
-            </View>
+            </View> */}
+
+            {listingStatus?.data?.accept_or_not === '1' ||
+            type === 'my listings' ||
+            listingDetail.author_id == user.user_id ||
+            listingDetail.private_group === 'off' ? (
+              <Button
+                buttonText={'Go to chat'}
+                buttonStyle={styles.button}
+                textStyle={{color: colors.secondary}}
+                onPress={() => {
+                  navigation.navigate('SecondaryStack', {
+                    screen: 'GroupChat',
+                    params: {
+                      title: listingDetail.listing_title,
+                      type: 'listing',
+                      listing_id: listingDetail.listing_id,
+                    },
+                  });
+                }}
+              />
+            ) : (
+              <Button
+                buttonText={
+                  listingStatus === 'pending' ||
+                  listingStatus?.data?.accept_or_not === '0'
+                    ? 'Pending'
+                    : 'Join Chat'
+                }
+                buttonStyle={styles.button}
+                disable={
+                  listingStatus === 'pending' ||
+                  listingStatus?.data?.accept_or_not === '0'
+                    ? true
+                    : false
+                }
+                textStyle={{color: colors.secondary}}
+                indicator={join_loading}
+                onPress={() => onJoin()}
+              />
+            )}
             <>
               <View style={{paddingTop: hp('10%')}}>
                 <View style={styles.headingView}>
@@ -161,20 +204,26 @@ const ListingDetails = ({route}) => {
                 <View style={styles.detailContainer}>
                   <Text style={styles.heading}>AREA CODE:</Text>
                   <View style={styles.line} />
-                  <Text style={styles.text}>{listingDetail.area_code_match || ''}</Text>
+                  <Text style={styles.text}>
+                    {listingDetail.area_code_match || ''}
+                  </Text>
                 </View>
                 <View style={styles.detailContainer}>
                   <Text style={styles.heading}>PRIVATE GROUP:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {listingDetail.private_group === 'true' ? 'Yes' : 'No' || ''}
+                    {listingDetail.private_group === 'true'
+                      ? 'Yes'
+                      : 'No' || ''}
                   </Text>
                 </View>
                 <View style={styles.detailContainer}>
                   <Text style={styles.heading}>EXPERIENCE LEVEL:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {listingDetail.experience_level ? listingDetail.experience_level : ''}
+                    {listingDetail.experience_level
+                      ? listingDetail.experience_level
+                      : ''}
                   </Text>
                 </View>
                 <View style={styles.detailContainer}>
@@ -195,78 +244,45 @@ const ListingDetails = ({route}) => {
                   <Text style={styles.heading}>HOW MANY PLAYERS:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {listingDetail.how_many_players ? listingDetail.how_many_players : ''}
+                    {listingDetail.how_many_players
+                      ? listingDetail.how_many_players
+                      : ''}
                   </Text>
                 </View>
                 <View style={styles.detailContainer}>
                   <Text style={styles.heading}>THE ITC HANDSHAKE:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {listingDetail.the_itc_handshake ? listingDetail.the_itc_handshake : ''}
+                    {listingDetail.the_itc_handshake
+                      ? listingDetail.the_itc_handshake
+                      : ''}
                   </Text>
                 </View>
                 <View style={styles.detailContainer}>
                   <Text style={styles.heading}>SMOKING FRIENDLY:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {listingDetail.smoking_friendly === 'true' ? 'Yes' : 'No' || ''}
+                    {listingDetail.smoking_friendly === 'true'
+                      ? 'Yes'
+                      : 'No' || ''}
                   </Text>
                 </View>
                 <View style={styles.detailContainer}>
                   <Text style={styles.heading}>DRINKING FRIENDLY:</Text>
                   <View style={styles.line} />
                   <Text style={styles.text}>
-                    {listingDetail.drinking_friendly === 'true' ? 'Yes' : 'No' || ''}
+                    {listingDetail.drinking_friendly === 'true'
+                      ? 'Yes'
+                      : 'No' || ''}
                   </Text>
                 </View>
               </View>
-              {listingStatus?.data?.accept_or_not === '1' ||
-              type === 'my listings' ||
-              listingDetail.author_id == user.user_id ||
-              listingDetail.private_group === 'off' ? (
-                <Button
-                  buttonText={'Go to chat'}
-                  buttonStyle={styles.button}
-                  textStyle={{color: colors.secondary}}
-                  onPress={() => {
-                    navigation.navigate('SecondaryStack', {
-                      screen: 'GroupChat',
-                      params: {
-                        title: listingDetail.listing_title,
-                        type: 'listing',
-                        listing_id: listingDetail.listing_id,
-                      },
-                    });
-                  }}
-                />
-              ) : (
-                <Button
-                  buttonText={
-                    listingStatus === 'pending' ||
-                    listingStatus?.data?.accept_or_not === '0'
-                      ? 'Pending'
-                      : 'Join Listing'
-                  }
-                  buttonStyle={styles.button}
-                  disable={
-                    listingStatus === 'pending' ||
-                    listingStatus?.data?.accept_or_not === '0'
-                      ? true
-                      : false
-                  }
-                  textStyle={{color: colors.secondary}}
-                  indicator={join_loading}
-                  onPress={() => onJoin()}
-                />
-              )}
             </>
             <>
               <SVGImage image={icons.pageEnd} style={{alignSelf: 'center'}} />
             </>
           </ScrollView>
-          {showArrow &&
-            <ScrollGuide />
-          }
+          {showArrow && <ScrollGuide />}
         </>
       )}
     </Container>
@@ -340,8 +356,9 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   button: {
-    width: hp('21%'),
-    borderRadius: 50,
+    width: hp('42%'),
+    borderRadius: 15,
+    alignSelf: 'center',
   },
   reviewStyle: {
     backgroundColor: colors.gray,

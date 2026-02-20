@@ -626,8 +626,8 @@ const AddNew = ({groupData}) => {
   );
 };
 
-export const AddNewGroups = ({buttonPressed}) => {
-  const [index, setIndex] = React.useState('first');
+export const AddNewGroups = ({buttonPressed, defaultTab = 'first'}) => {
+  const [index, setIndex] = React.useState(defaultTab);
   const [routes] = React.useState([
     {key: 'first', title: 'Discover'},
     {key: 'second', title: 'My Listings'},
