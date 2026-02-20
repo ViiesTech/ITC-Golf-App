@@ -9,8 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 
-const Header = ({iconStyle, headerStyle}) => {
-
+const Header = ({iconStyle, headerStyle, showBell = true}) => {
   const navigation = useNavigation();
 
   const {user} = useSelector(state => state?.AuthReducer);
@@ -35,19 +34,24 @@ const Header = ({iconStyle, headerStyle}) => {
         />
         <Text style={styles.headerText}>Hello {user.username}!</Text>
       </View>
-      <TouchableOpacity
-        activeOpacity={0.9}
-        onPress={() =>
-          navigation.navigate('SecondaryStack', {screen: 'Notifications'})
-        }
-        style={{paddingTop: hp('1.9%')}}>
-        <SVGImage image={icons.notification} style={[styles.icon, iconStyle]} />
-        {!noti_count == 0 && (
-          <View style={styles.bellStyle}>
-            <Text style={styles.count}>{noti_count}</Text>
-          </View>
-        )}
-      </TouchableOpacity>
+      {showBell && (
+        <TouchableOpacity
+          activeOpacity={0.9}
+          onPress={() =>
+            navigation.navigate('SecondaryStack', {screen: 'Notifications'})
+          }
+          style={{paddingTop: hp('1.9%')}}>
+          <SVGImage
+            image={icons.notification}
+            style={[styles.icon, iconStyle]}
+          />
+          {!noti_count == 0 && (
+            <View style={styles.bellStyle}>
+              <Text style={styles.count}>{noti_count}</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

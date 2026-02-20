@@ -273,7 +273,7 @@ const MyGroups = ({setIndex, setGroupData}) => {
   );
 };
 
-const AddNew = ({groupData}) => {
+const AddNew = ({groupData, locationAreaCode}) => {
   const [state, setState] = React.useState({
     group_title: '',
     description: '',
@@ -307,6 +307,18 @@ const AddNew = ({groupData}) => {
       updatedState();
     }
   }, [groupData]);
+
+  React.useEffect(() => {
+    if (locationAreaCode) {
+      setState(prevState => ({
+        ...prevState,
+        pickers: {
+          ...prevState.pickers,
+          area_code: locationAreaCode,
+        },
+      }));
+    }
+  }, [locationAreaCode]);
 
   const handlePickerChange = (pickerName, text) => {
     setState(prevState => ({
@@ -552,8 +564,8 @@ const AddNew = ({groupData}) => {
           />
           {area_codes?.map(item => (
             <Picker.Item
-              label={item}
-              value={item}
+              label={item?.area_code}
+              value={item?.area_code}
               style={{color: colors.secondary}}
             />
           ))}
@@ -626,7 +638,11 @@ const AddNew = ({groupData}) => {
   );
 };
 
-export const AddNewGroups = ({buttonPressed, defaultTab = 'first'}) => {
+export const AddNewGroups = ({
+  buttonPressed,
+  defaultTab = 'first',
+  locationAreaCode,
+}) => {
   const [index, setIndex] = React.useState(defaultTab);
   const [routes] = React.useState([
     {key: 'first', title: 'Discover'},
@@ -655,6 +671,7 @@ export const AddNewGroups = ({buttonPressed, defaultTab = 'first'}) => {
               ? {
                   backgroundColor: colors.primary,
                   borderRadius: 30,
+                  paddingHorizontal: 5,
                 }
               : null,
             {
@@ -673,6 +690,7 @@ export const AddNewGroups = ({buttonPressed, defaultTab = 'first'}) => {
             Discover
           </Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           onPress={() => setIndex('second')}
           style={[
@@ -680,6 +698,7 @@ export const AddNewGroups = ({buttonPressed, defaultTab = 'first'}) => {
               ? {
                   backgroundColor: colors.primary,
                   borderRadius: 30,
+                  paddingHorizontal: 5,
                 }
               : null,
             {
@@ -698,6 +717,7 @@ export const AddNewGroups = ({buttonPressed, defaultTab = 'first'}) => {
             My Groups
           </Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           onPress={() => setIndex('third')}
           style={[
@@ -705,6 +725,7 @@ export const AddNewGroups = ({buttonPressed, defaultTab = 'first'}) => {
               ? {
                   backgroundColor: colors.primary,
                   borderRadius: 30,
+                  paddingHorizontal: 5,
                 }
               : null,
             {
@@ -729,7 +750,7 @@ export const AddNewGroups = ({buttonPressed, defaultTab = 'first'}) => {
       ) : index == 'second' ? (
         <MyGroups setGroupData={setGroupData} setIndex={setIndex} />
       ) : index == 'third' ? (
-        <AddNew groupData={groupData} />
+        <AddNew groupData={groupData} locationAreaCode={locationAreaCode} />
       ) : null}
     </>
   );

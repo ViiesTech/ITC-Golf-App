@@ -42,7 +42,7 @@ const MyGroupsCard = ({
         <View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={styles.name}>{title}</Text>
-            <View style={{flexDirection: 'row'}}>
+            <View style={{flexDirection: 'row', right: 20}}>
               <View style={styles.teeView}>
                 <SVGImage image={icons.teeBlack} />
               </View>
@@ -111,7 +111,6 @@ const styles = StyleSheet.create({
     // flexDirection: 'row',
     marginLeft: hp(1),
     marginTop: hp('1%'),
-    // backgroundColor: 'blue'
     // flex: 1,
     // justifyContent: 'space-between'
   },

@@ -281,7 +281,7 @@ const MyListings = ({setIndex, setListingData}) => {
   );
 };
 
-const AddNew = ({listingData}) => {
+const AddNew = ({listingData, locationAreaCode}) => {
   const [state, setState] = React.useState({
     location: '',
     suggested_day: '',
@@ -408,6 +408,18 @@ const AddNew = ({listingData}) => {
     }
   }, [listingData]);
 
+  React.useEffect(() => {
+    if (locationAreaCode) {
+      setState(prevState => ({
+        ...prevState,
+        pickers: {
+          ...prevState.pickers,
+          area_code: locationAreaCode,
+        },
+      }));
+    }
+  }, [locationAreaCode]);
+
   const updatedState = () => {
     setState({
       location: listingData.listing_title,
@@ -519,177 +531,51 @@ const AddNew = ({listingData}) => {
         }
         style={styles.input}
       />
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-        <DateInput
-          heading={'Suggested Day'}
-          onConfirm={date =>
-            setState({
-              ...state,
-              suggested_day: moment(date).format('MM/DD/YYYY'),
-            })
-          }
-          text={state.suggested_day !== '' ? state.suggested_day : 'mm/dd/yyyy'}
-          icon={'date-range'}
-          mode={'date'}
-        />
-        <DateInput
-          heading={'Suggested Time'}
-          icon={'access-time'}
-          mode={'time'}
-          onConfirm={time =>
-            setState({
-              ...state,
-              suggested_time: moment(time).format('hh:mm'),
-            })
-          }
-          text={state.suggested_time !== '' ? state.suggested_time : 'Select'}
-          display={'clock'}
-        />
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          paddingTop: hp('1.3%'),
-        }}>
-        <View>
-          <Text style={styles.textStyle}>Area Code</Text>
-          <View style={styles.pickerStyle}>
-            <Picker
-              selectedValue={state.pickers.area_code}
-              dropdownIconColor={colors.white}
-              itemStyle={{color: colors.white}}
-              style={{color: colors.white}}
-              onValueChange={(itemValue, itemIndex) =>
-                handlePickerChange('area_code', itemValue)
-              }>
-              <Picker.Item
-                label={'Select'}
-                value={null}
-                style={{color: colors.secondary}}
-              />
-              {area_codes?.map((item, ind) => (
-                <Picker.Item
-                  key={ind}
-                  label={item}
-                  value={item}
-                  style={{color: colors.secondary}}
-                />
-              ))}
-            </Picker>
-          </View>
-        </View>
-        <View>
-          <Text style={styles.textStyle}>How Many Players</Text>
-          <View style={styles.pickerStyle}>
-            <Picker
-              selectedValue={state.pickers.how_many_players}
-              dropdownIconColor={colors.white}
-              style={{color: colors.white}}
-              itemStyle={{color: colors.white}}
-              onValueChange={(itemValue, itemIndex) =>
-                handlePickerChange('how_many_players', itemValue)
-              }>
-              <Picker.Item
-                label={'Select a Value'}
-                value={null}
-                style={{color: colors.secondary}}
-              />
-              {how_many_players.map((item, ind) => (
-                <Picker.Item
-                  key={ind}
-                  label={item.pickerText}
-                  value={item.pickerText}
-                  style={{color: colors.secondary}}
-                />
-              ))}
-            </Picker>
-          </View>
-        </View>
-        <View>
-          <Text style={styles.textStyle}>IN THE CUP HANDSHAKE</Text>
-          <View style={[styles.pickerStyle, {width: hp('30%')}]}>
-            <Picker
-              selectedValue={state.pickers.itc_handshake}
-              dropdownIconColor={colors.white}
-              itemStyle={{color: colors.white}}
-              style={{color: colors.white}}
-              onValueChange={itemValue =>
-                handlePickerChange('itc_handshake', itemValue)
-              }>
-              <Picker.Item
-                label={'Select'}
-                value={null}
-                style={{color: colors.secondary}}
-              />
-              {handshake.map((item, ind) => (
-                <Picker.Item
-                  key={ind}
-                  label={item.pickerText}
-                  value={item.pickerText}
-                  style={{color: colors.secondary}}
-                />
-              ))}
-            </Picker>
-          </View>
-        </View>
-        <View>
-          <Text style={styles.textStyle}>Experience Level</Text>
-          <View style={styles.pickerStyle}>
-            <Picker
-              selectedValue={state.pickers.exp_level}
-              dropdownIconColor={colors.white}
-              itemStyle={{color: colors.white}}
-              style={{color: colors.white}}
-              onValueChange={(itemValue, itemIndex) =>
-                handlePickerChange('exp_level', itemValue)
-              }>
-              <Picker.Item
-                label={'Select'}
-                value={null}
-                style={{color: colors.secondary}}
-              />
-              {ExperienceLevel.map((item, ind) => (
-                <Picker.Item
-                  key={ind}
-                  label={item.pickerText}
-                  value={item.pickerText}
-                  style={{color: colors.secondary}}
-                />
-              ))}
-            </Picker>
-          </View>
-        </View>
-        {TeeBox.map((item, ind) => (
-          <DropDownPicker
-            key={ind}
-            text={item.text}
-            iosStyle={{color: colors.white}}
-            iconColor={colors.lightgray}
-            itemStyle={{color: colors.lightgray}}
-            selectedValue={state.pickers.desired_tee}
-            onValueChange={itemValue => {
-              handlePickerChange('desired_tee', itemValue);
-            }}
-            value1={null}
-            value2={item.pickerText2}
-            value3={item.pickerText3}
-            value4={item.pickerText4}
-            value5={item.pickerText5}
-            value6={item.pickerText6}
-            label1={item.pickerText1}
-            label2={item.pickerText2}
-            label3={item.pickerText3}
-            label4={item.pickerText4}
-            label5={item.pickerText5}
-            label6={item.pickerText6}
-            style={[styles.picker, {width: hp('20%')}]}
+
+      <DateInput
+        heading={'Expiration Date'}
+        onConfirm={date =>
+          setState({
+            ...state,
+            suggested_day: moment(date).format('MM/DD/YYYY'),
+          })
+        }
+        text={state.suggested_day !== '' ? state.suggested_day : 'mm/dd/yyyy'}
+        icon={'date-range'}
+        mode={'date'}
+        style={{width: '100%'}}
+      />
+
+      <Text style={[styles.textStyle, {marginTop: hp('2%')}]}>Area Code</Text>
+      <View style={[styles.pickerStyle, {width: '100%'}]}>
+        <Picker
+          selectedValue={state.pickers.area_code}
+          dropdownIconColor={colors.white}
+          itemStyle={{color: colors.white}}
+          style={{color: colors.white}}
+          onValueChange={(itemValue, itemIndex) =>
+            handlePickerChange('area_code', itemValue)
+          }>
+          <Picker.Item
+            label={'Select'}
+            value={null}
+            style={{color: colors.secondary}}
           />
-        ))}
+          {area_codes?.map((item, ind) => {
+            return (
+              <Picker.Item
+                key={ind}
+                label={item?.area_code}
+                value={item?.area_code}
+                style={{color: colors.secondary}}
+              />
+            );
+          })}
+        </Picker>
       </View>
+
       <ContactInput
-        label={'Description'}
+        label={'Description/Services/Item'}
         value={state.description}
         onChangeText={text =>
           setState({
@@ -697,15 +583,16 @@ const AddNew = ({listingData}) => {
             description: text,
           })
         }
-        // textAlignVertical={'top'}
         multiline={true}
         style={styles.input}
       />
+
       <UploadPicture
         text={'Image'}
         chooseFile={() => onChoosePhoto('image')}
         fileName={state.image_details.name}
       />
+
       <ContactInput
         label={'Hyper Link'}
         value={state.hyperlink}
@@ -717,53 +604,16 @@ const AddNew = ({listingData}) => {
         }
         style={styles.input}
       />
-      <View
-        style={{
-          flexDirection: 'row',
-          gap: 15,
-          alignItems: 'flex-start',
-          position: 'relative',
-        }}>
-        {/* <View style={{flex: 1}}>
-        {state.listing_gallery.map((item, i) => {
-          return (
-            <UploadPicture
-              text={i == 0 && 'Listing Gallery'}
-              buttonStyle={{width: hp('16%')}}
-              chooseFile={() => onChoosePhoto('gallery', i)}
-              style={{width: hp('37%')}}
-              fileName={item.name}
-            />
-          );
-        })}
-      </View>
-      <TouchableOpacity
-        style={styles.addView}
-        activeOpacity={0.9}
-        onPress={() => onAddMore()}>
-        <Add name={'add'} color={colors.secondary} size={25} />
-      </TouchableOpacity> */}
-      </View>
+
       <View style={{paddingTop: hp('2%')}}>
         <Text style={styles.text}>Additional Details</Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            paddingTop: hp('3%'),
-            flexWrap: 'wrap',
-            justifyContent: 'space-between',
-          }}>
-          {switchOptions.map((item, key) => (
-            <Switch
-              key={key}
-              text={item.text}
-              isOn={state[item.props]}
-              color={state[item.props] ? colors.secondary : colors.lightgray}
-              onToggle={isOn => onSwitchToggle(item.props, isOn)}
-              style={{marginBottom: hp('3%')}}
-            />
-          ))}
-        </View>
+        <Switch
+          text={'Chat Off/On'}
+          isOn={state.private_match}
+          color={state.private_match ? colors.secondary : colors.lightgray}
+          onToggle={isOn => onSwitchToggle('private_match', isOn)}
+          style={{marginBottom: hp('3%')}}
+        />
         <Button
           buttonStyle={{width: '50%', borderRadius: 100, marginTop: hp('2%')}}
           onPress={() => onCreateListing()}
@@ -786,8 +636,12 @@ const AddNew = ({listingData}) => {
   );
 };
 
-export const AddNewListings = ({buttonPress, defaultTab = 'first'}) => {
-  console.log('buttonPress =======>', buttonPress);
+export const AddNewListings = ({
+  buttonPress,
+  defaultTab = 'first',
+  locationAreaCode,
+}) => {
+  // console.log('buttonPress =======>', buttonPress);
   const [index, setIndex] = React.useState(defaultTab);
   const [routes] = React.useState([
     {key: 'first', title: 'Discover'},
@@ -816,6 +670,7 @@ export const AddNewListings = ({buttonPress, defaultTab = 'first'}) => {
               ? {
                   backgroundColor: colors.primary,
                   borderRadius: 30,
+                  paddingHorizontal: 5,
                 }
               : null,
             {
@@ -834,6 +689,7 @@ export const AddNewListings = ({buttonPress, defaultTab = 'first'}) => {
             Discover
           </Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           onPress={() => setIndex('second')}
           style={[
@@ -841,6 +697,7 @@ export const AddNewListings = ({buttonPress, defaultTab = 'first'}) => {
               ? {
                   backgroundColor: colors.primary,
                   borderRadius: 30,
+                  paddingHorizontal: 5,
                 }
               : null,
             {
@@ -859,6 +716,7 @@ export const AddNewListings = ({buttonPress, defaultTab = 'first'}) => {
             My listing
           </Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           onPress={() => setIndex('third')}
           style={[
@@ -866,6 +724,7 @@ export const AddNewListings = ({buttonPress, defaultTab = 'first'}) => {
               ? {
                   backgroundColor: colors.primary,
                   borderRadius: 30,
+                  paddingHorizontal: 5,
                 }
               : null,
             {
@@ -890,7 +749,7 @@ export const AddNewListings = ({buttonPress, defaultTab = 'first'}) => {
       ) : index == 'second' ? (
         <MyListings setListingData={setListingData} setIndex={setIndex} />
       ) : index == 'third' ? (
-        <AddNew listingData={listingData} />
+        <AddNew listingData={listingData} locationAreaCode={locationAreaCode} />
       ) : null}
     </>
   );

@@ -227,6 +227,7 @@ const AllGroups = ({route}) => {
 
               <AddNewGroups
                 buttonPressed={groupSearch}
+                locationAreaCode={groupsCode}
                 defaultTab={changeTab === 'Add New Groups' ? 'third' : 'first'}
               />
             </Fragment>
@@ -241,6 +242,7 @@ const AllGroups = ({route}) => {
 
               <AddNewListings
                 buttonPress={listingSearch}
+                locationAreaCode={listingsCode}
                 defaultTab={
                   changeTab === 'Add New Listings' ? 'third' : 'first'
                 }

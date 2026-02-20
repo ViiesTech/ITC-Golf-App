@@ -189,7 +189,7 @@ const Notifications = () => {
 
   return (
     <Container>
-      <Header />
+      <Header showBell={false} />
       <SecondaryHeader text={'Notifications'} />
       {notification_loader ? (
         renderLoader()

@@ -167,7 +167,7 @@ const SearchFilter = ({
         ]}
       />
       <Button
-        buttonText={'My Location'}
+        buttonText={loading ? 'Fetching...' : 'My Location'}
         onPress={handleMyLocation}
         indicator={loading}
         disable={loading}
