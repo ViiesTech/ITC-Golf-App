@@ -18,7 +18,6 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [device_token, setDevice_Token] = useState('');
-  // console.log('deviceToken:----->', device_token);
 
   const dispatch = useDispatch();
 
@@ -33,14 +32,14 @@ const Login = () => {
 
   const askNotificationPermission = async () => {
     const status = await requestPermission('notifications');
-    // console.log('status in askNotificationPermission:----->', status);
+    // `console`.log('status in askNotificationPermission:----->', status);
     if (
       status === 'granted' ||
       status === messaging.AuthorizationStatus.AUTHORIZED
     ) {
       // await messaging().registerDeviceForRemoteMessages()
       const token = await messaging().getToken();
-      // console.log('token:----->', token);
+      // `console`.log('token:----->', token);
       setDevice_Token(token);
     } else {
       return ShowToast('Permission denied');

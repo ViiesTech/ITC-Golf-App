@@ -31,7 +31,7 @@ export const getListings = setListings => {
     api
       .get('matches')
       .then(res => {
-        console.log('listing response ======>', res.data);
+        console.log('res in getListings:-', res.data);
         setListings(res.data);
         dispatch({
           type: constant.GET_LISTING_DONE,
@@ -41,7 +41,7 @@ export const getListings = setListings => {
         dispatch({
           type: constant.GET_LISTING_DONE,
         });
-        console.log('listing error =======>', error);
+        console.log('err in getListings:-', error);
         return ShowToast('Some problem occured');
       });
   };
@@ -250,12 +250,12 @@ export const ReadNotifications = user_id => {
   };
 };
 
-export const GetAds = (setAds) => {
+export const GetAds = setAds => {
   return async dispatch => {
     try {
       const res = await api.get('/ads');
       // console.log('all ads response ======>', res.data);
-      setAds(res.data)
+      setAds(res.data);
       dispatch({
         type: constant.GET_ALL_ADS,
       });
@@ -264,20 +264,18 @@ export const GetAds = (setAds) => {
     }
   };
 };
- 
+
 export const FilterAdsByAreaCode = (area_code, setAds) => {
   return async dispatch => {
-
     try {
-      const res = await api.get(`/ads?area_code=${area_code}`)
-      console.log('response of filteration ads ======>',res.data)
-      setAds(res.data)
+      const res = await api.get(`/ads?area_code=${area_code}`);
+      console.log('response of filteration ads ======>', res.data);
+      setAds(res.data);
       dispatch({
-        type: constant.GET_ADS_BY_FILTER
-      })
+        type: constant.GET_ADS_BY_FILTER,
+      });
     } catch (error) {
-      console.log('filteration ads error =======>',error)
+      console.log('filteration ads error =======>', error);
     }
-  }
-}
-
+  };
+};

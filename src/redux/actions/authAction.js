@@ -1,5 +1,4 @@
 import constant, {URL} from '../constant';
-import FormData from 'form-data';
 import {ShowToast} from '../../Custom';
 import axios from 'axios';
 import api from '../services/api';
@@ -20,11 +19,11 @@ export const signup = (
     });
 
     data.append('custom_user_login', username);
+    data.append('custom_user_first', firstname);
+    data.append('custom_user_last', lastname);
     data.append('custom_user_email', email);
     data.append('custom_user_pass', password);
     data.append('custom_user_pass_confirm', cpassword);
-    data.append('custom_user_first', firstname);
-    data.append('custom_user_last', lastname);
 
     return await fetch(`${URL}/signup`, {
       method: 'POST',
@@ -80,7 +79,7 @@ export const signin = (username, password, device_token) => {
     })
       .then(async res => {
         const response = await res.json();
-        console.log('login response =====>', response);
+        console.log('response in signin:-', response);
         if (response.token) {
           ShowToast('login successfully');
           dispatch({
@@ -88,19 +87,22 @@ export const signin = (username, password, device_token) => {
             payload: response.response,
             token: response.token,
           });
+          return true;
         } else {
           ShowToast(response.message);
           dispatch({
             type: constant.LOGIN_DONE,
           });
+          return false;
         }
       })
       .catch(error => {
-        console.log('login error:--------->', error);
+        console.log('err in signin:-', error);
         ShowToast('some problem occured');
         dispatch({
           type: constant.LOGIN_DONE,
         });
+        return false;
       });
   };
 };

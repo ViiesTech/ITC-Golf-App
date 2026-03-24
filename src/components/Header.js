@@ -14,7 +14,7 @@ const Header = ({iconStyle, headerStyle, showBell = true}) => {
 
   const {user} = useSelector(state => state?.AuthReducer);
   const {noti_count} = useSelector(state => state?.HomeReducer);
-
+  console.log('user in header:-', JSON.stringify(user, null, 2));
   return (
     <View style={[styles.headerView, headerStyle]}>
       <View style={{flexDirection: 'row'}}>
@@ -32,7 +32,9 @@ const Header = ({iconStyle, headerStyle, showBell = true}) => {
           resizeMode={FastImage.resizeMode.cover}
           style={styles.image}
         />
-        <Text style={styles.headerText}>Hello {user.username}!</Text>
+        <Text style={styles.headerText}>
+          Hello {user.firstname + ' ' + user.lastname}!
+        </Text>
       </View>
       {showBell && (
         <TouchableOpacity
